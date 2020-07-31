@@ -1,7 +1,4 @@
-.PHONY = clean install test unit-test integration-test
-configuration = Debug
-target_framework = netcoreapp3.1
-output_path = bin/Project.Name/$(configuration)/$(target_framework)
+.PHONY = clean clean-lockfiles install relock test unit-test integration-test
 
 clean:
 	@rm -rf bin obj .nuget
@@ -13,6 +10,8 @@ clean-lockfiles:
 install:
 	@dotnet restore
 
+relock: clean-lockfiles install
+
 test:
 	@dotnet test
 
@@ -21,6 +20,3 @@ unit-test :
 
 integration-test:
 	@dotnet test --filter Category=Integration
-
-$(output_path)/Project.Name.dll:
-	@dotnet build
