@@ -41,6 +41,7 @@ jobs:
         run: dotnet restore -v normal
 
       - name: Build
+        shell: bash
         run: dotnet build -t:build,pack --no-restore -m  -bl:obj/logs/build-${{ matrix.os }}.binlog -p:PackageReleaseNotes="$(cat .github/releases/v${{ env.VERSION }}.md)"
 
       - name: Test
