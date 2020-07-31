@@ -32,7 +32,10 @@ jobs:
       - run: dotnet tool restore
 
       - name: Run nbgv
-        run: dotnet nbgv get-version
+        run: |
+          dotnet nbgv get-version
+          echo "::set-env name=VERSION::$(dotnet nbgv get-version -v NuGetPackageVersion)"
+          echo "${{ env.VERSION }}"
 
       - name: Restore
         run: dotnet restore -v normal
@@ -60,3 +63,12 @@ jobs:
         if: matrix.os == 'windows-latest' && github.ref == 'refs/heads/master' && github.event_name == 'push'
         shell: bash
         run: for file in $(ls bin/Packages/${{ env.Configuration }}/*.nupkg); do dotnet nuget push $file -k ${{ secrets.NUGET_TOKEN }} -s https://api.nuget.org/v3/index.json; done
+
+      - uses: ncipollo/release-action@v1
+        if: matrix.os == 'windows-latest' && github.ref == 'refs/heads/master' && github.event_name == 'push'
+        with:
+          artifacts: "bin/Packages/${{ env.Configuration}}/*.nupkg,bin/Packages/${{ env.Configuration}}/*.snupkg"
+          bodyFile: "releases/v${{ env.VERSION }}.md"
+          tag: v${{ env.VERSION }}
+          commit: ${{ env.GITHUB_SHA }}
+          token: ${{ secrets.GITHUB_TOKEN }}
