@@ -3,7 +3,7 @@
 
   <PropertyGroup>
     <PackageId>Lambdajection.Generator</PackageId>
-    <AssemblyName>$(PackageName)</AssemblyName>
+    <AssemblyName>$(PackageId)</AssemblyName>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
