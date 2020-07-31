@@ -1,0 +1,7 @@
+ <Project>
+    <Import Project="../Directory.Build.props" />
+    
+    <ItemGroup>
+        <PackageReference Include="Nerdbank.GitVersioning" Version="3.0.28" PrivateAssets="all" />
+    </ItemGroup>
+</Project>
