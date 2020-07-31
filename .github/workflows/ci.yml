@@ -69,7 +69,7 @@ jobs:
         if: matrix.os == 'windows-latest' && github.ref == 'refs/heads/master' && github.event_name == 'push'
         with:
           artifacts: "bin/Packages/${{ env.Configuration}}/*.nupkg,bin/Packages/${{ env.Configuration}}/*.snupkg"
-          bodyFile: "releases/v${{ env.VERSION }}.md"
+          bodyFile: ".github/releases/v${{ env.VERSION }}.md"
           tag: v${{ env.VERSION }}
           commit: ${{ env.GITHUB_SHA }}
           token: ${{ secrets.GITHUB_TOKEN }}
