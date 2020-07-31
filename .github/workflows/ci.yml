@@ -32,10 +32,10 @@ jobs:
       - run: dotnet tool restore
 
       - name: Run nbgv
-        run: |
-          dotnet nbgv get-version
-          echo "::set-env name=VERSION::$(dotnet nbgv get-version -v NuGetPackageVersion)"
-          echo "${{ env.VERSION }}"
+        run: echo "::set-env name=VERSION::$(dotnet nbgv get-version -v NuGetPackageVersion)"
+
+      - name: Display version
+        run: echo ${{ env.VERSION }}
 
       - name: Restore
         run: dotnet restore -v normal
