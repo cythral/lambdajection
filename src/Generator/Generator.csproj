@@ -8,6 +8,7 @@
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <PackageDescription>Includes the compile-time generator used to generate code needed for Dependency Injection-enabled AWS Lambdas.</PackageDescription>
   </PropertyGroup>
 
   <ItemGroup>
