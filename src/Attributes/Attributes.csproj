@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <PackageName>Lambdajection.Attributes</PackageName>
+    <AssemblyName>$(PackageName)</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Cythral.CodeGeneration.Roslyn.Attributes" Version="$(CythralCodeGenerationRoslynVersion)" />
+  </ItemGroup>
+</Project>

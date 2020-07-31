@@ -1,0 +1,4 @@
+root = true
+
+[*.{cs,csx}]
+dotnet_separate_import_directive_groups = true

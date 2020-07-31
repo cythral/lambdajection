@@ -1,0 +1,25 @@
+{
+  "Test Suite": {
+    "prefix": "testsuite",
+    "body": [
+      "using System;",
+      "",
+      "using NUnit.Framework;",
+      "",
+      "namespace Cythral.Brighid.Instructor.Tests",
+      "{",
+      "    class ${1:SuiteName}",
+      "    {",
+      "        [SetUp]",
+      "        public void SetUp()",
+      "        {",
+      "        }",
+      "     }",
+      "}"
+    ]
+  },
+  "Test": {
+    "prefix": "test",
+    "body": ["[Test]", "public void ${1:TestName}()", "{", "    $0", "}"]
+  }
+}

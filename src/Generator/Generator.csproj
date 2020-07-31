@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <Sdk Name="Cythral.CodeGeneration.Roslyn.Plugin.Sdk" />
+
+  <PropertyGroup>
+    <PackageName>Lambdajection.Generator</PackageName>
+    <AssemblyName>$(PackageName)</AssemblyName>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Attributes\Attributes.csproj" />
+  </ItemGroup>
+
+</Project>

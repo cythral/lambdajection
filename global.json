@@ -1,0 +1,10 @@
+{
+  "sdk": {
+    "version": "3.1.301",
+    "rollForward": "latestPatch"
+  },
+  "msbuild-sdks": {
+    "Cythral.CodeGeneration.Roslyn.Plugin.Sdk": "0.8.17-alpha-g40a87e6792",
+    "Cythral.CodeGeneration.Roslyn.PluginMetapackage.Sdk": "0.8.17-alpha-g40a87e6792"
+  }
+}

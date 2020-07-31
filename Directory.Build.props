@@ -1,0 +1,21 @@
+<Project>
+    <PropertyGroup>
+        <Configuration Condition="$(Configuration) == ''">Debug</Configuration>
+        <Nullable>enable</Nullable>
+        <LangVersion>8.0</LangVersion>
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+
+        <CythralCodeGenerationRoslynVersion>0.8.17-alpha-g40a87e6792</CythralCodeGenerationRoslynVersion>
+    </PropertyGroup>
+    
+    <PropertyGroup>
+        <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+        <RestoreLockedMode>true</RestoreLockedMode>
+        <OutputPath>$(MSBuildThisFileDirectory)bin\$(MSBuildProjectName)\$(Configuration)</OutputPath>
+        <BaseIntermediateOutputPath>$(MSBuildThisFileDirectory)obj\$(MSBuildProjectName)</BaseIntermediateOutputPath>
+        <PackageOutputPath>$(MSBuildThisFileDirectory)bin\Packages\$(Configuration)</PackageOutputPath>
+        <RestorePackagesPath>$(MSBuildThisFileDirectory).nuget</RestorePackagesPath>
+        <DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
+        <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
+    </PropertyGroup>
+</Project>
