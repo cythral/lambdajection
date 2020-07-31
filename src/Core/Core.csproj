@@ -7,6 +7,7 @@
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <PackageDescription>Includes interfaces and runtime support classes for writing AWS Lambdas using Dependency Injection.</PackageDescription>
   </PropertyGroup>
 
   <ItemGroup>

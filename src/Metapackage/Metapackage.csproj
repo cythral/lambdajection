@@ -6,6 +6,7 @@
     <IncludeBuildOutput>false</IncludeBuildOutput>
     <PackageId>Lambdajection</PackageId>
     <AssemblyName>$(ProjectName)</AssemblyName>
+    <PackageDescription>Write AWS Lambda Functions using Dependency Injection.</PackageDescription>
   </PropertyGroup>
 
   <ItemGroup>
