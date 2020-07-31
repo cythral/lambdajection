@@ -47,6 +47,12 @@
           "Microsoft.Extensions.DependencyInjection.Abstractions": "3.1.6"
         }
       },
+      "Nerdbank.GitVersioning": {
+        "type": "Direct",
+        "requested": "[3.0.28, )",
+        "resolved": "3.0.28",
+        "contentHash": "pEK+I9A22tN0MgUSqupWeR5vqNHQZYFG5KSFz4q3uH8rQ3xQvGQHDuO0dAOrvSbwppWw0etReOIZ4ZzysrvdCg=="
+      },
       "Microsoft.Bcl.AsyncInterfaces": {
         "type": "Transitive",
         "resolved": "1.1.0",

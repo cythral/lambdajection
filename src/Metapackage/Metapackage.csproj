@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <Sdk Name="Cythral.CodeGeneration.Roslyn.PluginMetapackage.Sdk" />
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <PackageId>Lambdajection</PackageId>
+    <AssemblyName>$(ProjectName)</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../Attributes/Attributes.csproj" />
+    <ProjectReference Include="../Core/Core.csproj" />
+    <NupkgAdditionalDependency Include="Lambdajection.Generator" IncludeAssets="all" />
+  </ItemGroup>
+</Project>

@@ -27,6 +27,12 @@
           "Microsoft.TestPlatform.TestHost": "16.4.0"
         }
       },
+      "Nerdbank.GitVersioning": {
+        "type": "Direct",
+        "requested": "[3.0.28, )",
+        "resolved": "3.0.28",
+        "contentHash": "pEK+I9A22tN0MgUSqupWeR5vqNHQZYFG5KSFz4q3uH8rQ3xQvGQHDuO0dAOrvSbwppWw0etReOIZ4ZzysrvdCg=="
+      },
       "NSubstitute": {
         "type": "Direct",
         "requested": "[4.2.2, )",

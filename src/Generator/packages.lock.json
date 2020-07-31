@@ -12,6 +12,12 @@
           "Microsoft.CodeAnalysis.CSharp": "[3.4.0]"
         }
       },
+      "Nerdbank.GitVersioning": {
+        "type": "Direct",
+        "requested": "[3.0.28, )",
+        "resolved": "3.0.28",
+        "contentHash": "pEK+I9A22tN0MgUSqupWeR5vqNHQZYFG5KSFz4q3uH8rQ3xQvGQHDuO0dAOrvSbwppWw0etReOIZ4ZzysrvdCg=="
+      },
       "Cythral.CodeGeneration.Roslyn.Attributes": {
         "type": "Transitive",
         "resolved": "0.8.17-alpha-g40a87e6792",

@@ -2,9 +2,12 @@
   <Sdk Name="Cythral.CodeGeneration.Roslyn.Plugin.Sdk" />
 
   <PropertyGroup>
-    <PackageName>Lambdajection.Generator</PackageName>
+    <PackageId>Lambdajection.Generator</PackageId>
     <AssemblyName>$(PackageName)</AssemblyName>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
   </PropertyGroup>
 
   <ItemGroup>

@@ -1,11 +1,21 @@
 <Project>
     <PropertyGroup>
+        <Authors>Talen Fisher</Authors>
+        <Company>Cythral LLC</Company>
+        <Copyright>© Copyright 2020 Cythral LLC</Copyright>
+        <PackageProjectUrl>https://github.com/cythral/lambdajection</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/cythral/lambdajection</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+        <CythralCodeGenerationRoslynVersion>0.8.17-alpha-g40a87e6792</CythralCodeGenerationRoslynVersion>
+    </PropertyGroup>
+
+    <PropertyGroup>
         <Configuration Condition="$(Configuration) == ''">Debug</Configuration>
         <Nullable>enable</Nullable>
         <LangVersion>8.0</LangVersion>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-
-        <CythralCodeGenerationRoslynVersion>0.8.17-alpha-g40a87e6792</CythralCodeGenerationRoslynVersion>
     </PropertyGroup>
     
     <PropertyGroup>
@@ -18,4 +28,12 @@
         <DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
         <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
     </PropertyGroup>
+
+    <ItemGroup>
+        <None Include="$(MSBuildThisFileDirectory)LICENSE.txt" Pack="true" PackagePath="LICENSE.txt" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Nerdbank.GitVersioning" Version="3.0.28" PrivateAssets="all" />
+    </ItemGroup>
 </Project>
