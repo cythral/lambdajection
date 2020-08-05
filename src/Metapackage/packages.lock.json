@@ -4,9 +4,9 @@
     ".NETStandard,Version=v2.1": {
       "Cythral.CodeGeneration.Roslyn.Tool": {
         "type": "Direct",
-        "requested": "[0.8.17-alpha-g40a87e6792, )",
-        "resolved": "0.8.17-alpha-g40a87e6792",
-        "contentHash": "gD8ZXGSGvGZike8FB4TB6ELhi20i8zzbMwQTCO+ejAbY7yH4E+0xLACXcQClJysQFvVo2AHUHqgsqkNH/6TvCQ=="
+        "requested": "[0.9.0, )",
+        "resolved": "0.9.0",
+        "contentHash": "mxX4rQklQpNEPsheTYMpXtpb038smVOaj1BeROidJXdJC5Dhn0ne8K1MNZLkj37rch6+vx0Xs0aZJXskO+pXFw=="
       },
       "Microsoft.SourceLink.GitHub": {
         "type": "Direct",
@@ -20,9 +20,9 @@
       },
       "Nerdbank.GitVersioning": {
         "type": "Direct",
-        "requested": "[3.0.28, )",
-        "resolved": "3.0.28",
-        "contentHash": "pEK+I9A22tN0MgUSqupWeR5vqNHQZYFG5KSFz4q3uH8rQ3xQvGQHDuO0dAOrvSbwppWw0etReOIZ4ZzysrvdCg=="
+        "requested": "[3.2.31, )",
+        "resolved": "3.2.31",
+        "contentHash": "19grBnpqHLxViOt1cwE+cI+brQ2swdm4gfM97P+9KbbgWGfXtdy4EmpVAkUZ3MgntFYYbUvfldM4pUOmks5q0w=="
       },
       "Amazon.Lambda.Core": {
         "type": "Transitive",
@@ -31,8 +31,8 @@
       },
       "Cythral.CodeGeneration.Roslyn.Attributes": {
         "type": "Transitive",
-        "resolved": "0.8.17-alpha-g40a87e6792",
-        "contentHash": "Vo2ZYNAYWSfGMpcaJCiSaRf+Lf1BJsde9lMCLjePJDMRUuA+ObjizzxZKCCAk8OwGnnNxEuXC68HtISKr0VGww==",
+        "resolved": "0.9.0",
+        "contentHash": "DHe67WQeXPmrQrAQbtrnhlRVbzYwru0P8u5s9By3eRXkJqi4uxTIX2tyR36FnDFrBIfQeSLzFT8rn8O9l/gHgQ==",
         "dependencies": {
           "NETStandard.Library": "1.6.1"
         }
@@ -1079,7 +1079,7 @@
       "Lambdajection.Attributes": {
         "type": "Project",
         "dependencies": {
-          "Cythral.CodeGeneration.Roslyn.Attributes": "0.8.17-alpha-g40a87e6792"
+          "Cythral.CodeGeneration.Roslyn.Attributes": "0.9.0"
         }
       },
       "Lambdajection.Core": {

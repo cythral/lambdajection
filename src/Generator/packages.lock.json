@@ -4,11 +4,11 @@
     ".NETCoreApp,Version=v3.1": {
       "Cythral.CodeGeneration.Roslyn": {
         "type": "Direct",
-        "requested": "[0.8.17-alpha-g40a87e6792, )",
-        "resolved": "0.8.17-alpha-g40a87e6792",
-        "contentHash": "pwtQpu0QyOZ5YhhAHfgLFkGN1SFvH0P8nucGUUbpxZV8eZj+j55fuMVgdIgsaZ2frQU4ct2d0vGoWUnhXaAG7w==",
+        "requested": "[0.9.0, )",
+        "resolved": "0.9.0",
+        "contentHash": "whskLGj2Z1Q/Ia/PV4myGac+lCZbc+jqeXfwOOG0SWfNG6VKWt/Re4b2h+bEVx6iDxV7SmfRfV+iZ9YIR31XdQ==",
         "dependencies": {
-          "Cythral.CodeGeneration.Roslyn.Attributes": "0.8.17-alpha-g40a87e6792",
+          "Cythral.CodeGeneration.Roslyn.Attributes": "0.9.0",
           "Microsoft.CodeAnalysis.CSharp": "[3.4.0]"
         }
       },
@@ -24,14 +24,14 @@
       },
       "Nerdbank.GitVersioning": {
         "type": "Direct",
-        "requested": "[3.0.28, )",
-        "resolved": "3.0.28",
-        "contentHash": "pEK+I9A22tN0MgUSqupWeR5vqNHQZYFG5KSFz4q3uH8rQ3xQvGQHDuO0dAOrvSbwppWw0etReOIZ4ZzysrvdCg=="
+        "requested": "[3.2.31, )",
+        "resolved": "3.2.31",
+        "contentHash": "19grBnpqHLxViOt1cwE+cI+brQ2swdm4gfM97P+9KbbgWGfXtdy4EmpVAkUZ3MgntFYYbUvfldM4pUOmks5q0w=="
       },
       "Cythral.CodeGeneration.Roslyn.Attributes": {
         "type": "Transitive",
-        "resolved": "0.8.17-alpha-g40a87e6792",
-        "contentHash": "Vo2ZYNAYWSfGMpcaJCiSaRf+Lf1BJsde9lMCLjePJDMRUuA+ObjizzxZKCCAk8OwGnnNxEuXC68HtISKr0VGww==",
+        "resolved": "0.9.0",
+        "contentHash": "DHe67WQeXPmrQrAQbtrnhlRVbzYwru0P8u5s9By3eRXkJqi4uxTIX2tyR36FnDFrBIfQeSLzFT8rn8O9l/gHgQ==",
         "dependencies": {
           "NETStandard.Library": "1.6.1"
         }
@@ -998,7 +998,7 @@
       "Lambdajection.Attributes": {
         "type": "Project",
         "dependencies": {
-          "Cythral.CodeGeneration.Roslyn.Attributes": "0.8.17-alpha-g40a87e6792"
+          "Cythral.CodeGeneration.Roslyn.Attributes": "0.9.0"
         }
       }
     }
