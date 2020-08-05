@@ -6,6 +6,7 @@ using Amazon.Lambda.Core;
 
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace Lambdajection.Core
 {
@@ -30,6 +31,11 @@ namespace Lambdajection.Core
             var startup = new TLambdaStartup();
             startup.Configuration = configuration;
             startup.ConfigureServices(serviceCollection);
+            serviceCollection.AddLogging(logging =>
+            {
+                logging.AddConsole();
+                startup.ConfigureLogging(logging);
+            });
 
             serviceProvider = serviceCollection.BuildServiceProvider();
         }
