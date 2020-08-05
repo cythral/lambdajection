@@ -8,6 +8,7 @@
         <RepositoryType>git</RepositoryType>
         <PublishRepositoryUrl>true</PublishRepositoryUrl>
         <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+        <PackageTags>AWS Amazon Cloud Lambda Lambdajection DependencyInjection IoC</PackageTags>
         <CythralCodeGenerationRoslynVersion>0.8.17-alpha-g40a87e6792</CythralCodeGenerationRoslynVersion>
     </PropertyGroup>
 
