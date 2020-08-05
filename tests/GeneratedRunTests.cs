@@ -9,6 +9,7 @@ using Lambdajection.Core;
 
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 using NUnit.Framework;
 
@@ -18,14 +19,18 @@ namespace Lambdajection
     public partial class ExampleLambda
     {
         private ExampleBar exampleBar;
+        private ILogger<ExampleLambda> logger;
 
-        public ExampleLambda(ExampleBar exampleService)
+        public ExampleLambda(ExampleBar exampleService, ILogger<ExampleLambda> logger)
         {
             this.exampleBar = exampleService;
+            this.logger = logger;
         }
 
         public Task<string> Handle(string request, ILambdaContext context)
         {
+            logger.LogInformation("Test Logging Works");
+
             return Task.FromResult(request + " " + exampleBar.Bar());
         }
     }

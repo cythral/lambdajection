@@ -51,6 +51,7 @@ using Lambdajection.Core;
 
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace Your.Namespace
 {
@@ -62,6 +63,12 @@ namespace Your.Namespace
         {
             // configure injected services here
             services.AddScoped<IRegisteredService, DefaultRegisteredService>();
+        }
+
+        public void ConfigureLogging(ILoggingBuilder logging)
+        {
+            // this method is optional
+            // logging comes preconfigured to log to the console
         }
     }
 }
