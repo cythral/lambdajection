@@ -14,33 +14,18 @@ namespace Lambdajection.Core
         where TLambda : class, ILambda<TLambdaParameter, TLambdaOutput>
         where TLambdaStartup : ILambdaStartup, new()
     {
-        private static IServiceProvider serviceProvider;
+        private IServiceProvider serviceProvider;
 
-        static LambdaHost()
+        public LambdaHost(IServiceProvider? serviceProvider = null)
         {
-            var configuration = new ConfigurationBuilder()
-            .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-            .AddEnvironmentVariables()
-            .Build();
-
-            var serviceCollection = new ServiceCollection();
-            serviceCollection.AddSingleton<IConfiguration>(configuration);
-            serviceCollection.AddTransient<TLambda>();
-
-            var startup = new TLambdaStartup();
-            startup.Configuration = configuration;
-            startup.ConfigureServices(serviceCollection);
-            serviceCollection.AddLogging(logging =>
+            if (serviceProvider == null)
             {
-                logging.AddConsole();
-                startup.ConfigureLogging(logging);
-            });
+                var builder = new LambdaHostBuilder<TLambda, TLambdaParameter, TLambdaOutput, TLambdaStartup>();
+                serviceProvider = builder.GetOrBuildServiceProvider();
+            }
 
-            serviceProvider = serviceCollection.BuildServiceProvider();
+            this.serviceProvider = serviceProvider;
         }
-
-        public LambdaHost() { }
 
         public async Task<TLambdaOutput> Run(TLambdaParameter parameter, ILambdaContext context)
         {
