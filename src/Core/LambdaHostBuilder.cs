@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Reflection;
 
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -7,24 +8,19 @@ using Microsoft.Extensions.Logging;
 
 namespace Lambdajection.Core
 {
-    public class LambdaHostBuilder<TLambda, TLambdaParameter, TLambdaOutput, TLambdaStartup>
+    internal class LambdaHostBuilder<TLambda, TLambdaParameter, TLambdaOutput, TLambdaStartup>
         where TLambda : class, ILambda<TLambdaParameter, TLambdaOutput>
         where TLambdaStartup : ILambdaStartup, new()
     {
-        private static IServiceProvider? instance;
+        internal static IServiceProvider? serviceProvider;
 
-        public IServiceProvider GetOrBuildServiceProvider()
+        public static void Build(LambdaHost<TLambda, TLambdaParameter, TLambdaOutput, TLambdaStartup> host)
         {
-            if (instance == null)
-            {
-                var builder = new LambdaHostBuilder<TLambda, TLambdaParameter, TLambdaOutput, TLambdaStartup>();
-                instance = builder.BuildServiceProvider();
-            }
-
-            return instance;
+            serviceProvider = serviceProvider ?? BuildServiceProvider();
+            host.ServiceProvider = serviceProvider;
         }
 
-        public IServiceProvider BuildServiceProvider()
+        public static IServiceProvider BuildServiceProvider()
         {
             var configuration = BuildConfiguration();
             var serviceCollection = BuildServiceCollection(configuration);
@@ -32,7 +28,7 @@ namespace Lambdajection.Core
             return serviceCollection.BuildServiceProvider();
         }
 
-        public IConfigurationRoot BuildConfiguration()
+        public static IConfigurationRoot BuildConfiguration()
         {
             return new ConfigurationBuilder()
             .SetBasePath(Directory.GetCurrentDirectory())
@@ -41,7 +37,7 @@ namespace Lambdajection.Core
             .Build();
         }
 
-        public IServiceCollection BuildServiceCollection(IConfigurationRoot configuration)
+        public static IServiceCollection BuildServiceCollection(IConfigurationRoot configuration)
         {
             var serviceCollection = new ServiceCollection();
             serviceCollection.AddSingleton<IConfiguration>(configuration);
@@ -49,7 +45,7 @@ namespace Lambdajection.Core
             return serviceCollection;
         }
 
-        public TLambdaStartup BuildLambdaStartup(IConfigurationRoot configuration, IServiceCollection serviceCollection)
+        public static TLambdaStartup BuildLambdaStartup(IConfigurationRoot configuration, IServiceCollection serviceCollection)
         {
             var startup = new TLambdaStartup();
             startup.Configuration = configuration;

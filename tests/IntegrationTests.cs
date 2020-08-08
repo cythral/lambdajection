@@ -13,7 +13,7 @@ using Microsoft.Extensions.Logging;
 
 using NUnit.Framework;
 
-namespace Lambdajection
+namespace Lambdajection.Tests
 {
     [Lambda(Startup = typeof(Startup))]
     public partial class ExampleLambda
@@ -37,9 +37,16 @@ namespace Lambdajection
 
     public class ExampleBar
     {
+        private string value;
+
+        public ExampleBar()
+        {
+            value = "bar";
+        }
+
         public string Bar()
         {
-            return "Bar";
+            return value;
         }
     }
 
@@ -53,7 +60,7 @@ namespace Lambdajection
         }
     }
 
-    public class GeneratedRunTests
+    public class IntegrationTests
     {
         [Test]
         public async Task TestExampleLambdaRun()
