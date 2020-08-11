@@ -14,37 +14,20 @@ namespace Lambdajection.Core
         where TLambda : class, ILambda<TLambdaParameter, TLambdaOutput>
         where TLambdaStartup : ILambdaStartup, new()
     {
-        private static IServiceProvider serviceProvider;
+        public IServiceProvider ServiceProvider { get; internal set; } = null!;
 
-        static LambdaHost()
+        public LambdaHost() : this(LambdaHostBuilder<TLambda, TLambdaParameter, TLambdaOutput, TLambdaStartup>.Build)
         {
-            var configuration = new ConfigurationBuilder()
-            .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-            .AddEnvironmentVariables()
-            .Build();
-
-            var serviceCollection = new ServiceCollection();
-            serviceCollection.AddSingleton<IConfiguration>(configuration);
-            serviceCollection.AddTransient<TLambda>();
-
-            var startup = new TLambdaStartup();
-            startup.Configuration = configuration;
-            startup.ConfigureServices(serviceCollection);
-            serviceCollection.AddLogging(logging =>
-            {
-                logging.AddConsole();
-                startup.ConfigureLogging(logging);
-            });
-
-            serviceProvider = serviceCollection.BuildServiceProvider();
         }
 
-        public LambdaHost() { }
+        public LambdaHost(Action<LambdaHost<TLambda, TLambdaParameter, TLambdaOutput, TLambdaStartup>> build)
+        {
+            build(this);
+        }
 
         public async Task<TLambdaOutput> Run(TLambdaParameter parameter, ILambdaContext context)
         {
-            using (var scope = serviceProvider.CreateScope())
+            using (var scope = ServiceProvider.CreateScope())
             {
                 var service = scope.ServiceProvider.GetRequiredService<TLambda>();
                 return await service.Handle(parameter, context);
