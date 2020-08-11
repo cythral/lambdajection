@@ -45,7 +45,7 @@ namespace Lambdajection.Generator
 
             foreach (var use in usings)
             {
-                yield return SyntaxFactory.UsingDirective(SyntaxFactory.ParseName(use));
+                yield return UsingDirective(ParseName(use));
             }
         }
 
@@ -55,14 +55,14 @@ namespace Lambdajection.Generator
             var namespaceNode = (NamespaceDeclarationSyntax)processingNode.Parent;
 
             var members = await GenerateAsync(context, progress, cancellationToken);
-            var namespacedMembers = SyntaxFactory.NamespaceDeclaration(namespaceNode.Name, SyntaxFactory.List<ExternAliasDirectiveSyntax>(), SyntaxFactory.List<UsingDirectiveSyntax>(), members);
+            var namespacedMembers = NamespaceDeclaration(namespaceNode.Name, List<ExternAliasDirectiveSyntax>(), List<UsingDirectiveSyntax>(), members);
             var namespacedMembersList = new List<MemberDeclarationSyntax> { namespacedMembers };
 
 
             return new RichGenerationResult
             {
-                Usings = SyntaxFactory.List(GenerateUsings(context.CompilationUnitUsings)),
-                Members = SyntaxFactory.List(namespacedMembersList),
+                Usings = List(GenerateUsings(context.CompilationUnitUsings)),
+                Members = List(namespacedMembersList),
             };
         }
 
@@ -76,6 +76,13 @@ namespace Lambdajection.Generator
 
             if (handleMember == null)
             {
+                var descriptor = new DiagnosticDescriptor("LJ0001", "Handle Method Not Implemented", "Implement the Handle method to provide Lambda Function Handler code.", "Lambdajection", DiagnosticSeverity.Error, true);
+                var diagnostic = Diagnostic.Create(descriptor, Location.Create(declaration.SyntaxTree, declaration.Span));
+                progress.Report(diagnostic);
+
+                var source = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+                source.Cancel();
+
                 throw new Exception("Lambda must implement handle method");
             }
 
@@ -87,10 +94,9 @@ namespace Lambdajection.Generator
 
             IEnumerable<MemberDeclarationSyntax> GeneratePartialClass()
             {
-                var partialClass = SyntaxFactory
-                .ClassDeclaration(className)
+                var partialClass = ClassDeclaration(className)
                 .WithBaseList(BaseList(Token(ColonToken), SeparatedList(typeConstraints)))
-                .AddModifiers(Token(SyntaxKind.PartialKeyword))
+                .AddModifiers(Token(PartialKeyword))
                 .WithIdentifier(Identifier(className))
                 .AddMembers(
                     GenerateRunMethod()
@@ -121,7 +127,7 @@ namespace Lambdajection.Generator
             }
 
             var result = GeneratePartialClass();
-            var list = SyntaxFactory.List(result);
+            var list = List(result);
             return Task.FromResult(list);
         }
     }
