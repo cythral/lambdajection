@@ -102,6 +102,11 @@
         "resolved": "1.1.0",
         "contentHash": "ueGId8b4DEHoVWkHDs3iAJH8IUSAUGu5AqkoI/Syl4RuByzik7lz9IjoImiGAlGhtsQV02MHNeTo04IFjS37gQ=="
       },
+      "AWSSDK.Core": {
+        "type": "Transitive",
+        "resolved": "3.5.0",
+        "contentHash": "bC5slbW3f1QgYlJK/I/zDUlixHq8YzktTwreJHwoOCpnRFB/IHV4EIgdEGwQnWOneJwRfwq4ZB0OhlrM3aT2pw=="
+      },
       "Castle.Core": {
         "type": "Transitive",
         "resolved": "4.4.0",
@@ -1135,6 +1140,7 @@
       "Lambdajection.Core": {
         "type": "Project",
         "dependencies": {
+          "AWSSDK.Core": "3.5.0",
           "Amazon.Lambda.Core": "1.1.0",
           "Lambdajection.Attributes": "1.0.0",
           "Microsoft.Extensions.Configuration": "3.1.6",

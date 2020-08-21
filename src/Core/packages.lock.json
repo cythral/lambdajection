@@ -8,6 +8,15 @@
         "resolved": "1.1.0",
         "contentHash": "ueGId8b4DEHoVWkHDs3iAJH8IUSAUGu5AqkoI/Syl4RuByzik7lz9IjoImiGAlGhtsQV02MHNeTo04IFjS37gQ=="
       },
+      "AWSSDK.Core": {
+        "type": "Direct",
+        "requested": "[3.5.0, )",
+        "resolved": "3.5.0",
+        "contentHash": "bC5slbW3f1QgYlJK/I/zDUlixHq8YzktTwreJHwoOCpnRFB/IHV4EIgdEGwQnWOneJwRfwq4ZB0OhlrM3aT2pw==",
+        "dependencies": {
+          "Microsoft.Bcl.AsyncInterfaces": "1.1.0"
+        }
+      },
       "Microsoft.CodeAnalysis.CSharp.CodeStyle": {
         "type": "Direct",
         "requested": "[3.8.0-1.20330.5, )",

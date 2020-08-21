@@ -1,16 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
 using Cythral.CodeGeneration.Roslyn;
 
-using Lambdajection.Attributes;
-
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
@@ -95,28 +91,19 @@ namespace Lambdajection.Generator
                 throw new Exception("Lambda must implement handle method");
             }
 
-            var optionClasses = from tree in context.Compilation.SyntaxTrees
-                                let semanticModel = context.Compilation.GetSemanticModel(tree)
-
-                                from node in tree.GetRoot().DescendantNodesAndSelf().OfType<ClassDeclarationSyntax>()
-                                from attr in semanticModel.GetDeclaredSymbol(node)?.GetAttributes() ?? ImmutableArray.Create<AttributeData>()
-
-                                where attr.AttributeClass?.Name == nameof(LambdaOptionsAttribute) &&
-                                    ((INamedTypeSymbol)attr.ConstructorArguments[0].Value!).ToDisplayString() == $"{namespaceName}.{className}"
-
-
-                                select ((string)attr.ConstructorArguments[1].Value!, node);
+            var scanner = new LambdaCompilationScanner(context.Compilation, context.Compilation.SyntaxTrees, $"{namespaceName}.{className}");
+            var scanResults = scanner.Scan();
 
             IEnumerable<MemberDeclarationSyntax> GenerateMembers()
             {
-                yield return GenerateLambda(className!, handleMember!, optionClasses!);
+                yield return GenerateLambda(className!, handleMember!, scanResults.OptionClasses);
             }
 
             var result = List(GenerateMembers());
             return Task.FromResult(result);
         }
 
-        public ClassDeclarationSyntax GenerateLambda(string className, MethodDeclarationSyntax handleMethod, IEnumerable<(string, ClassDeclarationSyntax)> optionClasses)
+        public ClassDeclarationSyntax GenerateLambda(string className, MethodDeclarationSyntax handleMethod, Dictionary<string, ClassDeclarationSyntax> optionClasses)
         {
             var inputParameter = handleMethod.ParameterList.Parameters[0];
             var contextParameter = handleMethod.ParameterList.Parameters[1];
@@ -154,7 +141,7 @@ namespace Lambdajection.Generator
                 );
         }
 
-        public static ClassDeclarationSyntax GenerateOptionsConfigurator(IEnumerable<(string, ClassDeclarationSyntax)> optionClasses)
+        public static ClassDeclarationSyntax GenerateOptionsConfigurator(Dictionary<string, ClassDeclarationSyntax> optionClasses)
         {
             var typeConstraints = new BaseTypeSyntax[] { SimpleBaseType(ParseTypeName("ILambdaOptionsConfigurator")) };
             var publicModifiersList = new SyntaxToken[] { Token(PublicKeyword) };
