@@ -3,8 +3,9 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Lambdajection.Core
 {
-    public interface ILambdaOptionsConfigurator
+    public interface ILambdaConfigurator
     {
         void ConfigureOptions(IConfiguration configuration, IServiceCollection services);
+        void ConfigureAwsServices(IServiceCollection services);
     }
 }

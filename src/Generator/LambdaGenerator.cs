@@ -1,16 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
 using Cythral.CodeGeneration.Roslyn;
 
-using Lambdajection.Attributes;
-
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
@@ -23,6 +19,9 @@ namespace Lambdajection.Generator
         private readonly AttributeData attributeData;
         private readonly INamedTypeSymbol startupType;
         private readonly string startupTypeName;
+        private readonly string startupTypeDisplayName;
+
+
         private readonly string[] usings = new string[]
         {
             "System.Threading.Tasks",
@@ -33,6 +32,8 @@ namespace Lambdajection.Generator
             "Lambdajection.Core"
         };
 
+        private HashSet<string> usingsAddedDuringGeneration = null!;
+
         public LambdaGenerator(AttributeData attributeData)
         {
             this.attributeData = attributeData;
@@ -41,25 +42,22 @@ namespace Lambdajection.Generator
                                 select (INamedTypeSymbol)arg.Value.Value!).FirstOrDefault();
 
             this.startupTypeName = this.startupType.Name;
+            this.startupTypeDisplayName = this.startupType.ToDisplayString();
         }
 
         public IEnumerable<UsingDirectiveSyntax> GenerateUsings(IEnumerable<UsingDirectiveSyntax> exclusions)
         {
-            var usingsWithoutExclusions = new List<string>(usings);
+            var exclusionNames = exclusions.Select(exclusion => exclusion.Name.ToString());
+            var usingsWithoutExclusions = new HashSet<string>(usings);
+            usingsWithoutExclusions.UnionWith(usingsAddedDuringGeneration);
+            usingsWithoutExclusions.ExceptWith(exclusionNames);
 
-            foreach (var exclusion in exclusions)
-            {
-                usingsWithoutExclusions.Remove(exclusion.Name.ToString());
-            }
-
-            foreach (var use in usingsWithoutExclusions)
-            {
-                yield return UsingDirective(ParseName(use));
-            }
+            return usingsWithoutExclusions.Select(name => UsingDirective(ParseName(name)));
         }
 
         public async Task<RichGenerationResult> GenerateRichAsync(TransformationContext context, IProgress<Diagnostic> progress, CancellationToken cancellationToken = default)
         {
+            usingsAddedDuringGeneration = new HashSet<string>();
             var processingNode = (ClassDeclarationSyntax)context.ProcessingNode;
             var namespaceNode = (NamespaceDeclarationSyntax)processingNode.Parent;
 
@@ -95,28 +93,19 @@ namespace Lambdajection.Generator
                 throw new Exception("Lambda must implement handle method");
             }
 
-            var optionClasses = from tree in context.Compilation.SyntaxTrees
-                                let semanticModel = context.Compilation.GetSemanticModel(tree)
-
-                                from node in tree.GetRoot().DescendantNodesAndSelf().OfType<ClassDeclarationSyntax>()
-                                from attr in semanticModel.GetDeclaredSymbol(node)?.GetAttributes() ?? ImmutableArray.Create<AttributeData>()
-
-                                where attr.AttributeClass?.Name == nameof(LambdaOptionsAttribute) &&
-                                    ((INamedTypeSymbol)attr.ConstructorArguments[0].Value!).ToDisplayString() == $"{namespaceName}.{className}"
-
-
-                                select ((string)attr.ConstructorArguments[1].Value!, node);
+            var scanner = new LambdaCompilationScanner(context.Compilation, context.Compilation.SyntaxTrees, $"{namespaceName}.{className}", startupTypeDisplayName);
+            var scanResults = scanner.Scan();
 
             IEnumerable<MemberDeclarationSyntax> GenerateMembers()
             {
-                yield return GenerateLambda(className!, handleMember!, optionClasses!);
+                yield return GenerateLambda(className!, handleMember!, scanResults);
             }
 
             var result = List(GenerateMembers());
             return Task.FromResult(result);
         }
 
-        public ClassDeclarationSyntax GenerateLambda(string className, MethodDeclarationSyntax handleMethod, IEnumerable<(string, ClassDeclarationSyntax)> optionClasses)
+        public ClassDeclarationSyntax GenerateLambda(string className, MethodDeclarationSyntax handleMethod, LambdaCompilationScanResult scanResults)
         {
             var inputParameter = handleMethod.ParameterList.Parameters[0];
             var contextParameter = handleMethod.ParameterList.Parameters[1];
@@ -141,7 +130,7 @@ namespace Lambdajection.Generator
 
             IEnumerable<StatementSyntax> GenerateRunMethodBody()
             {
-                yield return ParseStatement($"var host = new LambdaHost<{className}, {inputType}, {returnType}, {startupTypeName}, OptionsConfigurator>();");
+                yield return ParseStatement($"var host = new LambdaHost<{className}, {inputType}, {returnType}, {startupTypeName}, LambdajectionConfigurator>();");
                 yield return ParseStatement($"return await host.Run({inputParameter!.Identifier.ValueText}, {contextParameter!.Identifier.ValueText});");
             }
 
@@ -150,23 +139,18 @@ namespace Lambdajection.Generator
                 .AddModifiers(Token(PartialKeyword))
                 .AddMembers(
                     GenerateRunMethod(),
-                    GenerateOptionsConfigurator(optionClasses)
+                    GenerateConfigurator(scanResults)
                 );
         }
 
-        public static ClassDeclarationSyntax GenerateOptionsConfigurator(IEnumerable<(string, ClassDeclarationSyntax)> optionClasses)
+        public ClassDeclarationSyntax GenerateConfigurator(LambdaCompilationScanResult scanResults)
         {
-            var typeConstraints = new BaseTypeSyntax[] { SimpleBaseType(ParseTypeName("ILambdaOptionsConfigurator")) };
+            var typeConstraints = new BaseTypeSyntax[] { SimpleBaseType(ParseTypeName("ILambdaConfigurator")) };
             var publicModifiersList = new SyntaxToken[] { Token(PublicKeyword) };
-            var configureMethodParameters = SeparatedList(new ParameterSyntax[]
-            {
-                Parameter(List<AttributeListSyntax>(), TokenList(), ParseTypeName("IConfiguration"), Identifier("configuration"), null),
-                Parameter(List<AttributeListSyntax>(), TokenList(), ParseTypeName("IServiceCollection"), Identifier("services"), null),
-            });
 
             IEnumerable<StatementSyntax> GenerateConfigureMethodBody()
             {
-                foreach (var (sectionName, optionClass) in optionClasses)
+                foreach (var (sectionName, optionClass) in scanResults.OptionClasses)
                 {
                     var optionClassName = optionClass.Identifier.ValueText;
                     var namespac = optionClass.Ancestors().OfType<NamespaceDeclarationSyntax>().ElementAt(0);
@@ -176,18 +160,52 @@ namespace Lambdajection.Generator
                 }
             }
 
-            MemberDeclarationSyntax GenerateConfigureMethod()
+            MemberDeclarationSyntax GenerateConfigureOptionsMethod()
             {
+                var parameters = SeparatedList(new ParameterSyntax[]
+                {
+                    Parameter(List<AttributeListSyntax>(), TokenList(), ParseTypeName("IConfiguration"), Identifier("configuration"), null),
+                    Parameter(List<AttributeListSyntax>(), TokenList(), ParseTypeName("IServiceCollection"), Identifier("services"), null),
+                });
+
                 return MethodDeclaration(ParseTypeName("void"), "ConfigureOptions")
                     .WithModifiers(TokenList(publicModifiersList))
-                    .WithParameterList(ParameterList(configureMethodParameters))
+                    .WithParameterList(ParameterList(parameters))
                     .WithBody(Block(GenerateConfigureMethodBody()));
             };
 
-            return ClassDeclaration("OptionsConfigurator")
+            IEnumerable<StatementSyntax> GenerateConfigureAwsServicesMethodBody()
+            {
+                foreach (var interfaceName in scanResults.AwsServices)
+                {
+                    var serviceName = interfaceName[1..];
+                    var baseServiceName = serviceName[6..];
+                    var usingName = $"Amazon.{baseServiceName}";
+                    var implementationName = $"{serviceName}Client";
+
+                    usingsAddedDuringGeneration.Add(usingName);
+                    yield return ParseStatement($"services.AddScoped<{interfaceName}, {implementationName}>();");
+                }
+            }
+
+            MemberDeclarationSyntax GenerateConfigureAwsServicesMethod()
+            {
+                var parameters = SeparatedList(new ParameterSyntax[]
+                {
+                    Parameter(List<AttributeListSyntax>(), TokenList(), ParseTypeName("IServiceCollection"), Identifier("services"), null),
+                });
+
+                return MethodDeclaration(ParseTypeName("void"), "ConfigureAwsServices")
+                    .WithModifiers(TokenList(publicModifiersList))
+                    .WithParameterList(ParameterList(parameters))
+                    .WithBody(Block(GenerateConfigureAwsServicesMethodBody()));
+            }
+
+            return ClassDeclaration("LambdajectionConfigurator")
                 .WithBaseList(BaseList(Token(ColonToken), SeparatedList(typeConstraints)))
                 .AddMembers(
-                    GenerateConfigureMethod()
+                    GenerateConfigureOptionsMethod(),
+                    GenerateConfigureAwsServicesMethod()
                 );
         }
     }
