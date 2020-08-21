@@ -101,8 +101,6 @@ namespace Lambdajection.Generator
                 yield return GenerateLambda(className!, handleMember!, scanResults);
             }
 
-            System.IO.File.WriteAllText("/tmp/test", string.Join('\n', scanResults.AwsServices));
-
             var result = List(GenerateMembers());
             return Task.FromResult(result);
         }
