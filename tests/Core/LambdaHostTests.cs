@@ -26,7 +26,7 @@ namespace Lambdajection.Core.Tests
             collection.AddSingleton<TestLambda>(lambda);
 
             var provider = collection.BuildServiceProvider();
-            var host = new LambdaHost<TestLambda, object, object, TestStartup>(lambdaHost =>
+            var host = new LambdaHost<TestLambda, object, object, TestStartup, TestOptionsConfigurator>(lambdaHost =>
             {
                 lambdaHost.ServiceProvider = provider;
             });

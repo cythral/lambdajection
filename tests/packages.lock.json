@@ -4,9 +4,9 @@
     ".NETCoreApp,Version=v3.1": {
       "Cythral.CodeGeneration.Roslyn.Tool": {
         "type": "Direct",
-        "requested": "[0.9.0, )",
-        "resolved": "0.9.0",
-        "contentHash": "mxX4rQklQpNEPsheTYMpXtpb038smVOaj1BeROidJXdJC5Dhn0ne8K1MNZLkj37rch6+vx0Xs0aZJXskO+pXFw=="
+        "requested": "[0.9.1, )",
+        "resolved": "0.9.1",
+        "contentHash": "oDpJq1WkzEt7DQ/t04ul4Em/cAjx43mNUHvDp9Wc/EgM++/Axrjs8vqJm9e+IMmar1F48V7zHyaaGfs7mCcKvQ=="
       },
       "FluentAssertions": {
         "type": "Direct",
@@ -115,17 +115,17 @@
       },
       "Cythral.CodeGeneration.Roslyn": {
         "type": "Transitive",
-        "resolved": "0.9.0",
-        "contentHash": "whskLGj2Z1Q/Ia/PV4myGac+lCZbc+jqeXfwOOG0SWfNG6VKWt/Re4b2h+bEVx6iDxV7SmfRfV+iZ9YIR31XdQ==",
+        "resolved": "0.9.1",
+        "contentHash": "wh0PHegWLI4yfgBFmzpMvtCoWZuqZJw4JjzYK8tmUZLiuBF8YuieJqCD1GRfskDbHO4SujkSAoCIdg56KiMZjg==",
         "dependencies": {
-          "Cythral.CodeGeneration.Roslyn.Attributes": "0.9.0",
+          "Cythral.CodeGeneration.Roslyn.Attributes": "0.9.1",
           "Microsoft.CodeAnalysis.CSharp": "[3.4.0]"
         }
       },
       "Cythral.CodeGeneration.Roslyn.Attributes": {
         "type": "Transitive",
-        "resolved": "0.9.0",
-        "contentHash": "DHe67WQeXPmrQrAQbtrnhlRVbzYwru0P8u5s9By3eRXkJqi4uxTIX2tyR36FnDFrBIfQeSLzFT8rn8O9l/gHgQ==",
+        "resolved": "0.9.1",
+        "contentHash": "XaFge0znlvUJwPUO79QKjYhHtrClGRESe8uzj/j8Izzy6kB75KXOht85L5zMl7E4u7Y8/4VDHvGTPxMyihSGXA==",
         "dependencies": {
           "NETStandard.Library": "1.6.1"
         }
@@ -1123,13 +1123,14 @@
       "Lambdajection.Attributes": {
         "type": "Project",
         "dependencies": {
-          "Cythral.CodeGeneration.Roslyn.Attributes": "0.9.0"
+          "Cythral.CodeGeneration.Roslyn.Attributes": "0.9.1"
         }
       },
       "Lambdajection.Core": {
         "type": "Project",
         "dependencies": {
           "Amazon.Lambda.Core": "1.1.0",
+          "Lambdajection.Attributes": "1.0.0",
           "Microsoft.Extensions.Configuration": "3.1.6",
           "Microsoft.Extensions.Configuration.EnvironmentVariables": "3.1.6",
           "Microsoft.Extensions.Configuration.Json": "3.1.6",
@@ -1141,7 +1142,7 @@
       "Lambdajection.Generator": {
         "type": "Project",
         "dependencies": {
-          "Cythral.CodeGeneration.Roslyn": "0.9.0",
+          "Cythral.CodeGeneration.Roslyn": "0.9.1",
           "Lambdajection.Attributes": "1.0.0"
         }
       }

@@ -4,17 +4,20 @@ using System.Reflection;
 
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace Lambdajection.Core
 {
-    internal class LambdaHostBuilder<TLambda, TLambdaParameter, TLambdaOutput, TLambdaStartup>
+    internal static class LambdaHostBuilder<TLambda, TLambdaParameter, TLambdaOutput, TLambdaStartup, TLambdaOptionsConfigurator>
         where TLambda : class, ILambda<TLambdaParameter, TLambdaOutput>
         where TLambdaStartup : ILambdaStartup, new()
+        where TLambdaOptionsConfigurator : ILambdaOptionsConfigurator, new()
     {
         internal static IServiceProvider? serviceProvider;
 
-        public static void Build(LambdaHost<TLambda, TLambdaParameter, TLambdaOutput, TLambdaStartup> host)
+        public static void Build(LambdaHost<TLambda, TLambdaParameter, TLambdaOutput, TLambdaStartup, TLambdaOptionsConfigurator> host)
         {
             serviceProvider = serviceProvider ?? BuildServiceProvider();
             host.ServiceProvider = serviceProvider;
@@ -25,6 +28,7 @@ namespace Lambdajection.Core
             var configuration = BuildConfiguration();
             var serviceCollection = BuildServiceCollection(configuration);
             var startup = BuildLambdaStartup(configuration, serviceCollection);
+            BuildOptionsConfigurator(configuration, serviceCollection);
             return serviceCollection.BuildServiceProvider();
         }
 
@@ -45,10 +49,20 @@ namespace Lambdajection.Core
             return serviceCollection;
         }
 
+        public static TLambdaOptionsConfigurator BuildOptionsConfigurator(IConfigurationRoot configuration, IServiceCollection serviceCollection)
+        {
+            var configurator = new TLambdaOptionsConfigurator();
+            configurator.ConfigureOptions(configuration, serviceCollection);
+            return configurator;
+        }
+
         public static TLambdaStartup BuildLambdaStartup(IConfigurationRoot configuration, IServiceCollection serviceCollection)
         {
-            var startup = new TLambdaStartup();
-            startup.Configuration = configuration;
+            var startup = new TLambdaStartup
+            {
+                Configuration = configuration,
+            };
+
             startup.ConfigureServices(serviceCollection);
 
             serviceCollection.AddLogging(logging =>

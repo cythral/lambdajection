@@ -4,11 +4,11 @@
     ".NETCoreApp,Version=v3.1": {
       "Cythral.CodeGeneration.Roslyn": {
         "type": "Direct",
-        "requested": "[0.9.0, )",
-        "resolved": "0.9.0",
-        "contentHash": "whskLGj2Z1Q/Ia/PV4myGac+lCZbc+jqeXfwOOG0SWfNG6VKWt/Re4b2h+bEVx6iDxV7SmfRfV+iZ9YIR31XdQ==",
+        "requested": "[0.9.1, )",
+        "resolved": "0.9.1",
+        "contentHash": "wh0PHegWLI4yfgBFmzpMvtCoWZuqZJw4JjzYK8tmUZLiuBF8YuieJqCD1GRfskDbHO4SujkSAoCIdg56KiMZjg==",
         "dependencies": {
-          "Cythral.CodeGeneration.Roslyn.Attributes": "0.9.0",
+          "Cythral.CodeGeneration.Roslyn.Attributes": "0.9.1",
           "Microsoft.CodeAnalysis.CSharp": "[3.4.0]"
         }
       },
@@ -42,8 +42,8 @@
       },
       "Cythral.CodeGeneration.Roslyn.Attributes": {
         "type": "Transitive",
-        "resolved": "0.9.0",
-        "contentHash": "DHe67WQeXPmrQrAQbtrnhlRVbzYwru0P8u5s9By3eRXkJqi4uxTIX2tyR36FnDFrBIfQeSLzFT8rn8O9l/gHgQ==",
+        "resolved": "0.9.1",
+        "contentHash": "XaFge0znlvUJwPUO79QKjYhHtrClGRESe8uzj/j8Izzy6kB75KXOht85L5zMl7E4u7Y8/4VDHvGTPxMyihSGXA==",
         "dependencies": {
           "NETStandard.Library": "1.6.1"
         }
@@ -1030,7 +1030,7 @@
       "Lambdajection.Attributes": {
         "type": "Project",
         "dependencies": {
-          "Cythral.CodeGeneration.Roslyn.Attributes": "0.9.0"
+          "Cythral.CodeGeneration.Roslyn.Attributes": "0.9.1"
         }
       }
     }
