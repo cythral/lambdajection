@@ -18,8 +18,8 @@ namespace Lambdajection.Tests
     [Lambda(Startup = typeof(Startup))]
     public partial class ExampleLambda
     {
-        private ExampleBar exampleBar;
-        private ILogger<ExampleLambda> logger;
+        private readonly ExampleBar exampleBar;
+        private readonly ILogger<ExampleLambda> logger;
 
         public ExampleLambda(ExampleBar exampleService, ILogger<ExampleLambda> logger)
         {
@@ -37,7 +37,7 @@ namespace Lambdajection.Tests
 
     public class ExampleBar
     {
-        private string value;
+        private readonly string value;
 
         public ExampleBar()
         {

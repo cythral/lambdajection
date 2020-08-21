@@ -1,5 +1,6 @@
 {
   "editor.formatOnSave": true,
   "editor.formatOnPaste": true,
-  "omnisharp.enableEditorConfigSupport": true
+  "omnisharp.enableEditorConfigSupport": true,
+  "omnisharp.enableRoslynAnalyzers": true
 }
