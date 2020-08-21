@@ -7,12 +7,15 @@ namespace Lambdajection.Generator
 {
     public readonly struct LambdaCompilationScanResult : IEquatable<LambdaCompilationScanResult>
     {
-        public LambdaCompilationScanResult(Dictionary<string, ClassDeclarationSyntax> optionClasses)
+        public LambdaCompilationScanResult(Dictionary<string, ClassDeclarationSyntax> optionClasses, IEnumerable<string> awsServices)
         {
             this.OptionClasses = optionClasses;
+            this.AwsServices = awsServices;
         }
 
         public Dictionary<string, ClassDeclarationSyntax> OptionClasses { get; }
+        public IEnumerable<string> AwsServices { get; }
+
 
         public override bool Equals(object? obj)
         {

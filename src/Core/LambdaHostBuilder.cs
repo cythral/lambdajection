@@ -7,14 +7,14 @@ using Microsoft.Extensions.Logging;
 
 namespace Lambdajection.Core
 {
-    internal static class LambdaHostBuilder<TLambda, TLambdaParameter, TLambdaOutput, TLambdaStartup, TLambdaOptionsConfigurator>
+    internal static class LambdaHostBuilder<TLambda, TLambdaParameter, TLambdaOutput, TLambdaStartup, TLambdaConfigurator>
         where TLambda : class, ILambda<TLambdaParameter, TLambdaOutput>
         where TLambdaStartup : ILambdaStartup, new()
-        where TLambdaOptionsConfigurator : ILambdaOptionsConfigurator, new()
+        where TLambdaConfigurator : ILambdaConfigurator, new()
     {
         internal static IServiceProvider? serviceProvider;
 
-        public static void Build(LambdaHost<TLambda, TLambdaParameter, TLambdaOutput, TLambdaStartup, TLambdaOptionsConfigurator> host)
+        public static void Build(LambdaHost<TLambda, TLambdaParameter, TLambdaOutput, TLambdaStartup, TLambdaConfigurator> host)
         {
             serviceProvider ??= BuildServiceProvider();
             host.ServiceProvider = serviceProvider;
@@ -46,9 +46,10 @@ namespace Lambdajection.Core
             return serviceCollection;
         }
 
-        public static TLambdaOptionsConfigurator BuildOptionsConfigurator(IConfigurationRoot configuration, IServiceCollection serviceCollection)
+        public static TLambdaConfigurator BuildOptionsConfigurator(IConfigurationRoot configuration, IServiceCollection serviceCollection)
         {
-            var configurator = new TLambdaOptionsConfigurator();
+            var configurator = new TLambdaConfigurator();
+            configurator.ConfigureAwsServices(serviceCollection);
             configurator.ConfigureOptions(configuration, serviceCollection);
             return configurator;
         }

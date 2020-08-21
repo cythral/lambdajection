@@ -1,6 +1,8 @@
+using System;
 using System.Threading.Tasks;
 
 using Amazon.Lambda.Core;
+using Amazon.S3;
 
 using FluentAssertions;
 
@@ -20,16 +22,19 @@ namespace Lambdajection.Tests
     {
         private readonly ExampleBar exampleBar;
         private readonly ILogger<ExampleLambda> logger;
+        private readonly IAmazonS3 s3Client;
 
-        public ExampleLambda(ExampleBar exampleService, ILogger<ExampleLambda> logger)
+        public ExampleLambda(ExampleBar exampleService, ILogger<ExampleLambda> logger, IAmazonS3 s3Client)
         {
             this.exampleBar = exampleService;
             this.logger = logger;
+            this.s3Client = s3Client;
         }
 
         public Task<string> Handle(string request, ILambdaContext context)
         {
             logger.LogInformation("Test Logging Works");
+            logger.LogInformation("S3 Client null: " + s3Client is null ? "true" : "false");
 
             return Task.FromResult(request + " " + exampleBar.Bar());
         }
@@ -57,6 +62,7 @@ namespace Lambdajection.Tests
         public void ConfigureServices(IServiceCollection collection)
         {
             collection.AddScoped<ExampleBar>();
+            collection.UseAwsService<IAmazonS3>();
         }
     }
 
@@ -65,6 +71,10 @@ namespace Lambdajection.Tests
         [Test]
         public async Task TestExampleLambdaRun()
         {
+            Environment.SetEnvironmentVariable("AWS_REGION", "us-east-1");
+            Environment.SetEnvironmentVariable("AWS_ACCESS_KEY_ID", "key-id");
+            Environment.SetEnvironmentVariable("AWS_SECRET_ACCESS_KEY", "secret-key");
+
             var test = "foo";
             var result = await ExampleLambda.Run(test, null);
 
