@@ -16,14 +16,14 @@
       "problemMatcher": "$msCompile"
     },
     {
-      "label": "cleanup-imports",
+      "label": "format",
       "command": "dotnet",
       "type": "process",
       "args": [
         "format",
         "${workspaceFolder}/lambdajection.sln",
         "--fix-style",
-        "error"
+        "info"
       ],
       "problemMatcher": "$msCompile"
     }

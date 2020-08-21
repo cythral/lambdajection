@@ -58,7 +58,7 @@ namespace Lambdajection.Generator
             }
         }
 
-        public async Task<RichGenerationResult> GenerateRichAsync(TransformationContext context, IProgress<Diagnostic> progress, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<RichGenerationResult> GenerateRichAsync(TransformationContext context, IProgress<Diagnostic> progress, CancellationToken cancellationToken = default)
         {
             var processingNode = (ClassDeclarationSyntax)context.ProcessingNode;
             var namespaceNode = (NamespaceDeclarationSyntax)processingNode.Parent;
@@ -74,7 +74,7 @@ namespace Lambdajection.Generator
             };
         }
 
-        public Task<SyntaxList<MemberDeclarationSyntax>> GenerateAsync(TransformationContext context, IProgress<Diagnostic> progress, CancellationToken cancellationToken = default(CancellationToken))
+        public Task<SyntaxList<MemberDeclarationSyntax>> GenerateAsync(TransformationContext context, IProgress<Diagnostic> progress, CancellationToken cancellationToken = default)
         {
             var declaration = (ClassDeclarationSyntax)context.ProcessingNode;
             var namespaceName = declaration.Ancestors().OfType<NamespaceDeclarationSyntax>().ElementAt(0).Name;

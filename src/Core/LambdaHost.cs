@@ -25,11 +25,9 @@ namespace Lambdajection.Core
 
         public async Task<TLambdaOutput> Run(TLambdaParameter parameter, ILambdaContext context)
         {
-            using (var scope = ServiceProvider.CreateScope())
-            {
-                var service = scope.ServiceProvider.GetRequiredService<TLambda>();
-                return await service.Handle(parameter, context);
-            }
+            using var scope = ServiceProvider.CreateScope();
+            var service = scope.ServiceProvider.GetRequiredService<TLambda>();
+            return await service.Handle(parameter, context);
         }
     }
 }

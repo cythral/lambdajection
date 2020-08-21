@@ -16,7 +16,7 @@ namespace Lambdajection.Tests.Configuration
     [Lambda(Startup = typeof(TestStartup))]
     public partial class ConfigurationLambda
     {
-        private ExampleOptions exampleOptions;
+        private readonly ExampleOptions exampleOptions;
 
         public ConfigurationLambda(IOptions<ExampleOptions> exampleOptions)
         {

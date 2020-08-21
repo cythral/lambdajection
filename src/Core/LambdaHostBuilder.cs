@@ -16,7 +16,7 @@ namespace Lambdajection.Core
 
         public static void Build(LambdaHost<TLambda, TLambdaParameter, TLambdaOutput, TLambdaStartup, TLambdaOptionsConfigurator> host)
         {
-            serviceProvider = serviceProvider ?? BuildServiceProvider();
+            serviceProvider ??= BuildServiceProvider();
             host.ServiceProvider = serviceProvider;
         }
 
