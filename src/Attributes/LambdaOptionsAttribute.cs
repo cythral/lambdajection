@@ -1,8 +1,6 @@
 using System;
 using System.Diagnostics;
 
-using Cythral.CodeGeneration.Roslyn;
-
 namespace Lambdajection.Attributes
 {
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]

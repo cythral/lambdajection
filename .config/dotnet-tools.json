@@ -5,6 +5,10 @@
     "nbgv": {
       "version": "3.2.31",
       "commands": ["nbgv"]
+    },
+    "dotnet-format": {
+      "version": "5.0.142002",
+      "commands": ["dotnet-format"]
     }
   }
 }

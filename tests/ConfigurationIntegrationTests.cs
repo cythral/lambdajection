@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 using Amazon.Lambda.Core;
@@ -7,11 +6,7 @@ using Amazon.Lambda.Core;
 using FluentAssertions;
 
 using Lambdajection.Attributes;
-using Lambdajection.Core;
 
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 using NUnit.Framework;
@@ -30,7 +25,6 @@ namespace Lambdajection.Tests.Configuration
 
         public Task<string> Handle(string request, ILambdaContext context)
         {
-            var test = typeof(OptionsConfigurator);
             return Task.FromResult(exampleOptions.ExampleConfigValue);
         }
     }

@@ -1,12 +1,7 @@
 using System;
 using System.Linq;
-using System.Threading.Tasks;
-
-using Amazon.Lambda.Core;
 
 using FluentAssertions;
-
-using Lambdajection.Core;
 
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Configuration.EnvironmentVariables;

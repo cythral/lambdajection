@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -12,7 +11,6 @@ using Lambdajection.Attributes;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Symbols;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
@@ -22,14 +20,15 @@ namespace Lambdajection.Generator
 {
     public class LambdaGenerator : IRichCodeGenerator
     {
-        private AttributeData attributeData;
-        private INamedTypeSymbol startupType;
-        private string startupTypeName;
-        private string[] usings = new string[]
+        private readonly AttributeData attributeData;
+        private readonly INamedTypeSymbol startupType;
+        private readonly string startupTypeName;
+        private readonly string[] usings = new string[]
         {
             "System.Threading.Tasks",
             "System.IO",
             "Microsoft.Extensions.DependencyInjection",
+            "Microsoft.Extensions.Configuration",
             "Amazon.Lambda.Core",
             "Lambdajection.Core"
         };
@@ -159,12 +158,11 @@ namespace Lambdajection.Generator
         {
             var typeConstraints = new BaseTypeSyntax[] { SimpleBaseType(ParseTypeName("ILambdaOptionsConfigurator")) };
             var publicModifiersList = new SyntaxToken[] { Token(PublicKeyword) };
-
-            IEnumerable<ParameterSyntax> GenerateConfigureMethodParameters()
+            var configureMethodParameters = SeparatedList(new ParameterSyntax[]
             {
-                yield return Parameter(List<AttributeListSyntax>(), TokenList(), ParseTypeName("IConfiguration"), Identifier("configuration"), null);
-                yield return Parameter(List<AttributeListSyntax>(), TokenList(), ParseTypeName("IServiceCollection"), Identifier("services"), null);
-            }
+                Parameter(List<AttributeListSyntax>(), TokenList(), ParseTypeName("IConfiguration"), Identifier("configuration"), null),
+                Parameter(List<AttributeListSyntax>(), TokenList(), ParseTypeName("IServiceCollection"), Identifier("services"), null),
+            });
 
             IEnumerable<StatementSyntax> GenerateConfigureMethodBody()
             {
@@ -180,12 +178,9 @@ namespace Lambdajection.Generator
 
             MemberDeclarationSyntax GenerateConfigureMethod()
             {
-                var modifiers = new SyntaxToken[] { Token(PublicKeyword) };
-                var parameters = SeparatedList(GenerateConfigureMethodParameters());
-
                 return MethodDeclaration(ParseTypeName("void"), "ConfigureOptions")
                     .WithModifiers(TokenList(publicModifiersList))
-                    .WithParameterList(ParameterList(parameters))
+                    .WithParameterList(ParameterList(configureMethodParameters))
                     .WithBody(Block(GenerateConfigureMethodBody()));
             };
 

@@ -1,13 +1,8 @@
-using System;
 using System.Threading.Tasks;
 
 using Amazon.Lambda.Core;
 
 using Lambdajection.Core;
-
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 
 namespace Lambdajection
 {
