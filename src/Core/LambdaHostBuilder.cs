@@ -24,7 +24,7 @@ namespace Lambdajection.Core
         {
             var configuration = BuildConfiguration();
             var serviceCollection = BuildServiceCollection(configuration);
-            var startup = BuildLambdaStartup(configuration, serviceCollection);
+            BuildLambdaStartup(configuration, serviceCollection);
             BuildOptionsConfigurator(configuration, serviceCollection);
             return serviceCollection.BuildServiceProvider();
         }
