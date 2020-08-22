@@ -4,12 +4,18 @@
     ".NETStandard,Version=v2.1": {
       "Cythral.CodeGeneration.Roslyn.Attributes": {
         "type": "Direct",
-        "requested": "[0.9.0, )",
-        "resolved": "0.9.0",
-        "contentHash": "DHe67WQeXPmrQrAQbtrnhlRVbzYwru0P8u5s9By3eRXkJqi4uxTIX2tyR36FnDFrBIfQeSLzFT8rn8O9l/gHgQ==",
+        "requested": "[0.9.1, )",
+        "resolved": "0.9.1",
+        "contentHash": "XaFge0znlvUJwPUO79QKjYhHtrClGRESe8uzj/j8Izzy6kB75KXOht85L5zMl7E4u7Y8/4VDHvGTPxMyihSGXA==",
         "dependencies": {
           "NETStandard.Library": "1.6.1"
         }
+      },
+      "Microsoft.CodeAnalysis.CSharp.CodeStyle": {
+        "type": "Direct",
+        "requested": "[3.8.0-1.20330.5, )",
+        "resolved": "3.8.0-1.20330.5",
+        "contentHash": "0zUYloT5NiZGNjK0IvSSoe7gCg9RpQT0CmtgkHqp5VVNw8KvdlqXuVGawutAGvBuISMfCqlQ3Wu30VYbeI1DqA=="
       },
       "Microsoft.CodeAnalysis.FxCopAnalyzers": {
         "type": "Direct",

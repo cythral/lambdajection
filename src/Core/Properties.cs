@@ -1,3 +1,4 @@
 using System.Runtime.CompilerServices;
 
-[assembly: InternalsVisibleTo("Lambdajection.Tests")]
+[assembly: InternalsVisibleTo("Lambdajection.TestsWithFactories")]
+[assembly: InternalsVisibleTo("Lambdajection.TestsWithoutFactories")]

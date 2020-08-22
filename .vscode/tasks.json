@@ -5,36 +5,25 @@
       "label": "build",
       "command": "dotnet",
       "type": "process",
-      "args": [
-        "build",
-        "${workspaceFolder}/src/Project.Name.csproj",
-        "/property:GenerateFullPaths=true",
-        "/consoleloggerparameters:NoSummary"
-      ],
+      "args": ["build"],
       "problemMatcher": "$msCompile"
     },
     {
-      "label": "publish",
+      "label": "test",
       "command": "dotnet",
       "type": "process",
-      "args": [
-        "publish",
-        "${workspaceFolder}/src/Project.Name.csproj",
-        "/property:GenerateFullPaths=true",
-        "/consoleloggerparameters:NoSummary"
-      ],
+      "args": ["test"],
       "problemMatcher": "$msCompile"
     },
     {
-      "label": "watch",
+      "label": "format",
       "command": "dotnet",
       "type": "process",
       "args": [
-        "watch",
-        "run",
-        "${workspaceFolder}/src/Project.Name.csproj",
-        "/property:GenerateFullPaths=true",
-        "/consoleloggerparameters:NoSummary"
+        "format",
+        "${workspaceFolder}/lambdajection.sln",
+        "--fix-style",
+        "info"
       ],
       "problemMatcher": "$msCompile"
     }
