@@ -16,7 +16,6 @@ namespace Lambdajection.Generator
 {
     public class LambdaGenerator : IRichCodeGenerator
     {
-        private readonly AttributeData attributeData;
         private readonly INamedTypeSymbol startupType;
         private readonly string startupTypeName;
         private readonly string startupTypeDisplayName;
@@ -36,7 +35,6 @@ namespace Lambdajection.Generator
 
         public LambdaGenerator(AttributeData attributeData)
         {
-            this.attributeData = attributeData;
             this.startupType = (from arg in attributeData.NamedArguments
                                 where arg.Key == "Startup"
                                 select (INamedTypeSymbol)arg.Value.Value!).FirstOrDefault();
@@ -74,6 +72,7 @@ namespace Lambdajection.Generator
 
         public Task<SyntaxList<MemberDeclarationSyntax>> GenerateAsync(TransformationContext context, IProgress<Diagnostic> progress, CancellationToken cancellationToken = default)
         {
+            var includeFactories = context.Compilation.ReferencedAssemblyNames.Any(assembly => assembly.Name == "AWSSDK.SecurityToken");
             var declaration = (ClassDeclarationSyntax)context.ProcessingNode;
             var namespaceName = declaration.Ancestors().OfType<NamespaceDeclarationSyntax>().ElementAt(0).Name;
             var className = declaration.Identifier.ValueText;
@@ -98,14 +97,14 @@ namespace Lambdajection.Generator
 
             IEnumerable<MemberDeclarationSyntax> GenerateMembers()
             {
-                yield return GenerateLambda(className!, handleMember!, scanResults);
+                yield return GenerateLambda(className!, handleMember!, scanResults, includeFactories);
             }
 
             var result = List(GenerateMembers());
             return Task.FromResult(result);
         }
 
-        public ClassDeclarationSyntax GenerateLambda(string className, MethodDeclarationSyntax handleMethod, LambdaCompilationScanResult scanResults)
+        public ClassDeclarationSyntax GenerateLambda(string className, MethodDeclarationSyntax handleMethod, LambdaCompilationScanResult scanResults, bool includeFactories)
         {
             var inputParameter = handleMethod.ParameterList.Parameters[0];
             var contextParameter = handleMethod.ParameterList.Parameters[1];
@@ -139,11 +138,11 @@ namespace Lambdajection.Generator
                 .AddModifiers(Token(PartialKeyword))
                 .AddMembers(
                     GenerateRunMethod(),
-                    GenerateConfigurator(scanResults)
+                    GenerateConfigurator(scanResults, includeFactories)
                 );
         }
 
-        public ClassDeclarationSyntax GenerateConfigurator(LambdaCompilationScanResult scanResults)
+        public ClassDeclarationSyntax GenerateConfigurator(LambdaCompilationScanResult scanResults, bool includeFactories)
         {
             var typeConstraints = new BaseTypeSyntax[] { SimpleBaseType(ParseTypeName("ILambdaConfigurator")) };
             var publicModifiersList = new SyntaxToken[] { Token(PublicKeyword) };
@@ -176,15 +175,24 @@ namespace Lambdajection.Generator
 
             IEnumerable<StatementSyntax> GenerateConfigureAwsServicesMethodBody()
             {
-                foreach (var interfaceName in scanResults.AwsServices)
-                {
-                    var serviceName = interfaceName[1..];
-                    var baseServiceName = serviceName[6..];
-                    var usingName = $"Amazon.{baseServiceName}";
-                    var implementationName = $"{serviceName}Client";
+                var services = scanResults.AwsServices;
 
-                    usingsAddedDuringGeneration.Add(usingName);
-                    yield return ParseStatement($"services.AddScoped<{interfaceName}, {implementationName}>();");
+                if (includeFactories && services.Any())
+                {
+                    services = services.Where(service => service.ServiceName != "SecurityTokenService");
+                    yield return ParseStatement($"services.AddScoped<IAmazonSecurityTokenService, AmazonSecurityTokenServiceClient>();");
+                }
+
+                foreach (var service in services)
+                {
+                    usingsAddedDuringGeneration.Add(service.NamespaceName);
+
+                    yield return ParseStatement($"services.AddScoped<{service.InterfaceName}, {service.ImplementationName}>();");
+
+                    if (includeFactories)
+                    {
+                        yield return ParseStatement($"services.AddScoped<IAwsFactory<{service.InterfaceName}>, {service.ServiceName}Factory>();");
+                    }
                 }
             }
 
@@ -201,11 +209,102 @@ namespace Lambdajection.Generator
                     .WithBody(Block(GenerateConfigureAwsServicesMethodBody()));
             }
 
-            return ClassDeclaration("LambdajectionConfigurator")
+            var classDeclaration = ClassDeclaration("LambdajectionConfigurator")
                 .WithBaseList(BaseList(Token(ColonToken), SeparatedList(typeConstraints)))
                 .AddMembers(
                     GenerateConfigureOptionsMethod(),
                     GenerateConfigureAwsServicesMethod()
+                );
+
+            if (includeFactories)
+            {
+                if (scanResults.AwsServices.Any())
+                {
+                    usingsAddedDuringGeneration.Add("Amazon.SecurityToken");
+                    usingsAddedDuringGeneration.Add("Amazon.SecurityToken.Model");
+                }
+
+                foreach (var service in scanResults.AwsServices)
+                {
+                    var factory = GenerateAwsFactory(service.ServiceName, service.InterfaceName, service.ImplementationName);
+                    classDeclaration = classDeclaration.AddMembers(factory);
+                }
+            }
+
+            return classDeclaration;
+        }
+
+        public static ClassDeclarationSyntax GenerateAwsFactory(string service, string interfaceName, string implementationName)
+        {
+            var typeConstraints = new BaseTypeSyntax[] { SimpleBaseType(ParseTypeName($"IAwsFactory<{interfaceName}>")) };
+            var className = $"{service}Factory";
+
+            MemberDeclarationSyntax GenerateConstructor()
+            {
+                var parameters = SeparatedList(new ParameterSyntax[]
+                {
+                    Parameter(List<AttributeListSyntax>(), TokenList(), ParseTypeName("IAmazonSecurityTokenService"), Identifier("stsClient"), null),
+                });
+
+                static IEnumerable<StatementSyntax> GenerateBody()
+                {
+                    yield return ParseStatement("this.stsClient = stsClient;");
+                }
+
+                return ConstructorDeclaration(className!)
+                    .WithModifiers(TokenList(Token(PublicKeyword)))
+                    .WithParameterList(ParameterList(parameters))
+                    .WithBody(Block(GenerateBody()));
+            }
+
+            MemberDeclarationSyntax GenerateCreateMethod()
+            {
+                var roleArnDefaultValue = ParseExpression("null");
+                var parameters = SeparatedList(new ParameterSyntax[]
+                {
+                    Parameter(List<AttributeListSyntax>(), TokenList(), ParseTypeName("string"), Identifier("roleArn"), EqualsValueClause(roleArnDefaultValue)),
+                });
+
+                IEnumerable<StatementSyntax> GenerateBody()
+                {
+                    yield return IfStatement(ParseExpression("roleArn == null"),
+                        Block(
+                            ParseStatement("var request = new AssumeRoleRequest { RoleArn = roleArn, RoleSessionName = \"lambdajection-assume-role\" };"),
+                            ParseStatement("var response = await stsClient.AssumeRoleAsync(request);"),
+                            ParseStatement("var credentials = response.Credentials;"),
+                            ParseStatement($"return new {implementationName}(credentials);")
+                        )
+                    );
+
+                    yield return ParseStatement($"return new {implementationName}();");
+                }
+
+                return MethodDeclaration(ParseTypeName($"Task<{interfaceName}>"), "Create")
+                    .WithModifiers(TokenList(Token(PublicKeyword), Token(AsyncKeyword)))
+                    .WithParameterList(ParameterList(parameters))
+                    .WithBody(Block(GenerateBody()));
+            }
+
+            static MemberDeclarationSyntax GenerateStsClientField()
+            {
+                var attributes = List<AttributeListSyntax>();
+                var modifiers = TokenList(Token(PrivateKeyword));
+                var type = ParseTypeName("IAmazonSecurityTokenService");
+
+                var variables = new VariableDeclaratorSyntax[] { VariableDeclarator("stsClient") };
+                var variable = VariableDeclaration(type)
+                    .WithVariables(SeparatedList(variables));
+
+                return FieldDeclaration(attributes, modifiers, variable);
+
+            }
+
+            return ClassDeclaration(className)
+                .WithBaseList(BaseList(Token(ColonToken), SeparatedList(typeConstraints)))
+                .AddMembers(
+                    GenerateStsClientField(),
+                    GenerateConstructor(),
+                    GenerateCreateMethod()
                 );
         }
     }

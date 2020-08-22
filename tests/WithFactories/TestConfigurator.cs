@@ -13,8 +13,6 @@ namespace Lambdajection
 
         public IServiceCollection ServicesSetByConfigureAwsServices { get; private set; } = null!;
 
-
-
         public void ConfigureOptions(IConfiguration configuration, IServiceCollection services)
         {
             Configuration = configuration;

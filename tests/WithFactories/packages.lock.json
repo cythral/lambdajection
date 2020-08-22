@@ -11,6 +11,15 @@
           "AWSSDK.Core": "[3.5.0, 3.6.0)"
         }
       },
+      "AWSSDK.SecurityToken": {
+        "type": "Direct",
+        "requested": "[3.5.0, )",
+        "resolved": "3.5.0",
+        "contentHash": "rrhQYdiSynCneAUlTFZivo7eo6+Sm+FKSWGvfLRN0FmERb53yOB28O5w/o0dmr3B7rZ1kReCU0O0De/WGzA4vw==",
+        "dependencies": {
+          "AWSSDK.Core": "[3.5.0, 3.6.0)"
+        }
+      },
       "Cythral.CodeGeneration.Roslyn.Tool": {
         "type": "Direct",
         "requested": "[0.9.1, )",
@@ -1149,7 +1158,6 @@
       "Lambdajection.Core": {
         "type": "Project",
         "dependencies": {
-          "AWSSDK.Core": "3.5.0",
           "Amazon.Lambda.Core": "1.1.0",
           "Lambdajection.Attributes": "1.0.0",
           "Microsoft.Extensions.Configuration": "3.1.6",

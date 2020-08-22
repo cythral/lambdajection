@@ -19,7 +19,7 @@ namespace Lambdajection.Generator
         private readonly string lambdaTypeName;
         private readonly string startupDisplayName;
         private readonly Dictionary<string, ClassDeclarationSyntax> optionClasses = new Dictionary<string, ClassDeclarationSyntax>();
-        private readonly List<string> awsServices = new List<string>();
+        private readonly HashSet<AwsServiceMetadata> awsServices = new HashSet<AwsServiceMetadata>();
 
         public LambdaCompilationScanner(CSharpCompilation compilation, ImmutableArray<SyntaxTree> syntaxTrees, string lambdaTypeName, string startupDisplayName)
         {
@@ -81,15 +81,25 @@ namespace Lambdajection.Generator
                 return;
             }
 
-            var serviceNames = from invocation in classNode.DescendantNodes().OfType<InvocationExpressionSyntax>()
-                               where invocation.Expression is MemberAccessExpressionSyntax memberAccess
-                                     && semanticModel.GetTypeInfo(memberAccess.Expression).Type?.ToDisplayString() == ServiceCollectionDisplayName
-                                     && memberAccess.Name.Identifier.ValueText == UseAwsServiceName
-                               let memberAccess = (MemberAccessExpressionSyntax)invocation.Expression
-                               let genericName = (GenericNameSyntax)memberAccess.Name
-                               select genericName.TypeArgumentList.Arguments[0].ToString();
+            var serviceMetadatas = from invocation in classNode.DescendantNodes().OfType<InvocationExpressionSyntax>()
+                                   where invocation.Expression is MemberAccessExpressionSyntax memberAccess
+                                        && semanticModel.GetTypeInfo(memberAccess.Expression).Type?.ToDisplayString() == ServiceCollectionDisplayName
+                                        && memberAccess.Name.Identifier.ValueText == UseAwsServiceName
 
-            awsServices.AddRange(serviceNames);
+                                   let memberAccess = (MemberAccessExpressionSyntax)invocation.Expression
+                                   let genericName = (GenericNameSyntax)memberAccess.Name
+                                   let interfaceType = genericName.TypeArgumentList.Arguments[0]
+                                   let serviceType = semanticModel.GetTypeInfo(interfaceType).Type
+
+                                   let interfaceName = serviceType.Name.ToString()
+                                   let interfaceNameWithoutPrefix = interfaceName[1..]
+                                   let serviceName = interfaceNameWithoutPrefix[6..]
+                                   let implementationName = $"{interfaceNameWithoutPrefix}Client"
+                                   let namespaceName = serviceType.ContainingNamespace.ToDisplayString()
+
+                                   select new AwsServiceMetadata(serviceName, interfaceName, implementationName, namespaceName);
+
+            awsServices.UnionWith(serviceMetadatas);
         }
     }
 }
