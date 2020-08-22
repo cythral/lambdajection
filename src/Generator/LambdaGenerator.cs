@@ -175,7 +175,15 @@ namespace Lambdajection.Generator
 
             IEnumerable<StatementSyntax> GenerateConfigureAwsServicesMethodBody()
             {
-                foreach (var service in scanResults.AwsServices)
+                var services = scanResults.AwsServices;
+
+                if (includeFactories && services.Any())
+                {
+                    services = services.Where(service => service.ServiceName != "SecurityTokenService");
+                    yield return ParseStatement($"services.AddScoped<IAmazonSecurityTokenService, AmazonSecurityTokenServiceClient>();");
+                }
+
+                foreach (var service in services)
                 {
                     usingsAddedDuringGeneration.Add(service.NamespaceName);
 

@@ -23,18 +23,21 @@ namespace Lambdajection.Tests
         private readonly ExampleBar exampleBar;
         private readonly ILogger<ExampleLambda> logger;
         private readonly IAmazonS3 s3Client;
+        private readonly IAwsFactory<IAmazonS3> s3Factory;
 
-        public ExampleLambda(ExampleBar exampleService, ILogger<ExampleLambda> logger, IAmazonS3 s3Client)
+        public ExampleLambda(ExampleBar exampleService, ILogger<ExampleLambda> logger, IAmazonS3 s3Client, IAwsFactory<IAmazonS3> s3Factory)
         {
             this.exampleBar = exampleService;
             this.logger = logger;
             this.s3Client = s3Client;
+            this.s3Factory = s3Factory;
         }
 
         public Task<string> Handle(string request, ILambdaContext context)
         {
             logger.LogInformation("Test Logging Works");
             logger.LogInformation("S3 Client null: " + s3Client is null ? "true" : "false");
+            logger.LogInformation("S3 Factory null: " + s3Factory is null ? "true" : "false");
 
             return Task.FromResult(request + " " + exampleBar.Bar());
         }
