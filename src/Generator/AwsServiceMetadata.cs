@@ -17,38 +17,29 @@ namespace Lambdajection.Generator
         public string ImplementationName { get; }
         public string NamespaceName { get; }
 
-
-
         public override bool Equals(object? obj)
         {
-            return obj is AwsServiceMetadata result
-                && result.ServiceName.Equals(ServiceName)
-                && result.InterfaceName.Equals(InterfaceName)
-                && result.ImplementationName.Equals(ImplementationName)
-                && result.NamespaceName.Equals(NamespaceName);
+            return obj is AwsServiceMetadata result && result.ServiceName.Equals(ServiceName);
         }
 
         public bool Equals(AwsServiceMetadata result)
         {
-            return result.ServiceName.Equals(ServiceName)
-                && result.InterfaceName.Equals(InterfaceName)
-                && result.ImplementationName.Equals(ImplementationName)
-                && result.NamespaceName.Equals(NamespaceName);
+            return result.ServiceName.Equals(ServiceName);
         }
 
         public override int GetHashCode()
         {
-            return new { ServiceName, InterfaceName, ImplementationName, NamespaceName }.GetHashCode();
+            return ServiceName.GetHashCode();
         }
 
-        public static bool operator ==(AwsServiceMetadata scanA, AwsServiceMetadata scanB)
+        public static bool operator ==(AwsServiceMetadata metadataA, AwsServiceMetadata metadataB)
         {
-            return scanA.Equals(scanB);
+            return metadataA.Equals(metadataB);
         }
 
-        public static bool operator !=(AwsServiceMetadata scanA, AwsServiceMetadata scanB)
+        public static bool operator !=(AwsServiceMetadata metadataA, AwsServiceMetadata metadataB)
         {
-            return !scanA.Equals(scanB);
+            return !metadataA.Equals(metadataB);
         }
     }
 }

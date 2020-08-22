@@ -92,21 +92,6 @@ namespace Lambdajection.Generator
                 throw new Exception("Lambda must implement handle method");
             }
 
-            if (!includeFactories)
-            {
-                var descriptor = new DiagnosticDescriptor(
-                    id: "LJ0002",
-                    title: "STS Assembly Not Loaded",
-                    messageFormat: "If you need to use AWS service factories, add AWSSDK.SecurityToken as a dependency to your project.",
-                    category: "Lambdajection",
-                    defaultSeverity: DiagnosticSeverity.Warning,
-                    isEnabledByDefault: true
-                );
-
-                var diagnostic = Diagnostic.Create(descriptor, Location.Create(declaration.SyntaxTree, declaration.Span));
-                progress.Report(diagnostic);
-            }
-
             var scanner = new LambdaCompilationScanner(context.Compilation, context.Compilation.SyntaxTrees, $"{namespaceName}.{className}", startupTypeDisplayName);
             var scanResults = scanner.Scan();
 

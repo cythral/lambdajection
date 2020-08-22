@@ -2,7 +2,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <IsPackable>false</IsPackable>
-    <AssemblyName>Lambdajection.Tests</AssemblyName>
+    <AssemblyName>Lambdajection.TestsWithFactories</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
@@ -17,8 +17,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\Core\Core.csproj" />
-    <ProjectReference Include="..\src\Attributes\Attributes.csproj" />
-    <ProjectReference Include="..\src\Generator\Generator.csproj" IncludeAssets="all" OutputItemType="CodeGenerationRoslynPlugin" />
+    <ProjectReference Include="..\..\src\Core\Core.csproj" />
+    <ProjectReference Include="..\..\src\Attributes\Attributes.csproj" />
+    <ProjectReference Include="..\..\src\Generator\Generator.csproj" IncludeAssets="all" OutputItemType="CodeGenerationRoslynPlugin" />
   </ItemGroup>
 </Project>

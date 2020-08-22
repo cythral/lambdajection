@@ -19,7 +19,7 @@ namespace Lambdajection.Generator
         private readonly string lambdaTypeName;
         private readonly string startupDisplayName;
         private readonly Dictionary<string, ClassDeclarationSyntax> optionClasses = new Dictionary<string, ClassDeclarationSyntax>();
-        private readonly List<AwsServiceMetadata> awsServices = new List<AwsServiceMetadata>();
+        private readonly HashSet<AwsServiceMetadata> awsServices = new HashSet<AwsServiceMetadata>();
 
         public LambdaCompilationScanner(CSharpCompilation compilation, ImmutableArray<SyntaxTree> syntaxTrees, string lambdaTypeName, string startupDisplayName)
         {
@@ -83,8 +83,8 @@ namespace Lambdajection.Generator
 
             var serviceMetadatas = from invocation in classNode.DescendantNodes().OfType<InvocationExpressionSyntax>()
                                    where invocation.Expression is MemberAccessExpressionSyntax memberAccess
-                                         && semanticModel.GetTypeInfo(memberAccess.Expression).Type?.ToDisplayString() == ServiceCollectionDisplayName
-                                         && memberAccess.Name.Identifier.ValueText == UseAwsServiceName
+                                        && semanticModel.GetTypeInfo(memberAccess.Expression).Type?.ToDisplayString() == ServiceCollectionDisplayName
+                                        && memberAccess.Name.Identifier.ValueText == UseAwsServiceName
 
                                    let memberAccess = (MemberAccessExpressionSyntax)invocation.Expression
                                    let genericName = (GenericNameSyntax)memberAccess.Name
@@ -99,7 +99,7 @@ namespace Lambdajection.Generator
 
                                    select new AwsServiceMetadata(serviceName, interfaceName, implementationName, namespaceName);
 
-            awsServices.AddRange(serviceMetadatas);
+            awsServices.UnionWith(serviceMetadatas);
         }
     }
 }

@@ -63,6 +63,7 @@ namespace Lambdajection.Tests
         {
             collection.AddScoped<ExampleBar>();
             collection.UseAwsService<IAmazonS3>();
+            collection.UseAwsService<IAmazonS3>(); // intentionally added to ensure duplicate calls are handled ok
         }
     }
 
