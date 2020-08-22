@@ -12,7 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 using NUnit.Framework;
 
-namespace Lambdajection.TestsWithoutFactories.IntegrationTests
+namespace Lambdajection.TestsWithoutFactories
 {
     [Lambda(Startup = typeof(Startup))]
     public partial class TestLambda
@@ -40,7 +40,7 @@ namespace Lambdajection.TestsWithoutFactories.IntegrationTests
         }
     }
 
-    public class ConfigurationIntegrationTests
+    public class IntegrationTests
     {
         [Test]
         public void RunningTheLambdaShouldResultInException()
