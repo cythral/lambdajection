@@ -1,0 +1,39 @@
+Transform: AWS::Serverless-2016-10-31
+Resources:
+  AwsClientFactories:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: AwsClientFactories::AwsClientFactories.LambdaHandler::Run
+      Runtime: dotnetcore3.1
+      Timeout: 300
+      CodeUri: ../../bin/AwsClientFactories/Release/netcoreapp3.1/publish/
+      MemorySize: 512
+      Policies:
+        - AWSLambdaExecute
+
+  Bucket:
+    Type: AWS::S3::Bucket
+
+  BucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref Bucket
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Action: s3:PutObject
+            Resource: !Sub arn:aws:s3:::${Bucket}/*
+            Principal:
+              AWS: !GetAtt PutBucketRole.Arn
+
+  PutBucketRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Action: sts:AssumeRole
+            Principal:
+              AWS: !GetAtt AwsClientFactoriesRole.Arn
