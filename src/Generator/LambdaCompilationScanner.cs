@@ -3,6 +3,7 @@ using System.Collections.Immutable;
 using System.Linq;
 
 using Lambdajection.Attributes;
+using Lambdajection.Encryption;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -18,8 +19,9 @@ namespace Lambdajection.Generator
         private readonly CSharpCompilation compilation;
         private readonly string lambdaTypeName;
         private readonly string startupDisplayName;
-        private readonly Dictionary<string, ClassDeclarationSyntax> optionClasses = new Dictionary<string, ClassDeclarationSyntax>();
+        private readonly HashSet<OptionClass> optionClasses = new HashSet<OptionClass>();
         private readonly HashSet<AwsServiceMetadata> awsServices = new HashSet<AwsServiceMetadata>();
+        private bool includeDecryptionFacade = false;
 
         public LambdaCompilationScanner(CSharpCompilation compilation, ImmutableArray<SyntaxTree> syntaxTrees, string lambdaTypeName, string startupDisplayName)
         {
@@ -37,7 +39,7 @@ namespace Lambdajection.Generator
                 ScanTree(tree, semanticModel);
             }
 
-            return new LambdaCompilationScanResult(optionClasses, awsServices);
+            return new LambdaCompilationScanResult(optionClasses, awsServices, includeDecryptionFacade);
         }
 
         public void ScanTree(SyntaxTree tree, SemanticModel semanticModel)
@@ -47,12 +49,12 @@ namespace Lambdajection.Generator
             foreach (var classNode in classes)
             {
                 var attributes = semanticModel.GetDeclaredSymbol(classNode)?.GetAttributes() ?? ImmutableArray.Create<AttributeData>();
-                ScanForOptionClass(classNode, attributes);
+                ScanForOptionClass(classNode, attributes, semanticModel);
                 ScanForAwsServices(classNode, semanticModel);
             }
         }
 
-        public void ScanForOptionClass(ClassDeclarationSyntax classNode, IEnumerable<AttributeData> attributes)
+        public void ScanForOptionClass(ClassDeclarationSyntax classNode, IEnumerable<AttributeData> attributes, SemanticModel semanticModel)
         {
             foreach (var attribute in attributes)
             {
@@ -68,7 +70,18 @@ namespace Lambdajection.Generator
 
                 if (typeArgName == lambdaTypeName)
                 {
-                    optionClasses.Add(configSectionName, classNode);
+                    var encryptedProperties = from prop in classNode.DescendantNodes().OfType<PropertyDeclarationSyntax>()
+                                              from attr in semanticModel.GetDeclaredSymbol(prop).GetAttributes()
+                                              where attr.AttributeClass.Name == nameof(EncryptedAttribute)
+                                              select prop.Identifier.ValueText;
+
+                    optionClasses.Add(new OptionClass(configSectionName, classNode, encryptedProperties));
+
+                    if (encryptedProperties.Any())
+                    {
+                        includeDecryptionFacade = true;
+                    }
+
                     return;
                 }
             }

@@ -125,6 +125,14 @@
         "resolved": "3.5.0",
         "contentHash": "bC5slbW3f1QgYlJK/I/zDUlixHq8YzktTwreJHwoOCpnRFB/IHV4EIgdEGwQnWOneJwRfwq4ZB0OhlrM3aT2pw=="
       },
+      "AWSSDK.KeyManagementService": {
+        "type": "Transitive",
+        "resolved": "3.5.0",
+        "contentHash": "I0Ln1RZ6hVBP2rnRMk+Sw0vtJVt6f7ehWQcMZU5oqg1oVQmul+crZCFRZtLI49gOhPZqfkOx8zZrDtvY4lF1oQ==",
+        "dependencies": {
+          "AWSSDK.Core": "[3.5.0, 3.6.0)"
+        }
+      },
       "Castle.Core": {
         "type": "Transitive",
         "resolved": "4.4.0",
@@ -1149,6 +1157,12 @@
           "System.Xml.XmlDocument": "4.3.0"
         }
       },
+      "encryption": {
+        "type": "Project",
+        "dependencies": {
+          "AWSSDK.KeyManagementService": "3.5.0"
+        }
+      },
       "Lambdajection.Attributes": {
         "type": "Project",
         "dependencies": {
@@ -1172,6 +1186,7 @@
         "type": "Project",
         "dependencies": {
           "Cythral.CodeGeneration.Roslyn": "0.9.1",
+          "Encryption": "1.0.0",
           "Lambdajection.Attributes": "1.0.0"
         }
       }
