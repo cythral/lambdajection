@@ -7,8 +7,9 @@ dotnet_diagnostic.CA2007.severity = none
 dotnet_diagnostic.CA1062.severity = none
 dotnet_diagnostic.CA1303.severity = none
 dotnet_diagnostic.IDE0005.severity = error
-dotnet_diagnostic.CS1591.severity = error
-dotnet_diagnostic.CS1591.severity = none
 dotnet_diagnostic.CA1810.severity = none
 dotnet_diagnostic.CA1801.severity = none
 dotnet_diagnostic.CA1307.severity = none
+
+[{tests,obj,src/Generator}/**.{cs,csx}]
+dotnet_diagnostic.CS1591.severity = none
