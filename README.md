@@ -94,6 +94,11 @@ So, going off the example above, the handler scheme would look like this:
 Your.Assembly.Name::Your.Namespace.YourLambda::Run
 ```
 
+## Examples
+
+- [Injecting and using AWS Services + Factories](examples/AwsClientFactories)
+- [Adding and using encrypted options](examples/EncryptedOptions)
+
 ## Acknowledgments
 
 1. [CodeGeneration.Roslyn](https://github.com/aarnott/codegeneration.roslyn) - Used for compile-time code generation using attributes.
