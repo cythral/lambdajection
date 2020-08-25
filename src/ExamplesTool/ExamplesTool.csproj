@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Attributes\Attributes.csproj" />
+        <ProjectReference Include="..\Core\Core.csproj" />
+        <ProjectReference Include="..\Generator\Generator.csproj" />
+        <ProjectReference Include="..\Metapackage\Metapackage.csproj" />
+    </ItemGroup>
+
+    <Target Name="BuildExamples" AfterTargets="Pack">
+        <CreateItem Include="$(MSBuildThisFileDirectory)..\..\examples\*\*.csproj">
+            <Output TaskParameter="Include" ItemName="_Examples" />
+        </CreateItem>
+
+        <MSBuild 
+            Projects="@(_Examples)"
+            Targets="Clean;Restore;Build"
+            Properties="LambdajectionVersion=$(PackageVersion);Configuration=$(Configuration);Architecture=$(Architecture)"
+        />
+    </Target>
+</Project>
