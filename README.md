@@ -18,8 +18,6 @@ dotnet add package Lambdajection
 | Lambdajection.Generator  | ![Nuget](https://img.shields.io/nuget/v/Lambdajection.Generator?style=flat-square)  |
 | Lambdajection.Encryption | ![Nuget](https://img.shields.io/nuget/v/Lambdajection.Encryption?style=flat-square) |
 
-<br>
-
 ## Usage
 
 ### Lambda Class
