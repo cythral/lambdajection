@@ -7,11 +7,12 @@
     <PackageId>Lambdajection</PackageId>
     <AssemblyName>$(PackageId)</AssemblyName>
     <PackageDescription>Write AWS Lambda Functions using Dependency Injection.</PackageDescription>
+    <BuildDependsOn>$(BuildDependsOn);BuildExamples</BuildDependsOn>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="../Attributes/Attributes.csproj" />
-    <ProjectReference Include="../Core/Core.csproj" />
+    <ProjectReference Include="..\Attributes\Attributes.csproj" />
+    <ProjectReference Include="..\Core\Core.csproj" />
     <NupkgAdditionalDependency Include="Lambdajection.Generator" IncludeAssets="all" />
   </ItemGroup>
 </Project>

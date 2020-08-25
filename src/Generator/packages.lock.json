@@ -46,6 +46,19 @@
         "resolved": "3.2.31",
         "contentHash": "19grBnpqHLxViOt1cwE+cI+brQ2swdm4gfM97P+9KbbgWGfXtdy4EmpVAkUZ3MgntFYYbUvfldM4pUOmks5q0w=="
       },
+      "AWSSDK.Core": {
+        "type": "Transitive",
+        "resolved": "3.5.0",
+        "contentHash": "bC5slbW3f1QgYlJK/I/zDUlixHq8YzktTwreJHwoOCpnRFB/IHV4EIgdEGwQnWOneJwRfwq4ZB0OhlrM3aT2pw=="
+      },
+      "AWSSDK.KeyManagementService": {
+        "type": "Transitive",
+        "resolved": "3.5.0",
+        "contentHash": "I0Ln1RZ6hVBP2rnRMk+Sw0vtJVt6f7ehWQcMZU5oqg1oVQmul+crZCFRZtLI49gOhPZqfkOx8zZrDtvY4lF1oQ==",
+        "dependencies": {
+          "AWSSDK.Core": "[3.5.0, 3.6.0)"
+        }
+      },
       "Cythral.CodeGeneration.Roslyn.Attributes": {
         "type": "Transitive",
         "resolved": "0.9.1",
@@ -1037,6 +1050,12 @@
         "type": "Project",
         "dependencies": {
           "Cythral.CodeGeneration.Roslyn.Attributes": "0.9.1"
+        }
+      },
+      "Lambdajection.Encryption": {
+        "type": "Project",
+        "dependencies": {
+          "AWSSDK.KeyManagementService": "3.5.0"
         }
       }
     }
