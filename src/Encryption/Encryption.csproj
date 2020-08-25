@@ -2,6 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
+    <PackageId>Lambdajection.Encryption</PackageId>
+    <AssemblyName>$(PackageId)</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>

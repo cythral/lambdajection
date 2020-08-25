@@ -1046,16 +1046,16 @@
           "System.Xml.ReaderWriter": "4.3.0"
         }
       },
-      "encryption": {
-        "type": "Project",
-        "dependencies": {
-          "AWSSDK.KeyManagementService": "3.5.0"
-        }
-      },
       "Lambdajection.Attributes": {
         "type": "Project",
         "dependencies": {
           "Cythral.CodeGeneration.Roslyn.Attributes": "0.9.1"
+        }
+      },
+      "Lambdajection.Encryption": {
+        "type": "Project",
+        "dependencies": {
+          "AWSSDK.KeyManagementService": "3.5.0"
         }
       }
     }

@@ -1157,12 +1157,6 @@
           "System.Xml.XmlDocument": "4.3.0"
         }
       },
-      "encryption": {
-        "type": "Project",
-        "dependencies": {
-          "AWSSDK.KeyManagementService": "3.5.0"
-        }
-      },
       "Lambdajection.Attributes": {
         "type": "Project",
         "dependencies": {
@@ -1182,12 +1176,18 @@
           "Microsoft.Extensions.Logging.Console": "3.1.6"
         }
       },
+      "Lambdajection.Encryption": {
+        "type": "Project",
+        "dependencies": {
+          "AWSSDK.KeyManagementService": "3.5.0"
+        }
+      },
       "Lambdajection.Generator": {
         "type": "Project",
         "dependencies": {
           "Cythral.CodeGeneration.Roslyn": "0.9.1",
-          "Encryption": "1.0.0",
-          "Lambdajection.Attributes": "1.0.0"
+          "Lambdajection.Attributes": "1.0.0",
+          "Lambdajection.Encryption": "1.0.0"
         }
       }
     }

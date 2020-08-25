@@ -9,16 +9,17 @@
         <PublishRepositoryUrl>true</PublishRepositoryUrl>
         <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
         <PackageTags>AWS Amazon Cloud Lambda Lambdajection DependencyInjection IoC</PackageTags>
-        <CythralCodeGenerationRoslynVersion>0.9.1</CythralCodeGenerationRoslynVersion>
     </PropertyGroup>
 
     <PropertyGroup>
         <Configuration Condition="$(Configuration) == ''">Debug</Configuration>
         <Nullable>enable</Nullable>
         <LangVersion>8.0</LangVersion>
+        <CythralCodeGenerationRoslynVersion>0.9.1</CythralCodeGenerationRoslynVersion>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
         <SkipDefaultEditorConfigAsAdditionalFile>true</SkipDefaultEditorConfigAsAdditionalFile>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     </PropertyGroup>
     
     <PropertyGroup>
