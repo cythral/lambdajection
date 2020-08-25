@@ -8,6 +8,16 @@ Write elegant and testable AWS Lambdas using .NET Core and Microsoft's Dependenc
 dotnet add package Lambdajection
 ```
 
+## Packages
+
+|                          |                                                                                     |
+| ------------------------ | ----------------------------------------------------------------------------------- |
+| Lambdajection            | ![Nuget](https://img.shields.io/nuget/v/Lambdajection?style=flat-square)            |
+| Lambdajection.Attributes | ![Nuget](https://img.shields.io/nuget/v/Lambdajection.Attributes?style=flat-square) |
+| Lambdajection.Core       | ![Nuget](https://img.shields.io/nuget/v/Lambdajection.Core?style=flat-square)       |
+| Lambdajection.Generator  | ![Nuget](https://img.shields.io/nuget/v/Lambdajection.Generator?style=flat-square)  |
+| Lambdajection.Encryption | ![Nuget](https://img.shields.io/nuget/v/Lambdajection.Encryption?style=flat-square) |
+
 ## Usage
 
 ### Lambda Class
