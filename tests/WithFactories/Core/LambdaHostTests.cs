@@ -10,6 +10,14 @@ using NSubstitute;
 
 using NUnit.Framework;
 
+using TestLambdaHost = Lambdajection.Core.LambdaHost<
+    Lambdajection.TestLambda,
+    object,
+    object,
+    Lambdajection.TestStartup,
+    Lambdajection.TestConfigurator
+>;
+
 namespace Lambdajection.Core.Tests
 {
     public class LambdaHostTests
@@ -22,10 +30,10 @@ namespace Lambdajection.Core.Tests
             lambda.Handle(Arg.Any<object>(), Arg.Any<ILambdaContext>()).Returns(expectedResponse);
 
             var collection = new ServiceCollection();
-            collection.AddSingleton<TestLambda>(lambda);
+            collection.AddSingleton(lambda);
 
             var provider = collection.BuildServiceProvider();
-            var host = new LambdaHost<TestLambda, object, object, TestStartup, TestConfigurator>(lambdaHost =>
+            var host = new TestLambdaHost(lambdaHost =>
             {
                 lambdaHost.ServiceProvider = provider;
             });
