@@ -7,15 +7,27 @@ using Amazon.KeyManagementService.Model;
 
 namespace Lambdajection.Encryption
 {
+    /// <summary>
+    /// Default decryption service - uses KMS to decrypt values.
+    /// </summary>
     public class DefaultDecryptionService : IDecryptionService
     {
         private readonly IAmazonKeyManagementService kmsClient;
 
+        /// <summary>
+        /// Constructs a new DefaultDecryptionService
+        /// </summary>
+        /// <param name="kmsClient">The KMS Client to use when decrypting values.</param>
         public DefaultDecryptionService(IAmazonKeyManagementService kmsClient)
         {
             this.kmsClient = kmsClient;
         }
 
+        /// <summary>
+        /// Decrypts a value and returns it as a plaintext string.
+        /// </summary>
+        /// <param name="ciphertext">The ciphertext to decrypt.</param>
+        /// <returns>The plaintext decrypted value.</returns>
         public virtual async Task<string> Decrypt(string ciphertext)
         {
             using var stream = new MemoryStream();
