@@ -1,38 +1,42 @@
 using System;
 using System.Collections.Generic;
 
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-
 namespace Lambdajection.Generator
 {
     public readonly struct LambdaCompilationScanResult : IEquatable<LambdaCompilationScanResult>
     {
-        public LambdaCompilationScanResult(Dictionary<string, ClassDeclarationSyntax> optionClasses, IEnumerable<AwsServiceMetadata> awsServices)
+        public LambdaCompilationScanResult(HashSet<OptionClass> optionClasses, IEnumerable<AwsServiceMetadata> awsServices, bool includeDecryptionFacade)
         {
             this.OptionClasses = optionClasses;
             this.AwsServices = awsServices;
+            this.IncludeDecryptionFacade = includeDecryptionFacade;
         }
 
-        public Dictionary<string, ClassDeclarationSyntax> OptionClasses { get; }
+        public HashSet<OptionClass> OptionClasses { get; }
 
         public IEnumerable<AwsServiceMetadata> AwsServices { get; }
+
+        public bool IncludeDecryptionFacade { get; }
 
 
         public override bool Equals(object? obj)
         {
             return obj is LambdaCompilationScanResult result
                 && result.OptionClasses.Equals(OptionClasses)
-                && result.AwsServices.Equals(AwsServices);
+                && result.AwsServices.Equals(AwsServices)
+                && result.IncludeDecryptionFacade == IncludeDecryptionFacade;
         }
 
         public bool Equals(LambdaCompilationScanResult result)
         {
-            return result.OptionClasses.Equals(OptionClasses) && result.AwsServices.Equals(AwsServices);
+            return result.OptionClasses.Equals(OptionClasses)
+                && result.AwsServices.Equals(AwsServices)
+                && result.IncludeDecryptionFacade == IncludeDecryptionFacade;
         }
 
         public override int GetHashCode()
         {
-            return new { OptionClasses, AwsServices }.GetHashCode();
+            return new { OptionClasses, AwsServices, IncludeDecryptionFacade }.GetHashCode();
         }
 
         public static bool operator ==(LambdaCompilationScanResult scanA, LambdaCompilationScanResult scanB)
