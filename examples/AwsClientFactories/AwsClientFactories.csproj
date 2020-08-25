@@ -5,10 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Lambdajection" Version="$(LambdajectionVersion)" />
     <PackageReference Include="Amazon.Lambda.Serialization.SystemTextJson" Version="2.0.1" />
     <PackageReference Include="AWSSDK.S3" Version="3.5.0" />
     <PackageReference Include="AWSSDK.SecurityToken" Version="3.5.0" />
-    <PackageReference Include="Lambdajection" Version="0.3.0-beta1" />
   </ItemGroup>
 
 </Project>

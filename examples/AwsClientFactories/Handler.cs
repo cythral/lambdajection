@@ -10,19 +10,19 @@ using Lambdajection.Core;
 
 [assembly: LambdaSerializer(typeof(DefaultLambdaJsonSerializer))]
 
-namespace AwsClientFactories
+namespace Lambdajection.Examples.AwsClientFactories
 {
     [Lambda(Startup = typeof(Startup))]
-    public partial class LambdaHandler
+    public partial class Handler
     {
         private readonly IAwsFactory<IAmazonS3> s3Factory;
 
-        public LambdaHandler(IAwsFactory<IAmazonS3> s3Factory)
+        public Handler(IAwsFactory<IAmazonS3> s3Factory)
         {
             this.s3Factory = s3Factory;
         }
 
-        public async Task<string> Handle(LambdaRequest request, ILambdaContext context)
+        public async Task<string> Handle(Request request, ILambdaContext context)
         {
             var s3Client = await s3Factory.Create(request.RoleArn);
 

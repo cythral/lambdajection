@@ -2,45 +2,6 @@
   "version": 1,
   "dependencies": {
     ".NETCoreApp,Version=v3.1": {
-      "Amazon.Lambda.Serialization.SystemTextJson": {
-        "type": "Direct",
-        "requested": "[2.0.1, )",
-        "resolved": "2.0.1",
-        "contentHash": "WPtMxw5jwEcVbe0Ro/bF0VDnict/zoCW0r6dfRIIOthjO+fVMgDyGYa4Pkz6ptgCCFcnhQuOq6iebYw1LRZeIQ==",
-        "dependencies": {
-          "Amazon.Lambda.Core": "1.1.0"
-        }
-      },
-      "AWSSDK.S3": {
-        "type": "Direct",
-        "requested": "[3.5.0, )",
-        "resolved": "3.5.0",
-        "contentHash": "CLlXO0FGY8CnzBJGyVrLAi4rTDYaNUzbitEZ6B7qvnVRUOG8HnWS3KU7nk/wm6fJVTpa+CSHoittUzHfZbY2+g==",
-        "dependencies": {
-          "AWSSDK.Core": "[3.5.0, 3.6.0)"
-        }
-      },
-      "AWSSDK.SecurityToken": {
-        "type": "Direct",
-        "requested": "[3.5.0, )",
-        "resolved": "3.5.0",
-        "contentHash": "rrhQYdiSynCneAUlTFZivo7eo6+Sm+FKSWGvfLRN0FmERb53yOB28O5w/o0dmr3B7rZ1kReCU0O0De/WGzA4vw==",
-        "dependencies": {
-          "AWSSDK.Core": "[3.5.0, 3.6.0)"
-        }
-      },
-      "Lambdajection": {
-        "type": "Direct",
-        "requested": "[0.3.0-beta1, )",
-        "resolved": "0.3.0-beta1",
-        "contentHash": "y0qvm2sLKgJy8uGou1HxYUcYcCOWwzDLWUPO8kFs86OkeG5qatzNGVfccsyzK5ItCnL2b9PnQWQYmyRHNaTZCA==",
-        "dependencies": {
-          "Cythral.CodeGeneration.Roslyn.Tool": "0.9.1",
-          "Lambdajection.Attributes": "0.3.0-beta1",
-          "Lambdajection.Core": "0.3.0-beta1",
-          "Lambdajection.Generator": "0.3.0-beta1"
-        }
-      },
       "Microsoft.CodeAnalysis.CSharp.CodeStyle": {
         "type": "Direct",
         "requested": "[3.8.0-1.20330.5, )",
@@ -85,6 +46,23 @@
         "resolved": "3.5.0",
         "contentHash": "bC5slbW3f1QgYlJK/I/zDUlixHq8YzktTwreJHwoOCpnRFB/IHV4EIgdEGwQnWOneJwRfwq4ZB0OhlrM3aT2pw=="
       },
+      "AWSSDK.KeyManagementService": {
+        "type": "Transitive",
+        "resolved": "3.5.0",
+        "contentHash": "I0Ln1RZ6hVBP2rnRMk+Sw0vtJVt6f7ehWQcMZU5oqg1oVQmul+crZCFRZtLI49gOhPZqfkOx8zZrDtvY4lF1oQ==",
+        "dependencies": {
+          "AWSSDK.Core": "[3.5.0, 3.6.0)"
+        }
+      },
+      "Cythral.CodeGeneration.Roslyn": {
+        "type": "Transitive",
+        "resolved": "0.9.1",
+        "contentHash": "wh0PHegWLI4yfgBFmzpMvtCoWZuqZJw4JjzYK8tmUZLiuBF8YuieJqCD1GRfskDbHO4SujkSAoCIdg56KiMZjg==",
+        "dependencies": {
+          "Cythral.CodeGeneration.Roslyn.Attributes": "0.9.1",
+          "Microsoft.CodeAnalysis.CSharp": "[3.4.0]"
+        }
+      },
       "Cythral.CodeGeneration.Roslyn.Attributes": {
         "type": "Transitive",
         "resolved": "0.9.1",
@@ -98,38 +76,37 @@
         "resolved": "0.9.1",
         "contentHash": "oDpJq1WkzEt7DQ/t04ul4Em/cAjx43mNUHvDp9Wc/EgM++/Axrjs8vqJm9e+IMmar1F48V7zHyaaGfs7mCcKvQ=="
       },
-      "Lambdajection.Attributes": {
-        "type": "Transitive",
-        "resolved": "0.3.0-beta1",
-        "contentHash": "nWYsJDhQwsTCNT2/lOoVSIE44/1Vu2wJ2R7L+LASID/sCOoD2hVLNFfY4nJ3AsntgKDLhsCI7J/IKBv1pWucpg==",
-        "dependencies": {
-          "Cythral.CodeGeneration.Roslyn.Attributes": "0.9.1"
-        }
-      },
-      "Lambdajection.Core": {
-        "type": "Transitive",
-        "resolved": "0.3.0-beta1",
-        "contentHash": "/uuPjaaQnJUNMUfdoT5NXCACCzCJi0yMihIDjOR0g0wc+yAlt6uYb3zWbPUWqKiVGSd9GxD8azHgBheQro5a/Q==",
-        "dependencies": {
-          "Amazon.Lambda.Core": "1.1.0",
-          "Lambdajection.Attributes": "0.3.0-beta1",
-          "Microsoft.Extensions.Configuration": "3.1.6",
-          "Microsoft.Extensions.Configuration.EnvironmentVariables": "3.1.6",
-          "Microsoft.Extensions.Configuration.Json": "3.1.6",
-          "Microsoft.Extensions.DependencyInjection": "3.1.6",
-          "Microsoft.Extensions.Logging": "3.1.6",
-          "Microsoft.Extensions.Logging.Console": "3.1.6"
-        }
-      },
-      "Lambdajection.Generator": {
-        "type": "Transitive",
-        "resolved": "0.3.0-beta1",
-        "contentHash": "4CS6f4VSV6UzrqAuPfa5EmP11xxIqwYwfone4HAhOZNATm54eCThssZWD3gKlI2Wj6tGj/0fqyPu7cbSlWzWCg=="
-      },
       "Microsoft.Build.Tasks.Git": {
         "type": "Transitive",
         "resolved": "1.0.0",
         "contentHash": "z2fpmmt+1Jfl+ZnBki9nSP08S1/tbEOxFdsK1rSR+LBehIJz1Xv9/6qOOoGNqlwnAGGVGis1Oj6S8Kt9COEYlQ=="
+      },
+      "Microsoft.CodeAnalysis.Analyzers": {
+        "type": "Transitive",
+        "resolved": "2.9.6",
+        "contentHash": "Kmms3TxGQMNb95Cu/3K+0bIcMnV4qf/phZBLAB0HUi65rBPxP4JO3aM2LoAcb+DFS600RQJMZ7ZLyYDTbLwJOQ=="
+      },
+      "Microsoft.CodeAnalysis.Common": {
+        "type": "Transitive",
+        "resolved": "3.4.0",
+        "contentHash": "3ncA7cV+iXGA1VYwe2UEZXcvWyZSlbexWjM9AvocP7sik5UD93qt9Hq0fMRGk0jFRmvmE4T2g+bGfXiBVZEhLw==",
+        "dependencies": {
+          "Microsoft.CodeAnalysis.Analyzers": "2.9.6",
+          "System.Collections.Immutable": "1.5.0",
+          "System.Memory": "4.5.3",
+          "System.Reflection.Metadata": "1.6.0",
+          "System.Runtime.CompilerServices.Unsafe": "4.5.2",
+          "System.Text.Encoding.CodePages": "4.5.1",
+          "System.Threading.Tasks.Extensions": "4.5.3"
+        }
+      },
+      "Microsoft.CodeAnalysis.CSharp": {
+        "type": "Transitive",
+        "resolved": "3.4.0",
+        "contentHash": "/LsTtgcMN6Tu1oo7/WYbRAHL4/ubXC/miEakwTpcZKJKtFo7D0AK95Hw0dbGxul6C8WJu60v6NP2435TDYZM+Q==",
+        "dependencies": {
+          "Microsoft.CodeAnalysis.Common": "[3.4.0]"
+        }
       },
       "Microsoft.CodeAnalysis.VersionCheckAnalyzer": {
         "type": "Transitive",
@@ -293,8 +270,8 @@
       },
       "Microsoft.NETCore.Platforms": {
         "type": "Transitive",
-        "resolved": "1.1.0",
-        "contentHash": "kz0PEW2lhqygehI/d6XsPCQzD7ff7gUJaVGPVETX611eadGsA3A877GdSlU0LRVMCTH/+P3o2iDTak+S08V2+A=="
+        "resolved": "2.1.2",
+        "contentHash": "mOJy3M0UN+LUG21dLGMxaWZEP6xYpQEpLuvuEQBaownaX4YuhH6NmNUlN9si+vNkAS6dwJ//N1O4DmLf2CikVg=="
       },
       "Microsoft.NETCore.Targets": {
         "type": "Transitive",
@@ -526,6 +503,11 @@
           "System.Threading.Tasks": "4.3.0"
         }
       },
+      "System.Collections.Immutable": {
+        "type": "Transitive",
+        "resolved": "1.5.0",
+        "contentHash": "EXKiDFsChZW0RjrZ4FYHu9aW6+P4MCgEDCklsVseRfhoO0F+dXeMSsMRAlVXIo06kGJ/zv+2w1a2uc2+kxxSaQ=="
+      },
       "System.Console": {
         "type": "Transitive",
         "resolved": "4.3.0",
@@ -723,6 +705,11 @@
           "System.Threading": "4.3.0"
         }
       },
+      "System.Memory": {
+        "type": "Transitive",
+        "resolved": "4.5.3",
+        "contentHash": "3oDzvc/zzetpTKWMShs1AADwZjQ/36HnsufHRPcOjyRAAMLDlu2iD33MBI2opxnezcVUtXyqDXXjoFMOU9c7SA=="
+      },
       "System.Net.Http": {
         "type": "Transitive",
         "resolved": "4.3.0",
@@ -848,6 +835,11 @@
           "System.Runtime": "4.3.0"
         }
       },
+      "System.Reflection.Metadata": {
+        "type": "Transitive",
+        "resolved": "1.6.0",
+        "contentHash": "COC1aiAJjCoA5GBF+QKL2uLqEBew4JsCkQmoHKbN3TlOZKa2fKLz5CpiRQKDz0RsAOEGsVKqOD5bomsXq/4STQ=="
+      },
       "System.Reflection.Primitives": {
         "type": "Transitive",
         "resolved": "4.3.0",
@@ -887,6 +879,11 @@
           "Microsoft.NETCore.Platforms": "1.1.0",
           "Microsoft.NETCore.Targets": "1.1.0"
         }
+      },
+      "System.Runtime.CompilerServices.Unsafe": {
+        "type": "Transitive",
+        "resolved": "4.5.2",
+        "contentHash": "wprSFgext8cwqymChhrBLu62LMg/1u92bU+VOwyfBimSPVFXtsNqEWC92Pf9ofzJFlk4IHmJA75EDJn1b2goAQ=="
       },
       "System.Runtime.Extensions": {
         "type": "Transitive",
@@ -1100,6 +1097,15 @@
           "System.Runtime": "4.3.0"
         }
       },
+      "System.Text.Encoding.CodePages": {
+        "type": "Transitive",
+        "resolved": "4.5.1",
+        "contentHash": "4J2JQXbftjPMppIHJ7IC+VXQ9XfEagN92vZZNoG12i+zReYlim5dMoXFC1Zzg7tsnKDM7JPo5bYfFK4Jheq44w==",
+        "dependencies": {
+          "Microsoft.NETCore.Platforms": "2.1.2",
+          "System.Runtime.CompilerServices.Unsafe": "4.5.2"
+        }
+      },
       "System.Text.Encoding.Extensions": {
         "type": "Transitive",
         "resolved": "4.3.0",
@@ -1140,13 +1146,8 @@
       },
       "System.Threading.Tasks.Extensions": {
         "type": "Transitive",
-        "resolved": "4.3.0",
-        "contentHash": "npvJkVKl5rKXrtl1Kkm6OhOUaYGEiF9wFbppFRWSMoApKzt2PiPHT2Bb8a5sAWxprvdOAtvaARS9QYMznEUtug==",
-        "dependencies": {
-          "System.Collections": "4.3.0",
-          "System.Runtime": "4.3.0",
-          "System.Threading.Tasks": "4.3.0"
-        }
+        "resolved": "4.5.3",
+        "contentHash": "+MvhNtcvIbqmhANyKu91jQnvIRVSTiaOiFNfKWwXGHG48YAb4I/TyH8spsySiPYla7gKal5ZnF3teJqZAximyQ=="
       },
       "System.Threading.Timer": {
         "type": "Transitive",
@@ -1197,6 +1198,47 @@
           "System.Text.Encoding": "4.3.0",
           "System.Threading": "4.3.0",
           "System.Xml.ReaderWriter": "4.3.0"
+        }
+      },
+      "Lambdajection": {
+        "type": "Project",
+        "dependencies": {
+          "Cythral.CodeGeneration.Roslyn.Tool": "0.9.1",
+          "Lambdajection.Attributes": "1.0.0",
+          "Lambdajection.Core": "1.0.0"
+        }
+      },
+      "Lambdajection.Attributes": {
+        "type": "Project",
+        "dependencies": {
+          "Cythral.CodeGeneration.Roslyn.Attributes": "0.9.1"
+        }
+      },
+      "Lambdajection.Core": {
+        "type": "Project",
+        "dependencies": {
+          "Amazon.Lambda.Core": "1.1.0",
+          "Lambdajection.Attributes": "1.0.0",
+          "Microsoft.Extensions.Configuration": "3.1.6",
+          "Microsoft.Extensions.Configuration.EnvironmentVariables": "3.1.6",
+          "Microsoft.Extensions.Configuration.Json": "3.1.6",
+          "Microsoft.Extensions.DependencyInjection": "3.1.6",
+          "Microsoft.Extensions.Logging": "3.1.6",
+          "Microsoft.Extensions.Logging.Console": "3.1.6"
+        }
+      },
+      "Lambdajection.Encryption": {
+        "type": "Project",
+        "dependencies": {
+          "AWSSDK.KeyManagementService": "3.5.0"
+        }
+      },
+      "Lambdajection.Generator": {
+        "type": "Project",
+        "dependencies": {
+          "Cythral.CodeGeneration.Roslyn": "0.9.1",
+          "Lambdajection.Attributes": "1.0.0",
+          "Lambdajection.Encryption": "1.0.0"
         }
       }
     }

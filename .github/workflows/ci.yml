@@ -38,11 +38,11 @@ jobs:
         run: echo ${{ env.VERSION }}
 
       - name: Restore
-        run: dotnet restore -v normal
+        run: dotnet restore
 
       - name: Build
         shell: bash
-        run: ./build.ps1 ${{ matrix.os }}
+        run: dotnet build -t:build,pack --no-restore -m  -bl:obj/logs/build-${{ matrix.os }}.binlog -p:PackageReleaseNotes="$(sed 's/,/%2c/g' .github/releases/v${{ env.VERSION }}.md)"
 
       - name: Test
         run: dotnet test --no-build
