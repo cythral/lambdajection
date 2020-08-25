@@ -8,6 +8,7 @@
         <_PackagesRelease>$(MSBuildThisFileDirectory)..\bin\Packages\Release</_PackagesRelease>
         <RestoreAdditionalProjectSources>@(CustomLocalFeed);$(RestoreAdditionalProjectSources)</RestoreAdditionalProjectSources>
         <RestoreDependsOn>ResolveProjectReferences;$(RestoreDependsOn)</RestoreDependsOn>
+        <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
     </PropertyGroup>
 
      <ItemGroup>
