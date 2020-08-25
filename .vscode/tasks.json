@@ -26,6 +26,18 @@
         "info"
       ],
       "problemMatcher": "$msCompile"
+    },
+    {
+      "label": "format-examples",
+      "command": "dotnet",
+      "type": "process",
+      "args": [
+        "format",
+        "${workspaceFolder}/examples/examples.sln",
+        "--fix-style",
+        "info"
+      ],
+      "problemMatcher": "$msCompile"
     }
   ]
 }
