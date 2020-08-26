@@ -5,8 +5,8 @@ This example illustrates the use of both the IServiceCollection.UseAwsServices h
 ## Files
 
 - [Lambda Code](Handler.cs)
-- [Options Code](Options.cs)
 - [Startup Code](Startup.cs)
+- [Request Object](Request.cs)
 - [CloudFormation Template](cloudformation.template.yml)
 
 ## Steps to Recreate
