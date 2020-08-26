@@ -102,7 +102,12 @@ namespace Your.Namespace
 
 ### Adding Options
 
-You can add an options section by defining a class for that section, and annotating it with the [LambdaOptions attribute](src/Attributes/LambdaOptionsAttribute.cs). If any options are in encrypted form, add the [Encrypted attribute](src/Encryption/EncryptedAttribute.cs) to that property. When the options are requested, the [IDecryptionService](src/Encryption/IDecryptionService.cs) singleton in the container will be used to decrypt those properties. The [default decryption service](src/Encryption/DefaultDecryptionService.cs) uses KMS to decrypt values. The Encrypted attribute, IDecryptionService and DefaultDecryptionService are all provided by the `Lambdajection.Encryption` package.
+You can add an options section by defining a class for that section, and annotating it with the [LambdaOptions attribute](src/Attributes/LambdaOptionsAttribute.cs). If any options are in encrypted form, add the [Encrypted attribute](src/Encryption/EncryptedAttribute.cs) to that property. When the options are requested, the [IDecryptionService](src/Encryption/IDecryptionService.cs) singleton in the container will be used to decrypt those properties. The [default decryption service](src/Encryption/DefaultDecryptionService.cs) uses KMS to decrypt values.
+
+- The Encrypted attribute, IDecryptionService and DefaultDecryptionService are all provided by the `Lambdajection.Encryption` package.
+- Option classes must be in the same assembly as your lambda.
+- You can replace the default decryption service with your own `IDecryptionService` by injecting it as a singleton in your Startup class' `ConfigureServices` method.
+- See [the example for using Encrypted properties.](examples/EncryptedOptions)
 
 ```cs
 using Lambdajection.Encryption;
@@ -119,9 +124,6 @@ namespace Your.Namespace
     }
 }
 ```
-
-- Option classes must be in the same assembly as your lambda.
--
 
 ### Handler Scheme
 
