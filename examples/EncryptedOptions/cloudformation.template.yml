@@ -6,7 +6,7 @@ Resources:
       Handler: EncryptedOptions::Lambdajection.Examples.EncryptedOptions.Handler::Run
       Runtime: dotnetcore3.1
       Timeout: 300
-      CodeUri: ../bin/EncryptedOptions/Release/netcoreapp3.1/publish/
+      CodeUri: ../../bin/Examples/EncryptedOptions/Release/netcoreapp3.1/publish/
       MemorySize: 512
       Policies:
         - AWSLambdaExecute

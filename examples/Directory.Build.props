@@ -3,7 +3,7 @@
         <OutputPath>$(MSBuildThisFileDirectory)..\bin\Examples\$(MSBuildProjectName)\$(Configuration)</OutputPath>
         <BaseIntermediateOutputPath>$(MSBuildThisFileDirectory)..\obj\Examples\$(MSBuildProjectName)</BaseIntermediateOutputPath>
         <PackageOutputPath>$(MSBuildThisFileDirectory)..\bin\Packages\Examples\$(Configuration)</PackageOutputPath>
-        <RestorePackagesPath>$(MSBuildThisFileDirectory)..\.nuget</RestorePackagesPath>
+        <RestorePackagesPath>$(MSBuildThisFileDirectory).nuget</RestorePackagesPath>
         <_PackagesDebug>$(MSBuildThisFileDirectory)..\bin\Packages\Debug</_PackagesDebug>
         <_PackagesRelease>$(MSBuildThisFileDirectory)..\bin\Packages\Release</_PackagesRelease>
         <RestoreAdditionalProjectSources>@(CustomLocalFeed);$(RestoreAdditionalProjectSources)</RestoreAdditionalProjectSources>

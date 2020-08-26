@@ -130,79 +130,92 @@ namespace Lambdajection.Core.Tests
 
             collection.Should().Contain(descriptor =>
                 descriptor.ServiceType == typeof(TestLambda) &&
-                descriptor.Lifetime == ServiceLifetime.Transient
+                descriptor.Lifetime == ServiceLifetime.Scoped
             );
         }
 
         [Test]
         public void BuildConfiguratorShouldConfigureOptions()
         {
-            var configuration = Substitute.For<IConfigurationRoot>();
-            var serviceCollection = Substitute.For<IServiceCollection>();
-            var configurator = TestLambdaHostBuilder.BuildOptionsConfigurator(configuration, serviceCollection);
+            var configuration = Substitute.For<IConfiguration>();
+            var configurator = Substitute.For<ILambdaConfigurator>();
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.AddSingleton(configurator);
+            serviceCollection.AddSingleton(configuration);
 
-            configurator.Configuration.Should().BeSameAs(configuration);
-            configurator.ServicesSetByConfigureOptions.Should().BeSameAs(serviceCollection);
+            var provider = serviceCollection.BuildServiceProvider();
+            TestLambdaHostBuilder.RunOptionsConfigurator(provider, serviceCollection);
+
+            configurator.Received().ConfigureOptions(Arg.Is(configuration), Arg.Is(serviceCollection));
         }
 
         [Test]
         public void BuildConfiguratorShouldConfigureAwsServices()
         {
-            var configuration = Substitute.For<IConfigurationRoot>();
-            var serviceCollection = Substitute.For<IServiceCollection>();
-            var configurator = TestLambdaHostBuilder.BuildOptionsConfigurator(configuration, serviceCollection);
+            var configuration = Substitute.For<IConfiguration>();
+            var configurator = Substitute.For<ILambdaConfigurator>();
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.AddSingleton(configurator);
+            serviceCollection.AddSingleton(configuration);
 
-            configurator.ServicesSetByConfigureAwsServices.Should().BeSameAs(serviceCollection);
+            var provider = serviceCollection.BuildServiceProvider();
+            TestLambdaHostBuilder.RunOptionsConfigurator(provider, serviceCollection);
+
+            configurator.Received().ConfigureAwsServices(Arg.Is(serviceCollection));
         }
 
         [Test]
-        public void BuildLambdaStartupShouldAddConfiguration()
+        public void RunLambdaStartupShouldAddServiceCollection()
         {
-            var configuration = Substitute.For<IConfigurationRoot>();
-            var collection = Substitute.For<IServiceCollection>();
-            var startup = TestLambdaHostBuilder.BuildLambdaStartup(configuration, collection);
+            var startup = Substitute.For<ILambdaStartup>();
+            var collection = new ServiceCollection();
+            collection.AddSingleton(startup);
 
-            startup.Configuration.Should().BeSameAs(configuration);
+            var provider = collection.BuildServiceProvider();
+            TestLambdaHostBuilder.RunLambdaStartup(provider, collection);
+
+            startup.Received().ConfigureServices(Arg.Is(collection));
         }
 
         [Test]
-        public void BuildLambdaStartupShouldAddServiceCollection()
+        public void RunLambdaStartupShouldAddLoggingToServiceCollection()
         {
-            var configuration = Substitute.For<IConfigurationRoot>();
-            var collection = Substitute.For<IServiceCollection>();
-            var startup = TestLambdaHostBuilder.BuildLambdaStartup(configuration, collection);
-
-            startup.Services.Should().BeSameAs(collection);
-        }
-
-        [Test]
-        public void BuildLambdaStartupShouldAddLoggingToServiceCollection()
-        {
+            var startup = Substitute.For<ILambdaStartup>();
             var configuration = Substitute.For<IConfigurationRoot>();
             var collection = new ServiceCollection();
-            var startup = TestLambdaHostBuilder.BuildLambdaStartup(configuration, collection);
+            collection.AddSingleton(startup);
+
+            var provider = collection.BuildServiceProvider();
+            TestLambdaHostBuilder.RunLambdaStartup(provider, collection);
 
             collection.Should().Contain(descriptor => descriptor.ServiceType == typeof(ILoggerFactory));
         }
 
         [Test]
-        public void BuildLambdaStartupShouldAddConsoleDestinationToLogging()
+        public void RunLambdaStartupShouldAddConsoleDestinationToLogging()
         {
             var configuration = Substitute.For<IConfigurationRoot>();
+            var startup = Substitute.For<ILambdaStartup>();
             var collection = new ServiceCollection();
-            var startup = TestLambdaHostBuilder.BuildLambdaStartup(configuration, collection);
+            collection.AddSingleton(startup);
+
+            var provider = collection.BuildServiceProvider();
+            TestLambdaHostBuilder.RunLambdaStartup(provider, collection);
 
             collection.Should().Contain(descriptor => descriptor.ImplementationType == typeof(ConsoleLoggerProvider));
         }
 
         [Test]
-        public void BuildLambdaStartupShouldCallConfigureLoggingOnStartup()
+        public void RunLambdaStartupShouldCallConfigureLoggingOnStartup()
         {
-            var configuration = Substitute.For<IConfigurationRoot>();
             var collection = new ServiceCollection();
-            var startup = TestLambdaHostBuilder.BuildLambdaStartup(configuration, collection);
+            var startup = Substitute.For<ILambdaStartup>();
+            collection.AddSingleton(startup);
 
-            startup.LoggingBuilder.Should().NotBeNull();
+            var provider = collection.BuildServiceProvider();
+            TestLambdaHostBuilder.RunLambdaStartup(provider, collection);
+
+            startup.Received().ConfigureLogging(Arg.Any<ILoggingBuilder>());
         }
     }
 }

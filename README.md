@@ -67,7 +67,12 @@ namespace Your.Namespace
 {
     public class Startup : ILambdaStartup
     {
-        public IConfiguration Configuration { get; set; } = default!;
+        public IConfiguration Configuration { get; }
+
+        public Startup(IConfiguration configuration)
+        {
+            this.Configuration = configuration;
+        }
 
         public void ConfigureServices(IServiceCollection services)
         {
