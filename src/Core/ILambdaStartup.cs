@@ -1,5 +1,3 @@
-
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
@@ -11,9 +9,6 @@ namespace Lambdajection.Core
     /// </summary>
     public interface ILambdaStartup
     {
-        /// <value>The configuration used for the lambda.</value>
-        IConfiguration Configuration { get; set; }
-
         /// <summary>
         /// Configures services to be injected into the lambda's IoC container.
         /// </summary>

@@ -9,7 +9,12 @@ namespace Lambdajection.Examples.AwsClientFactories
 {
     public class Startup : ILambdaStartup
     {
-        public IConfiguration Configuration { get; set; } = null!;
+        public IConfiguration Configuration { get; }
+        
+        public Startup(IConfiguration configuration)
+        {
+            this.Configuration = configuration;
+        }
 
         public void ConfigureServices(IServiceCollection services)
         {
