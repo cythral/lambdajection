@@ -9,8 +9,8 @@ namespace Lambdajection.Core
 {
     internal static class LambdaHostBuilder<TLambda, TLambdaParameter, TLambdaOutput, TLambdaStartup, TLambdaConfigurator>
         where TLambda : class, ILambda<TLambdaParameter, TLambdaOutput>
-        where TLambdaStartup : ILambdaStartup, new()
-        where TLambdaConfigurator : ILambdaConfigurator, new()
+        where TLambdaStartup : class, ILambdaStartup
+        where TLambdaConfigurator : class, ILambdaConfigurator
     {
         internal static IServiceProvider? serviceProvider;
 
@@ -24,8 +24,9 @@ namespace Lambdajection.Core
         {
             var configuration = BuildConfiguration();
             var serviceCollection = BuildServiceCollection(configuration);
-            BuildLambdaStartup(configuration, serviceCollection);
-            BuildOptionsConfigurator(configuration, serviceCollection);
+            using var intermediateProvider = serviceCollection.BuildServiceProvider();
+            RunLambdaStartup(intermediateProvider, serviceCollection);
+            RunOptionsConfigurator(intermediateProvider, serviceCollection);
             return serviceCollection.BuildServiceProvider();
         }
 
@@ -42,27 +43,16 @@ namespace Lambdajection.Core
         {
             var serviceCollection = new ServiceCollection();
             serviceCollection.AddSingleton<IConfiguration>(configuration);
-            serviceCollection.AddTransient<TLambda>();
+            serviceCollection.AddSingleton<ILambdaStartup, TLambdaStartup>();
+            serviceCollection.AddSingleton<ILambdaConfigurator, TLambdaConfigurator>();
+            serviceCollection.AddScoped<TLambda>();
             return serviceCollection;
         }
 
-        public static TLambdaConfigurator BuildOptionsConfigurator(IConfigurationRoot configuration, IServiceCollection serviceCollection)
+        public static ILambdaStartup RunLambdaStartup(IServiceProvider provider, IServiceCollection serviceCollection)
         {
-            var configurator = new TLambdaConfigurator();
-            configurator.ConfigureAwsServices(serviceCollection);
-            configurator.ConfigureOptions(configuration, serviceCollection);
-            return configurator;
-        }
-
-        public static TLambdaStartup BuildLambdaStartup(IConfigurationRoot configuration, IServiceCollection serviceCollection)
-        {
-            var startup = new TLambdaStartup
-            {
-                Configuration = configuration,
-            };
-
+            var startup = provider.GetRequiredService<ILambdaStartup>();
             startup.ConfigureServices(serviceCollection);
-
             serviceCollection.AddLogging(logging =>
             {
                 logging.AddConsole();
@@ -70,6 +60,15 @@ namespace Lambdajection.Core
             });
 
             return startup;
+        }
+
+        public static ILambdaConfigurator RunOptionsConfigurator(IServiceProvider provider, IServiceCollection serviceCollection)
+        {
+            var configurator = provider.GetRequiredService<ILambdaConfigurator>();
+            var configuration = provider.GetRequiredService<IConfiguration>();
+            configurator.ConfigureAwsServices(serviceCollection);
+            configurator.ConfigureOptions(configuration, serviceCollection);
+            return configurator;
         }
     }
 }

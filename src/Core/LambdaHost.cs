@@ -17,8 +17,8 @@ namespace Lambdajection.Core
     /// <typeparam name="TLambdaConfigurator">The type to use for the lambda configurator (sets up options and aws services).</typeparam>
     public class LambdaHost<TLambda, TLambdaParameter, TLambdaOutput, TLambdaStartup, TLambdaConfigurator>
         where TLambda : class, ILambda<TLambdaParameter, TLambdaOutput>
-        where TLambdaStartup : ILambdaStartup, new()
-        where TLambdaConfigurator : ILambdaConfigurator, new()
+        where TLambdaStartup : class, ILambdaStartup
+        where TLambdaConfigurator : class, ILambdaConfigurator
     {
 
         /// <value>Provides services to the lambda.</value>
@@ -35,7 +35,7 @@ namespace Lambdajection.Core
         /// Constructs a new Lambda Host / IoC Container with the given host builder function.
         /// </summary>
         /// <param name="build"></param>
-        public LambdaHost(Action<LambdaHost<TLambda, TLambdaParameter, TLambdaOutput, TLambdaStartup, TLambdaConfigurator>> build)
+        internal LambdaHost(Action<LambdaHost<TLambda, TLambdaParameter, TLambdaOutput, TLambdaStartup, TLambdaConfigurator>> build)
         {
             build(this);
         }

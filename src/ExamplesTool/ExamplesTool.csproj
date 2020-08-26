@@ -18,7 +18,7 @@
 
         <MSBuild 
             Projects="@(_Examples)"
-            Targets="Clean;Restore;Build"
+            Targets="Clean;Restore;Build;Publish"
             Properties="LambdajectionVersion=$(PackageVersion);Configuration=$(Configuration);Architecture=$(Architecture)"
         />
     </Target>

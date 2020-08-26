@@ -39,7 +39,12 @@ namespace Lambdajection.Tests.Configuration
     public class Startup : ILambdaStartup
     {
         public static IDecryptionService DecryptionService { get; } = Substitute.For<IDecryptionService>();
-        public IConfiguration Configuration { get; set; } = null!;
+        public IConfiguration Configuration { get; }
+
+        public Startup(IConfiguration configuration)
+        {
+            this.Configuration = configuration;
+        }
 
         public void ConfigureServices(IServiceCollection services)
         {
