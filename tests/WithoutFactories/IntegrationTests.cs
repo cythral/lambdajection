@@ -45,6 +45,7 @@ namespace Lambdajection.TestsWithoutFactories
         }
     }
 
+    [Category("Integration")]
     public class IntegrationTests
     {
         [Test]

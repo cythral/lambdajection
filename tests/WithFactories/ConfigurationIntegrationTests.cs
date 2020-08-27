@@ -62,6 +62,7 @@ namespace Lambdajection.Tests.Configuration
         public string ExampleEncryptedValue { get; set; } = "";
     }
 
+    [Category("Integration")]
     public class ConfigurationIntegrationTests
     {
         private const string exampleConfigValue = "example config value";

@@ -75,6 +75,7 @@ namespace Lambdajection.Tests
         }
     }
 
+    [Category("Integration")]
     public class IntegrationTests
     {
         [Test]
