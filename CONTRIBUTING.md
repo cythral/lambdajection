@@ -1,10 +1,13 @@
 <!-- omit in toc -->
+
 # Contributing
 
 Pull requests are always welcome - we value every contribution and your input! If you are interested in becoming a maintainer, please email talen.fisher@cythral.com.
 
 <!-- omit in toc -->
+
 ## Table of Contents
+
 - [1. Source and Versioning Control](#1-source-and-versioning-control)
 - [2. Feature & Bug Tracking](#2-feature--bug-tracking)
 - [3. Editing](#3-editing)
@@ -99,6 +102,7 @@ We try to use a roll-forward method of making changes, rather than going back an
 - To add a new dependency to a project, delete the project's lock file first, before running `dotnet add package`.
 - To regenerate all lock files, run `make relock`.
 - The [Markdown All-In-One VSCode extension](https://marketplace.visualstudio.com/items?itemName=yzhang.markdown-all-in-one) can be used to update table of contents in the README and contributing guide.
+- Use [Merge Scheduler](https://github.com/gr2m/merge-schedule-action) to schedule release PRs for a specific date.
 
 ## 7. Licensing
 
