@@ -1,14 +1,29 @@
-# Lambdajection
+<!-- omit in toc -->
+# Lambdajection 
 
-Write elegant and testable AWS Lambdas using .NET Core and Microsoft's Dependency Injection + Configuration extensions. No longer do you need to write your own boilerplate to achieve this - just write your Lambda code and service configuration!
+Write elegant and testable AWS Lambdas using .NET Core and Microsoft's Dependency Injection + Configuration extensions. No longer do you need to write your own boilerplate to achieve this - just write your Lambda code and service configuration!  Community contribution/pull requests are welcome and encouraged! See the [contributing guide](CONTRIBUTING.md) for instructions.  Report issues on [JIRA](https://cythral.atlassian.net/jira/software/c/projects/LAMBJ/issues) - you can report anonymously or include contact info in the ticket summary/comments.
 
-## Installation
+<!-- omit in toc -->
+## Table of Contents
+- [1. Installation](#1-installation)
+- [2. Packages](#2-packages)
+- [3. Usage](#3-usage)
+  - [3.1. Lambda Handler](#31-lambda-handler)
+  - [3.2. Startup Configuration](#32-startup-configuration)
+  - [3.3. Adding Options](#33-adding-options)
+  - [3.4. Handler Scheme](#34-handler-scheme)
+- [4. Examples](#4-examples)
+- [5. Acknowledgments](#5-acknowledgments)
+- [6. Contributing](#6-contributing)
+- [7. License](#7-license)
+
+## 1. Installation
 
 ```
 dotnet add package Lambdajection
 ```
 
-## Packages
+## 2. Packages
 
 |                          |                                                                                     |
 | ------------------------ | ----------------------------------------------------------------------------------- |
@@ -18,9 +33,9 @@ dotnet add package Lambdajection
 | Lambdajection.Generator  | ![Nuget](https://img.shields.io/nuget/v/Lambdajection.Generator?style=flat-square)  |
 | Lambdajection.Encryption | ![Nuget](https://img.shields.io/nuget/v/Lambdajection.Encryption?style=flat-square) |
 
-## Usage
+## 3. Usage
 
-### Lambda Handler
+### 3.1. Lambda Handler
 
 Writing the lambda is simple: Just define a public, partial class that contains a Handle method and annotate the class with the `Lambda` attribute. The `Lambda` attribute requires that you specify a startup class - more on this in the next step. You are not limited to an request/input parameter of type object - this can be any serializable value or reference type. Same goes for the return value, however the return value must be enclosed in a `Task`.
 
@@ -54,7 +69,7 @@ namespace Your.Namespace
 
 ```
 
-### Startup Configuration
+### 3.2. Startup Configuration
 
 The startup class configures services that are injected into the Lambda's IoC container / service collection.
 
@@ -100,7 +115,7 @@ namespace Your.Namespace
 }
 ```
 
-### Adding Options
+### 3.3. Adding Options
 
 You can add an options section by defining a class for that section, and annotating it with the [LambdaOptions attribute](src/Attributes/LambdaOptionsAttribute.cs). If any options are in encrypted form, add the [Encrypted attribute](src/Encryption/EncryptedAttribute.cs) to that property. When the options are requested, the [IDecryptionService](src/Encryption/IDecryptionService.cs) singleton in the container will be used to decrypt those properties. The [default decryption service](src/Encryption/DefaultDecryptionService.cs) uses KMS to decrypt values.
 
@@ -125,7 +140,7 @@ namespace Your.Namespace
 }
 ```
 
-### Handler Scheme
+### 3.4. Handler Scheme
 
 When configuring your lambda on AWS, the method name you'll want to use will be `Run` (NOT `Handle`). For context, `Run` is a static method is generated on your class during compilation that takes care of setting up the IoC container (if it hasn't been already).
 
@@ -135,16 +150,21 @@ So, going off the example above, the handler scheme would look like this:
 Your.Assembly.Name::Your.Namespace.YourLambda::Run
 ```
 
-## Examples
+## 4. Examples
 
 - [Injecting and using AWS Services + Factories](examples/AwsClientFactories)
 - [Adding and using encrypted options](examples/EncryptedOptions)
 
-## Acknowledgments
+## 5. Acknowledgments
 
 1. [CodeGeneration.Roslyn](https://github.com/aarnott/codegeneration.roslyn) - Used for compile-time code generation using attributes.
 2. [Simple Lambda Dependency Injection in AWS Lambda .NET Core](https://dev.to/gary_woodfine/simple-dependency-injection-in-aws-lambda-net-core-n0g) by Gary Woodfine - primary inspiration for this project.
 
-## License
+## 6. Contributing
+
+Issues and feature requests may be reported anonymously on [JIRA Cloud](https://cythral.atlassian.net/jira/software/c/projects/LAMBJ/issues).
+Pull requests are always welcome! See the [contributing guide](CONTRIBUTING.md).
+
+## 7. License
 
 This project is licensed under the [MIT License](LICENSE.txt).
