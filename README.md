@@ -1,7 +1,7 @@
 <!-- omit in toc -->
 # Lambdajection 
 
-Write elegant and testable AWS Lambdas using .NET Core and Microsoft's Dependency Injection + Configuration extensions. No longer do you need to write your own boilerplate to achieve this - just write your Lambda code and service configuration!  Community contribution/pull requests are welcome and encouraged! See the [contributing guide](CONTRIBUTING.md) for instructions.  Report issues on [JIRA](https://cythral.atlassian.net/jira/software/c/projects/LAMBJ/issues) - you can report anonymously or include contact info in the ticket summary/comments.
+Write elegant and testable AWS Lambdas using .NET Core and Microsoft's Dependency Injection + Configuration extensions. No longer do you need to write your own boilerplate to achieve this - just write your Lambda code and service configuration!  Community contribution/pull requests are welcome and encouraged! See the [contributing guide](CONTRIBUTING.md) for instructions.  Report issues on [JIRA](https://cythral.atlassian.net/jira/software/c/projects/LAMBJ/issues) - you can report anonymously or include github username/contact info in the ticket summary.
 
 <!-- omit in toc -->
 ## Table of Contents
