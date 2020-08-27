@@ -13,6 +13,7 @@ using NUnit.Framework;
 
 namespace Lambdajection.Encryption.Tests
 {
+    [Category("Unit")]
     public class DefaultDecryptionServiceTests
     {
 

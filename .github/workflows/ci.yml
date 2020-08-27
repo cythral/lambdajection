@@ -61,12 +61,12 @@ jobs:
           path: obj/logs/
 
       - name: Deploy to NuGet
-        if: matrix.os == 'windows-latest' && github.ref == 'refs/heads/master' && github.event_name == 'push'
+        if: matrix.os == 'windows-latest' && github.event_name == 'push' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/release/*')
         shell: bash
         run: for file in $(ls bin/Packages/${{ env.Configuration }}/*.nupkg); do dotnet nuget push $file -k ${{ secrets.NUGET_TOKEN }} -s https://api.nuget.org/v3/index.json; done
 
       - uses: ncipollo/release-action@v1
-        if: matrix.os == 'windows-latest' && github.ref == 'refs/heads/master' && github.event_name == 'push'
+        if: matrix.os == 'windows-latest' && github.event_name == 'push' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/release/*')
         with:
           artifacts: "bin/Packages/${{ env.Configuration}}/*.nupkg,bin/Packages/${{ env.Configuration}}/*.snupkg"
           bodyFile: ".github/releases/v${{ env.VERSION }}.md"

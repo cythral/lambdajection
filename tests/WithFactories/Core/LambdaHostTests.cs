@@ -20,6 +20,7 @@ using TestLambdaHost = Lambdajection.Core.LambdaHost<
 
 namespace Lambdajection.Core.Tests
 {
+    [Category("Unit")]
     public class LambdaHostTests
     {
         [Test]
