@@ -11,7 +11,7 @@
         <ProjectReference Include="..\Metapackage\Metapackage.csproj" />
     </ItemGroup>
 
-    <Target Name="BuildExamples" AfterTargets="Pack">
+    <Target Name="BuildExamples" AfterTargets="Pack" DependsOnTargets="ResolveProjectReferences">
         <CreateItem Include="$(MSBuildThisFileDirectory)..\..\examples\*\*.csproj">
             <Output TaskParameter="Include" ItemName="_Examples" />
         </CreateItem>
