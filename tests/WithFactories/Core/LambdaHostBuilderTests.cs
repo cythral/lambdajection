@@ -32,6 +32,7 @@ using TestLambdaHostBuilder = Lambdajection.Core.LambdaHostBuilder<
 
 namespace Lambdajection.Core.Tests
 {
+    [Category("Unit")]
     public class LambdaHostBuilderTests
     {
         [Test]

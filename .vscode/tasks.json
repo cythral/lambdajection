@@ -16,6 +16,20 @@
       "problemMatcher": "$msCompile"
     },
     {
+      "label": "run unit tests",
+      "command": "dotnet",
+      "type": "process",
+      "args": ["test", "--filter", "Category=Unit"],
+      "problemMatcher": "$msCompile"
+    },
+    {
+      "label": "run integration test",
+      "command": "dotnet",
+      "type": "process",
+      "args": ["test", "--filter", "Category=Integration"],
+      "problemMatcher": "$msCompile"
+    },
+    {
       "label": "format",
       "command": "dotnet",
       "type": "process",
