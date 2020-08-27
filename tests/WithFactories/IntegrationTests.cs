@@ -1,4 +1,3 @@
-using System;
 using System.Threading.Tasks;
 
 using Amazon.Lambda.Core;
@@ -81,9 +80,6 @@ namespace Lambdajection.Tests
         [Test]
         public async Task TestExampleLambdaRun()
         {
-            Environment.SetEnvironmentVariable("AWS_REGION", "us-east-1");
-            Environment.SetEnvironmentVariable("AWS_ACCESS_KEY_ID", "key-id");
-            Environment.SetEnvironmentVariable("AWS_SECRET_ACCESS_KEY", "secret-key");
 
             var test = "foo";
             var result = await ExampleLambda.Run(test, null);
