@@ -61,7 +61,7 @@ jobs:
 
       - name: Deploy to Github Packages
         if: matrix.os == 'windows-latest' && github.event_name == 'pull_request'
-        run: dotnet gpr push bin/Packages/${{ env.Configuration }}/*.nupkg -k ${{ secrets.GH_PACKAGES_TOKEN }}
+        run: dotnet gpr push bin/Packages/${{ env.Configuration }}/*.nupkg -k ${{ secrets.GH_TOKEN }}
 
       - name: Deploy to NuGet
         if: matrix.os == 'windows-latest' && github.event_name == 'push' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/release/*')
@@ -75,4 +75,4 @@ jobs:
           bodyFile: ".github/releases/v${{ env.VERSION }}.md"
           tag: v${{ env.VERSION }}
           commit: ${{ env.GITHUB_SHA }}
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GH_TOKEN }}
