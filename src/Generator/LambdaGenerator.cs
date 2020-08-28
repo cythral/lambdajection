@@ -252,7 +252,7 @@ namespace Lambdajection.Generator
             if (scanResults.IncludeDecryptionFacade)
             {
                 usingsAddedDuringGeneration.Add("Lambdajection.Encryption");
-                usingsAddedDuringGeneration.Add("Microsoft.Extensions.Configuration");
+                usingsAddedDuringGeneration.Add("Microsoft.Extensions.Options");
 
                 foreach (var optionClass in scanResults.OptionClasses)
                 {
