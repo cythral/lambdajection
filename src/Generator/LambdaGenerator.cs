@@ -373,7 +373,7 @@ namespace Lambdajection.Generator
 
                 IEnumerable<StatementSyntax> GenerateBody()
                 {
-                    yield return IfStatement(ParseExpression("roleArn == null"),
+                    yield return IfStatement(ParseExpression("roleArn != null"),
                         Block(
                             ParseStatement("var request = new AssumeRoleRequest { RoleArn = roleArn, RoleSessionName = \"lambdajection-assume-role\" };"),
                             ParseStatement("var response = await stsClient.AssumeRoleAsync(request);"),
