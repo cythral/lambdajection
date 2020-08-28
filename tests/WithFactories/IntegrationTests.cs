@@ -1,7 +1,11 @@
+using System;
+using System.Reflection;
 using System.Threading.Tasks;
 
 using Amazon.Lambda.Core;
 using Amazon.S3;
+using Amazon.SecurityToken;
+using Amazon.SecurityToken.Model;
 
 using FluentAssertions;
 
@@ -12,8 +16,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
-using NUnit.Framework;
+using NSubstitute;
 
+using NUnit.Framework;
 namespace Lambdajection.Tests
 {
     [Lambda(Startup = typeof(Startup))]
@@ -85,6 +90,34 @@ namespace Lambdajection.Tests
             var result = await ExampleLambda.Run(test, null);
 
             result.Should().BeEquivalentTo("foo bar");
+        }
+
+        [Test]
+        public async Task TestFactoriesDoNotPerformAssumeRoleIfNoRoleArnGiven()
+        {
+            var client = Substitute.For<IAmazonSecurityTokenService>();
+            var configuratorType = typeof(ExampleLambda).GetNestedType("LambdajectionConfigurator", BindingFlags.NonPublic)!;
+            var s3FactoryType = configuratorType.GetNestedType("S3Factory", BindingFlags.NonPublic)!;
+            var factory = Activator.CreateInstance(s3FactoryType, new object[] { client });
+            var createMethod = s3FactoryType.GetMethod("Create")!;
+            createMethod.Invoke(factory, new object[] { null! });
+
+            await client.DidNotReceive().AssumeRoleAsync(Arg.Any<AssumeRoleRequest>());
+        }
+
+        [Test]
+        public async Task TestFactoriesPerformAssumeRoleIfRoleArnGiven()
+        {
+            var client = Substitute.For<IAmazonSecurityTokenService>();
+            var configuratorType = typeof(ExampleLambda).GetNestedType("LambdajectionConfigurator", BindingFlags.NonPublic)!;
+            var s3FactoryType = configuratorType.GetNestedType("S3Factory", BindingFlags.NonPublic)!;
+            var factory = Activator.CreateInstance(s3FactoryType, new object[] { client });
+            var createMethod = s3FactoryType.GetMethod("Create")!;
+            var roleArn = "rolearn";
+
+            createMethod.Invoke(factory, new object[] { roleArn });
+
+            await client.Received().AssumeRoleAsync(Arg.Is<AssumeRoleRequest>(req => req.RoleArn == roleArn));
         }
     }
 }
