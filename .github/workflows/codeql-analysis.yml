@@ -26,8 +26,8 @@ jobs:
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v1
       
-    - name: Autobuild
-      uses: github/codeql-action/autobuild@v1
+    - name: Build
+      run: dotnet build
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v1
