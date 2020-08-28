@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <Target Name="RestoreTools" AfterTargets="Restore">
+        <Exec Command="dotnet tool restore" ConsoleToMsBuild="true" />
+    </Target>
+
+    <Target Name="BuildExamples" AfterTargets="Build">
+        <Message Importance="High" Text="%0A%0ABuilding Examples%0A-----------------%0A" />
+
+        <CreateItem Include="$(MSBuildThisFileDirectory)examples\*\*.csproj">
+            <Output TaskParameter="Include" ItemName="_Examples" />
+        </CreateItem>
+        
+        <Exec Command="dotnet nbgv get-version -v NuGetPackageVersion" ConsoleToMsBuild="true" StandardOutputImportance="Low">
+            <Output TaskParameter="ConsoleOutput" PropertyName="_Version" />
+        </Exec>
+
+        <MSBuild 
+            Projects="@(_Examples)"
+            Targets="Clean;Restore;Build;Publish"
+            Properties="LambdajectionVersion=$(_Version);Configuration=$(Configuration);Architecture=$(Architecture)"
+        />
+    </Target>
+</Project>

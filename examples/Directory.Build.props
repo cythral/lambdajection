@@ -1,0 +1,18 @@
+<Project>    
+    <PropertyGroup>
+        <OutputPath>$(MSBuildThisFileDirectory)..\bin\Examples\$(MSBuildProjectName)\$(Configuration)</OutputPath>
+        <BaseIntermediateOutputPath>$(MSBuildThisFileDirectory)..\obj\Examples\$(MSBuildProjectName)</BaseIntermediateOutputPath>
+        <PackageOutputPath>$(MSBuildThisFileDirectory)..\bin\Packages\Examples\$(Configuration)</PackageOutputPath>
+        <RestorePackagesPath>$(MSBuildThisFileDirectory).nuget</RestorePackagesPath>
+        <_PackagesDebug>$(MSBuildThisFileDirectory)..\bin\Packages\Debug</_PackagesDebug>
+        <_PackagesRelease>$(MSBuildThisFileDirectory)..\bin\Packages\Release</_PackagesRelease>
+        <RestoreAdditionalProjectSources>@(CustomLocalFeed);$(RestoreAdditionalProjectSources)</RestoreAdditionalProjectSources>
+        <RestoreDependsOn>ResolveProjectReferences;$(RestoreDependsOn)</RestoreDependsOn>
+        <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
+    </PropertyGroup>
+
+     <ItemGroup>
+        <CustomLocalFeed Include="$(_PackagesDebug)" Condition="Exists($(_PackagesDebug))" />
+        <CustomLocalFeed Include="$(_PackagesRelease)" Condition="Exists($(_PackagesRelease))" />
+    </ItemGroup>
+</Project>

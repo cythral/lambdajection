@@ -2,13 +2,31 @@ root = true
 
 [*.{cs,csx}]
 insert_final_newline = true
+
+# Imports - Organization and Remove Unnecessary Ones
 dotnet_separate_import_directive_groups = true
-dotnet_diagnostic.CA2007.severity = none
-dotnet_diagnostic.CA1062.severity = none
-dotnet_diagnostic.CA1303.severity = none
 dotnet_diagnostic.IDE0005.severity = error
-dotnet_diagnostic.CS1591.severity = error
-dotnet_diagnostic.CS1591.severity = none
-dotnet_diagnostic.CA1810.severity = none
-dotnet_diagnostic.CA1801.severity = none
+
+# "Do not directly await a task"
+# This is a library not a GUI
+dotnet_diagnostic.CA2007.severity = none
+
+# "Validate arguments are not null"
+# C# 8 Nullability makes this unnecessary
+dotnet_diagnostic.CA1062.severity = none
+
+# Globalization
+# We don't do it
+dotnet_diagnostic.CA1303.severity = none
 dotnet_diagnostic.CA1307.severity = none
+
+# No Static Constructors
+dotnet_diagnostic.CA1810.severity = none
+
+[{tests,obj,src/Generator}/**.{cs,csx}]
+# Unused parameters
+dotnet_diagnostic.CA1801.severity = none
+
+# XML comments
+# Not necessary in test projects
+dotnet_diagnostic.CS1591.severity = none

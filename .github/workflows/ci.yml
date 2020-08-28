@@ -27,9 +27,11 @@ jobs:
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v1
 
-      - run: dotnet --info
+      - name: Display .NET Info
+        run: dotnet --info
 
-      - run: dotnet tool restore
+      - name: Restore
+        run: dotnet restore
 
       - name: Run nbgv
         run: echo "::set-env name=VERSION::$(dotnet nbgv get-version -v NuGetPackageVersion)"
@@ -37,12 +39,9 @@ jobs:
       - name: Display version
         run: echo ${{ env.VERSION }}
 
-      - name: Restore
-        run: dotnet restore -v normal
-
       - name: Build
         shell: bash
-        run: dotnet build -t:build,pack --no-restore -m  -bl:obj/logs/build-${{ matrix.os }}.binlog -p:PackageReleaseNotes="$(sed 's/,/%2c/g' .github/releases/v${{ env.VERSION }}.md)"
+        run: dotnet build --no-restore -m  -bl:obj/logs/build-${{ matrix.os }}.binlog -p:PackageReleaseNotes="$(sed 's/,/%2c/g' .github/releases/v${{ env.VERSION }}.md)"
 
       - name: Test
         run: dotnet test --no-build
@@ -60,13 +59,17 @@ jobs:
           name: logs-${{ matrix.os }}
           path: obj/logs/
 
+      - name: Deploy to Github Packages
+        if: matrix.os == 'windows-latest' && github.event_name == 'pull_request'
+        run: dotnet gpr push bin/Packages/${{ env.Configuration }}/*.nupkg -k ${{ secrets.GH_PACKAGES_TOKEN }}
+
       - name: Deploy to NuGet
-        if: matrix.os == 'windows-latest' && github.ref == 'refs/heads/master' && github.event_name == 'push'
+        if: matrix.os == 'windows-latest' && github.event_name == 'push' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/release/*')
         shell: bash
-        run: for file in $(ls bin/Packages/${{ env.Configuration }}/*.nupkg); do dotnet nuget push $file -k ${{ secrets.NUGET_TOKEN }} -s https://api.nuget.org/v3/index.json; done
+        run: for file in $(ls bin/Packages/${{ env.Configuration }}/*.nupkg); do dotnet nuget push $file -k ${{ secrets.NUGET_TOKEN }} -s https://api.nuget.org/v3/index.json --skip-duplicate; done
 
       - uses: ncipollo/release-action@v1
-        if: matrix.os == 'windows-latest' && github.ref == 'refs/heads/master' && github.event_name == 'push'
+        if: matrix.os == 'windows-latest' && github.event_name == 'push' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/release/*')
         with:
           artifacts: "bin/Packages/${{ env.Configuration}}/*.nupkg,bin/Packages/${{ env.Configuration}}/*.snupkg"
           bodyFile: ".github/releases/v${{ env.VERSION }}.md"

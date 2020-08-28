@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <PackageId>Lambdajection.Encryption</PackageId>
+    <AssemblyName>$(PackageId)</AssemblyName>
+    <PackageDescription>Provides an attribute and decryption service for encrypted configuration options that are injected into AWS Lambdas.</PackageDescription>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AWSSDK.KeyManagementService" Version="3.5.0" />
+  </ItemGroup>
+
+</Project>

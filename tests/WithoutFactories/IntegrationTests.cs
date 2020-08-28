@@ -32,7 +32,12 @@ namespace Lambdajection.TestsWithoutFactories
 
     public class Startup : ILambdaStartup
     {
-        public IConfiguration Configuration { get; set; } = default!;
+        public IConfiguration Configuration { get; }
+
+        public Startup(IConfiguration configuration)
+        {
+            this.Configuration = configuration;
+        }
 
         public void ConfigureServices(IServiceCollection collection)
         {
@@ -40,6 +45,7 @@ namespace Lambdajection.TestsWithoutFactories
         }
     }
 
+    [Category("Integration")]
     public class IntegrationTests
     {
         [Test]

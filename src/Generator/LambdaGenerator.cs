@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 
 using Cythral.CodeGeneration.Roslyn;
 
+using Lambdajection.Encryption;
+
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -26,6 +28,7 @@ namespace Lambdajection.Generator
             "System.Threading.Tasks",
             "System.IO",
             "Microsoft.Extensions.DependencyInjection",
+            "Microsoft.Extensions.DependencyInjection.Extensions",
             "Microsoft.Extensions.Configuration",
             "Amazon.Lambda.Core",
             "Lambdajection.Core"
@@ -149,13 +152,28 @@ namespace Lambdajection.Generator
 
             IEnumerable<StatementSyntax> GenerateConfigureMethodBody()
             {
-                foreach (var (sectionName, optionClass) in scanResults.OptionClasses)
+                if (scanResults.IncludeDecryptionFacade)
                 {
-                    var optionClassName = optionClass.Identifier.ValueText;
-                    var namespac = optionClass.Ancestors().OfType<NamespaceDeclarationSyntax>().ElementAt(0);
-                    var fullName = namespac.Name + "." + optionClassName;
+                    usingsAddedDuringGeneration.Add("Amazon.KeyManagementService");
 
-                    yield return ParseStatement($"services.Configure<{fullName}>(configuration.GetSection(\"{sectionName}\"));");
+                    yield return ParseStatement($"services.TryAddSingleton(typeof(IAmazonKeyManagementService), typeof(AmazonKeyManagementServiceClient));");
+                    yield return ParseStatement($"services.TryAddSingleton(typeof({nameof(IDecryptionService)}), typeof({nameof(DefaultDecryptionService)}));\n\n");
+                }
+
+                foreach (var optionClass in scanResults.OptionClasses)
+                {
+                    var classDeclaration = optionClass.ClassDeclaration;
+                    var sectionName = optionClass.ConfigSectionName;
+                    var optionClassName = classDeclaration.Identifier.ValueText;
+                    var namespaceName = classDeclaration.Ancestors().OfType<NamespaceDeclarationSyntax>().ElementAt(0);
+                    var fullName = namespaceName.Name + "." + optionClassName;
+
+                    if (optionClass.EncryptedProperties.Any())
+                    {
+                        yield return ParseStatement($"services.AddSingleton<IPostConfigureOptions<{fullName}>, {sectionName}Decryptor>();");
+                    }
+
+                    yield return ParseStatement($"services.Configure<{fullName}>(configuration.GetSection(\"{optionClass.ConfigSectionName}\"));");
                 }
             }
 
@@ -180,18 +198,18 @@ namespace Lambdajection.Generator
                 if (includeFactories && services.Any())
                 {
                     services = services.Where(service => service.ServiceName != "SecurityTokenService");
-                    yield return ParseStatement($"services.AddScoped<IAmazonSecurityTokenService, AmazonSecurityTokenServiceClient>();");
+                    yield return ParseStatement($"services.AddSingleton<IAmazonSecurityTokenService, AmazonSecurityTokenServiceClient>();");
                 }
 
                 foreach (var service in services)
                 {
                     usingsAddedDuringGeneration.Add(service.NamespaceName);
 
-                    yield return ParseStatement($"services.AddScoped<{service.InterfaceName}, {service.ImplementationName}>();");
+                    yield return ParseStatement($"services.AddSingleton<{service.InterfaceName}, {service.ImplementationName}>();");
 
                     if (includeFactories)
                     {
-                        yield return ParseStatement($"services.AddScoped<IAwsFactory<{service.InterfaceName}>, {service.ServiceName}Factory>();");
+                        yield return ParseStatement($"services.AddSingleton<IAwsFactory<{service.InterfaceName}>, {service.ServiceName}Factory>();");
                     }
                 }
             }
@@ -231,7 +249,95 @@ namespace Lambdajection.Generator
                 }
             }
 
+            if (scanResults.IncludeDecryptionFacade)
+            {
+                usingsAddedDuringGeneration.Add("Lambdajection.Encryption");
+                usingsAddedDuringGeneration.Add("Microsoft.Extensions.Options");
+
+                foreach (var optionClass in scanResults.OptionClasses)
+                {
+                    var decryptorClass = GenerateOptionsDecryptor(optionClass);
+                    classDeclaration = classDeclaration.AddMembers(decryptorClass);
+                }
+            }
+
             return classDeclaration;
+        }
+
+        public static ClassDeclarationSyntax GenerateOptionsDecryptor(OptionClass optionClass)
+        {
+            var classDeclaration = optionClass.ClassDeclaration;
+            var optionClassName = classDeclaration.Identifier.ValueText;
+            var namespaceName = classDeclaration.Ancestors().OfType<NamespaceDeclarationSyntax>().ElementAt(0);
+            var fullName = namespaceName.Name + "." + optionClassName;
+            var typeConstraints = new BaseTypeSyntax[] { SimpleBaseType(ParseTypeName($"IPostConfigureOptions<{fullName}>")) };
+
+            MemberDeclarationSyntax GenerateConstructor()
+            {
+                var parameters = SeparatedList(new ParameterSyntax[]
+                {
+                    Parameter(List<AttributeListSyntax>(), TokenList(), ParseTypeName(nameof(IDecryptionService)), Identifier("decryptionService"), null),
+                });
+
+                static IEnumerable<StatementSyntax> GenerateBody()
+                {
+                    yield return ParseStatement("this.decryptionService = decryptionService;");
+                }
+
+                return ConstructorDeclaration($"{optionClass.ConfigSectionName}Decryptor")
+                    .WithModifiers(TokenList(Token(PublicKeyword)))
+                    .WithParameterList(ParameterList(parameters))
+                    .WithBody(Block(GenerateBody()));
+            }
+
+            static MemberDeclarationSyntax GenerateDecryptionServiceField()
+            {
+                var attributes = List<AttributeListSyntax>();
+                var modifiers = TokenList(Token(PrivateKeyword));
+                var type = ParseTypeName(nameof(IDecryptionService));
+
+                var variables = new VariableDeclaratorSyntax[] { VariableDeclarator("decryptionService") };
+                var variable = VariableDeclaration(type)
+                    .WithVariables(SeparatedList(variables));
+
+                return FieldDeclaration(attributes, modifiers, variable);
+            }
+
+            MemberDeclarationSyntax GeneratePostConfigureMethod()
+            {
+                var parameters = SeparatedList(new ParameterSyntax[]
+                {
+                    Parameter(List<AttributeListSyntax>(), TokenList(), ParseTypeName("string"), Identifier("name"), null),
+                    Parameter(List<AttributeListSyntax>(), TokenList(), ParseTypeName(fullName), Identifier("options"), null),
+                });
+
+                IEnumerable<StatementSyntax> GenerateBody()
+                {
+
+                    var taskRunner = "Task.WaitAll(new Task[]\n{\n";
+
+                    foreach (var prop in optionClass.EncryptedProperties)
+                    {
+                        taskRunner += $"Task.Run(async () => options.{prop} = await decryptionService.Decrypt(options.{prop})),\n";
+                    }
+
+                    taskRunner += "});";
+                    yield return ParseStatement(taskRunner).NormalizeWhitespace();
+                }
+
+                return MethodDeclaration(ParseTypeName("void"), "PostConfigure")
+                    .WithModifiers(TokenList(Token(PublicKeyword)))
+                    .WithParameterList(ParameterList(parameters))
+                    .WithBody(Block(GenerateBody()));
+            }
+
+            return ClassDeclaration(optionClass.ConfigSectionName + "Decryptor")
+                .WithBaseList(BaseList(Token(ColonToken), SeparatedList(typeConstraints)))
+                .AddMembers(
+                    GenerateDecryptionServiceField(),
+                    GenerateConstructor(),
+                    GeneratePostConfigureMethod()
+                );
         }
 
         public static ClassDeclarationSyntax GenerateAwsFactory(string service, string interfaceName, string implementationName)
@@ -296,7 +402,6 @@ namespace Lambdajection.Generator
                     .WithVariables(SeparatedList(variables));
 
                 return FieldDeclaration(attributes, modifiers, variable);
-
             }
 
             return ClassDeclaration(className)

@@ -1,7 +1,7 @@
 .PHONY = clean clean-lockfiles install relock test unit-test integration-test
 
 clean:
-	@rm -rf bin obj .nuget
+	@rm -rf bin obj .nuget examples/.nuget
 	@dotnet clean
 
 clean-lockfiles:
