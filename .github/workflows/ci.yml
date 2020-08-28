@@ -66,7 +66,7 @@ jobs:
       - name: Deploy to NuGet
         if: matrix.os == 'windows-latest' && github.event_name == 'push' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/release/*')
         shell: bash
-        run: for file in $(ls bin/Packages/${{ env.Configuration }}/*.nupkg); do dotnet nuget push $file -k ${{ secrets.NUGET_TOKEN }} -s https://api.nuget.org/v3/index.json; done
+        run: for file in $(ls bin/Packages/${{ env.Configuration }}/*.nupkg); do dotnet nuget push $file -k ${{ secrets.NUGET_TOKEN }} -s https://api.nuget.org/v3/index.json --skip-duplicate; done
 
       - uses: ncipollo/release-action@v1
         if: matrix.os == 'windows-latest' && github.event_name == 'push' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/release/*')
