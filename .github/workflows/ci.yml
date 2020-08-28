@@ -27,18 +27,17 @@ jobs:
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v1
 
-      - run: dotnet --info
+      - name: Display .NET Info
+        run: dotnet --info
 
-      - run: dotnet tool restore
+      - name: Restore
+        run: dotnet restore
 
       - name: Run nbgv
         run: echo "::set-env name=VERSION::$(dotnet nbgv get-version -v NuGetPackageVersion)"
 
       - name: Display version
         run: echo ${{ env.VERSION }}
-
-      - name: Restore
-        run: dotnet restore
 
       - name: Build
         shell: bash
@@ -59,6 +58,10 @@ jobs:
         with:
           name: logs-${{ matrix.os }}
           path: obj/logs/
+
+      - name: Deploy to Github Packages
+        if: matrix.os == 'windows-latest' && github.event_name == 'pull_request'
+        run: dotnet gpr push bin/Packages/${{ env.Configuration }}/*.nupkg -k ${{ secrets.GH_PACKAGES_TOKEN }}
 
       - name: Deploy to NuGet
         if: matrix.os == 'windows-latest' && github.event_name == 'push' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/release/*')
