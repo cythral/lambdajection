@@ -16,11 +16,11 @@
 
         <Message Text="Running End to End Test for $(ProjectName)..." Importance="High" />
 
-        <Exec Command="aws cloudformation describe-stacks --stack-name $(ProjectName) --query 'Stacks[0].Outputs[?OutputKey==`InputPayload`].OutputValue' --output text" ConsoleToMsBuild="true">
+        <Exec Command="aws cloudformation describe-stacks --stack-name $(ProjectName) --query &apos;Stacks[0].Outputs[?OutputKey==`InputPayload`].OutputValue&apos; --output text" ConsoleToMsBuild="true">
             <Output TaskParameter="ConsoleOutput" ItemName="_InputPayload" />
         </Exec>
 
-        <Exec Command="aws cloudformation describe-stacks --stack-name $(ProjectName) --query 'Stacks[0].Outputs[?OutputKey==`ExpectedOutput`].OutputValue' --output text" ConsoleToMsBuild="true">
+        <Exec Command="aws cloudformation describe-stacks --stack-name $(ProjectName) --query &apos;Stacks[0].Outputs[?OutputKey==`ExpectedOutput`].OutputValue&apos; --output text" ConsoleToMsBuild="true">
             <Output TaskParameter="ConsoleOutput" ItemName="_ExpectedOutputLines" />
         </Exec>
 
