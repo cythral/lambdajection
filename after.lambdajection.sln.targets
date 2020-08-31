@@ -22,7 +22,7 @@
         />
     </Target>
 
-    <Target Name="EndToEndTests" DependsOnTargets="BuildExamples" Condition="$(Configuration) == 'Release'">
+    <Target Name="EndToEndTests" Condition="$(Configuration) == 'Release'">
         <CreateItem Include="$(MSBuildThisFileDirectory)examples\*\*.csproj">
             <Output TaskParameter="Include" ItemName="_Examples" />
         </CreateItem>

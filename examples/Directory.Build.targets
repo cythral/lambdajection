@@ -1,5 +1,5 @@
 <Project>
-    <Target Name="EndToEndTest" DependsOnTargets="Restore;Publish">
+    <Target Name="EndToEndTest" DependsOnTargets="Publish">
         <PropertyGroup>
             <_OutputFileName>$(IntermediateOutputPath)\$(ProjectName)-E2EResponse.txt</_OutputFileName>
         </PropertyGroup>
