@@ -15,4 +15,8 @@
         <CustomLocalFeed Include="$(_PackagesDebug)" Condition="Exists($(_PackagesDebug))" />
         <CustomLocalFeed Include="$(_PackagesRelease)" Condition="Exists($(_PackagesRelease))" />
     </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Cythral.CloudFormation.BuildTasks" Version="0.1.1-g22a2bacbbd" />
+    </ItemGroup>
 </Project>

@@ -46,6 +46,9 @@ jobs:
       - name: Test
         run: dotnet test --no-build
 
+      - name: Run End to End Tests
+        run: dotnet build -t:EndToEndTests -p:PackageBucket=${{ secrets.ARTIFACT_BUCKET }} -p:RoleArn=${{ secrets.CLOUDFORMATION_ROLE_ARN }}
+
       - name: Upload nugets
         if: github.event_name == 'push' && matrix.os == 'windows-latest'
         uses: actions/upload-artifact@v1

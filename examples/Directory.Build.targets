@@ -1,0 +1,41 @@
+<Project>
+    <Target Name="EndToEndTest" DependsOnTargets="Restore;Publish">
+        <PropertyGroup>
+            <_OutputFileName>$(IntermediateOutputPath)\$(ProjectName)-E2EResponse.txt</_OutputFileName>
+        </PropertyGroup>
+
+        <Deploy 
+            TemplateFile="$(MSBuildProjectDirectory)\cloudformation.template.yml" 
+            Package="true" 
+            PackageBucket="$(PackageBucket)" 
+            StackName="$(ProjectName)" 
+            ConfigFile="$(MSBuildProjectDirectory)\cloudformation.config.json" 
+            Capabilities="CAPABILITY_IAM;CAPABILITY_AUTO_EXPAND"
+            RoleArn="$(RoleArn)"
+        />
+
+        <Message Text="Running End to End Test for $(ProjectName)..." Importance="High" />
+
+        <Exec Command="aws cloudformation describe-stacks --stack-name $(ProjectName) --query 'Stacks[0].Outputs[?OutputKey==`InputPayload`].OutputValue' --output text" ConsoleToMsBuild="true" StandardOutputImportance="low">
+            <Output TaskParameter="ConsoleOutput" ItemName="_InputPayload" />
+        </Exec>
+
+        <Exec Command="aws cloudformation describe-stacks --stack-name $(ProjectName) --query 'Stacks[0].Outputs[?OutputKey==`ExpectedOutput`].OutputValue' --output text" ConsoleToMsBuild="true" StandardOutputImportance="low">
+            <Output TaskParameter="ConsoleOutput" ItemName="_ExpectedOutputLines" />
+        </Exec>
+
+        <Exec Command="aws lambda invoke --function-name $(ProjectName) --payload '@(_InputPayload, '')' $(_OutputFileName)" StandardOutputImportance="low" />
+
+        <ReadLinesFromFile File="$(_OutputFileName)">
+            <Output TaskParameter="Lines" ItemName="_ActualOutputLines" />
+        </ReadLinesFromFile>
+
+        <PropertyGroup>
+            <_ActualOutput>@(_ActualOutputLines, '')</_ActualOutput>
+            <_ExpectedOutput>@(_ExpectedOutputLines, '')</_ExpectedOutput>
+        </PropertyGroup>
+
+        <Message Text="Success!" Condition="$(_ActualOutput) == $(_ExpectedOutput)" Importance="High" />
+        <Message Text="Failed!" Condition="$(_ActualOutput) != $(_ExpectedOutput)" Importance="High" />
+    </Target>
+</Project>

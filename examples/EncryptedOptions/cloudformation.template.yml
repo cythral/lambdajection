@@ -5,14 +5,22 @@ Resources:
     Properties:
       Handler: EncryptedOptions::Lambdajection.Examples.EncryptedOptions.Handler::Run
       Runtime: dotnetcore3.1
+      FunctionName: EncryptedOptions
       Timeout: 300
       CodeUri: ../../bin/Examples/EncryptedOptions/Release/netcoreapp3.1/publish/
       MemorySize: 512
       Policies:
         - AWSLambdaExecute
         # Replace this with the ARN of a policy containing the kms:Decrypt permission
-        - !ImportValue cfn-utilities:SecretsKeyDecryptPolicyArn
+        - !ImportValue lambdajection-infrastructure:EncryptionKeyDecryptPolicyArn
       Environment:
         Variables:
           # Replace the value here with a KMS-encrypted string
-          Lambda__EncryptedValue: AQICAHh4uPV0nEVcHa3p2SypoTWL5pD0GFaoWYwOD6EQxbjUgAGMMsdjI4dFNfcZ0ise9vIAAAAAZzBlBgkqhkiG9w0BBwagWDBWAgEAMFEGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMsM/ycznlHgrlC2bCAgEQgCRphMH2SwlU3BI+w0bXHPG8Y2ptoNQwiuNDLxlb2YZjxqhutVM=
+          Lambda__EncryptedValue: AQICAHhR2Ot7i4uEGcs8aZuMfEC/V5DNL8Ge1TYf7zn4DUiqbgH7hgvX1TFJEqRgJ0feGuy4AAAAdTBzBgkqhkiG9w0BBwagZjBkAgEAMF8GCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMbyLC+JEK1j5VlzMDAgEQgDIZzUfhKehW5e2z5mPuzGOwDBYkip/WUPfHUoVWLsDi+XxYfdmQia4Fub0tV4xrNVwMrQ==
+
+Outputs:
+  InputPayload:
+    Value: "{}"
+
+  ExpectedOutput:
+    Value: '"Example Encrypted Value"'

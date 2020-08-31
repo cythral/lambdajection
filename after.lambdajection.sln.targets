@@ -4,7 +4,7 @@
         <Exec Command="dotnet tool restore" ConsoleToMsBuild="true" />
     </Target>
 
-    <Target Name="BuildExamples" AfterTargets="Build">
+    <Target Name="BuildExamples" AfterTargets="Build" DependsOnTargets="Build">
         <Message Importance="High" Text="%0A%0ABuilding Examples%0A-----------------%0A" />
 
         <CreateItem Include="$(MSBuildThisFileDirectory)examples\*\*.csproj">
@@ -20,5 +20,20 @@
             Targets="Clean;Restore;Build;Publish"
             Properties="LambdajectionVersion=$(_Version);Configuration=$(Configuration);Architecture=$(Architecture)"
         />
+    </Target>
+
+    <Target Name="EndToEndTests" DependsOnTargets="BuildExamples" Condition="$(Configuration) == 'Release'">
+        <CreateItem Include="$(MSBuildThisFileDirectory)examples\*\*.csproj">
+            <Output TaskParameter="Include" ItemName="_Examples" />
+        </CreateItem>
+
+        <Exec Command="dotnet nbgv get-version -v NuGetPackageVersion" ConsoleToMsBuild="true" StandardOutputImportance="Low">
+            <Output TaskParameter="ConsoleOutput" PropertyName="_Version" />
+        </Exec>
+
+        <MSBuild
+            Projects="@(_Examples)"
+            Targets="EndToEndTest"
+            Properties="LambdajectionVersion=$(_Version);Configuration=$(Configuration);Architecture=$(Architecture);PackageBucket=$(PackageBucket);RoleArn=$(RoleArn)" />
     </Target>
 </Project>
