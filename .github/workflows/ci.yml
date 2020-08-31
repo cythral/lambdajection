@@ -48,6 +48,7 @@ jobs:
 
       - name: Run End to End Tests
         if: matrix.os == 'windows-latest'
+        shell: bash
         run: dotnet build -t:EndToEndTests -p:PackageBucket=${{ secrets.ARTIFACT_BUCKET }} -p:RoleArn=${{ secrets.CLOUDFORMATION_ROLE_ARN }}
         env:
           AWS_REGION: us-east-1
