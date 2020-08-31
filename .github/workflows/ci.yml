@@ -47,7 +47,12 @@ jobs:
         run: dotnet test --no-build
 
       - name: Run End to End Tests
+        if: matrix.os == 'windows-latest'
         run: dotnet build -t:EndToEndTests -p:PackageBucket=${{ secrets.ARTIFACT_BUCKET }} -p:RoleArn=${{ secrets.CLOUDFORMATION_ROLE_ARN }}
+        env:
+          AWS_REGION: us-east-1
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
       - name: Upload nugets
         if: github.event_name == 'push' && matrix.os == 'windows-latest'
