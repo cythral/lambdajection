@@ -4,6 +4,13 @@
         <Exec Command="dotnet tool restore" ConsoleToMsBuild="true" />
     </Target>
 
+    <Target Name="RestoreNoFactoryCompilationTestProject" AfterTargets="Restore">
+        <MSBuild
+            Projects="$(MSBuildThisFileDirectory)tests\Integration\NoFactoryCompilationTestProject\NoFactoryCompilationTestProject.csproj"
+            Targets="Restore" />
+    </Target>
+    
+
     <Target Name="CleanExamples" AfterTargets="Clean">
         <Exec Command="dotnet nbgv get-version -v NuGetPackageVersion" ConsoleToMsBuild="true" StandardOutputImportance="Low">
             <Output TaskParameter="ConsoleOutput" PropertyName="_Version" />

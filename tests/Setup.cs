@@ -3,10 +3,10 @@ using NUnit.Framework;
 using static System.Environment;
 
 [SetUpFixture]
-public class GlobalSetup
+public class Setup
 {
     [OneTimeSetUp]
-    public void Setup()
+    public void SetupEnvironmentVariables()
     {
         SetEnvironmentVariable("AWS_REGION", "us-east-1");
         SetEnvironmentVariable("AWS_SECRET_ACCESS_KEY", "AWS_SECRET_ACCESS_KEY");

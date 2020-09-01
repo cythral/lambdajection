@@ -17,7 +17,7 @@ using NSubstitute;
 
 using NUnit.Framework;
 
-namespace Lambdajection.Tests.Configuration
+namespace Lambdajection.Tests.Integration.Configuration
 {
 
     [Lambda(Startup = typeof(Startup))]
