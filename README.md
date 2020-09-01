@@ -1,8 +1,16 @@
 <!-- omit in toc -->
 # Lambdajection
 
-Write elegant and testable AWS Lambdas using .NET Core and Microsoft's Dependency Injection + Configuration extensions. No longer do you need to write your own boilerplate to achieve this - just write your Lambda code and service configuration! Community contribution/pull requests are welcome and encouraged! See the [contributing guide](CONTRIBUTING.md) for instructions. Report issues on [JIRA](https://cythral.atlassian.net/jira/software/c/projects/LAMBJ/issues) - you can report anonymously or include github username/contact info in the ticket summary.
+Write elegant and testable AWS Lambdas using .NET Core and Microsoft's Dependency Injection + Configuration extensions. No longer do you need to write your own boilerplate to achieve this - just write your Lambda code and service configuration! 
 
+Lambdajection aims to:
+- Facilitate rapid and secure lambda development using C#.
+- Increase Lambda testability by enabling use of Microsoft's [dependency injection](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection), [configuration](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration/) and [logging](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/logging/) extensions. 
+- Achieve faster startup times (and lower costs) by using compile-time code generation rather than reflection wherever possible.
+- Optimize for container reuse by reusing service collections and services between invocations.
+
+
+Community contribution/pull requests are welcome and encouraged! See the [contributing guide](CONTRIBUTING.md) for instructions. Report issues on [JIRA](https://cythral.atlassian.net/jira/software/c/projects/LAMBJ/issues) - you can report anonymously or include github username/contact info in the ticket summary.
 <!-- omit in toc -->
 ## Table of Contents
 
