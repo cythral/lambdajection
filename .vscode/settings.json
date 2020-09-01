@@ -3,8 +3,5 @@
   "editor.formatOnPaste": true,
   "omnisharp.enableEditorConfigSupport": true,
   "omnisharp.enableRoslynAnalyzers": true,
-  "markdown.extension.toc.omittedFromToc": {
-    "README.md": ["# Lambdajection", "## Table of Contents"]
-  },
   "prettier.enable": false
 }
