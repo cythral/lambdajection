@@ -1,11 +1,13 @@
 <!-- omit in toc -->
-# Lambdajection 
+# Lambdajection
 
-Write elegant and testable AWS Lambdas using .NET Core and Microsoft's Dependency Injection + Configuration extensions. No longer do you need to write your own boilerplate to achieve this - just write your Lambda code and service configuration!  Community contribution/pull requests are welcome and encouraged! See the [contributing guide](CONTRIBUTING.md) for instructions.  Report issues on [JIRA](https://cythral.atlassian.net/jira/software/c/projects/LAMBJ/issues) - you can report anonymously or include github username/contact info in the ticket summary.
+Write elegant and testable AWS Lambdas using .NET Core and Microsoft's Dependency Injection + Configuration extensions. No longer do you need to write your own boilerplate to achieve this - just write your Lambda code and service configuration! Community contribution/pull requests are welcome and encouraged! See the [contributing guide](CONTRIBUTING.md) for instructions. Report issues on [JIRA](https://cythral.atlassian.net/jira/software/c/projects/LAMBJ/issues) - you can report anonymously or include github username/contact info in the ticket summary.
 
 <!-- omit in toc -->
 ## Table of Contents
+
 - [1. Installation](#1-installation)
+  - [1.1. Development Builds](#11-development-builds)
 - [2. Packages](#2-packages)
 - [3. Usage](#3-usage)
   - [3.1. Lambda Handler](#31-lambda-handler)
@@ -21,6 +23,31 @@ Write elegant and testable AWS Lambdas using .NET Core and Microsoft's Dependenc
 
 ```
 dotnet add package Lambdajection
+```
+
+### 1.1. Development Builds
+
+Development builds are generated for PRs and uploaded to GitHub Packages.  To use them, update the **user** config file for nuget (varies by OS - see [this article](https://docs.microsoft.com/en-us/nuget/consume-packages/configuring-nuget-behavior)) and add this to the packageSourceCredentials section of that file:
+
+```xml
+<github>
+    <add key="Username" value="USERNAME" />
+    <add key="ClearTextPassword" value="TOKEN" />
+</github>
+```
+
+Replace USERNAME with your username, and TOKEN with a personal access token from GitHub that has permissions to read packages.  It is important that this goes in the user config file rather than the project one, so that you do not accidentally leak your personal access token to the world.
+
+Then, in your **project**'s nuget.config file, add the following to your packageSources section:
+
+```xml
+<add key="github" value="https://nuget.pkg.github.com/cythral/index.json" />
+```
+
+Finally, you may use development builds by adding the package and version to your .csproj, for instance:
+
+```xml
+<PackageReference Include="Lambdajection" Version="0.3.0-gc2ca768d3f" />
 ```
 
 ## 2. Packages
