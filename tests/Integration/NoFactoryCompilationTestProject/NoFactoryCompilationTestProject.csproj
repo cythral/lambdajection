@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AWSSDK.S3" Version="3.5.0" />
+    <PackageReference Include="Cythral.CodeGeneration.Roslyn.Tool" Version="$(CythralCodeGenerationRoslynVersion)" ReferenceOutputAssembly="false" OutputItemType="CodeGeneratorToolPathItem" SkipGetTargetFrameworkProperties="true" UndefineProperties="TargetFramework" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\src\Core\Core.csproj" />
+    <ProjectReference Include="..\..\..\src\Attributes\Attributes.csproj" />
+    <ProjectReference Include="..\..\..\src\Encryption\Encryption.csproj" />
+    <ProjectReference Include="..\..\..\src\Generator\Generator.csproj" IncludeAssets="all" OutputItemType="CodeGenerationRoslynPlugin" />
+  </ItemGroup>
+</Project>

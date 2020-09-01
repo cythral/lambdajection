@@ -10,8 +10,6 @@ using Lambdajection.Core;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-using NUnit.Framework;
-
 namespace Lambdajection.TestsWithoutFactories
 {
     [Lambda(Startup = typeof(Startup))]
@@ -42,16 +40,6 @@ namespace Lambdajection.TestsWithoutFactories
         public void ConfigureServices(IServiceCollection collection)
         {
             collection.UseAwsService<IAmazonS3>();
-        }
-    }
-
-    [Category("Integration")]
-    public class IntegrationTests
-    {
-        [Test]
-        public void RunningTheLambdaShouldResultInException()
-        {
-            Assert.That(async () => await TestLambda.Run("", null), Throws.Exception);
         }
     }
 }

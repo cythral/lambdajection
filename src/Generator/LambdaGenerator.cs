@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 using Cythral.CodeGeneration.Roslyn;
 
+using Lambdajection.Core;
 using Lambdajection.Encryption;
 
 using Microsoft.CodeAnalysis;
@@ -83,16 +84,39 @@ namespace Lambdajection.Generator
                                 where (member as MethodDeclarationSyntax)?.Identifier.ValueText == "Handle"
                                 select (MethodDeclarationSyntax)member).FirstOrDefault();
 
+            var constructorArgs = from constructor in declaration.Members.OfType<ConstructorDeclarationSyntax>()
+                                  from parameter in constructor.ParameterList.Parameters
+                                  select parameter;
+
             if (handleMember == null)
             {
                 var descriptor = new DiagnosticDescriptor("LJ0001", "Handle Method Not Implemented", "Implement the Handle method to provide Lambda Function Handler code.", "Lambdajection", DiagnosticSeverity.Error, true);
                 var diagnostic = Diagnostic.Create(descriptor, Location.Create(declaration.SyntaxTree, declaration.Span));
                 progress.Report(diagnostic);
 
-                var source = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
-                source.Cancel();
+                Cancel(cancellationToken);
+                throw new GenerationFailureException();
+            }
 
-                throw new Exception("Lambda must implement handle method");
+            if (!includeFactories && constructorArgs.Any())
+            {
+                foreach (var arg in constructorArgs)
+                {
+                    var typeDefinition = context.SemanticModel.GetTypeInfo(arg.Type).Type?.OriginalDefinition;
+                    var qualifiedName = typeDefinition?.ContainingNamespace + "." + typeDefinition?.MetadataName + ", " + typeDefinition?.ContainingAssembly;
+
+                    if (qualifiedName != typeof(IAwsFactory<>).AssemblyQualifiedName)
+                    {
+                        continue;
+                    }
+
+                    var descriptor = new DiagnosticDescriptor("LJ0002", "Factories Not Enabled", "[LJ0002] Add AWSSDK.SecurityToken as a dependency of your project to use AWS Factories.", "Lambdajection", DiagnosticSeverity.Error, true);
+                    var diagnostic = Diagnostic.Create(descriptor, Location.Create(declaration.SyntaxTree, declaration.Span));
+                    progress.Report(diagnostic);
+
+                    Cancel(cancellationToken);
+                    throw new GenerationFailureException();
+                }
             }
 
             var scanner = new LambdaCompilationScanner(context.Compilation, context.Compilation.SyntaxTrees, $"{namespaceName}.{className}", startupTypeDisplayName);
@@ -411,6 +435,12 @@ namespace Lambdajection.Generator
                     GenerateConstructor(),
                     GenerateCreateMethod()
                 );
+        }
+
+        private static void Cancel(CancellationToken token)
+        {
+            using var source = CancellationTokenSource.CreateLinkedTokenSource(token);
+            source.Cancel();
         }
     }
 }
