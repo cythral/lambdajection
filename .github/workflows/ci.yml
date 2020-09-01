@@ -47,7 +47,7 @@ jobs:
         run: dotnet test --no-build
 
       - name: Run End to End Tests
-        if: matrix.os == 'ubuntu-latest'
+        if: matrix.os == 'ubuntu-latest' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/release/*')
         run: dotnet build -t:EndToEndTests -p:PackageBucket=${{ secrets.ARTIFACT_BUCKET }} -p:RoleArn=${{ secrets.CLOUDFORMATION_ROLE_ARN }}
         env:
           AWS_REGION: us-east-1
