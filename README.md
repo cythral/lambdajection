@@ -8,6 +8,7 @@ Lambdajection aims to:
 - Increase Lambda testability by enabling use of Microsoft's [dependency injection](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection), [configuration](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration/) and [logging](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/logging/) extensions. 
 - Achieve faster startup times (and lower costs) by using compile-time code generation rather than reflection wherever possible.
 - Optimize for container reuse by reusing service collections and services between invocations.
+- Be highly extensible and configurable.
 
 
 Community contribution/pull requests are welcome and encouraged! See the [contributing guide](CONTRIBUTING.md) for instructions. Report issues on [JIRA](https://cythral.atlassian.net/jira/software/c/projects/LAMBJ/issues) - you can report anonymously or include github username/contact info in the ticket summary.
