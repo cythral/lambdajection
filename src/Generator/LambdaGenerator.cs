@@ -84,7 +84,8 @@ namespace Lambdajection.Generator
                                 where (member as MethodDeclarationSyntax)?.Identifier.ValueText == "Handle"
                                 select (MethodDeclarationSyntax)member).FirstOrDefault();
 
-            var constructorArgs = from constructor in declaration.Members.OfType<ConstructorDeclarationSyntax>()
+            var constructorArgs = from tree in context.Compilation.SyntaxTrees
+                                  from constructor in tree.GetRoot().DescendantNodes().OfType<ConstructorDeclarationSyntax>()
                                   from parameter in constructor.ParameterList.Parameters
                                   select parameter;
 
@@ -102,7 +103,8 @@ namespace Lambdajection.Generator
             {
                 foreach (var arg in constructorArgs)
                 {
-                    var typeDefinition = context.SemanticModel.GetTypeInfo(arg.Type).Type?.OriginalDefinition;
+                    var semanticModel = context.Compilation.GetSemanticModel(arg.SyntaxTree);
+                    var typeDefinition = semanticModel.GetTypeInfo(arg.Type).Type?.OriginalDefinition;
                     var qualifiedName = typeDefinition?.ContainingNamespace + "." + typeDefinition?.MetadataName + ", " + typeDefinition?.ContainingAssembly;
 
                     if (qualifiedName != typeof(IAwsFactory<>).AssemblyQualifiedName)

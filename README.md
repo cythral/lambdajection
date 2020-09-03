@@ -10,7 +10,6 @@ Lambdajection aims to:
 - Optimize for container reuse by reusing service collections and services between invocations.
 - Be highly extensible and configurable.
 
-
 Community contribution/pull requests are welcome and encouraged! See the [contributing guide](CONTRIBUTING.md) for instructions. Report issues on [JIRA](https://cythral.atlassian.net/jira/software/c/projects/LAMBJ/issues) - you can report anonymously or include github username/contact info in the ticket summary.
 <!-- omit in toc -->
 ## Table of Contents

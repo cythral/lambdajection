@@ -2,9 +2,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <IsPackable>false</IsPackable>
-    <NoWarn>MSB3277</NoWarn>
     <AssemblyName>Lambdajection.Tests</AssemblyName>
-    <!-- <GenerateAssemblyVersionAttribute>true</GenerateAssemblyVersionAttribute> -->
   </PropertyGroup>
 
   <ItemGroup>
@@ -20,11 +18,14 @@
     <PackageReference Include="NUnit3TestAdapter" Version="3.15.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.4.0" />
     <PackageReference Include="Cythral.CodeGeneration.Roslyn.Tool" Version="$(CythralCodeGenerationRoslynVersion)" ReferenceOutputAssembly="false" OutputItemType="CodeGeneratorToolPathItem" SkipGetTargetFrameworkProperties="true" UndefineProperties="TargetFramework" />
+    
+    <!-- Added to resolve a version conflict, this isn't used directly -->
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.7.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="NoFactoryCompilationTestProject\**" />
+    <!-- Don't compile the NoFactoryCompilationTestProject, a test will do that at runtime. -->
+    <Compile Remove="Integration\NoFactoryCompilationTestProject\**" />
   </ItemGroup>
 
   <ItemGroup>
