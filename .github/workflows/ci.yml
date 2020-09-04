@@ -46,8 +46,17 @@ jobs:
       - name: Test
         run: dotnet test --no-build
 
+      - name: Run End to End Tests
+        if: matrix.os == 'ubuntu-latest' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/release/*' || contains(github.event.head_commit.message, '[e2e]'))
+        run: dotnet build -t:EndToEndTests -p:PackageBucket=${{ secrets.ARTIFACT_BUCKET }} -p:RoleArn=${{ secrets.CLOUDFORMATION_ROLE_ARN }}
+        env:
+          AWS_REGION: us-east-1
+          AWS_DEFAULT_REGION: us-east-1
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
       - name: Upload nugets
-        if: github.event_name == 'push' && matrix.os == 'windows-latest'
+        if: github.event_name == 'pull_request' && matrix.os == 'ubuntu-latest'
         uses: actions/upload-artifact@v1
         with:
           name: nugets
@@ -60,16 +69,16 @@ jobs:
           path: obj/logs/
 
       - name: Deploy to Github Packages
-        if: matrix.os == 'windows-latest' && github.event_name == 'pull_request'
+        if: matrix.os == 'ubuntu-latest' && github.event_name == 'pull_request'
         run: dotnet gpr push bin/Packages/${{ env.Configuration }}/*.nupkg -k ${{ secrets.GH_TOKEN }}
 
       - name: Deploy to NuGet
-        if: matrix.os == 'windows-latest' && github.event_name == 'push' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/release/*')
+        if: matrix.os == 'ubuntu-latest' && github.event_name == 'push' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/release/*')
         shell: bash
         run: for file in $(ls bin/Packages/${{ env.Configuration }}/*.nupkg); do dotnet nuget push $file -k ${{ secrets.NUGET_TOKEN }} -s https://api.nuget.org/v3/index.json --skip-duplicate; done
 
       - uses: ncipollo/release-action@v1
-        if: matrix.os == 'windows-latest' && github.event_name == 'push' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/release/*')
+        if: matrix.os == 'ubuntu-latest' && github.event_name == 'push' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/release/*')
         with:
           artifacts: "bin/Packages/${{ env.Configuration}}/*.nupkg,bin/Packages/${{ env.Configuration}}/*.snupkg"
           bodyFile: ".github/releases/v${{ env.VERSION }}.md"

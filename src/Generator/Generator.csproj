@@ -12,8 +12,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="Generator.props" Pack="true" PackagePath="build/" KeepDuplicates="false" />
+    <PackageBuildFolderProjectImport Include="@(None->'%(Filename)%(Extension)')" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Attributes\Attributes.csproj" />
     <ProjectReference Include="..\Encryption\Encryption.csproj" />
+    <ProjectReference Include="..\Core\Core.csproj" />
   </ItemGroup>
 
 </Project>

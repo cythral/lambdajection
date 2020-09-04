@@ -7,12 +7,14 @@
         <_PackagesDebug>$(MSBuildThisFileDirectory)..\bin\Packages\Debug</_PackagesDebug>
         <_PackagesRelease>$(MSBuildThisFileDirectory)..\bin\Packages\Release</_PackagesRelease>
         <RestoreAdditionalProjectSources>@(CustomLocalFeed);$(RestoreAdditionalProjectSources)</RestoreAdditionalProjectSources>
-        <RestoreDependsOn>ResolveProjectReferences;$(RestoreDependsOn)</RestoreDependsOn>
-        <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
     </PropertyGroup>
 
      <ItemGroup>
         <CustomLocalFeed Include="$(_PackagesDebug)" Condition="Exists($(_PackagesDebug))" />
         <CustomLocalFeed Include="$(_PackagesRelease)" Condition="Exists($(_PackagesRelease))" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Cythral.CloudFormation.BuildTasks" Version="0.1.1" />
     </ItemGroup>
 </Project>

@@ -10,23 +10,31 @@ using Lambdajection.Core;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-using NUnit.Framework;
-
 namespace Lambdajection.TestsWithoutFactories
 {
     [Lambda(Startup = typeof(Startup))]
     public partial class TestLambda
     {
-        private readonly IAwsFactory<IAmazonS3> s3Factory;
+        private readonly S3Utility utility;
 
-        public TestLambda(IAwsFactory<IAmazonS3> s3Factory)
+        public TestLambda(S3Utility utility)
         {
-            this.s3Factory = s3Factory;
+            this.utility = utility;
         }
 
         public Task<IAwsFactory<IAmazonS3>> Handle(string request, ILambdaContext context)
         {
-            return Task.FromResult(s3Factory);
+            return Task.FromResult(utility.Factory);
+        }
+    }
+
+    public class S3Utility
+    {
+        public IAwsFactory<IAmazonS3> Factory { get; set; }
+
+        public S3Utility(IAwsFactory<IAmazonS3> s3Factory)
+        {
+            this.Factory = s3Factory;
         }
     }
 
@@ -42,16 +50,6 @@ namespace Lambdajection.TestsWithoutFactories
         public void ConfigureServices(IServiceCollection collection)
         {
             collection.UseAwsService<IAmazonS3>();
-        }
-    }
-
-    [Category("Integration")]
-    public class IntegrationTests
-    {
-        [Test]
-        public void RunningTheLambdaShouldResultInException()
-        {
-            Assert.That(async () => await TestLambda.Run("", null), Throws.Exception);
         }
     }
 }

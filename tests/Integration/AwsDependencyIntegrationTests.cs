@@ -12,6 +12,8 @@ using FluentAssertions;
 using Lambdajection.Attributes;
 using Lambdajection.Core;
 
+using Microsoft.Build.Locator;
+using Microsoft.CodeAnalysis.MSBuild;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -19,7 +21,8 @@ using Microsoft.Extensions.Logging;
 using NSubstitute;
 
 using NUnit.Framework;
-namespace Lambdajection.Tests
+
+namespace Lambdajection.Tests.Integration.AwsDependency
 {
     [Lambda(Startup = typeof(Startup))]
     public partial class ExampleLambda
@@ -80,12 +83,11 @@ namespace Lambdajection.Tests
     }
 
     [Category("Integration")]
-    public class IntegrationTests
+    public class AwsDependencyIntegrationTests
     {
         [Test]
         public async Task TestExampleLambdaRun()
         {
-
             var test = "foo";
             var result = await ExampleLambda.Run(test, null);
 
@@ -100,6 +102,7 @@ namespace Lambdajection.Tests
             var s3FactoryType = configuratorType.GetNestedType("S3Factory", BindingFlags.NonPublic)!;
             var factory = Activator.CreateInstance(s3FactoryType, new object[] { client });
             var createMethod = s3FactoryType.GetMethod("Create")!;
+
             createMethod.Invoke(factory, new object[] { null! });
 
             await client.DidNotReceive().AssumeRoleAsync(Arg.Any<AssumeRoleRequest>());
@@ -118,6 +121,21 @@ namespace Lambdajection.Tests
             createMethod.Invoke(factory, new object[] { roleArn });
 
             await client.Received().AssumeRoleAsync(Arg.Is<AssumeRoleRequest>(req => req.RoleArn == roleArn));
+        }
+
+        [Test]
+        public async Task TestFactoryGenerationFailsIfRequestingAwsClientFactoryWithoutSecurityTokenAssembly()
+        {
+            MSBuildLocator.RegisterDefaults();
+
+            using var workspace = MSBuildWorkspace.Create();
+            workspace.LoadMetadataForReferencedProjects = true;
+
+            // this path is relative to the output directory
+            var project = await workspace.OpenProjectAsync("../../../../tests/Integration/NoFactoryCompilationTestProject/NoFactoryCompilationTestProject.csproj");
+            var compilation = (await project.GetCompilationAsync())!;
+
+            workspace.Diagnostics.Should().Contain(diagnostic => diagnostic.Message.Contains("[LJ0002] Add AWSSDK.SecurityToken as a dependency of your project to use AWS Factories."));
         }
     }
 }

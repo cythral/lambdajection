@@ -8,5 +8,8 @@ namespace Lambdajection.Examples.EncryptedOptions
     {
         [Encrypted]
         public string EncryptedValue { get; set; }
+
+        /// <value>expected plaintext version of the encrypted value</value>
+        public string ExpectedValue { get; set; }
     }
 }

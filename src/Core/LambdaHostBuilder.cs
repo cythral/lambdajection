@@ -12,11 +12,10 @@ namespace Lambdajection.Core
         where TLambdaStartup : class, ILambdaStartup
         where TLambdaConfigurator : class, ILambdaConfigurator
     {
-        internal static IServiceProvider? serviceProvider;
+        internal static IServiceProvider serviceProvider = BuildServiceProvider();
 
         public static void Build(LambdaHost<TLambda, TLambdaParameter, TLambdaOutput, TLambdaStartup, TLambdaConfigurator> host)
         {
-            serviceProvider ??= BuildServiceProvider();
             host.ServiceProvider = serviceProvider;
         }
 

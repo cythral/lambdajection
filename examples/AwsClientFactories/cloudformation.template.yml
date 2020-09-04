@@ -4,6 +4,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Handler: AwsClientFactories::Lambdajection.Examples.AwsClientFactories.Handler::Run
+      FunctionName: AwsClientFactories
       Runtime: dotnetcore3.1
       Timeout: 300
       CodeUri: ../../bin/Examples/AwsClientFactories/Release/netcoreapp3.1/publish/
@@ -37,3 +38,16 @@ Resources:
             Action: sts:AssumeRole
             Principal:
               AWS: !GetAtt AwsClientFactoriesRole.Arn
+
+Outputs:
+  InputPayload:
+    Value: !Sub |
+      {
+        "RoleArn": "${PutBucketRole.Arn}",
+        "BucketName": "${Bucket}",
+        "FileName": "test-file",
+        "Contents": "test"
+      }
+
+  ExpectedOutput:
+    Value: !Sub '"Successfully written to file test-file in bucket ${Bucket}"'

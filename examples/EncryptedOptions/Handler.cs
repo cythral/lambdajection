@@ -23,7 +23,7 @@ namespace Lambdajection.Examples.EncryptedOptions
 
         public Task<string> Handle(object request, ILambdaContext context)
         {
-            return Task.FromResult(options.EncryptedValue); // Despite the name, this will be returned to you unencrypted.
+            return Task.FromResult(options.EncryptedValue); // despite the name, this value will have already been decrypted for you.
         }
     }
 }
