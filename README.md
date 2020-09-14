@@ -107,7 +107,7 @@ namespace Your.Namespace
 
 ### 3.2. Serialization
 
-If your Lambda targets the `netcoreapp3.1` framework, then by default, the serializer is set by default to  `DefaultLambdaJsonSerializer` from the `Amazon.Lambda.Serialization.SystemTextJson` package.  With any TFM, you may specify the serializer you want to use by setting the Lambda attribute's `Serializer` argument:
+If your Lambda targets the `netcoreapp3.1` framework, then by default, the serializer is set to  `DefaultLambdaJsonSerializer` from the `Amazon.Lambda.Serialization.SystemTextJson` package.  With any TFM, you may specify the serializer you want to use by setting the Lambda attribute's `Serializer` argument:
 
 ```cs
 [Lambda(Startup = typeof(Startup), Serializer = typeof(Serializer))]
