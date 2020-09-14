@@ -152,6 +152,26 @@ namespace Lambdajection.Generator
             var returnType = handleMethod.ReturnType.ChildNodes().ElementAt(0).ChildNodes().ElementAt(0);
             var typeConstraints = new BaseTypeSyntax[] { SimpleBaseType(ParseTypeName($"ILambda<{inputType},{returnType}>")) };
 
+            string? GetSerializerName()
+            {
+                if (serializerType != null)
+                {
+                    return serializerType.Name;
+                }
+
+                return includeDefaultSerializer ? nameof(DefaultLambdaJsonSerializer) : null;
+            }
+
+            string? GetSerializerNamespace()
+            {
+                if (serializerType != null)
+                {
+                    return serializerType.ContainingNamespace?.ToString();
+                }
+
+                return includeDefaultSerializer ? typeof(DefaultLambdaJsonSerializer).Namespace?.ToString() : null;
+            }
+
             MemberDeclarationSyntax GenerateRunMethod()
             {
                 var modifiers = new SyntaxToken[]
@@ -161,25 +181,13 @@ namespace Lambdajection.Generator
                     Token(AsyncKeyword),
                 };
 
-                string? serializerName = null;
-                string? serializerNamespace = null;
-
-                if (includeDefaultSerializer)
-                {
-                    serializerName = nameof(DefaultLambdaJsonSerializer);
-                    serializerNamespace = typeof(DefaultLambdaJsonSerializer).Namespace!.ToString();
-                }
-
-                if (serializerType != null)
-                {
-                    serializerName = serializerType.Name;
-                    serializerNamespace = serializerType.ContainingNamespace?.ToString();
-                }
-
                 var method = MethodDeclaration(ParseTypeName($"Task<{returnType}>"), "Run")
                     .WithModifiers(TokenList(modifiers))
                     .WithParameterList(handleMethod!.ParameterList)
                     .WithBody(Block(GenerateRunMethodBody()));
+
+                var serializerName = GetSerializerName();
+                var serializerNamespace = GetSerializerNamespace();
 
                 if (serializerName != null)
                 {
