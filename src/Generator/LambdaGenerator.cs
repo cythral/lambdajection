@@ -199,7 +199,7 @@ namespace Lambdajection.Generator
                     method = method.WithAttributeLists(attributeLists);
                 }
 
-                if (serializerNamespace != null)
+                if (serializerName != null && serializerNamespace != null)
                 {
                     usingsAddedDuringGeneration.Add(serializerNamespace);
                 }
