@@ -5,7 +5,7 @@ clean:
 	@dotnet clean
 
 clean-lockfiles:
-	@rm -rf **/**/packages.lock.json **/packages.lock.json
+	@for file in $$(find . -name packages.lock.json); do rm $$file; done
 
 install:
 	@dotnet restore
