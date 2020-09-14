@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
+using Amazon.Lambda.Serialization.SystemTextJson;
+
 using Cythral.CodeGeneration.Roslyn;
 
 using Lambdajection.Core;
@@ -85,6 +87,7 @@ namespace Lambdajection.Generator
         public Task<SyntaxList<MemberDeclarationSyntax>> GenerateAsync(TransformationContext context, IProgress<Diagnostic> progress, CancellationToken cancellationToken = default)
         {
             var includeFactories = context.Compilation.ReferencedAssemblyNames.Any(assembly => assembly.Name == "AWSSDK.SecurityToken");
+            var includeDefaultSerializer = context.Compilation.ReferencedAssemblyNames.Any(assembly => assembly.Name == "Amazon.Lambda.Serialization.SystemTextJson");
             var declaration = (ClassDeclarationSyntax)context.ProcessingNode;
             var namespaceName = declaration.Ancestors().OfType<NamespaceDeclarationSyntax>().ElementAt(0).Name;
             var className = declaration.Identifier.ValueText;
@@ -134,14 +137,14 @@ namespace Lambdajection.Generator
 
             IEnumerable<MemberDeclarationSyntax> GenerateMembers()
             {
-                yield return GenerateLambda(className!, handleMember!, scanResults, includeFactories);
+                yield return GenerateLambda(className!, handleMember!, scanResults, includeFactories, includeDefaultSerializer);
             }
 
             var result = List(GenerateMembers());
             return Task.FromResult(result);
         }
 
-        public ClassDeclarationSyntax GenerateLambda(string className, MethodDeclarationSyntax handleMethod, LambdaCompilationScanResult scanResults, bool includeFactories)
+        public ClassDeclarationSyntax GenerateLambda(string className, MethodDeclarationSyntax handleMethod, LambdaCompilationScanResult scanResults, bool includeFactories, bool includeDefaultSerializer)
         {
             var inputParameter = handleMethod.ParameterList.Parameters[0];
             var contextParameter = handleMethod.ParameterList.Parameters[1];
@@ -158,27 +161,42 @@ namespace Lambdajection.Generator
                     Token(AsyncKeyword),
                 };
 
-                var serializerName = "DefaultLambdaJsonSerializer";
-                var serializerNamespace = "Amazon.Lambda.Serialization.SystemTextJson";
+                string? serializerName = null;
+                string? serializerNamespace = null;
+
+                if (includeDefaultSerializer)
+                {
+                    serializerName = nameof(DefaultLambdaJsonSerializer);
+                    serializerNamespace = typeof(DefaultLambdaJsonSerializer).Namespace!.ToString();
+                }
 
                 if (serializerType != null)
                 {
                     serializerName = serializerType.Name;
-                    serializerNamespace = serializerType.ContainingNamespace?.ToString() ?? serializerNamespace;
+                    serializerNamespace = serializerType.ContainingNamespace?.ToString();
                 }
 
-                usingsAddedDuringGeneration.Add(serializerNamespace);
-
-                var argumentList = ParseAttributeArgumentList($"(typeof({serializerName}))");
-                var attribute = Attribute(ParseName("LambdaSerializer"), argumentList);
-                var attributeList = AttributeList(SeparatedList(new AttributeSyntax[] { attribute }));
-                var attributeLists = List(new AttributeListSyntax[] { attributeList });
-
-                return MethodDeclaration(ParseTypeName($"Task<{returnType}>"), "Run")
+                var method = MethodDeclaration(ParseTypeName($"Task<{returnType}>"), "Run")
                     .WithModifiers(TokenList(modifiers))
                     .WithParameterList(handleMethod!.ParameterList)
-                    .WithBody(Block(GenerateRunMethodBody()))
-                    .WithAttributeLists(attributeLists);
+                    .WithBody(Block(GenerateRunMethodBody()));
+
+                if (serializerName != null)
+                {
+                    if (serializerNamespace != null)
+                    {
+                        usingsAddedDuringGeneration.Add(serializerNamespace);
+                    }
+
+                    var argumentList = ParseAttributeArgumentList($"(typeof({serializerName}))");
+                    var attribute = Attribute(ParseName("LambdaSerializer"), argumentList);
+                    var attributeList = AttributeList(SeparatedList(new AttributeSyntax[] { attribute }));
+                    var attributeLists = List(new AttributeListSyntax[] { attributeList });
+
+                    method = method.WithAttributeLists(attributeLists);
+                }
+
+                return method;
             }
 
             IEnumerable<StatementSyntax> GenerateRunMethodBody()

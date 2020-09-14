@@ -8,8 +8,6 @@ using FluentAssertions;
 
 using Lambdajection.Attributes;
 
-// using NSubstitute;
-
 using NUnit.Framework;
 
 namespace Lambdajection.Tests.Integration.Serialization
