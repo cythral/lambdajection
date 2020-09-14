@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
+using Amazon.Lambda.Serialization.SystemTextJson;
+
 using Cythral.CodeGeneration.Roslyn;
 
 using Lambdajection.Core;
@@ -20,6 +22,7 @@ namespace Lambdajection.Generator
     public class LambdaGenerator : IRichCodeGenerator
     {
         private readonly INamedTypeSymbol startupType;
+        private readonly INamedTypeSymbol? serializerType;
         private readonly string startupTypeName;
         private readonly string startupTypeDisplayName;
 
@@ -39,12 +42,19 @@ namespace Lambdajection.Generator
 
         public LambdaGenerator(AttributeData attributeData)
         {
-            this.startupType = (from arg in attributeData.NamedArguments
-                                where arg.Key == "Startup"
-                                select (INamedTypeSymbol)arg.Value.Value!).FirstOrDefault();
-
+            this.startupType = GetAttributeArgument(attributeData, "Startup")!;
+            this.serializerType = GetAttributeArgument(attributeData, "Serializer");
             this.startupTypeName = this.startupType.Name;
             this.startupTypeDisplayName = this.startupType.ToDisplayString();
+        }
+
+        private static INamedTypeSymbol? GetAttributeArgument(AttributeData attributeData, string argName)
+        {
+            var query = from arg in attributeData.NamedArguments
+                        where arg.Key == argName
+                        select (INamedTypeSymbol?)arg.Value.Value;
+
+            return query.FirstOrDefault();
         }
 
         public IEnumerable<UsingDirectiveSyntax> GenerateUsings(IEnumerable<UsingDirectiveSyntax> exclusions)
@@ -77,6 +87,7 @@ namespace Lambdajection.Generator
         public Task<SyntaxList<MemberDeclarationSyntax>> GenerateAsync(TransformationContext context, IProgress<Diagnostic> progress, CancellationToken cancellationToken = default)
         {
             var includeFactories = context.Compilation.ReferencedAssemblyNames.Any(assembly => assembly.Name == "AWSSDK.SecurityToken");
+            var includeDefaultSerializer = context.Compilation.ReferencedAssemblyNames.Any(assembly => assembly.Name == "Amazon.Lambda.Serialization.SystemTextJson");
             var declaration = (ClassDeclarationSyntax)context.ProcessingNode;
             var namespaceName = declaration.Ancestors().OfType<NamespaceDeclarationSyntax>().ElementAt(0).Name;
             var className = declaration.Identifier.ValueText;
@@ -126,20 +137,40 @@ namespace Lambdajection.Generator
 
             IEnumerable<MemberDeclarationSyntax> GenerateMembers()
             {
-                yield return GenerateLambda(className!, handleMember!, scanResults, includeFactories);
+                yield return GenerateLambda(className!, handleMember!, scanResults, includeFactories, includeDefaultSerializer);
             }
 
             var result = List(GenerateMembers());
             return Task.FromResult(result);
         }
 
-        public ClassDeclarationSyntax GenerateLambda(string className, MethodDeclarationSyntax handleMethod, LambdaCompilationScanResult scanResults, bool includeFactories)
+        public ClassDeclarationSyntax GenerateLambda(string className, MethodDeclarationSyntax handleMethod, LambdaCompilationScanResult scanResults, bool includeFactories, bool includeDefaultSerializer)
         {
             var inputParameter = handleMethod.ParameterList.Parameters[0];
             var contextParameter = handleMethod.ParameterList.Parameters[1];
             var inputType = inputParameter?.Type?.ToString() ?? "";
             var returnType = handleMethod.ReturnType.ChildNodes().ElementAt(0).ChildNodes().ElementAt(0);
             var typeConstraints = new BaseTypeSyntax[] { SimpleBaseType(ParseTypeName($"ILambda<{inputType},{returnType}>")) };
+
+            string? GetSerializerName()
+            {
+                if (serializerType != null)
+                {
+                    return serializerType.Name;
+                }
+
+                return includeDefaultSerializer ? nameof(DefaultLambdaJsonSerializer) : null;
+            }
+
+            string? GetSerializerNamespace()
+            {
+                if (serializerType != null)
+                {
+                    return serializerType.ContainingNamespace?.ToString();
+                }
+
+                return includeDefaultSerializer ? typeof(DefaultLambdaJsonSerializer).Namespace?.ToString() : null;
+            }
 
             MemberDeclarationSyntax GenerateRunMethod()
             {
@@ -150,10 +181,30 @@ namespace Lambdajection.Generator
                     Token(AsyncKeyword),
                 };
 
-                return MethodDeclaration(ParseTypeName($"Task<{returnType}>"), "Run")
+                var method = MethodDeclaration(ParseTypeName($"Task<{returnType}>"), "Run")
                     .WithModifiers(TokenList(modifiers))
                     .WithParameterList(handleMethod!.ParameterList)
                     .WithBody(Block(GenerateRunMethodBody()));
+
+                var serializerName = GetSerializerName();
+                var serializerNamespace = GetSerializerNamespace();
+
+                if (serializerName != null)
+                {
+                    var argumentList = ParseAttributeArgumentList($"(typeof({serializerName}))");
+                    var attribute = Attribute(ParseName("LambdaSerializer"), argumentList);
+                    var attributeList = AttributeList(SeparatedList(new AttributeSyntax[] { attribute }));
+                    var attributeLists = List(new AttributeListSyntax[] { attributeList });
+
+                    method = method.WithAttributeLists(attributeLists);
+                }
+
+                if (serializerName != null && serializerNamespace != null)
+                {
+                    usingsAddedDuringGeneration.Add(serializerNamespace);
+                }
+
+                return method;
             }
 
             IEnumerable<StatementSyntax> GenerateRunMethodBody()

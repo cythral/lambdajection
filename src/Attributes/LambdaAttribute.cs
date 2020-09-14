@@ -16,5 +16,8 @@ namespace Lambdajection.Attributes
     {
         /// <value>The type of Startup class to use for the Lambda.  The type passed must implement <c>ILambdaStartup</c>.</value>
         public Type Startup { get; set; } = null!;
+
+        /// <value>The type of Serializer to use for the Lambda.</value>
+        public Type Serializer { get; set; } = null!;
     }
 }

@@ -19,9 +19,10 @@ Community contribution/pull requests are welcome and encouraged! See the [contri
 - [2. Packages](#2-packages)
 - [3. Usage](#3-usage)
   - [3.1. Lambda Handler](#31-lambda-handler)
-  - [3.2. Startup Configuration](#32-startup-configuration)
-  - [3.3. Adding Options](#33-adding-options)
-  - [3.4. Handler Scheme](#34-handler-scheme)
+  - [3.2. Serialization](#32-serialization)
+  - [3.3. Startup Configuration](#33-startup-configuration)
+  - [3.4. Adding Options](#34-adding-options)
+  - [3.5. Handler Scheme](#35-handler-scheme)
 - [4. Examples](#4-examples)
 - [5. Acknowledgments](#5-acknowledgments)
 - [6. Contributing](#6-contributing)
@@ -104,7 +105,19 @@ namespace Your.Namespace
 
 ```
 
-### 3.2. Startup Configuration
+### 3.2. Serialization
+
+If your Lambda targets the `netcoreapp3.1` framework, then by default, the serializer is set to  `DefaultLambdaJsonSerializer` from the `Amazon.Lambda.Serialization.SystemTextJson` package.  With any TFM, you may specify the serializer you want to use by setting the Lambda attribute's `Serializer` argument:
+
+```cs
+[Lambda(Startup = typeof(Startup), Serializer = typeof(Serializer))]
+public partial class Lambda
+{
+    ...
+```
+
+
+### 3.3. Startup Configuration
 
 The startup class configures services that are injected into the Lambda's IoC container / service collection.
 
@@ -150,7 +163,7 @@ namespace Your.Namespace
 }
 ```
 
-### 3.3. Adding Options
+### 3.4. Adding Options
 
 You can add an options section by defining a class for that section, and annotating it with the [LambdaOptions attribute](src/Attributes/LambdaOptionsAttribute.cs). If any options are in encrypted form, add the [Encrypted attribute](src/Encryption/EncryptedAttribute.cs) to that property. When the options are requested, the [IDecryptionService](src/Encryption/IDecryptionService.cs) singleton in the container will be used to decrypt those properties. The [default decryption service](src/Encryption/DefaultDecryptionService.cs) uses KMS to decrypt values.
 
@@ -175,7 +188,7 @@ namespace Your.Namespace
 }
 ```
 
-### 3.4. Handler Scheme
+### 3.5. Handler Scheme
 
 When configuring your lambda on AWS, the method name you'll want to use will be `Run` (NOT `Handle`). For context, `Run` is a static method is generated on your class during compilation that takes care of setting up the IoC container (if it hasn't been already).
 

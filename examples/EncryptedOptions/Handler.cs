@@ -1,13 +1,10 @@
 ﻿using System.Threading.Tasks;
 
 using Amazon.Lambda.Core;
-using Amazon.Lambda.Serialization.SystemTextJson;
 
 using Lambdajection.Attributes;
 
 using Microsoft.Extensions.Options;
-
-[assembly: LambdaSerializer(typeof(DefaultLambdaJsonSerializer))]
 
 namespace Lambdajection.Examples.EncryptedOptions
 {
