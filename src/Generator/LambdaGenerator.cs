@@ -191,17 +191,17 @@ namespace Lambdajection.Generator
 
                 if (serializerName != null)
                 {
-                    if (serializerNamespace != null)
-                    {
-                        usingsAddedDuringGeneration.Add(serializerNamespace);
-                    }
-
                     var argumentList = ParseAttributeArgumentList($"(typeof({serializerName}))");
                     var attribute = Attribute(ParseName("LambdaSerializer"), argumentList);
                     var attributeList = AttributeList(SeparatedList(new AttributeSyntax[] { attribute }));
                     var attributeLists = List(new AttributeListSyntax[] { attributeList });
 
                     method = method.WithAttributeLists(attributeLists);
+                }
+
+                if (serializerNamespace != null)
+                {
+                    usingsAddedDuringGeneration.Add(serializerNamespace);
                 }
 
                 return method;
