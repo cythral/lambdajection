@@ -14,7 +14,7 @@ namespace Lambdajection.Tests.Integration.Serialization
 {
     public class TestSerializer { }
 
-    [Lambda(Startup = typeof(TestStartup), Serializer = typeof(TestSerializer))]
+    [Lambda(typeof(TestStartup), Serializer = typeof(TestSerializer))]
     public partial class TestLambdaWithSerializer
     {
 #pragma warning disable CA1822
@@ -25,7 +25,7 @@ namespace Lambdajection.Tests.Integration.Serialization
 #pragma warning restore CA1822
     }
 
-    [Lambda(Startup = typeof(TestStartup))]
+    [Lambda(typeof(TestStartup))]
     public partial class TestLambdaWithoutSerializer
     {
 #pragma warning disable CA1822

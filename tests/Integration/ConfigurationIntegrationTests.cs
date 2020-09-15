@@ -20,7 +20,7 @@ using NUnit.Framework;
 namespace Lambdajection.Tests.Integration.Configuration
 {
 
-    [Lambda(Startup = typeof(Startup))]
+    [Lambda(typeof(Startup))]
     public partial class ConfigurationLambda
     {
         private readonly ExampleOptions exampleOptions;

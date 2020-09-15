@@ -9,7 +9,7 @@ using Lambdajection.Core;
 
 namespace Lambdajection.Examples.AwsClientFactories
 {
-    [Lambda(Startup = typeof(Startup))]
+    [Lambda(typeof(Startup))]
     public partial class Handler
     {
         private readonly IAwsFactory<IAmazonS3> s3Factory;

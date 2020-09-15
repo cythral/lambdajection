@@ -50,6 +50,11 @@ namespace Lambdajection.Generator
 
         private static INamedTypeSymbol? GetAttributeArgument(AttributeData attributeData, string argName)
         {
+            if (argName == "Startup")
+            {
+                return (INamedTypeSymbol?)attributeData.ConstructorArguments[0].Value;
+            }
+
             var query = from arg in attributeData.NamedArguments
                         where arg.Key == argName
                         select (INamedTypeSymbol?)arg.Value.Value;
