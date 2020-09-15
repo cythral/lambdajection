@@ -28,5 +28,8 @@ namespace Lambdajection.Attributes
 
         /// <value>The type of Serializer to use for the Lambda.</value>
         public Type Serializer { get; set; } = null!;
+
+        /// <value>The type of Config Factory to use for the Lambda.</value>
+        public Type ConfigFactory { get; set; } = null!;
     }
 }

@@ -89,6 +89,5 @@ namespace Lambdajection.Tests.Integration.Configuration
             var result = await ConfigurationLambda.Run("", null);
             result.ExampleEncryptedValue.Should().BeEquivalentTo("[decrypted] " + exampleEncryptedValue);
         }
-
     }
 }
