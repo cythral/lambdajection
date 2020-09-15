@@ -15,7 +15,8 @@ using TestLambdaHost = Lambdajection.Core.LambdaHost<
     object,
     object,
     Lambdajection.TestStartup,
-    Lambdajection.TestConfigurator
+    Lambdajection.TestConfigurator,
+    Lambdajection.TestConfigFactory
 >;
 
 namespace Lambdajection.Core.Tests

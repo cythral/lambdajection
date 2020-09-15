@@ -11,6 +11,7 @@ Lambdajection aims to:
 - Be highly extensible and configurable.
 
 Community contribution/pull requests are welcome and encouraged! See the [contributing guide](CONTRIBUTING.md) for instructions. Report issues on [JIRA](https://cythral.atlassian.net/jira/software/c/projects/LAMBJ/issues) - you can report anonymously or include github username/contact info in the ticket summary.
+
 <!-- omit in toc -->
 ## Table of Contents
 
@@ -20,9 +21,10 @@ Community contribution/pull requests are welcome and encouraged! See the [contri
 - [3. Usage](#3-usage)
   - [3.1. Lambda Handler](#31-lambda-handler)
   - [3.2. Serialization](#32-serialization)
-  - [3.3. Startup Configuration](#33-startup-configuration)
-  - [3.4. Adding Options](#34-adding-options)
-  - [3.5. Handler Scheme](#35-handler-scheme)
+  - [3.3. Startup Class](#33-startup-class)
+  - [3.4. Customizing Configuration](#34-customizing-configuration)
+  - [3.5. Adding Options](#35-adding-options)
+  - [3.6. Handler Scheme](#36-handler-scheme)
 - [4. Examples](#4-examples)
 - [5. Acknowledgments](#5-acknowledgments)
 - [6. Contributing](#6-contributing)
@@ -117,7 +119,7 @@ public partial class Lambda
 ```
 
 
-### 3.3. Startup Configuration
+### 3.3. Startup Class
 
 The startup class configures services that are injected into the Lambda's IoC container / service collection.
 
@@ -163,7 +165,41 @@ namespace Your.Namespace
 }
 ```
 
-### 3.4. Adding Options
+### 3.4. Customizing Configuration
+
+By default, configuration is environment variables-based. If you would like to use a file-based or other configuration scheme, you may supply a custom configuration factory to the Lambda attribute:
+
+```cs
+[Lambda(typeof(Startup), ConfigFactory = typeof(ConfigFactory))]
+public partial class Lambda
+{
+    ...
+```
+
+A custom config factory might look like the following:
+```cs
+using System.IO;
+
+using Lambdajection.Core;
+
+using Microsoft.Extensions.Configuration;
+
+namespace Your.Namespace
+{
+    public class ConfigFactory : ILambdaConfigFactory
+    {
+        public IConfigurationRoot Create()
+        {
+            return new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: true)
+                .Build();
+        }
+    }
+}
+```
+
+### 3.5. Adding Options
 
 You can add an options section by defining a class for that section, and annotating it with the [LambdaOptions attribute](src/Attributes/LambdaOptionsAttribute.cs). If any options are in encrypted form, add the [Encrypted attribute](src/Encryption/EncryptedAttribute.cs) to that property. When the options are requested, the [IDecryptionService](src/Encryption/IDecryptionService.cs) singleton in the container will be used to decrypt those properties. The [default decryption service](src/Encryption/DefaultDecryptionService.cs) uses KMS to decrypt values.
 
@@ -188,7 +224,7 @@ namespace Your.Namespace
 }
 ```
 
-### 3.5. Handler Scheme
+### 3.6. Handler Scheme
 
 When configuring your lambda on AWS, the method name you'll want to use will be `Run` (NOT `Handle`). For context, `Run` is a static method is generated on your class during compilation that takes care of setting up the IoC container (if it hasn't been already).
 

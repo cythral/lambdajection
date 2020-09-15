@@ -23,6 +23,7 @@ namespace Lambdajection.Generator
     {
         private readonly INamedTypeSymbol startupType;
         private readonly INamedTypeSymbol? serializerType;
+        private readonly INamedTypeSymbol? configFactoryType;
         private readonly string startupTypeName;
         private readonly string startupTypeDisplayName;
 
@@ -44,6 +45,7 @@ namespace Lambdajection.Generator
         {
             this.startupType = GetAttributeArgument(attributeData, "Startup")!;
             this.serializerType = GetAttributeArgument(attributeData, "Serializer");
+            this.configFactoryType = GetAttributeArgument(attributeData, "ConfigFactory");
             this.startupTypeName = this.startupType.Name;
             this.startupTypeDisplayName = this.startupType.ToDisplayString();
         }
@@ -214,7 +216,11 @@ namespace Lambdajection.Generator
 
             IEnumerable<StatementSyntax> GenerateRunMethodBody()
             {
-                yield return ParseStatement($"var host = new LambdaHost<{className}, {inputType}, {returnType}, {startupTypeName}, LambdajectionConfigurator>();");
+                var configFactory = configFactoryType?.Name ?? nameof(LambdaConfigFactory);
+                var configFactoryNamespace = configFactoryType?.ContainingNamespace?.ToString() ?? "Lambdajection.Core";
+                usingsAddedDuringGeneration.Add(configFactoryNamespace);
+
+                yield return ParseStatement($"var host = new LambdaHost<{className}, {inputType}, {returnType}, {startupTypeName}, LambdajectionConfigurator, {configFactory}>();");
                 yield return ParseStatement($"return await host.Run({inputParameter!.Identifier.ValueText}, {contextParameter!.Identifier.ValueText});");
             }
 
