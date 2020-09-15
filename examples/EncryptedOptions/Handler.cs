@@ -8,7 +8,7 @@ using Microsoft.Extensions.Options;
 
 namespace Lambdajection.Examples.EncryptedOptions
 {
-    [Lambda(Startup = typeof(Startup))]
+    [Lambda(typeof(Startup))]
     public partial class Handler
     {
         private readonly Options options;

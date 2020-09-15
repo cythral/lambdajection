@@ -84,7 +84,7 @@ using Lambdajection.Attributes;
 
 namespace Your.Namespace
 {
-    [Lambda(Startup = typeof(Startup))]
+    [Lambda(typeof(Startup))]
     public partial class YourLambda
     {
         private IRegisteredService yourService;
@@ -110,7 +110,7 @@ namespace Your.Namespace
 If your Lambda targets the `netcoreapp3.1` framework, then by default, the serializer is set to  `DefaultLambdaJsonSerializer` from the `Amazon.Lambda.Serialization.SystemTextJson` package.  With any TFM, you may specify the serializer you want to use by setting the Lambda attribute's `Serializer` argument:
 
 ```cs
-[Lambda(Startup = typeof(Startup), Serializer = typeof(Serializer))]
+[Lambda(typeof(Startup), Serializer = typeof(Serializer))]
 public partial class Lambda
 {
     ...
