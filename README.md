@@ -28,7 +28,8 @@ Community contribution/pull requests are welcome and encouraged! See the [contri
 - [4. Examples](#4-examples)
 - [5. Acknowledgments](#5-acknowledgments)
 - [6. Contributing](#6-contributing)
-- [7. License](#7-license)
+- [7. Security](#7-security)
+- [8. License](#8-license)
 
 ## 1. Installation
 
@@ -249,6 +250,10 @@ Your.Assembly.Name::Your.Namespace.YourLambda::Run
 Issues and feature requests may be reported anonymously on [JIRA Cloud](https://cythral.atlassian.net/jira/software/c/projects/LAMBJ/issues).
 Pull requests are always welcome! See the [contributing guide](CONTRIBUTING.md).
 
-## 7. License
+## 7. Security
+
+Security issues can be reported on our JIRA.  See our [security policy](SECURITY.md) for more information. 
+
+## 8. License
 
 This project is licensed under the [MIT License](LICENSE.txt).
