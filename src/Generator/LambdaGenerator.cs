@@ -25,7 +25,7 @@ namespace Lambdajection.Generator
         private readonly INamedTypeSymbol? serializerType;
         private readonly INamedTypeSymbol? configFactoryType;
         private readonly string startupTypeName;
-        private readonly string startupTypeDisplayName;
+        private string startupTypeDisplayName;
 
 
         private readonly string[] usings = new string[]
@@ -395,17 +395,18 @@ namespace Lambdajection.Generator
 
             MemberDeclarationSyntax GenerateInitializeMethod()
             {
-                IEnumerable<ExpressionSyntax> GenerateDecryptPropertyCalls()
+                static IEnumerable<ExpressionSyntax> GenerateDecryptPropertyCalls(IEnumerable<string> properties)
                 {
-                    foreach (var prop in optionClass.EncryptedProperties)
+                    foreach (var prop in properties)
                     {
                         yield return ParseExpression($"Decrypt{prop}()");
                     }
                 }
 
-                static IEnumerable<StatementSyntax> GenerateBody()
+                IEnumerable<StatementSyntax> GenerateBody()
                 {
-                    var initializerList = SeparatedList(GenerateDecryptPropertyCalls());
+                    var calls = GenerateDecryptPropertyCalls(optionClass.EncryptedProperties);
+                    var initializerList = SeparatedList(calls);
                     var initializer = InitializerExpression(ArrayInitializerExpression, initializerList);
                     var creationExpression = ObjectCreationExpression(ParseTypeName("Task[]"), null, initializer);
 
