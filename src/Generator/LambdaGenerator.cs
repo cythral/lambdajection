@@ -403,7 +403,7 @@ namespace Lambdajection.Generator
                     }
                 }
 
-                IEnumerable<StatementSyntax> GenerateBody()
+                static IEnumerable<StatementSyntax> GenerateBody()
                 {
                     var initializerList = SeparatedList(GenerateDecryptPropertyCalls());
                     var initializer = InitializerExpression(ArrayInitializerExpression, initializerList);
@@ -422,7 +422,7 @@ namespace Lambdajection.Generator
                     .WithBody(Block(GenerateBody()));
             }
 
-            MemberDeclarationSyntax GenerateDecryptPropertyMethod(string prop)
+            static MemberDeclarationSyntax GenerateDecryptPropertyMethod(string prop)
             {
                 var body = new StatementSyntax[] { ParseStatement($"options.{prop} = await decryptionService.Decrypt(options.{prop});") };
 
