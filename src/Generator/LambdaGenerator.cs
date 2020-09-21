@@ -25,7 +25,7 @@ namespace Lambdajection.Generator
         private readonly INamedTypeSymbol? serializerType;
         private readonly INamedTypeSymbol? configFactoryType;
         private readonly string startupTypeName;
-        private string startupTypeDisplayName;
+        private readonly string startupTypeDisplayName;
 
         private readonly string[] usings = new string[]
         {
