@@ -26,7 +26,8 @@ namespace Lambdajection.Core
         /// <value>Provides services to the lambda.</value>
         public IServiceProvider ServiceProvider { get; internal set; } = null!;
 
-        private bool initialized = false;
+        /// <value>Whether the lambda host should run its initialization services.</value>
+        public bool RunInitializationServices { get; internal set; } = false;
 
 
         /// <summary>
@@ -53,7 +54,7 @@ namespace Lambdajection.Core
         /// <returns>The return value of the lambda.</returns>
         public async Task<TLambdaOutput> Run(TLambdaParameter parameter, ILambdaContext context)
         {
-            if (!initialized) await Initialize();
+            if (RunInitializationServices) await Initialize();
 
             using var scope = ServiceProvider.CreateScope();
             var service = scope.ServiceProvider.GetRequiredService<TLambda>();
@@ -67,7 +68,6 @@ namespace Lambdajection.Core
                 .Select(service => service.Initialize());
 
             await Task.WhenAll(tasks);
-            initialized = true;
         }
     }
 }

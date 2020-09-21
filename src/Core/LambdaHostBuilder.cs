@@ -13,10 +13,13 @@ namespace Lambdajection.Core
         where TLambdaConfigFactory : class, ILambdaConfigFactory, new()
     {
         internal static IServiceProvider serviceProvider = BuildServiceProvider();
+        internal static bool runInitializationServices = true;
 
         public static void Build(LambdaHost<TLambda, TLambdaParameter, TLambdaOutput, TLambdaStartup, TLambdaConfigurator, TLambdaConfigFactory> host)
         {
             host.ServiceProvider = serviceProvider;
+            host.RunInitializationServices = runInitializationServices;
+            runInitializationServices = false;
         }
 
         public static IServiceProvider BuildServiceProvider()
