@@ -27,7 +27,6 @@ namespace Lambdajection.Generator
         private readonly string startupTypeName;
         private string startupTypeDisplayName;
 
-
         private readonly string[] usings = new string[]
         {
             "System.Threading.Tasks",
