@@ -24,7 +24,8 @@ Community contribution/pull requests are welcome and encouraged! See the [contri
   - [3.3. Startup Class](#33-startup-class)
   - [3.4. Customizing Configuration](#34-customizing-configuration)
   - [3.5. Adding Options](#35-adding-options)
-  - [3.6. Handler Scheme](#36-handler-scheme)
+  - [3.6. Initialization Services](#36-initialization-services)
+  - [3.7. Handler Scheme](#37-handler-scheme)
 - [4. Examples](#4-examples)
 - [5. Acknowledgments](#5-acknowledgments)
 - [6. Contributing](#6-contributing)
@@ -225,7 +226,10 @@ namespace Your.Namespace
 }
 ```
 
-### 3.6. Handler Scheme
+### 3.6. Initialization Services
+Initialization services can be used to initialize data or perform some task before the lambda is run.  Initialization services should implement [ILambdaInitializationService](src/Core/ILambdaInitializationService.cs) and be injected into the container as singletons at startup.
+
+### 3.7. Handler Scheme
 
 When configuring your lambda on AWS, the method name you'll want to use will be `Run` (NOT `Handle`). For context, `Run` is a static method is generated on your class during compilation that takes care of setting up the IoC container (if it hasn't been already).
 

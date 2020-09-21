@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 using Amazon.Lambda.Core;
@@ -22,9 +23,11 @@ namespace Lambdajection.Core
         where TLambdaConfigurator : class, ILambdaConfigurator
         where TLambdaConfigFactory : class, ILambdaConfigFactory, new()
     {
-
         /// <value>Provides services to the lambda.</value>
         public IServiceProvider ServiceProvider { get; internal set; } = null!;
+
+        private bool initialized = false;
+
 
         /// <summary>
         /// Constructs a new Lambda Host / IoC Container with the default host builder function.
@@ -50,9 +53,21 @@ namespace Lambdajection.Core
         /// <returns>The return value of the lambda.</returns>
         public async Task<TLambdaOutput> Run(TLambdaParameter parameter, ILambdaContext context)
         {
+            if (!initialized) await Initialize();
+
             using var scope = ServiceProvider.CreateScope();
             var service = scope.ServiceProvider.GetRequiredService<TLambda>();
             return await service.Handle(parameter, context);
+        }
+
+        private async Task Initialize()
+        {
+            var tasks = ServiceProvider
+                .GetServices<ILambdaInitializationService>()
+                .Select(service => service.Initialize());
+
+            await Task.WhenAll(tasks);
+            initialized = true;
         }
     }
 }
