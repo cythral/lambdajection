@@ -1,5 +1,4 @@
 using System;
-using System.IO;
 
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -7,35 +6,27 @@ using Microsoft.Extensions.Logging;
 
 namespace Lambdajection.Core
 {
-    internal static class LambdaHostBuilder<TLambda, TLambdaParameter, TLambdaOutput, TLambdaStartup, TLambdaConfigurator>
+    internal static class LambdaHostBuilder<TLambda, TLambdaParameter, TLambdaOutput, TLambdaStartup, TLambdaConfigurator, TLambdaConfigFactory>
         where TLambda : class, ILambda<TLambdaParameter, TLambdaOutput>
         where TLambdaStartup : class, ILambdaStartup
         where TLambdaConfigurator : class, ILambdaConfigurator
+        where TLambdaConfigFactory : class, ILambdaConfigFactory, new()
     {
         internal static IServiceProvider serviceProvider = BuildServiceProvider();
 
-        public static void Build(LambdaHost<TLambda, TLambdaParameter, TLambdaOutput, TLambdaStartup, TLambdaConfigurator> host)
+        public static void Build(LambdaHost<TLambda, TLambdaParameter, TLambdaOutput, TLambdaStartup, TLambdaConfigurator, TLambdaConfigFactory> host)
         {
             host.ServiceProvider = serviceProvider;
         }
 
         public static IServiceProvider BuildServiceProvider()
         {
-            var configuration = BuildConfiguration();
+            var configuration = new TLambdaConfigFactory().Create();
             var serviceCollection = BuildServiceCollection(configuration);
             using var intermediateProvider = serviceCollection.BuildServiceProvider();
             RunLambdaStartup(intermediateProvider, serviceCollection);
             RunOptionsConfigurator(intermediateProvider, serviceCollection);
             return serviceCollection.BuildServiceProvider();
-        }
-
-        public static IConfigurationRoot BuildConfiguration()
-        {
-            return new ConfigurationBuilder()
-            .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.json", optional: true)
-            .AddEnvironmentVariables()
-            .Build();
         }
 
         public static IServiceCollection BuildServiceCollection(IConfigurationRoot configuration)

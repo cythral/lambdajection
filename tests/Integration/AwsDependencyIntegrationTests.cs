@@ -24,7 +24,7 @@ using NUnit.Framework;
 
 namespace Lambdajection.Tests.Integration.AwsDependency
 {
-    [Lambda(Startup = typeof(Startup))]
+    [Lambda(typeof(Startup))]
     public partial class ExampleLambda
     {
         private readonly ExampleBar exampleBar;

@@ -1,11 +1,8 @@
 using System;
-using System.Linq;
 
 using FluentAssertions;
 
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Configuration.EnvironmentVariables;
-using Microsoft.Extensions.Configuration.Json;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Console;
@@ -19,7 +16,8 @@ using TestLambdaHost = Lambdajection.Core.LambdaHost<
     object,
     object,
     Lambdajection.TestStartup,
-    Lambdajection.TestConfigurator
+    Lambdajection.TestConfigurator,
+    Lambdajection.TestConfigFactory
 >;
 
 using TestLambdaHostBuilder = Lambdajection.Core.LambdaHostBuilder<
@@ -27,7 +25,8 @@ using TestLambdaHostBuilder = Lambdajection.Core.LambdaHostBuilder<
     object,
     object,
     Lambdajection.TestStartup,
-    Lambdajection.TestConfigurator
+    Lambdajection.TestConfigurator,
+    Lambdajection.TestConfigFactory
 >;
 
 namespace Lambdajection.Core.Tests
@@ -83,31 +82,6 @@ namespace Lambdajection.Core.Tests
 
             var configuration = provider.GetService<TestLambda>();
             configuration.Should().NotBeNull();
-        }
-
-        [Test]
-        public void BuildConfigurationShouldAddJsonFile()
-        {
-            var configuration = TestLambdaHostBuilder.BuildConfiguration();
-
-            configuration.Providers.Should().Contain(provider => provider.GetType() == typeof(JsonConfigurationProvider));
-        }
-
-        [Test]
-        public void JsonConfigurationShouldBeOptional()
-        {
-            var configuration = TestLambdaHostBuilder.BuildConfiguration();
-            var providerQuery = from p in configuration.Providers where p.GetType() == typeof(JsonConfigurationProvider) select (JsonConfigurationProvider)p;
-            var provider = providerQuery.First();
-
-            provider.Source.Optional.Should().BeTrue();
-        }
-
-        [Test]
-        public void BuildConfigurationShouldAddEnvironmentVariables()
-        {
-            var configuration = TestLambdaHostBuilder.BuildConfiguration();
-            configuration.Providers.Should().Contain(provider => provider.GetType() == typeof(EnvironmentVariablesConfigurationProvider));
         }
 
         [Test]

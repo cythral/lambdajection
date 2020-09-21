@@ -1,18 +1,15 @@
 ﻿using System.Threading.Tasks;
 
 using Amazon.Lambda.Core;
-using Amazon.Lambda.Serialization.SystemTextJson;
 using Amazon.S3;
 using Amazon.S3.Model;
 
 using Lambdajection.Attributes;
 using Lambdajection.Core;
 
-[assembly: LambdaSerializer(typeof(DefaultLambdaJsonSerializer))]
-
 namespace Lambdajection.Examples.AwsClientFactories
 {
-    [Lambda(Startup = typeof(Startup))]
+    [Lambda(typeof(Startup))]
     public partial class Handler
     {
         private readonly IAwsFactory<IAmazonS3> s3Factory;
