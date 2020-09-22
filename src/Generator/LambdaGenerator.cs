@@ -27,7 +27,6 @@ namespace Lambdajection.Generator
         private readonly string startupTypeName;
         private readonly string startupTypeDisplayName;
 
-
         private readonly string[] usings = new string[]
         {
             "System.Threading.Tasks",
@@ -258,7 +257,7 @@ namespace Lambdajection.Generator
 
                     if (optionClass.EncryptedProperties.Any())
                     {
-                        yield return ParseStatement($"services.AddSingleton<IPostConfigureOptions<{fullName}>, {sectionName}Decryptor>();");
+                        yield return ParseStatement($"services.AddSingleton<{nameof(ILambdaInitializationService)}, {sectionName}Decryptor>();");
                     }
 
                     yield return ParseStatement($"services.Configure<{fullName}>(configuration.GetSection(\"{optionClass.ConfigSectionName}\"));");
@@ -358,18 +357,20 @@ namespace Lambdajection.Generator
             var optionClassName = classDeclaration.Identifier.ValueText;
             var namespaceName = classDeclaration.Ancestors().OfType<NamespaceDeclarationSyntax>().ElementAt(0);
             var fullName = namespaceName.Name + "." + optionClassName;
-            var typeConstraints = new BaseTypeSyntax[] { SimpleBaseType(ParseTypeName($"IPostConfigureOptions<{fullName}>")) };
+            var typeConstraints = new BaseTypeSyntax[] { SimpleBaseType(ParseTypeName($"ILambdaInitializationService")) };
 
             MemberDeclarationSyntax GenerateConstructor()
             {
                 var parameters = SeparatedList(new ParameterSyntax[]
                 {
                     Parameter(List<AttributeListSyntax>(), TokenList(), ParseTypeName(nameof(IDecryptionService)), Identifier("decryptionService"), null),
+                    Parameter(List<AttributeListSyntax>(), TokenList(), ParseTypeName($"IOptions<{optionClassName}>"), Identifier("options"), null),
                 });
 
                 static IEnumerable<StatementSyntax> GenerateBody()
                 {
                     yield return ParseStatement("this.decryptionService = decryptionService;");
+                    yield return ParseStatement("this.options = options.Value;");
                 }
 
                 return ConstructorDeclaration($"{optionClass.ConfigSectionName}Decryptor")
@@ -378,54 +379,69 @@ namespace Lambdajection.Generator
                     .WithBody(Block(GenerateBody()));
             }
 
-            static MemberDeclarationSyntax GenerateDecryptionServiceField()
+            static MemberDeclarationSyntax GeneratePrivateField(string typeName, string name)
             {
                 var attributes = List<AttributeListSyntax>();
                 var modifiers = TokenList(Token(PrivateKeyword));
-                var type = ParseTypeName(nameof(IDecryptionService));
+                var type = ParseTypeName(typeName);
 
-                var variables = new VariableDeclaratorSyntax[] { VariableDeclarator("decryptionService") };
+                var variables = new VariableDeclaratorSyntax[] { VariableDeclarator(name) };
                 var variable = VariableDeclaration(type)
                     .WithVariables(SeparatedList(variables));
 
                 return FieldDeclaration(attributes, modifiers, variable);
             }
 
-            MemberDeclarationSyntax GeneratePostConfigureMethod()
+            MemberDeclarationSyntax GenerateInitializeMethod()
             {
-                var parameters = SeparatedList(new ParameterSyntax[]
+                static IEnumerable<ExpressionSyntax> GenerateDecryptPropertyCalls(IEnumerable<string> properties)
                 {
-                    Parameter(List<AttributeListSyntax>(), TokenList(), ParseTypeName("string"), Identifier("name"), null),
-                    Parameter(List<AttributeListSyntax>(), TokenList(), ParseTypeName(fullName), Identifier("options"), null),
-                });
+                    foreach (var prop in properties)
+                    {
+                        yield return ParseExpression($"Decrypt{prop}()");
+                    }
+                }
 
                 IEnumerable<StatementSyntax> GenerateBody()
                 {
+                    var calls = GenerateDecryptPropertyCalls(optionClass.EncryptedProperties);
+                    var initializerList = SeparatedList(calls);
+                    var initializer = InitializerExpression(ArrayInitializerExpression, initializerList);
+                    var creationExpression = ObjectCreationExpression(ParseTypeName("Task[]"), null, initializer);
 
-                    var taskRunner = "Task.WaitAll(new Task[]\n{\n";
+                    var args = SeparatedList(new ArgumentSyntax[] { Argument(creationExpression) });
+                    var argList = ArgumentList(args);
+                    var whenAllExpression = InvocationExpression(ParseExpression("Task.WhenAll"), argList);
+                    var awaitExpression = AwaitExpression(whenAllExpression);
 
-                    foreach (var prop in optionClass.EncryptedProperties)
-                    {
-                        taskRunner += $"Task.Run(async () => options.{prop} = await decryptionService.Decrypt(options.{prop})),\n";
-                    }
-
-                    taskRunner += "});";
-                    yield return ParseStatement(taskRunner).NormalizeWhitespace();
+                    yield return ExpressionStatement(awaitExpression);
                 }
 
-                return MethodDeclaration(ParseTypeName("void"), "PostConfigure")
-                    .WithModifiers(TokenList(Token(PublicKeyword)))
-                    .WithParameterList(ParameterList(parameters))
+                return MethodDeclaration(ParseTypeName("Task"), "Initialize")
+                    .WithModifiers(TokenList(Token(PublicKeyword), Token(AsyncKeyword)))
                     .WithBody(Block(GenerateBody()));
             }
+
+            static MemberDeclarationSyntax GenerateDecryptPropertyMethod(string prop)
+            {
+                var body = new StatementSyntax[] { ParseStatement($"options.{prop} = await decryptionService.Decrypt(options.{prop});") };
+
+                return MethodDeclaration(ParseTypeName("Task"), $"Decrypt{prop}")
+                    .WithModifiers(TokenList(Token(PrivateKeyword), Token(AsyncKeyword)))
+                    .WithBody(Block(body));
+            }
+
+            var decryptMethods = optionClass.EncryptedProperties.Select(prop => GenerateDecryptPropertyMethod(prop));
 
             return ClassDeclaration(optionClass.ConfigSectionName + "Decryptor")
                 .WithBaseList(BaseList(Token(ColonToken), SeparatedList(typeConstraints)))
                 .AddMembers(
-                    GenerateDecryptionServiceField(),
+                    GeneratePrivateField(nameof(IDecryptionService), "decryptionService"),
+                    GeneratePrivateField($"{optionClassName}", "options"),
                     GenerateConstructor(),
-                    GeneratePostConfigureMethod()
-                );
+                    GenerateInitializeMethod()
+                )
+                .AddMembers(decryptMethods.ToArray());
         }
 
         public static ClassDeclarationSyntax GenerateAwsFactory(string service, string interfaceName, string implementationName)
