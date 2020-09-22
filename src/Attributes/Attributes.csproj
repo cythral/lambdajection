@@ -9,7 +9,6 @@
     <IncludeBuildOutput>false</IncludeBuildOutput>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
     <PreserveCompilationContext>true</PreserveCompilationContext>
-    <BuildDependsOn>$(BuildDependsOn);BuildExamples</BuildDependsOn>
     <PackageDescription>Includes attributes needed for writing AWS Lambdas using Dependency Injection.</PackageDescription>
   </PropertyGroup>
 
