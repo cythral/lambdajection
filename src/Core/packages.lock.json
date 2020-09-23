@@ -10,9 +10,9 @@
       },
       "Amazon.Lambda.Serialization.SystemTextJson": {
         "type": "Direct",
-        "requested": "[2.0.1, )",
-        "resolved": "2.0.1",
-        "contentHash": "WPtMxw5jwEcVbe0Ro/bF0VDnict/zoCW0r6dfRIIOthjO+fVMgDyGYa4Pkz6ptgCCFcnhQuOq6iebYw1LRZeIQ==",
+        "requested": "[2.0.2, )",
+        "resolved": "2.0.2",
+        "contentHash": "xh6nVPg5Iz75u+KTuSOh1P+L4k2HIi4Qz29LijgCcuZ0tTvmUOpNdWafwzaDD9fN+Q15BmzcO7l35/L3j5OGgA==",
         "dependencies": {
           "Amazon.Lambda.Core": "1.1.0"
         }
