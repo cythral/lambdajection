@@ -169,8 +169,8 @@
       },
       "Amazon.Lambda.Serialization.SystemTextJson": {
         "type": "Transitive",
-        "resolved": "2.0.1",
-        "contentHash": "WPtMxw5jwEcVbe0Ro/bF0VDnict/zoCW0r6dfRIIOthjO+fVMgDyGYa4Pkz6ptgCCFcnhQuOq6iebYw1LRZeIQ==",
+        "resolved": "2.0.2",
+        "contentHash": "xh6nVPg5Iz75u+KTuSOh1P+L4k2HIi4Qz29LijgCcuZ0tTvmUOpNdWafwzaDD9fN+Q15BmzcO7l35/L3j5OGgA==",
         "dependencies": {
           "Amazon.Lambda.Core": "1.1.0"
         }
@@ -1417,7 +1417,7 @@
         "type": "Project",
         "dependencies": {
           "Amazon.Lambda.Core": "1.1.0",
-          "Amazon.Lambda.Serialization.SystemTextJson": "2.0.1",
+          "Amazon.Lambda.Serialization.SystemTextJson": "2.0.2",
           "Lambdajection.Attributes": "1.0.0",
           "Microsoft.Extensions.Configuration": "3.1.6",
           "Microsoft.Extensions.Configuration.EnvironmentVariables": "3.1.6",
