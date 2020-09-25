@@ -49,7 +49,7 @@ namespace Lambdajection.Core.Tests
         }
 
         [Test]
-        public async Task RunRunsInitializationServicesOnlyOnce()
+        public async Task RunRunsInitializationServices()
         {
             var expectedResponse = "expectedResponse";
             var lambda = Substitute.For<TestLambda>();
@@ -65,15 +65,43 @@ namespace Lambdajection.Core.Tests
             var host = new TestLambdaHost(lambdaHost =>
             {
                 lambdaHost.ServiceProvider = provider;
+                lambdaHost.RunInitializationServices = true;
             });
 
             var request = new object();
             var context = Substitute.For<ILambdaContext>();
 
             await host.Run(request, context);
+
+            await initializationService.Received().Initialize();
+        }
+
+        [Test]
+        public async Task RunDoesNotRunInitializationServicesIfPropertySetToFalse()
+        {
+            var expectedResponse = "expectedResponse";
+            var lambda = Substitute.For<TestLambda>();
+            lambda.Handle(Arg.Any<object>(), Arg.Any<ILambdaContext>()).Returns(expectedResponse);
+
+            var initializationService = Substitute.For<ILambdaInitializationService>();
+
+            var collection = new ServiceCollection();
+            collection.AddSingleton(initializationService);
+            collection.AddSingleton(lambda);
+
+            var provider = collection.BuildServiceProvider();
+            var host = new TestLambdaHost(lambdaHost =>
+            {
+                lambdaHost.ServiceProvider = provider;
+                lambdaHost.RunInitializationServices = false;
+            });
+
+            var request = new object();
+            var context = Substitute.For<ILambdaContext>();
+
             await host.Run(request, context);
 
-            await initializationService.Received(1).Initialize();
+            await initializationService.DidNotReceive().Initialize();
         }
     }
 }

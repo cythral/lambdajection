@@ -5,6 +5,9 @@
     <PackageId>Lambdajection.Encryption</PackageId>
     <AssemblyName>$(PackageId)</AssemblyName>
     <PackageDescription>Provides an attribute and decryption service for encrypted configuration options that are injected into AWS Lambdas.</PackageDescription>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
   </PropertyGroup>
 
   <ItemGroup>

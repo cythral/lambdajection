@@ -58,6 +58,35 @@ namespace Lambdajection.Core.Tests
         }
 
         [Test]
+        public void BuildSetsRunInitializationServicesToTrueTheFirstTime()
+        {
+            var host = new TestLambdaHost(lambdaHost => { });
+            host.ServiceProvider.Should().BeNull();
+
+            var serviceProvider = Substitute.For<IServiceProvider>();
+            TestLambdaHostBuilder.serviceProvider = serviceProvider;
+            TestLambdaHostBuilder.runInitializationServices = true;
+            TestLambdaHostBuilder.Build(host);
+
+            host.RunInitializationServices.Should().BeTrue();
+        }
+
+        [Test]
+        public void BuildSetsRunInitializationServicesToFalseTheSecondTime()
+        {
+            var host = new TestLambdaHost(lambdaHost => { });
+            host.ServiceProvider.Should().BeNull();
+
+            var serviceProvider = Substitute.For<IServiceProvider>();
+            TestLambdaHostBuilder.serviceProvider = serviceProvider;
+            TestLambdaHostBuilder.runInitializationServices = true;
+            TestLambdaHostBuilder.Build(host);
+            TestLambdaHostBuilder.Build(host);
+
+            host.RunInitializationServices.Should().BeFalse();
+        }
+
+        [Test]
         public void BuildServiceProviderReturnsServiceProviderWithConfiguration()
         {
             var provider = TestLambdaHostBuilder.BuildServiceProvider();

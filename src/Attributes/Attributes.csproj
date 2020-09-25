@@ -3,12 +3,22 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
     <PackageId>Lambdajection.Attributes</PackageId>
+    <NoWarn>NU5128;NU5131</NoWarn>
     <AssemblyName>$(PackageId)</AssemblyName>
-    <IncludeSymbols>true</IncludeSymbols>
-    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
+    <PreserveCompilationContext>true</PreserveCompilationContext>
     <PackageDescription>Includes attributes needed for writing AWS Lambdas using Dependency Injection.</PackageDescription>
   </PropertyGroup>
+
+  <Target Name="_GetReferenceAssemblies" AfterTargets="Build" BeforeTargets="Pack">
+    <ItemGroup>
+      <ReferenceAssembliesOutput Include="@(IntermediateRefAssembly->'%(FullPath)')" TargetFramework="$(TargetFramework)" />
+      <ReferenceAssembliesOutput Include="@(DocumentationProjectOutputGroupOutput->'%(FullPath)')" TargetFramework="$(TargetFramework)" />
+      <None Include="@(ReferenceAssembliesOutput)" PackagePath="ref/%(ReferenceAssembliesOutput.TargetFramework)" Pack="true" />
+    </ItemGroup>
+  </Target>
 
   <ItemGroup>
     <PackageReference Include="Cythral.CodeGeneration.Roslyn.Attributes" Version="$(CythralCodeGenerationRoslynVersion)" />
