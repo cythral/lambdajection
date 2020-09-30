@@ -1,11 +1,9 @@
 <!-- omit in toc -->
-
 # Contributing
 
 Pull requests are always welcome - we value every contribution and your input! If you are interested in becoming a maintainer, please email talen.fisher@cythral.com.
 
 <!-- omit in toc -->
-
 ## Table of Contents
 
 - [1. Source and Versioning Control](#1-source-and-versioning-control)
