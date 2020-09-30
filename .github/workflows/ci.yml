@@ -43,8 +43,8 @@ jobs:
 
       - name: Check for Stale Version Number
         run: |
-        lastTaggedVersion=$(git describe --abbrev=0 --tags)
-        if [ "$lastTaggedVersion" = "$VERSION" ]; then exit 1; fi
+          lastTaggedVersion=$(git describe --abbrev=0 --tags)
+          if [ "$lastTaggedVersion" = "$VERSION" ]; then exit 1; fi
 
       - name: Build
         shell: bash
