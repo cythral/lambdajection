@@ -44,6 +44,7 @@ jobs:
       - name: Check for Stale Version Number
         run: |
           lastTaggedVersion=$(git describe --abbrev=0 --tags)
+          echo $lastTaggedVersion
           if [ "$lastTaggedVersion" = "$VERSION" ]; then exit 1; fi
 
       - name: Build
@@ -77,7 +78,7 @@ jobs:
 
       - name: Deploy to Github Packages
         if: matrix.os == 'ubuntu-latest'
-        run: dotnet gpr push ${{steps.download.outputs.download-path}}/*.nupkg -k ${{ secrets.GH_TOKEN }}
+        run: dotnet gpr push bin/Packages/${{ env.Configuration }}/*.nupkg -k ${{ secrets.GH_TOKEN }}
 
   release:
     needs: build
