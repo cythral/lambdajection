@@ -39,9 +39,11 @@ jobs:
         run: echo ${{ env.VERSION }}
 
       - name: Check for Release Notes
+        shell: bash
         run: if [ ! -f .github/releases/v$VERSION.md ]; then exit 1; fi
 
       - name: Check for Stale Version Number
+        shell: bash
         run: |
           lastTaggedVersion=$(git describe --abbrev=0 --tags)
           echo $lastTaggedVersion
