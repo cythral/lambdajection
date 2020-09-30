@@ -32,7 +32,7 @@ jobs:
       - name: Restore
         run: dotnet restore
 
-      - name: Run nbgv
+      - name: Set version
         run: echo "::set-env name=VERSION::$(cat version.json | jq -r '.version')"
 
       - name: Display version
@@ -47,7 +47,7 @@ jobs:
         run: |
           lastTaggedVersion=$(git describe --abbrev=0 --tags)
           echo $lastTaggedVersion
-          if [ "$lastTaggedVersion" = "$VERSION" ]; then exit 1; fi
+          if [ "$lastTaggedVersion" = "v$VERSION" ]; then exit 1; fi
 
       - name: Build
         shell: bash
