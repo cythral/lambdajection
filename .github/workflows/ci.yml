@@ -43,6 +43,7 @@ jobs:
         run: if [ ! -f .github/releases/v$VERSION.md ]; then exit 1; fi
 
       - name: Check for Stale Version Number
+        if: github.ref != 'refs/tags/v*'
         shell: bash
         run: |
           lastTaggedVersion=$(git describe --abbrev=0 --tags)
