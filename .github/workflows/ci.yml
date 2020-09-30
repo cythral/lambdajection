@@ -45,7 +45,7 @@ jobs:
         run: |
           lastTaggedVersion=$(git describe --abbrev=0 --tags)
           echo $lastTaggedVersion
-          if [ "$lastTaggedVersion" = "$VERSION" ]; then exit 1; fi
+          if [ "$lastTaggedVersion" -eq "$VERSION" ]; then exit 1; fi
 
       - name: Build
         shell: bash
