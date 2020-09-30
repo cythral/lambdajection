@@ -1,0 +1,16 @@
+name: Release Checks
+
+on:
+  pull_request:
+    branches: [master]
+
+jobs:
+  release-notes:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - run: echo "::set-env name=VERSION::$(cat version.json | jq -r .version)"
+      - run: if [ ! -f .github/releases/$VERSION.md ]; then exit 1; done
