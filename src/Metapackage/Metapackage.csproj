@@ -6,9 +6,14 @@
     <IncludeBuildOutput>false</IncludeBuildOutput>
     <PackageId>Lambdajection</PackageId>
     <AssemblyName>$(PackageId)</AssemblyName>
+    <AddImplicitCodeGenerationRoslynToolReference>false</AddImplicitCodeGenerationRoslynToolReference>
     <PackageDescription>Write AWS Lambda Functions using Dependency Injection.</PackageDescription>
     <BuildDependsOn>$(BuildDependsOn);BuildExamples</BuildDependsOn>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Cythral.CodeGeneration.Roslyn.Tool" PrivateAssets="none" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Attributes\Attributes.csproj" />

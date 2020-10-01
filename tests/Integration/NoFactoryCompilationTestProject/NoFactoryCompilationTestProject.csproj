@@ -5,8 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AWSSDK.S3" Version="3.5.0" />
-    <PackageReference Include="Cythral.CodeGeneration.Roslyn.Tool" Version="$(CythralCodeGenerationRoslynVersion)" ReferenceOutputAssembly="false" OutputItemType="CodeGeneratorToolPathItem" SkipGetTargetFrameworkProperties="true" UndefineProperties="TargetFramework" />
+    <PackageReference Include="AWSSDK.S3" />
+    <PackageReference Include="Cythral.CodeGeneration.Roslyn.Tool" ReferenceOutputAssembly="false" OutputItemType="CodeGeneratorToolPathItem" SkipGetTargetFrameworkProperties="true" UndefineProperties="TargetFramework" />
   </ItemGroup>
 
   <ItemGroup>

@@ -9,19 +9,19 @@
         <PublishRepositoryUrl>true</PublishRepositoryUrl>
         <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
         <PackageTags>AWS Amazon Cloud Lambda Lambdajection DependencyInjection IoC</PackageTags>
+        <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
     </PropertyGroup>
 
     <PropertyGroup>
         <Configuration Condition="$(Configuration) == ''">Debug</Configuration>
         <Nullable>enable</Nullable>
         <LangVersion>8.0</LangVersion>
-        <CythralCodeGenerationRoslynVersion>0.9.1</CythralCodeGenerationRoslynVersion>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
         <SkipDefaultEditorConfigAsAdditionalFile>true</SkipDefaultEditorConfigAsAdditionalFile>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     </PropertyGroup>
-    
+
     <PropertyGroup>
         <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
         <RestoreLockedMode>true</RestoreLockedMode>
@@ -37,14 +37,14 @@
         <None Include="$(MSBuildThisFileDirectory)LICENSE.txt" Pack="true" PackagePath="LICENSE.txt" />
     </ItemGroup>
 
-    <ItemGroup Condition="Exists('$(MSBuildThisFileDirectory)\.editorconfig')" >
+    <ItemGroup Condition="Exists('$(MSBuildThisFileDirectory)\.editorconfig')">
         <AdditionalFiles Include="$(MSBuildThisFileDirectory)\.editorconfig" />
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Nerdbank.GitVersioning" Version="3.2.31" PrivateAssets="all" />
-        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="all" />
-        <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.0.0" PrivateAssets="all" />
-        <PackageReference Include="Microsoft.CodeAnalysis.CSharp.CodeStyle" Version="3.8.0-1.20330.5" PrivateAssets="all" />
+        <PackageReference Include="Nerdbank.GitVersioning" PrivateAssets="all" />
+        <PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="all" />
+        <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" PrivateAssets="all" />
+        <PackageReference Include="Microsoft.CodeAnalysis.CSharp.CodeStyle" PrivateAssets="all" />
     </ItemGroup>
 </Project>
