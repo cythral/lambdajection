@@ -120,6 +120,8 @@ public partial class Lambda
     ...
 ```
 
+See a [full example of serializer customization](./examples/CustomSerializer/README.md). 
+
 
 ### 3.3. Startup Class
 
