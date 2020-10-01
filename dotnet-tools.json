@@ -4,15 +4,21 @@
   "tools": {
     "nbgv": {
       "version": "3.2.31",
-      "commands": ["nbgv"]
+      "commands": [
+        "nbgv"
+      ]
     },
     "dotnet-format": {
       "version": "5.0.142002",
-      "commands": ["dotnet-format"]
+      "commands": [
+        "dotnet-format"
+      ]
     },
     "gpr": {
       "version": "0.1.233",
-      "commands": ["gpr"]
+      "commands": [
+        "gpr"
+      ]
     }
   }
 }

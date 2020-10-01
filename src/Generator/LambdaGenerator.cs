@@ -121,7 +121,7 @@ namespace Lambdajection.Generator
                 foreach (var arg in constructorArgs)
                 {
                     var semanticModel = context.Compilation.GetSemanticModel(arg.SyntaxTree);
-                    var typeDefinition = semanticModel.GetTypeInfo(arg.Type).Type?.OriginalDefinition;
+                    var typeDefinition = semanticModel.GetTypeInfo(arg.Type, cancellationToken).Type?.OriginalDefinition;
                     var qualifiedName = typeDefinition?.ContainingNamespace + "." + typeDefinition?.MetadataName + ", " + typeDefinition?.ContainingAssembly;
 
                     if (qualifiedName != typeof(IAwsFactory<>).AssemblyQualifiedName)

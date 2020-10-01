@@ -27,7 +27,7 @@ namespace Lambdajection.Core
         public IServiceProvider ServiceProvider { get; internal set; } = null!;
 
         /// <value>Whether the lambda host should run its initialization services.</value>
-        public bool RunInitializationServices { get; internal set; } = false;
+        public bool RunInitializationServices { get; internal set; }
 
 
         /// <summary>

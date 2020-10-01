@@ -21,6 +21,6 @@
   </Target>
 
   <ItemGroup>
-    <PackageReference Include="Cythral.CodeGeneration.Roslyn.Attributes" Version="$(CythralCodeGenerationRoslynVersion)" />
+    <PackageReference Include="Cythral.CodeGeneration.Roslyn.Attributes" />
   </ItemGroup>
 </Project>

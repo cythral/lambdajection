@@ -1,4 +1,4 @@
-<Project>    
+<Project>
     <PropertyGroup>
         <OutputPath>$(MSBuildThisFileDirectory)..\bin\Examples\$(MSBuildProjectName)\$(Configuration)</OutputPath>
         <BaseIntermediateOutputPath>$(MSBuildThisFileDirectory)..\obj\Examples\$(MSBuildProjectName)</BaseIntermediateOutputPath>
@@ -9,7 +9,7 @@
         <RestoreAdditionalProjectSources>@(CustomLocalFeed);$(RestoreAdditionalProjectSources)</RestoreAdditionalProjectSources>
     </PropertyGroup>
 
-     <ItemGroup>
+    <ItemGroup>
         <CustomLocalFeed Include="$(_PackagesDebug)" Condition="Exists($(_PackagesDebug))" />
         <CustomLocalFeed Include="$(_PackagesRelease)" Condition="Exists($(_PackagesRelease))" />
     </ItemGroup>

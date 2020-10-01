@@ -10,7 +10,7 @@ namespace Lambdajection
     {
         public object Request { get; set; } = null!;
 
-        public ILambdaContext? Context { get; set; } = null;
+        public ILambdaContext? Context { get; set; }
 
         public virtual Task<object> Handle(object request, ILambdaContext? context)
         {
