@@ -1167,85 +1167,26 @@
       "Lambdajection.Attributes": {
         "type": "Project",
         "dependencies": {
-          "AWSSDK.Core": "3.5.1.20",
-          "AWSSDK.KeyManagementService": "3.5.0.22",
-          "AWSSDK.S3": "3.5.2",
-          "AWSSDK.SecurityToken": "3.5.1.2",
-          "Amazon.Lambda.Core": "1.1.0",
-          "Amazon.Lambda.Serialization.SystemTextJson": "2.0.2",
-          "Cythral.CodeGeneration.Roslyn.Attributes": "0.9.1",
-          "Cythral.CodeGeneration.Roslyn.Tool": "0.9.1",
-          "FluentAssertions": "5.10.3",
-          "Microsoft.Build.Locator": "1.2.6",
-          "Microsoft.CodeAnalysis": "3.4.0",
-          "Microsoft.CodeAnalysis.Workspaces.MSBuild": "3.4.0",
-          "Microsoft.Extensions.Configuration": "3.1.8",
-          "Microsoft.Extensions.Configuration.EnvironmentVariables": "3.1.8",
-          "Microsoft.Extensions.DependencyInjection": "3.1.8",
-          "Microsoft.Extensions.Logging": "3.1.8",
-          "Microsoft.Extensions.Logging.Console": "3.1.8",
-          "Microsoft.NET.Test.Sdk": "16.7.1",
-          "NSubstitute": "4.2.2",
-          "NUnit3TestAdapter": "3.17.0",
-          "NuGet.ProjectModel": "5.7.0",
-          "System.Configuration.ConfigurationManager": "4.7.0",
-          "nunit": "3.12.0"
+          "Cythral.CodeGeneration.Roslyn.Attributes": "0.9.1"
         }
       },
       "Lambdajection.Core": {
         "type": "Project",
         "dependencies": {
-          "AWSSDK.KeyManagementService": "3.5.0.22",
-          "AWSSDK.S3": "3.5.2",
-          "AWSSDK.SecurityToken": "3.5.1.2",
           "Amazon.Lambda.Core": "1.1.0",
           "Amazon.Lambda.Serialization.SystemTextJson": "2.0.2",
-          "Cythral.CodeGeneration.Roslyn.Attributes": "0.9.1",
-          "Cythral.CodeGeneration.Roslyn.Tool": "0.9.1",
-          "FluentAssertions": "5.10.3",
           "Lambdajection.Attributes": "1.0.0",
-          "Microsoft.Build.Locator": "1.2.6",
-          "Microsoft.CodeAnalysis": "3.4.0",
-          "Microsoft.CodeAnalysis.Workspaces.MSBuild": "3.4.0",
           "Microsoft.Extensions.Configuration": "3.1.8",
           "Microsoft.Extensions.Configuration.EnvironmentVariables": "3.1.8",
           "Microsoft.Extensions.DependencyInjection": "3.1.8",
           "Microsoft.Extensions.Logging": "3.1.8",
-          "Microsoft.Extensions.Logging.Console": "3.1.8",
-          "Microsoft.NET.Test.Sdk": "16.7.1",
-          "NSubstitute": "4.2.2",
-          "NUnit3TestAdapter": "3.17.0",
-          "NuGet.ProjectModel": "5.7.0",
-          "System.Configuration.ConfigurationManager": "4.7.0",
-          "nunit": "3.12.0"
+          "Microsoft.Extensions.Logging.Console": "3.1.8"
         }
       },
       "Lambdajection.Encryption": {
         "type": "Project",
         "dependencies": {
-          "AWSSDK.Core": "3.5.1.20",
-          "AWSSDK.KeyManagementService": "3.5.0.22",
-          "AWSSDK.S3": "3.5.2",
-          "AWSSDK.SecurityToken": "3.5.1.2",
-          "Amazon.Lambda.Core": "1.1.0",
-          "Amazon.Lambda.Serialization.SystemTextJson": "2.0.2",
-          "Cythral.CodeGeneration.Roslyn.Attributes": "0.9.1",
-          "Cythral.CodeGeneration.Roslyn.Tool": "0.9.1",
-          "FluentAssertions": "5.10.3",
-          "Microsoft.Build.Locator": "1.2.6",
-          "Microsoft.CodeAnalysis": "3.4.0",
-          "Microsoft.CodeAnalysis.Workspaces.MSBuild": "3.4.0",
-          "Microsoft.Extensions.Configuration": "3.1.8",
-          "Microsoft.Extensions.Configuration.EnvironmentVariables": "3.1.8",
-          "Microsoft.Extensions.DependencyInjection": "3.1.8",
-          "Microsoft.Extensions.Logging": "3.1.8",
-          "Microsoft.Extensions.Logging.Console": "3.1.8",
-          "Microsoft.NET.Test.Sdk": "16.7.1",
-          "NSubstitute": "4.2.2",
-          "NUnit3TestAdapter": "3.17.0",
-          "NuGet.ProjectModel": "5.7.0",
-          "System.Configuration.ConfigurationManager": "4.7.0",
-          "nunit": "3.12.0"
+          "AWSSDK.KeyManagementService": "3.5.0.22"
         }
       }
     }
