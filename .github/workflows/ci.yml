@@ -47,8 +47,8 @@ jobs:
         shell: bash
         run: |
           lastTaggedVersion=$(git describe --abbrev=0 --tags)
-          echo $lastTaggedVersion
-          if [ "$lastTaggedVersion" = "v$VERSION" ]; then exit 1; fi
+          lastTaggedVersionSha=$(git rev-list -n 1 $lastTaggedVersion)
+          if [ "$lastTaggedVersion" = "v$VERSION" ] && [ "$lastTaggedVersionSha" != "${{ github.event.head_commit.id }}" ]; then exit 1; fi
 
       - name: Build
         shell: bash
