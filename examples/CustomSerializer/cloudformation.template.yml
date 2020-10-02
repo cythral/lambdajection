@@ -1,0 +1,32 @@
+Transform: AWS::Serverless-2016-10-31
+Resources:
+  CustomSerializer:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: CustomSerializer::Lambdajection.Examples.CustomSerializer.Handler::Run
+      Runtime: dotnetcore3.1
+      FunctionName: CustomSerializer
+      Timeout: 300
+      CodeUri: ../../bin/Examples/CustomSerializer/Release/netcoreapp3.1/publish/
+      MemorySize: 512
+      Policies:
+        - AWSLambdaExecute
+
+Outputs:
+  InputPayload:
+    Value: |
+      {
+        "path": "/about.html"
+      }
+
+  ExpectedOutput:
+    Value: |
+      {
+        "statusCode": 200,
+        "statusDescription": "200 OK",
+        "headers": {
+          "content-type": "text/html"
+        },
+        "body": "<!DOCTYPE html>\n<html>\n<body>\n    <p>This HTML file was brought to you by the Lambdajection Custom Serializer Example.</p>\n</body>\n</html>",
+        "isBase64Encoded": false
+      }

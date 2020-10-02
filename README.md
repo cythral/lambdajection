@@ -120,6 +120,8 @@ public partial class Lambda
     ...
 ```
 
+See a [full example of serializer customization](./examples/CustomSerializer/README.md). 
+
 
 ### 3.3. Startup Class
 
@@ -242,7 +244,8 @@ Your.Assembly.Name::Your.Namespace.YourLambda::Run
 ## 4. Examples
 
 - [Injecting and using AWS Services + Factories](examples/AwsClientFactories)
-- [Adding and using encrypted options](examples/EncryptedOptions)
+- [Automatic decryption of encrypted options](examples/EncryptedOptions)
+- [Using a custom serializer](examples/CustomSerializer/README.md)
 
 ## 5. Acknowledgments
 
