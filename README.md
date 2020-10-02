@@ -244,7 +244,8 @@ Your.Assembly.Name::Your.Namespace.YourLambda::Run
 ## 4. Examples
 
 - [Injecting and using AWS Services + Factories](examples/AwsClientFactories)
-- [Adding and using encrypted options](examples/EncryptedOptions)
+- [Automatic decryption of encrypted options](examples/EncryptedOptions)
+- [Using a custom serializer](examples/CustomSerializer/README.md)
 
 ## 5. Acknowledgments
 

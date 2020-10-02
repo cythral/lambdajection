@@ -35,4 +35,4 @@ This example illustrates the use of a custom serializer, which is set using the 
 
 1. During a build, the generator adds a LambdaSerializer attribute to the `Run` method, passing in the `Serializer` argument you gave to the Lambda attribute.  
   - If you didn't specify one and are targeting netcoreapp3.1, `Amazon.Lambda.Serialization.SystemTextJson.DefaultLambdaJsonSerializer` is the default serializer used. 
-2. 
+2. When the lambda runs, it uses the serializer defined in the LambdaSerializer attribute added in step 1. 
