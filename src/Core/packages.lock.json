@@ -109,8 +109,8 @@
       },
       "Cythral.CodeGeneration.Roslyn.Attributes": {
         "type": "Transitive",
-        "resolved": "0.9.1",
-        "contentHash": "XaFge0znlvUJwPUO79QKjYhHtrClGRESe8uzj/j8Izzy6kB75KXOht85L5zMl7E4u7Y8/4VDHvGTPxMyihSGXA==",
+        "resolved": "0.9.2",
+        "contentHash": "VJ/hVTSHVTE2tZ4OzeRcXZ0rMXOwjw6oiqT0fPh9xWX28GP8poEZJ3gSvD5M6ZgW1C9OC9+rMkygIO+23IIIoA==",
         "dependencies": {
           "NETStandard.Library": "1.6.1"
         }
@@ -1106,7 +1106,7 @@
       "Lambdajection.Attributes": {
         "type": "Project",
         "dependencies": {
-          "Cythral.CodeGeneration.Roslyn.Attributes": "0.9.1"
+          "Cythral.CodeGeneration.Roslyn.Attributes": "0.9.2"
         }
       }
     },
@@ -1212,8 +1212,8 @@
       },
       "Cythral.CodeGeneration.Roslyn.Attributes": {
         "type": "Transitive",
-        "resolved": "0.9.1",
-        "contentHash": "XaFge0znlvUJwPUO79QKjYhHtrClGRESe8uzj/j8Izzy6kB75KXOht85L5zMl7E4u7Y8/4VDHvGTPxMyihSGXA==",
+        "resolved": "0.9.2",
+        "contentHash": "VJ/hVTSHVTE2tZ4OzeRcXZ0rMXOwjw6oiqT0fPh9xWX28GP8poEZJ3gSvD5M6ZgW1C9OC9+rMkygIO+23IIIoA==",
         "dependencies": {
           "NETStandard.Library": "1.6.1"
         }
@@ -2243,7 +2243,7 @@
       "Lambdajection.Attributes": {
         "type": "Project",
         "dependencies": {
-          "Cythral.CodeGeneration.Roslyn.Attributes": "0.9.1"
+          "Cythral.CodeGeneration.Roslyn.Attributes": "0.9.2"
         }
       }
     }

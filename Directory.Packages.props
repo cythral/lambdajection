@@ -1,7 +1,7 @@
 ﻿<Project>
     <ItemGroup>
-        <PackageVersion Include="Cythral.CodeGeneration.Roslyn.Attributes" Version="0.9.1" />
-        <PackageVersion Include="Cythral.CodeGeneration.Roslyn.Tool" Version="0.9.1" />
+        <PackageVersion Include="Cythral.CodeGeneration.Roslyn.Attributes" Version="0.9.2" />
+        <PackageVersion Include="Cythral.CodeGeneration.Roslyn.Tool" Version="0.9.2" />
     </ItemGroup>
 
     <ItemGroup>
@@ -25,9 +25,9 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageVersion Include="Microsoft.CodeAnalysis" Version="3.4.0" />
+        <PackageVersion Include="Microsoft.CodeAnalysis" Version="3.7.0" />
         <PackageVersion Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.3.0" />
-        <PackageVersion Include="Microsoft.CodeAnalysis.Workspaces.MSBuild" Version="3.4.0" />
+        <PackageVersion Include="Microsoft.CodeAnalysis.Workspaces.MSBuild" Version="3.7.0" />
         <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="1.0.0" />
         <PackageVersion Include="Microsoft.CodeAnalysis.CSharp.CodeStyle" Version="3.8.0-1.20330.5" />
         <PackageVersion Include="Nerdbank.GitVersioning" Version="3.2.31" />

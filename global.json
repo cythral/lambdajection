@@ -4,7 +4,7 @@
     "rollForward": "latestPatch"
   },
   "msbuild-sdks": {
-    "Cythral.CodeGeneration.Roslyn.Plugin.Sdk": "0.9.1",
-    "Cythral.CodeGeneration.Roslyn.PluginMetapackage.Sdk": "0.9.1"
+    "Cythral.CodeGeneration.Roslyn.Plugin.Sdk": "0.9.2",
+    "Cythral.CodeGeneration.Roslyn.PluginMetapackage.Sdk": "0.9.2"
   }
 }
