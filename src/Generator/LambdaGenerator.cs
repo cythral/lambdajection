@@ -77,16 +77,20 @@ namespace Lambdajection.Generator
         {
             usingsAddedDuringGeneration = new HashSet<string>();
             var processingNode = (ClassDeclarationSyntax)context.ProcessingNode;
-            var namespaceNode = (NamespaceDeclarationSyntax)processingNode.Parent;
+            var namespaceNode = (NamespaceDeclarationSyntax?)processingNode.Parent;
 
             var members = await GenerateAsync(context, progress, cancellationToken);
-            var namespacedMembers = NamespaceDeclaration(namespaceNode.Name, List<ExternAliasDirectiveSyntax>(), List<UsingDirectiveSyntax>(), members);
-            var namespacedMembersList = new MemberDeclarationSyntax[] { namespacedMembers };
+
+            if (namespaceNode != null)
+            {
+                var namespacedMembers = NamespaceDeclaration(namespaceNode.Name, List<ExternAliasDirectiveSyntax>(), List<UsingDirectiveSyntax>(), members);
+                members = List(new MemberDeclarationSyntax[] { namespacedMembers });
+            }
 
             return new RichGenerationResult
             {
                 Usings = List(GenerateUsings(context.CompilationUnitUsings)),
-                Members = List(namespacedMembersList),
+                Members = List(members),
             };
         }
 
@@ -120,6 +124,11 @@ namespace Lambdajection.Generator
             {
                 foreach (var arg in constructorArgs)
                 {
+                    if (arg == null || arg.Type == null)
+                    {
+                        continue;
+                    }
+
                     var semanticModel = context.Compilation.GetSemanticModel(arg.SyntaxTree);
                     var typeDefinition = semanticModel.GetTypeInfo(arg.Type, cancellationToken).Type?.OriginalDefinition;
                     var qualifiedName = typeDefinition?.ContainingNamespace + "." + typeDefinition?.MetadataName + ", " + typeDefinition?.ContainingAssembly;

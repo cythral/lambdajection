@@ -71,8 +71,8 @@ namespace Lambdajection.Generator
                 if (typeArgName == lambdaTypeName)
                 {
                     var encryptedProperties = from prop in classNode.DescendantNodes().OfType<PropertyDeclarationSyntax>()
-                                              from attr in semanticModel.GetDeclaredSymbol(prop).GetAttributes()
-                                              where attr.AttributeClass.Name == nameof(EncryptedAttribute)
+                                              from attr in semanticModel.GetDeclaredSymbol(prop)?.GetAttributes() ?? ImmutableArray.Create<AttributeData>()
+                                              where attr.AttributeClass?.Name == nameof(EncryptedAttribute)
                                               select prop.Identifier.ValueText;
 
                     optionClasses.Add(new OptionClass(configSectionName, classNode, encryptedProperties));
@@ -89,7 +89,7 @@ namespace Lambdajection.Generator
 
         public void ScanForAwsServices(ClassDeclarationSyntax classNode, SemanticModel semanticModel)
         {
-            if (semanticModel.GetDeclaredSymbol(classNode).ToDisplayString() != startupDisplayName)
+            if (semanticModel.GetDeclaredSymbol(classNode)?.ToDisplayString() != startupDisplayName)
             {
                 return;
             }
