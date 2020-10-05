@@ -36,6 +36,7 @@ jobs:
         run: dotnet restore
 
       - name: Set version
+        shell: bash
         run: echo "VERSION=$(cat version.json | jq -r '.version')" >> $GITHUB_ENV
 
       - name: Display version
