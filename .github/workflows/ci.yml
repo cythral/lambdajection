@@ -83,12 +83,6 @@ jobs:
           name: logs-${{ matrix.os }}
           path: obj/logs/
 
-      - name: Update .ENV File
-        uses: actions/upload-artifact@v1
-        with:
-          name: logs-${{ matrix.os }}
-          path: $GITHUB_ENV
-
       - name: Deploy to Github Packages
         if: matrix.os == 'ubuntu-latest'
         run: dotnet gpr push bin/Packages/${{ env.Configuration }}/*.nupkg -k ${{ secrets.GH_TOKEN }} || true
