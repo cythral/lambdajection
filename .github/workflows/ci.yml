@@ -87,7 +87,7 @@ jobs:
         uses: actions/upload-artifact@v1
         with:
           name: logs-${{ matrix.os }}
-          path: $GITHUB_ENV
+          path: ${{ env.GITHUB_ENV }}
 
       - name: Deploy to Github Packages
         if: matrix.os == 'ubuntu-latest'
