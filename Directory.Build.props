@@ -29,12 +29,17 @@
         <BaseIntermediateOutputPath>$(MSBuildThisFileDirectory)obj\$(MSBuildProjectName)</BaseIntermediateOutputPath>
         <PackageOutputPath>$(MSBuildThisFileDirectory)bin\Packages\$(Configuration)</PackageOutputPath>
         <RestorePackagesPath>$(MSBuildThisFileDirectory).nuget</RestorePackagesPath>
+        <RestoreAdditionalProjectSources>@(Libs);$(RestoreAdditionalProjectSources)</RestoreAdditionalProjectSources>
         <DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
         <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
     </PropertyGroup>
 
     <ItemGroup>
         <None Include="$(MSBuildThisFileDirectory)LICENSE.txt" Pack="true" PackagePath="LICENSE.txt" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Libs Include="$(MSBuildThisFileDirectory)\lib\" />
     </ItemGroup>
 
     <ItemGroup Condition="Exists('$(MSBuildThisFileDirectory)\.editorconfig')">
