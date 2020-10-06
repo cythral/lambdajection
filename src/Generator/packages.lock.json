@@ -42,9 +42,9 @@
       },
       "Nerdbank.GitVersioning": {
         "type": "Direct",
-        "requested": "[3.3.35-rc-g31135a7d2a, )",
-        "resolved": "3.3.35-rc-g31135a7d2a",
-        "contentHash": "cqaqkCPJty5y473UySC2VSP7w/0FGrnJprmfM4SxU6NFZ92XTh8P8T/UPdbS/0UpgP1TkRU/jTBIE6USsuFARQ=="
+        "requested": "[3.2.31, )",
+        "resolved": "3.2.31",
+        "contentHash": "19grBnpqHLxViOt1cwE+cI+brQ2swdm4gfM97P+9KbbgWGfXtdy4EmpVAkUZ3MgntFYYbUvfldM4pUOmks5q0w=="
       },
       "Amazon.Lambda.Core": {
         "type": "Transitive",
