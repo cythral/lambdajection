@@ -24,7 +24,7 @@ jobs:
           fetch-depth: 0
 
       - name: Get Commit Message
-        run: echo ::set-env name=COMMIT_MESSAGE::$(git log --format=%B -n 1 ${{ github.event.after }})
+        run: echo "COMMIT_MESSAGE=$(git log --format=%B -n 1 ${{ github.event.after }})" >> $GITHUB_ENV
 
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v1
@@ -36,7 +36,8 @@ jobs:
         run: dotnet restore
 
       - name: Set version
-        run: echo "::set-env name=VERSION::$(cat version.json | jq -r '.version')"
+        shell: bash
+        run: echo "VERSION=$(cat version.json | jq -r '.version')" >> $GITHUB_ENV
 
       - name: Display version
         run: echo ${{ env.VERSION }}
@@ -102,7 +103,8 @@ jobs:
           name: nugets
 
       - name: Set version
-        run: echo "::set-env name=VERSION::$(cat version.json | jq -r '.version')"
+        shell: bash
+        run: echo "VERSION=$(cat version.json | jq -r '.version')" >> $GITHUB_ENV
 
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v1
