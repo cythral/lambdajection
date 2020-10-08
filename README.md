@@ -96,11 +96,17 @@ Lambdajection .NET templates are available for your convenience.  Run `dotnet ne
 
 
 <!-- omit in toc -->
-### Lambdajection Project <small>(`dotnet new lambdajection`)</small>
+### Lambdajection Project
+```
+dotnet new lambdajection
+```
 Creates a new C# project with Lambdajection installed, plus boilerplate for a Lambda Handler and Startup class.
 
 <!-- omit in toc -->
-### Options Class <small>(`dotnet new lambdajection-options`)</small>
+### Options Class
+```
+dotnet new lambdajection-options
+```
 Creates a new Options class to be injected into your Lambda as an `IOption<>`.
 
 
