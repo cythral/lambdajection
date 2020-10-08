@@ -29,7 +29,8 @@ Community contribution/pull requests are welcome and encouraged! See the [contri
   - [4.4. Customizing Configuration](#44-customizing-configuration)
   - [4.5. Adding Options](#45-adding-options)
   - [4.6. Initialization Services](#46-initialization-services)
-  - [4.7. Handler Scheme](#47-handler-scheme)
+  - [4.7. Disposers](#47-disposers)
+  - [4.8. Handler Scheme](#48-handler-scheme)
 - [5. Examples](#5-examples)
 - [6. Acknowledgments](#6-acknowledgments)
 - [7. Donations](#7-donations)
@@ -268,9 +269,14 @@ namespace Your.Namespace
 ### 4.6. Initialization Services
 Initialization services can be used to initialize data or perform some task before the lambda is run.  Initialization services should implement [ILambdaInitializationService](src/Core/ILambdaInitializationService.cs) and be injected into the container as singletons at startup.
 
-### 4.7. Handler Scheme
+### 4.7. Disposers
+> ℹ Disposers will be fully supported starting in v0.5.0-beta1
 
-When configuring your lambda on AWS, the method name you'll want to use will be `Run` (NOT `Handle`). For context, `Run` is a static method is generated on your class during compilation that takes care of setting up the IoC container (if it hasn't been already).
+Disposers can be used to run object finalization and mark for garbage collection. Lambdajection supports Lambdas that implement either [IDisposable](https://docs.microsoft.com/en-us/dotnet/api/system.idisposable), [IAsyncDisposable](https://docs.microsoft.com/en-us/dotnet/api/system.iasyncdisposable) or both.  If you implement both, DisposeAsync will be preferred.
+
+### 4.8. Handler Scheme
+
+When configuring your lambda on AWS, the method name you'll want to use will be `Run` (NOT `Handle`). For context, `Run` is a static method generated on your class during compilation.  It takes care of setting up the IoC container, if it hasn't been setup already.
 
 So, going off the example above, the handler scheme would look like this:
 

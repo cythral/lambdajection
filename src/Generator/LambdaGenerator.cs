@@ -228,7 +228,7 @@ namespace Lambdajection.Generator
                 var configFactoryNamespace = configFactoryType?.ContainingNamespace?.ToString() ?? "Lambdajection.Core";
                 usingsAddedDuringGeneration.Add(configFactoryNamespace);
 
-                yield return ParseStatement($"var host = new LambdaHost<{className}, {inputType}, {returnType}, {startupTypeName}, LambdajectionConfigurator, {configFactory}>();");
+                yield return ParseStatement($"await using var host = new LambdaHost<{className}, {inputType}, {returnType}, {startupTypeName}, LambdajectionConfigurator, {configFactory}>();");
                 yield return ParseStatement($"return await host.Run({inputParameter!.Identifier.ValueText}, {contextParameter!.Identifier.ValueText});");
             }
 

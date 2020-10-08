@@ -17,17 +17,25 @@ namespace Lambdajection.Core
     /// <typeparam name="TLambdaStartup">The type to use for lambda startup (sets up services).</typeparam>
     /// <typeparam name="TLambdaConfigurator">The type to use for the lambda configurator (sets up options and aws services).</typeparam>
     /// <typeparam name="TLambdaConfigFactory">The type to use for the lambda's config factory.</typeparam>
-    public class LambdaHost<TLambda, TLambdaParameter, TLambdaOutput, TLambdaStartup, TLambdaConfigurator, TLambdaConfigFactory>
+    public sealed class LambdaHost<TLambda, TLambdaParameter, TLambdaOutput, TLambdaStartup, TLambdaConfigurator, TLambdaConfigFactory>
+        : IAsyncDisposable
         where TLambda : class, ILambda<TLambdaParameter, TLambdaOutput>
         where TLambdaStartup : class, ILambdaStartup
         where TLambdaConfigurator : class, ILambdaConfigurator
         where TLambdaConfigFactory : class, ILambdaConfigFactory, new()
     {
         /// <value>Provides services to the lambda.</value>
-        public IServiceProvider ServiceProvider { get; internal set; } = null!;
+        public IServiceProvider ServiceProvider { get; internal set; } = default!;
 
         /// <value>Whether the lambda host should run its initialization services.</value>
         public bool RunInitializationServices { get; internal set; }
+
+        /// <value>Function to suppress the finalization of an object.</value>
+        public Action<object> SuppressFinalize { get; internal set; } = GC.SuppressFinalize;
+
+        private TLambda? lambda;
+
+        private IServiceScope? scope;
 
 
         /// <summary>
@@ -56,9 +64,9 @@ namespace Lambdajection.Core
         {
             if (RunInitializationServices) await Initialize();
 
-            using var scope = ServiceProvider.CreateScope();
-            var service = scope.ServiceProvider.GetRequiredService<TLambda>();
-            return await service.Handle(parameter, context);
+            scope = ServiceProvider.CreateScope();
+            lambda = scope.ServiceProvider.GetRequiredService<TLambda>();
+            return await lambda.Handle(parameter, context);
         }
 
         private async Task Initialize()
@@ -68,6 +76,31 @@ namespace Lambdajection.Core
                 .Select(service => service.Initialize());
 
             await Task.WhenAll(tasks);
+        }
+
+        /// <summary>
+        /// Disposes the Lambda Host and its subresources asynchronously
+        /// </summary>
+        public async ValueTask DisposeAsync()
+        {
+            await MaybeDispose(scope);
+            await MaybeDispose(lambda);
+
+            lambda = null;
+            scope = null;
+
+            SuppressFinalize(this);
+        }
+
+        private static async ValueTask MaybeDispose(object? obj)
+        {
+            if (obj is IAsyncDisposable asyncDisposable)
+            {
+                await asyncDisposable.DisposeAsync();
+                return;
+            }
+
+            (obj as IDisposable)?.Dispose();
         }
     }
 }

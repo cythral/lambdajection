@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 
 using Amazon.Lambda.Core;
@@ -9,6 +10,8 @@ using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
 
 using NUnit.Framework;
+
+using static NSubstitute.Arg;
 
 using TestLambdaHost = Lambdajection.Core.LambdaHost<
     Lambdajection.TestLambda,
@@ -35,7 +38,7 @@ namespace Lambdajection.Core.Tests
             collection.AddSingleton(lambda);
 
             var provider = collection.BuildServiceProvider();
-            var host = new TestLambdaHost(lambdaHost =>
+            await using var host = new TestLambdaHost(lambdaHost =>
             {
                 lambdaHost.ServiceProvider = provider;
             });
@@ -62,7 +65,7 @@ namespace Lambdajection.Core.Tests
             collection.AddSingleton(lambda);
 
             var provider = collection.BuildServiceProvider();
-            var host = new TestLambdaHost(lambdaHost =>
+            await using var host = new TestLambdaHost(lambdaHost =>
             {
                 lambdaHost.ServiceProvider = provider;
                 lambdaHost.RunInitializationServices = true;
@@ -90,7 +93,7 @@ namespace Lambdajection.Core.Tests
             collection.AddSingleton(lambda);
 
             var provider = collection.BuildServiceProvider();
-            var host = new TestLambdaHost(lambdaHost =>
+            await using var host = new TestLambdaHost(lambdaHost =>
             {
                 lambdaHost.ServiceProvider = provider;
                 lambdaHost.RunInitializationServices = false;
@@ -102,6 +105,112 @@ namespace Lambdajection.Core.Tests
             await host.Run(request, context);
 
             await initializationService.DidNotReceive().Initialize();
+        }
+
+        [Test]
+        public async Task DisposeAsyncIsCalled()
+        {
+            var lambda = Substitute.For<AsyncDisposableLambda>();
+            var initializationService = Substitute.For<ILambdaInitializationService>();
+            var collection = new ServiceCollection();
+            collection.AddSingleton(initializationService);
+            collection.AddSingleton<TestLambda>(lambda);
+
+            var provider = collection.BuildServiceProvider();
+            await using (var host = new TestLambdaHost(lambdaHost =>
+            {
+                lambdaHost.ServiceProvider = provider;
+                lambdaHost.RunInitializationServices = false;
+            }))
+            {
+
+                var request = new object();
+                var context = Substitute.For<ILambdaContext>();
+                await host.Run(request, context);
+            }
+
+            await lambda.Received().DisposeAsync();
+        }
+
+        [Test]
+        public async Task DisposeIsCalled()
+        {
+            var lambda = Substitute.For<DisposableLambda>();
+            var suppressor = Substitute.For<Action<object>>();
+            var initializationService = Substitute.For<ILambdaInitializationService>();
+            var collection = new ServiceCollection();
+            collection.AddSingleton(initializationService);
+            collection.AddSingleton<TestLambda>(lambda);
+
+            var provider = collection.BuildServiceProvider();
+            await using (var host = new TestLambdaHost(lambdaHost =>
+            {
+                lambdaHost.ServiceProvider = provider;
+                lambdaHost.RunInitializationServices = false;
+                lambdaHost.SuppressFinalize = suppressor;
+            }))
+            {
+
+                var request = new object();
+                var context = Substitute.For<ILambdaContext>();
+                await host.Run(request, context);
+            }
+
+            lambda.Received().Dispose();
+        }
+
+        [Test]
+        public async Task DisposeAsyncIsPreferred()
+        {
+            var lambda = Substitute.For<MultiDisposableLambda>();
+            var initializationService = Substitute.For<ILambdaInitializationService>();
+            var collection = new ServiceCollection();
+            collection.AddSingleton(initializationService);
+            collection.AddSingleton<TestLambda>(lambda);
+
+            var provider = collection.BuildServiceProvider();
+            await using (var host = new TestLambdaHost(lambdaHost =>
+            {
+                lambdaHost.ServiceProvider = provider;
+                lambdaHost.RunInitializationServices = false;
+            }))
+            {
+
+                var request = new object();
+                var context = Substitute.For<ILambdaContext>();
+                await host.Run(request, context);
+            }
+
+            await lambda.Received().DisposeAsync();
+            lambda.DidNotReceive().Dispose();
+        }
+
+        [Test]
+        public async Task FinalizationIsSuppressed()
+        {
+            var lambda = Substitute.For<MultiDisposableLambda>();
+            var suppressor = Substitute.For<Action<object>>();
+            var initializationService = Substitute.For<ILambdaInitializationService>();
+            var collection = new ServiceCollection();
+            collection.AddSingleton(initializationService);
+            collection.AddSingleton<TestLambda>(lambda);
+
+            TestLambdaHost host;
+            var provider = collection.BuildServiceProvider();
+            await using (host = new TestLambdaHost(lambdaHost =>
+            {
+                lambdaHost.ServiceProvider = provider;
+                lambdaHost.RunInitializationServices = false;
+                lambdaHost.SuppressFinalize = suppressor;
+            }))
+            {
+
+                var request = new object();
+                var context = Substitute.For<ILambdaContext>();
+                await host.Run(request, context);
+            }
+
+            suppressor.Received()(Is(host));
         }
     }
 }
