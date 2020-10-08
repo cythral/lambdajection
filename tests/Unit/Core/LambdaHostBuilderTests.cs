@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 
 using FluentAssertions;
 
@@ -35,9 +36,9 @@ namespace Lambdajection.Core.Tests
     public class LambdaHostBuilderTests
     {
         [Test]
-        public void BuildSetsTheServiceProvider()
+        public async Task BuildSetsTheServiceProvider()
         {
-            var host = new TestLambdaHost(lambdaHost => { });
+            await using var host = new TestLambdaHost(lambdaHost => { });
             host.ServiceProvider.Should().BeNull();
 
             TestLambdaHostBuilder.Build(host);
@@ -45,9 +46,9 @@ namespace Lambdajection.Core.Tests
         }
 
         [Test]
-        public void BuildSetsTheServiceProviderIfItAlreadyWasBuilt()
+        public async Task BuildSetsTheServiceProviderIfItAlreadyWasBuilt()
         {
-            var host = new TestLambdaHost(lambdaHost => { });
+            await using var host = new TestLambdaHost(lambdaHost => { });
             host.ServiceProvider.Should().BeNull();
 
             var serviceProvider = Substitute.For<IServiceProvider>();
@@ -58,9 +59,9 @@ namespace Lambdajection.Core.Tests
         }
 
         [Test]
-        public void BuildSetsRunInitializationServicesToTrueTheFirstTime()
+        public async Task BuildSetsRunInitializationServicesToTrueTheFirstTime()
         {
-            var host = new TestLambdaHost(lambdaHost => { });
+            await using var host = new TestLambdaHost(lambdaHost => { });
             host.ServiceProvider.Should().BeNull();
 
             var serviceProvider = Substitute.For<IServiceProvider>();
@@ -72,9 +73,9 @@ namespace Lambdajection.Core.Tests
         }
 
         [Test]
-        public void BuildSetsRunInitializationServicesToFalseTheSecondTime()
+        public async Task BuildSetsRunInitializationServicesToFalseTheSecondTime()
         {
-            var host = new TestLambdaHost(lambdaHost => { });
+            await using var host = new TestLambdaHost(lambdaHost => { });
             host.ServiceProvider.Should().BeNull();
 
             var serviceProvider = Substitute.For<IServiceProvider>();
