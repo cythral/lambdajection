@@ -1,5 +1,6 @@
 <!-- omit in toc -->
 # Lambdajection
+[![Nuget](https://img.shields.io/nuget/v/Lambdajection?label=version&style=flat-square)](https://nuget.org/packages/Lambdajection) [![Nuget](https://img.shields.io/nuget/vpre/Lambdajection?label=pre-release&style=flat-square)](https://nuget.org/packages/Lambdajection) [![GitHub](https://img.shields.io/github/license/cythral/lambdajection?style=flat-square)](./LICENSE.txt) [![GitHub Workflow Status](https://img.shields.io/github/workflow/status/cythral/lambdajection/Continuous%20Integration?style=flat-square)](https://github.com/cythral/lambdajection/actions?query=workflow%3A%22Continuous+Integration%22) [![Sponsor on Github](https://img.shields.io/badge/sponsor-on%20github-pink?style=flat-square)](https://github.com/sponsor/cythral) [![Donate on Paypal](https://img.shields.io/badge/donate-on%20paypal-blue?style=flat-square)](https://paypal.me/cythral)
 
 Write elegant and testable AWS Lambdas using .NET Core and Microsoft's Dependency Injection + Configuration extensions. No longer do you need to write your own boilerplate to achieve this - just write your Lambda code and service configuration! 
 
@@ -79,13 +80,14 @@ Finally, you may use development builds by adding the package and version to you
 
 ## 2. Packages
 
-|                          |                                                                                     |
-| ------------------------ | ----------------------------------------------------------------------------------- |
-| Lambdajection            | ![Nuget](https://img.shields.io/nuget/v/Lambdajection?style=flat-square)            |
-| Lambdajection.Attributes | ![Nuget](https://img.shields.io/nuget/v/Lambdajection.Attributes?style=flat-square) |
-| Lambdajection.Core       | ![Nuget](https://img.shields.io/nuget/v/Lambdajection.Core?style=flat-square)       |
-| Lambdajection.Generator  | ![Nuget](https://img.shields.io/nuget/v/Lambdajection.Generator?style=flat-square)  |
-| Lambdajection.Encryption | ![Nuget](https://img.shields.io/nuget/v/Lambdajection.Encryption?style=flat-square) |
+|                          |                                                                                                                                                                                                   |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Lambdajection            | ![Nuget](https://img.shields.io/nuget/v/Lambdajection?label=version&style=flat-square) ![Nuget](https://img.shields.io/nuget/dt/Lambdajection?color=blue&style=flat-square)                       |
+| Lambdajection.Attributes | ![Nuget](https://img.shields.io/nuget/v/Lambdajection.Attributes?label=version&style=flat-square) ![Nuget](https://img.shields.io/nuget/dt/Lambdajection.Attributes?color=blue&style=flat-square) |
+| Lambdajection.Core       | ![Nuget](https://img.shields.io/nuget/v/Lambdajection.Core?label=version&style=flat-square) ![Nuget](https://img.shields.io/nuget/dt/Lambdajection.Core?color=blue&style=flat-square)             |
+| Lambdajection.Generator  | ![Nuget](https://img.shields.io/nuget/v/Lambdajection.Generator?label=version&style=flat-square) ![Nuget](https://img.shields.io/nuget/dt/Lambdajection.Generator?color=blue&style=flat-square)   |
+| Lambdajection.Encryption | ![Nuget](https://img.shields.io/nuget/v/Lambdajection.Encryption?label=version&style=flat-square) ![Nuget](https://img.shields.io/nuget/dt/Lambdajection.Encryption?color=blue&style=flat-square) |
+| Lambdajection.Templates  | ![Nuget](https://img.shields.io/nuget/v/Lambdajection.Templates?label=version&style=flat-square) ![Nuget](https://img.shields.io/nuget/dt/Lambdajection.Templates?color=blue&style=flat-square)   |
 
 ## 3. Templates
 > ℹ Templates will be available starting in v0.5.0-beta1
