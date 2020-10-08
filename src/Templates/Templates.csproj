@@ -1,0 +1,47 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <PackageType>Template</PackageType>
+        <TargetFramework>netstandard2.1</TargetFramework>
+        <PackageId>Lambdajection.Templates</PackageId>
+        <AssemblyName>$(PackageId)</AssemblyName>
+        <NoWarn>NU5128;NU5131</NoWarn>
+        <IncludeBuildOutput>false</IncludeBuildOutput>
+        <IncludeContentInPack>true</IncludeContentInPack>
+        <PackageDescription>Includes templates for creating Lambdajection projects and components.</PackageDescription>
+        <BeforePack>CopyTemplates;PrepareTemplates</BeforePack>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Compile Remove="$(IntermediateOutputPath)\templates\**" />
+        <TemplateSource Include="$(MSBuildThisFileDirectory)..\..\templates\*\**" />
+        <TemplateSourceFile Include="@(TemplateSource)">
+          <Destination>$(IntermediateOutputPath)templates\%(RecursiveDir)%(Filename)%(Extension)</Destination>
+        </TemplateSourceFile>
+    </ItemGroup>
+
+    <Target Name="CopyTemplates" DependsOnTargets="GetBuildVersion">
+        <MakeDir Directories="$(IntermediateOutputPath)templates" />
+        <Copy SourceFiles="@(TemplateSourceFile)" DestinationFiles="%(Destination)">
+          <Output TaskParameter="CopiedFiles" ItemName="Template" />
+        </Copy>
+    </Target>
+
+    <Target Name="PrepareTemplates" Outputs="%(TemplateSourceFile.Destination)" AfterTargets="CopyTemplates">
+        <PropertyGroup>
+          <PackagePath>$([System.String]::Copy(%(TemplateSourceFile.Destination)).Replace('$(IntermediateOutputPath)templates', ''))</PackagePath>
+          <FileContents>$([System.IO.File]::ReadAllText(%(TemplateSourceFile.Destination)).Replace('__LambdajectionVersion__','$(NuGetPackageVersion)'))</FileContents>
+        </PropertyGroup>
+
+        <WriteLinesToFile
+          File="%(TemplateSourceFile.Destination)"
+          Lines="$(FileContents)"
+          Overwrite="true"
+        />
+      
+      <ItemGroup>
+        <Content Include="%(TemplateSourceFile.Destination)" Pack="true" PackagePath="content$(PackagePath)" />
+      </ItemGroup>
+    </Target>
+
+</Project>

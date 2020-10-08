@@ -34,3 +34,7 @@ dotnet_diagnostic.CS1591.severity = none
 [obj/**.{cs,csx}]
 # Unnecessary usings - we don't have much control over these
 dotnet_diagnostic.CS8019.severity = none
+
+[templates/**.{cs,csx}]
+# Value assigned but never read
+dotnet_diagnostic.IDE0052.severity = none

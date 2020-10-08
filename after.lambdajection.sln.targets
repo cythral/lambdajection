@@ -1,72 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <RunFormatter Condition="$(RunFormatter) == ''">true</RunFormatter>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <_SubSolution Include="$(MSBuildThisFileDirectory)examples\examples.sln" />
+        <_SubSolution Include="$(MSBuildThisFileDirectory)templates\templates.sln" />
+        <_SubSolutionProp Include="Configuration=$(Configuration)" />
+        <_SubSolutionProp Include="Architecture=$(Architecture)" />
+    </ItemGroup>
+
     <Target Name="RestoreTools" AfterTargets="Restore">
         <Exec Command="dotnet tool restore" ConsoleToMsBuild="true" />
     </Target>
 
     <Target Name="RestoreNoFactoryCompilationTestProject" AfterTargets="Restore">
-        <MSBuild
-            Projects="$(MSBuildThisFileDirectory)tests\Integration\NoFactoryCompilationTestProject\NoFactoryCompilationTestProject.csproj"
-            Targets="Restore" />
+        <MSBuild Projects="$(MSBuildThisFileDirectory)tests\Integration\NoFactoryCompilationTestProject\NoFactoryCompilationTestProject.csproj" Targets="Restore" />
     </Target>
 
-    <Target Name="CheckFormatting" AfterTargets="Build">
-        <Message Importance="High" Text="%0A" />
-        
-        <Exec Command="dotnet format $(MSBuildThisFileDirectory)lambdajection.sln --fix-style info --check" ConsoleToMsBuild="true" IgnoreExitCode="true">
-            <Output TaskParameter="ExitCode" PropertyName="_FormatExitCode" />
-        </Exec>
-
-        <Message 
-            Importance="High" 
-            Condition="'$(_FormatExitCode)' != '0'"
-            Text="%0ARun the following command to attempt to automatically fix formatting issues:%0Adotnet format $(MSBuildThisFileDirectory)lambdajection.sln --fix-style info%0A" />
-
-        <Error 
-            Condition="'$(_FormatExitCode)' != '0'"
-            File="$(MSBuildThisFileDirectory)lambdajection.sln"
-            Text="Fix formatting issues." />
-    </Target>
-
-    <Target Name="CleanExamples" AfterTargets="Clean">
+    <Target Name="RetrievePackageVersionFromTool">
         <Exec Command="dotnet nbgv get-version -v NuGetPackageVersion" ConsoleToMsBuild="true" StandardOutputImportance="Low">
-            <Output TaskParameter="ConsoleOutput" PropertyName="_Version" />
+            <Output TaskParameter="ConsoleOutput" PropertyName="PackageVersion" />
         </Exec>
 
-        <MSBuild 
-            Projects="$(MSBuildThisFileDirectory)examples\examples.sln"
-            Targets="Clean"
-            Properties="LambdajectionVersion=$(_Version);Configuration=$(Configuration);Architecture=$(Architecture)"
-        />
+        <ItemGroup>
+            <_SubSolutionProp Include="LambdajectionVersion=$(PackageVersion)" />
+        </ItemGroup>
     </Target>
 
-    <Target Name="BuildExamples" AfterTargets="Build" DependsOnTargets="Build">
-        <Message Importance="High" Text="%0A%0ABuilding Examples%0A-----------------%0A" />
+    <Target Name="CleanExamplesAndTemplates" AfterTargets="Clean" DependsOnTargets="Restore;RetrievePackageVersionFromTool">
+        <MSBuild Projects="@(_SubSolution)" Targets="Clean" Properties="@(_SubSolutionProp)" />
+    </Target>
+
+    <Target Name="BuildExamplesAndTemplates" AfterTargets="Build" DependsOnTargets="Build;RetrievePackageVersionFromTool">
+        <Message Importance="High" Text="%0A%0ABuilding Examples and Templates%0A---------------------------------%0A" />
         <RemoveDir Directories="$(MSBuildThisFileDirectory)examples\.nuget" />
-
-        <Exec Command="dotnet nbgv get-version -v NuGetPackageVersion" ConsoleToMsBuild="true" StandardOutputImportance="Low">
-            <Output TaskParameter="ConsoleOutput" PropertyName="_Version" />
-        </Exec>
-
-        <MSBuild 
-            Projects="$(MSBuildThisFileDirectory)examples\examples.sln"
-            Targets="Restore;Build;Publish"
-            Properties="LambdajectionVersion=$(_Version);Configuration=$(Configuration);Architecture=$(Architecture)"
-        />
+        <MSBuild Projects="@(_SubSolution)" Targets="Restore;Build;Publish" Properties="@(_SubSolutionProp)" />
     </Target>
 
-    <Target Name="EndToEndTests" Condition="$(Configuration) == 'Release'">
+    <Target Name="EndToEndTests" DependsOnTargets="RetrievePackageVersionFromTool" Condition="$(Configuration) == 'Release'">
         <CreateItem Include="$(MSBuildThisFileDirectory)examples\*\*.csproj">
             <Output TaskParameter="Include" ItemName="_Examples" />
         </CreateItem>
 
-        <Exec Command="dotnet nbgv get-version -v NuGetPackageVersion" ConsoleToMsBuild="true" StandardOutputImportance="Low">
-            <Output TaskParameter="ConsoleOutput" PropertyName="_Version" />
-        </Exec>
+        <MSBuild Projects="@(_Examples)" Targets="EndToEndTest" Properties="LambdajectionVersion=$(PackageVersion);Configuration=$(Configuration);Architecture=$(Architecture);PackageBucket=$(PackageBucket);RoleArn=$(RoleArn)" />
+    </Target>
 
-        <MSBuild
-            Projects="@(_Examples)"
-            Targets="EndToEndTest"
-            Properties="LambdajectionVersion=$(_Version);Configuration=$(Configuration);Architecture=$(Architecture);PackageBucket=$(PackageBucket);RoleArn=$(RoleArn)" />
+    <Target Name="CheckFormatting" AfterTargets="Build" Condition="$(RunFormatter) == 'true'">
+        <Message Importance="High" Text="%0A" />
+
+        <!-- Main -->
+        <Exec Command="dotnet format $(MSBuildThisFileDirectory)lambdajection.sln --fix-style info --check" ConsoleToMsBuild="true" IgnoreExitCode="true">
+            <Output TaskParameter="ExitCode" PropertyName="_FormatExitCode" />
+        </Exec>
+        <Message Importance="High" Condition="'$(_FormatExitCode)' != '0'" Text="%0ARun the following command to attempt to automatically fix formatting issues:%0Adotnet msbuild -t:format%0A" />
+        <Error Condition="'$(_FormatExitCode)' != '0'" File="$(MSBuildThisFileDirectory)lambdajection.sln" Text=" Fix formatting issues." />
+
+        <!-- Examples -->
+        <Exec Command="dotnet format $(MSBuildThisFileDirectory)examples/examples.sln --fix-style info --check" ConsoleToMsBuild="true" IgnoreExitCode="true">
+            <Output TaskParameter="ExitCode" PropertyName="_FormatExitCode" />
+        </Exec>
+        <Message Importance="High" Condition="'$(_FormatExitCode)' != '0'" Text="%0ARun the following command to attempt to automatically fix formatting issues:%0Adotnet msbuild -t:format%0A" />
+        <Error Condition="'$(_FormatExitCode)' != '0'" File="$(MSBuildThisFileDirectory)examples/examples.sln" Text=" Fix formatting issues." />
+
+        <!-- Templates -->
+        <Exec Command="dotnet format $(MSBuildThisFileDirectory)templates/templates.sln --fix-style info --check" ConsoleToMsBuild="true" IgnoreExitCode="true">
+            <Output TaskParameter="ExitCode" PropertyName="_FormatExitCode" />
+        </Exec>
+        <Message Importance="High" Condition="'$(_FormatExitCode)' != '0'" Text="%0ARun the following command to attempt to automatically fix formatting issues:%0Adotnet msbuild -t:format%0A" />
+        <Error Condition="'$(_FormatExitCode)' != '0'" File="$(MSBuildThisFileDirectory)templates/templates.sln" Text=" Fix formatting issues." />
+    </Target>
+
+    <Target Name="Format" DependsOnTargets="Restore;RestoreTools">
+        <Exec Command="dotnet format $(MSBuildThisFileDirectory)lambdajection.sln --fix-style info" />
+        <Exec Command="dotnet format $(MSBuildThisFileDirectory)examples/examples.sln --fix-style info" />
+        <Exec Command="dotnet format $(MSBuildThisFileDirectory)templates/templates.sln --fix-style info" />
     </Target>
 </Project>

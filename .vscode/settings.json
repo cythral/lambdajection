@@ -3,5 +3,6 @@
   "editor.formatOnPaste": true,
   "omnisharp.enableEditorConfigSupport": true,
   "omnisharp.enableRoslynAnalyzers": true,
-  "prettier.enable": false
+  "prettier.enable": false,
+  "xml.format.preserveAttributeLineBreaks": true
 }
