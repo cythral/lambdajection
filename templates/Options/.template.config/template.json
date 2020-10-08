@@ -6,7 +6,7 @@
         "Cloud",
         "Lambda"
     ],
-    "name": "AWS Lambda using Lambdajection",
+    "name": "Lambdajection Options Class",
     "shortName": "lambdajection-options",
     "tags": {
         "language": "C#",
