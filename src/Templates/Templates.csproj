@@ -23,7 +23,7 @@
 
         <MakeDir Directories="$(IntermediateOutputPath)\templates" />
         <Copy SourceFiles="@(_Templates)" DestinationFiles="$(IntermediateOutputPath)\templates\%(RecursiveDir)%(Filename)%(Extension)" />
-        <Exec Command="dotnet orang replace $(IntermediateOutputPath)/templates -c '$$LambdajectionVersion' l -r '$(NuGetPackageVersion)'" StandardOutputImportance="Low" />
+        <Exec Command="dotnet orang replace $(IntermediateOutputPath)templates -c '$$LambdajectionVersion' l -r '$(NuGetPackageVersion)'" StandardOutputImportance="Low" />
 
         <ItemGroup>
             <FileWrites Include="$(IntermediateOutputPath)\templates\**" />
