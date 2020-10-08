@@ -1,0 +1,62 @@
+{
+    "$schema": "http://json.schemastore.org/template",
+    "identity": "Lambdajection.Templates.Options",
+    "author": "Cythral LLC",
+    "classifications": [
+        "Cloud",
+        "Lambda"
+    ],
+    "name": "AWS Lambda using Lambdajection",
+    "shortName": "lambdajection-options",
+    "tags": {
+        "language": "C#",
+        "type": "item"
+    },
+    "postActions": [
+        {
+            "actionId": "B17581D1-C5C9-4489-8F0A-004BE667B814",
+            "description": "Installs the Lambdajection.Encryption package",
+            "condition": "(encryption)",
+            "continueOnError": false,
+            "manualInstructions": [
+                {
+                    "text": "Run 'dotnet add package Lambdajection.Encryption --version $$LambdajectionVersion'"
+                }
+            ],
+            "args": {
+                "referenceType": "package",
+                "reference": "Lambdajection.Encryption",
+                "version": "$$LambdajectionVersion",
+                "projectFileExtensions": ".csproj"
+            }
+        }
+    ],
+    "symbols": {
+        "namespace": {
+            "type": "parameter",
+            "description": "Namespace for the Lambda project",
+            "replaces": "Project"
+        },
+        "sectionName": {
+            "type": "parameter",
+            "description": "Section name for the config options",
+            "replaces": "SectionName"
+        },
+        "className": {
+            "type": "parameter",
+            "description": "Name of the options class",
+            "replaces": "Options"
+        },
+        "handlerName": {
+            "type": "parameter",
+            "description": "Name of the lambda handler type",
+            "replaces": "Handler"
+        },
+        "encryption": {
+            "type": "parameter",
+            "description": "Whether to include the Encryption package",
+            "datatype": "bool",
+            "defaultValue": "false"
+        }
+    }
+}

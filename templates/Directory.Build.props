@@ -1,9 +1,9 @@
 <Project>
     <PropertyGroup>
         <OutputPath>$(MSBuildThisFileDirectory)..\bin\Examples\$(MSBuildProjectName)\$(Configuration)</OutputPath>
-        <BaseIntermediateOutputPath>$(MSBuildThisFileDirectory)..\obj\Examples\$(MSBuildProjectName)</BaseIntermediateOutputPath>
-        <PackageOutputPath>$(MSBuildThisFileDirectory)..\bin\Packages\Examples\$(Configuration)</PackageOutputPath>
-        <RestorePackagesPath>$(MSBuildThisFileDirectory)..\.nuget\examples</RestorePackagesPath>
+        <BaseIntermediateOutputPath>$(MSBuildThisFileDirectory)..\obj\Templates\$(MSBuildProjectName)</BaseIntermediateOutputPath>
+        <PackageOutputPath>$(MSBuildThisFileDirectory)..\bin\Packages\Templates\$(Configuration)</PackageOutputPath>
+        <RestorePackagesPath>$(MSBuildThisFileDirectory)..\.nuget\templates</RestorePackagesPath>
         <_PackagesDebug>$(MSBuildThisFileDirectory)..\bin\Packages\Debug</_PackagesDebug>
         <_PackagesRelease>$(MSBuildThisFileDirectory)..\bin\Packages\Release</_PackagesRelease>
         <RestoreAdditionalProjectSources>@(CustomLocalFeed);$(RestoreAdditionalProjectSources)</RestoreAdditionalProjectSources>
@@ -16,9 +16,5 @@
 
     <ItemGroup>
         <AdditionalFiles Include="$(MSBuildThisFileDirectory)..\.editorconfig" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <PackageReference Include="Cythral.CloudFormation.BuildTasks" Version="0.1.1" />
     </ItemGroup>
 </Project>

@@ -16,29 +16,43 @@ Community contribution/pull requests are welcome and encouraged! See the [contri
 ## Table of Contents
 
 - [1. Installation](#1-installation)
-  - [1.1. Development Builds](#11-development-builds)
+  - [1.1. Metapackage](#11-metapackage)
+  - [1.2. Templates](#12-templates)
+  - [1.3. Development Builds](#13-development-builds)
 - [2. Packages](#2-packages)
-- [3. Usage](#3-usage)
-  - [3.1. Lambda Handler](#31-lambda-handler)
-  - [3.2. Serialization](#32-serialization)
-  - [3.3. Startup Class](#33-startup-class)
-  - [3.4. Customizing Configuration](#34-customizing-configuration)
-  - [3.5. Adding Options](#35-adding-options)
-  - [3.6. Initialization Services](#36-initialization-services)
-  - [3.7. Handler Scheme](#37-handler-scheme)
-- [4. Examples](#4-examples)
-- [5. Acknowledgments](#5-acknowledgments)
-- [6. Contributing](#6-contributing)
-- [7. Security](#7-security)
-- [8. License](#8-license)
+- [3. Templates](#3-templates)
+- [4. Usage](#4-usage)
+  - [4.1. Lambda Handler](#41-lambda-handler)
+  - [4.2. Serialization](#42-serialization)
+  - [4.3. Startup Class](#43-startup-class)
+  - [4.4. Customizing Configuration](#44-customizing-configuration)
+  - [4.5. Adding Options](#45-adding-options)
+  - [4.6. Initialization Services](#46-initialization-services)
+  - [4.7. Handler Scheme](#47-handler-scheme)
+- [5. Examples](#5-examples)
+- [6. Acknowledgments](#6-acknowledgments)
+- [7. Donations](#7-donations)
+- [8. Contributing](#8-contributing)
+- [9. Security](#9-security)
+- [10. License](#10-license)
 
 ## 1. Installation
+
+### 1.1. Metapackage
+See the [packages](#2-packages) section for a list of available packages.
 
 ```
 dotnet add package Lambdajection
 ```
 
-### 1.1. Development Builds
+### 1.2. Templates
+> ℹ Templates will be available starting in v0.5.0-beta1
+
+```
+dotnet new -i Lambdajection.Templates
+```
+
+### 1.3. Development Builds
 
 Development builds are generated for PRs and uploaded to GitHub Packages.  To use them, update the **user** config file for nuget (varies by OS - see [this article](https://docs.microsoft.com/en-us/nuget/consume-packages/configuring-nuget-behavior)) and add this to the packageSourceCredentials section of that file:
 
@@ -73,9 +87,24 @@ Finally, you may use development builds by adding the package and version to you
 | Lambdajection.Generator  | ![Nuget](https://img.shields.io/nuget/v/Lambdajection.Generator?style=flat-square)  |
 | Lambdajection.Encryption | ![Nuget](https://img.shields.io/nuget/v/Lambdajection.Encryption?style=flat-square) |
 
-## 3. Usage
+## 3. Templates
+> ℹ Templates will be available starting in v0.5.0-beta1
 
-### 3.1. Lambda Handler
+Lambdajection .NET templates are available for your convenience.  Run `dotnet new [template-name] --help` to see a list of available options for each template.
+
+
+<!-- omit in toc -->
+### Lambdajection Project <small>(`dotnet new lambdajection`)</small>
+Creates a new C# project with Lambdajection installed, plus boilerplate for a Lambda Handler and Startup class.
+
+<!-- omit in toc -->
+### Options Class <small>(`dotnet new lambdajection-options`)</small>
+Creates a new Options class to be injected into your Lambda as an `IOption<>`.
+
+
+## 4. Usage
+
+### 4.1. Lambda Handler
 
 Writing the lambda is simple: Just define a public, partial class that contains a Handle method and annotate the class with the `Lambda` attribute. The `Lambda` attribute requires that you specify a startup class - more on this in the next step. You are not limited to an request/input parameter of type object - this can be any serializable value or reference type. Same goes for the return value, however the return value must be enclosed in a `Task`.
 
@@ -109,7 +138,7 @@ namespace Your.Namespace
 
 ```
 
-### 3.2. Serialization
+### 4.2. Serialization
 
 If your Lambda targets the `netcoreapp3.1` framework, then by default, the serializer is set to  `DefaultLambdaJsonSerializer` from the `Amazon.Lambda.Serialization.SystemTextJson` package.  With any TFM, you may specify the serializer you want to use by setting the Lambda attribute's `Serializer` argument:
 
@@ -123,7 +152,7 @@ public partial class Lambda
 See a [full example of serializer customization](./examples/CustomSerializer/README.md). 
 
 
-### 3.3. Startup Class
+### 4.3. Startup Class
 
 The startup class configures services that are injected into the Lambda's IoC container / service collection.
 
@@ -169,7 +198,7 @@ namespace Your.Namespace
 }
 ```
 
-### 3.4. Customizing Configuration
+### 4.4. Customizing Configuration
 
 By default, configuration is environment variables-based. If you would like to use a file-based or other configuration scheme, you may supply a custom configuration factory to the Lambda attribute:
 
@@ -203,7 +232,7 @@ namespace Your.Namespace
 }
 ```
 
-### 3.5. Adding Options
+### 4.5. Adding Options
 
 You can add an options section by defining a class for that section, and annotating it with the [LambdaOptions attribute](src/Attributes/LambdaOptionsAttribute.cs). If any options are in encrypted form, add the [Encrypted attribute](src/Encryption/EncryptedAttribute.cs) to that property. When the options are requested, the [IDecryptionService](src/Encryption/IDecryptionService.cs) singleton in the container will be used to decrypt those properties. The [default decryption service](src/Encryption/DefaultDecryptionService.cs) uses KMS to decrypt values.
 
@@ -228,10 +257,10 @@ namespace Your.Namespace
 }
 ```
 
-### 3.6. Initialization Services
+### 4.6. Initialization Services
 Initialization services can be used to initialize data or perform some task before the lambda is run.  Initialization services should implement [ILambdaInitializationService](src/Core/ILambdaInitializationService.cs) and be injected into the container as singletons at startup.
 
-### 3.7. Handler Scheme
+### 4.7. Handler Scheme
 
 When configuring your lambda on AWS, the method name you'll want to use will be `Run` (NOT `Handle`). For context, `Run` is a static method is generated on your class during compilation that takes care of setting up the IoC container (if it hasn't been already).
 
@@ -241,26 +270,30 @@ So, going off the example above, the handler scheme would look like this:
 Your.Assembly.Name::Your.Namespace.YourLambda::Run
 ```
 
-## 4. Examples
+## 5. Examples
 
 - [Injecting and using AWS Services + Factories](examples/AwsClientFactories)
 - [Automatic decryption of encrypted options](examples/EncryptedOptions)
 - [Using a custom serializer](examples/CustomSerializer/README.md)
 
-## 5. Acknowledgments
+## 6. Acknowledgments
 
 1. [CodeGeneration.Roslyn](https://github.com/aarnott/codegeneration.roslyn) - Used for compile-time code generation using attributes.
 2. [Simple Lambda Dependency Injection in AWS Lambda .NET Core](https://dev.to/gary_woodfine/simple-dependency-injection-in-aws-lambda-net-core-n0g) by Gary Woodfine - primary inspiration for this project.
 
-## 6. Contributing
+## 7. Donations
+
+If you use this project and find it useful, please consider donating.  Donations are accepted via [Github Sponsors](https://github.com/sponsors/cythral) and [PayPal](https://www.paypal.com/paypalme/cythral).
+
+## 8. Contributing
 
 Issues and feature requests may be reported anonymously on [JIRA Cloud](https://cythral.atlassian.net/jira/software/c/projects/LAMBJ/issues).
-Pull requests are always welcome! See the [contributing guide](CONTRIBUTING.md).
+Pull requests are always welcome! See the [contributing guide](CONTRIBUTING.md) for more information.
 
-## 7. Security
+## 9. Security
 
 Security issues can be reported on our JIRA.  See our [security policy](SECURITY.md) for more information. 
 
-## 8. License
+## 10. License
 
 This project is licensed under the [MIT License](LICENSE.txt).

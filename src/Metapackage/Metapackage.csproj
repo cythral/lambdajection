@@ -12,7 +12,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Cythral.CodeGeneration.Roslyn.Tool" PrivateAssets="none" />
+    <PackageReference Include="Cythral.CodeGeneration.Roslyn.Tool" Version="0.9.2" PrivateAssets="none" />
   </ItemGroup>
 
   <ItemGroup>

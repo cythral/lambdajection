@@ -1,0 +1,34 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <PackageType>Template</PackageType>
+        <TargetFramework>netstandard2.1</TargetFramework>
+        <PackageId>Lambdajection.Templates</PackageId>
+        <AssemblyName>$(PackageId)</AssemblyName>
+        <NoWarn>NU5128;NU5131</NoWarn>
+        <IncludeBuildOutput>false</IncludeBuildOutput>
+        <IncludeContentInPack>true</IncludeContentInPack>
+        <PackageDescription>Includes templates for creating Lambdajection projects and components.</PackageDescription>
+        <BeforePack>PrepareTemplates</BeforePack>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Compile Remove="$(IntermediateOutputPath)\templates\**" />
+    </ItemGroup>
+
+    <Target Name="PrepareTemplates" DependsOnTargets="GetBuildVersion">
+        <ItemGroup>
+            <_Templates Include="$(MSBuildThisFileDirectory)..\..\templates\*\**" />
+        </ItemGroup>
+
+        <MakeDir Directories="$(IntermediateOutputPath)\templates" />
+        <Copy SourceFiles="@(_Templates)" DestinationFiles="$(IntermediateOutputPath)\templates\%(RecursiveDir)%(Filename)%(Extension)" />
+        <Exec Command="dotnet orang replace $(IntermediateOutputPath)/templates -c '$$LambdajectionVersion' l -r '$(NuGetPackageVersion)'" StandardOutputImportance="Low" />
+
+        <ItemGroup>
+            <FileWrites Include="$(IntermediateOutputPath)\templates\**" />
+            <Content Include="$(IntermediateOutputPath)\templates\**" Pack="true" PackagePath="content" />
+        </ItemGroup>
+    </Target>
+
+</Project>

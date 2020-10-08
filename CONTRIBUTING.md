@@ -33,7 +33,7 @@ Before opening a pull request, please perform the following checks:
 
 - The project builds without any errors (`dotnet build`).
 - All tests pass (`dotnet test`).
-- Formatting errors [are fixed](#auto-formatting).
+- Formatting errors [are fixed](#31-auto-formatting).
 - Your code makes minimal use of reflection in favor of code generation wherever possible.
 - Documentation comments are added to public facing APIs.
 - README documentation should be updated if applicable.
@@ -45,10 +45,8 @@ Before opening a pull request, please perform the following checks:
 To automatically fix any formatting errors, run the following command:
 
 ```shell
-dotnet format --fix-style info
+dotnet msbuild -t:format
 ```
-
-You may need to run `dotnet tool restore` to get access to this command.
 
 ## 4. Testing
 
@@ -78,10 +76,7 @@ Testing is done with NUnit, NSubstitute and FluentAssertions. Please use FluentA
 
 ## 5. Versioning
 
-We use SemVer for versioning our project, and every merge-commit into master indicates a release (packages will automatically deploy to NuGet from master).
-
-1. Maintainers will make a new version branch for each version, and squash-merge in changes going into that version.
-2. Once that version is ready to release, the version branch will be merged into master using a merge commit.
+We use SemVer for versioning our project, and every tag pushed to the repository indicates a release (packages will automatically deploy to NuGet from tags and Github Packages everywhere else).
 
 ### 5.1. Patch Fixes to Earlier Versions
 
@@ -90,17 +85,16 @@ We try to use a roll-forward method of making changes, rather than going back an
 ### 5.2. Starting a new Version
 
 1. Create a new version in JIRA
-2. Create a ticket in JIRA for releasing that version
-3. Create a branch with the JIRA ticket ID made in step 2.
-4. Update version.json with the new version number
-5. Create a release notes file in .github/releases
+2. Create a ticket in JIRA for release preparations
+3. Update version.json with the new version number
+4. Create a release notes file in .github/releases
+5. Create a PR with the release preparations done in step 3 and 4.
 
 ## 6. Gotchas & Tips
 
-- To add a new dependency to a project, delete the project's lock file first, before running `dotnet add package`.
-- To regenerate all lock files, run `make relock`.
+- To add a new dependency to a project, run `dotnet add package [package] --no-restore` then `dotnet restore --force-evaluate`
 - The [Markdown All-In-One VSCode extension](https://marketplace.visualstudio.com/items?itemName=yzhang.markdown-all-in-one) can be used to update table of contents in the README and contributing guide.
-- Use [Merge Scheduler](https://github.com/gr2m/merge-schedule-action) to schedule release PRs for a specific date.
+- To run a build without checking formatting, do `dotnet build -p:RunFormatter=false` (formatting can sometimes take awhile, be sure to run formatters after you're done iterating though).
 
 ## 7. Licensing
 
