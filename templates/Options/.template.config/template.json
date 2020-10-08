@@ -20,13 +20,13 @@
             "continueOnError": false,
             "manualInstructions": [
                 {
-                    "text": "Run 'dotnet add package Lambdajection.Encryption --version $$LambdajectionVersion'"
+                    "text": "Run 'dotnet add package Lambdajection.Encryption --version __LambdajectionVersion__'"
                 }
             ],
             "args": {
                 "referenceType": "package",
                 "reference": "Lambdajection.Encryption",
-                "version": "$$LambdajectionVersion",
+                "version": "__LambdajectionVersion__",
                 "projectFileExtensions": ".csproj"
             }
         }

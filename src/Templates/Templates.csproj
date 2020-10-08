@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <PackageType>Template</PackageType>
@@ -9,26 +9,39 @@
         <IncludeBuildOutput>false</IncludeBuildOutput>
         <IncludeContentInPack>true</IncludeContentInPack>
         <PackageDescription>Includes templates for creating Lambdajection projects and components.</PackageDescription>
-        <BeforePack>PrepareTemplates</BeforePack>
+        <BeforePack>CopyTemplates;PrepareTemplates</BeforePack>
     </PropertyGroup>
 
     <ItemGroup>
         <Compile Remove="$(IntermediateOutputPath)\templates\**" />
+        <TemplateSource Include="$(MSBuildThisFileDirectory)..\..\templates\*\**" />
+        <TemplateSourceFile Include="@(TemplateSource)">
+          <Destination>$(IntermediateOutputPath)templates\%(RecursiveDir)%(Filename)%(Extension)</Destination>
+        </TemplateSourceFile>
     </ItemGroup>
 
-    <Target Name="PrepareTemplates" DependsOnTargets="GetBuildVersion">
-        <ItemGroup>
-            <_Templates Include="$(MSBuildThisFileDirectory)..\..\templates\*\**" />
-        </ItemGroup>
+    <Target Name="CopyTemplates" DependsOnTargets="GetBuildVersion">
+        <MakeDir Directories="$(IntermediateOutputPath)templates" />
+        <Copy SourceFiles="@(TemplateSourceFile)" DestinationFiles="%(Destination)">
+          <Output TaskParameter="CopiedFiles" ItemName="Template" />
+        </Copy>
+    </Target>
 
-        <MakeDir Directories="$(IntermediateOutputPath)\templates" />
-        <Copy SourceFiles="@(_Templates)" DestinationFiles="$(IntermediateOutputPath)\templates\%(RecursiveDir)%(Filename)%(Extension)" />
-        <Exec Command="dotnet orang replace $(IntermediateOutputPath)templates -c '$$LambdajectionVersion' l -r '$(NuGetPackageVersion)'" />
+    <Target Name="PrepareTemplates" Outputs="%(TemplateSourceFile.Destination)" AfterTargets="CopyTemplates">
+        <PropertyGroup>
+          <PackagePath>$([System.String]::Copy(%(TemplateSourceFile.Destination)).Replace('$(IntermediateOutputPath)templates', ''))</PackagePath>
+          <FileContents>$([System.IO.File]::ReadAllText(%(TemplateSourceFile.Destination)).Replace('__LambdajectionVersion__','$(NuGetPackageVersion)'))</FileContents>
+        </PropertyGroup>
 
-        <ItemGroup>
-            <FileWrites Include="$(IntermediateOutputPath)\templates\**" />
-            <Content Include="$(IntermediateOutputPath)\templates\**" Pack="true" PackagePath="content" />
-        </ItemGroup>
+        <WriteLinesToFile
+          File="%(TemplateSourceFile.Destination)"
+          Lines="$(FileContents)"
+          Overwrite="true"
+        />
+      
+      <ItemGroup>
+        <Content Include="%(TemplateSourceFile.Destination)" Pack="true" PackagePath="content$(PackagePath)" />
+      </ItemGroup>
     </Target>
 
 </Project>

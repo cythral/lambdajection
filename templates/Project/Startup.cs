@@ -1,4 +1,3 @@
-
 using Lambdajection.Core;
 
 using Microsoft.Extensions.Configuration;

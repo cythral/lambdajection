@@ -22,7 +22,7 @@
             "type": "parameter",
             "description": "Version of Lambdajection to use",
             "replaces": "$(LambdajectionVersion)",
-            "defaultValue": "$$LambdajectionVersion"
+            "defaultValue": "__LambdajectionVersion__"
         },
         "encryption": {
             "type": "parameter",
