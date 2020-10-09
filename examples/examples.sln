@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AwsClientFactories", "AwsCl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomSerializer", "CustomSerializer\CustomSerializer.csproj", "{98D76580-934D-450B-9FB5-0D5B76465D22}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomConfiguration", "CustomConfiguration\CustomConfiguration.csproj", "{02804CA8-1838-47C9-9882-9227FD8B923B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -58,5 +60,17 @@ Global
 		{98D76580-934D-450B-9FB5-0D5B76465D22}.Release|x64.Build.0 = Release|Any CPU
 		{98D76580-934D-450B-9FB5-0D5B76465D22}.Release|x86.ActiveCfg = Release|Any CPU
 		{98D76580-934D-450B-9FB5-0D5B76465D22}.Release|x86.Build.0 = Release|Any CPU
+		{02804CA8-1838-47C9-9882-9227FD8B923B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{02804CA8-1838-47C9-9882-9227FD8B923B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{02804CA8-1838-47C9-9882-9227FD8B923B}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{02804CA8-1838-47C9-9882-9227FD8B923B}.Debug|x64.Build.0 = Debug|Any CPU
+		{02804CA8-1838-47C9-9882-9227FD8B923B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{02804CA8-1838-47C9-9882-9227FD8B923B}.Debug|x86.Build.0 = Debug|Any CPU
+		{02804CA8-1838-47C9-9882-9227FD8B923B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{02804CA8-1838-47C9-9882-9227FD8B923B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{02804CA8-1838-47C9-9882-9227FD8B923B}.Release|x64.ActiveCfg = Release|Any CPU
+		{02804CA8-1838-47C9-9882-9227FD8B923B}.Release|x64.Build.0 = Release|Any CPU
+		{02804CA8-1838-47C9-9882-9227FD8B923B}.Release|x86.ActiveCfg = Release|Any CPU
+		{02804CA8-1838-47C9-9882-9227FD8B923B}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

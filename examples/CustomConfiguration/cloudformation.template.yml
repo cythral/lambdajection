@@ -1,0 +1,20 @@
+Transform: AWS::Serverless-2016-10-31
+Resources:
+  CustomConfiguration:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: CustomConfiguration::Lambdajection.Examples.CustomConfiguration.Handler::Run
+      Runtime: dotnetcore3.1
+      FunctionName: CustomConfiguration
+      Timeout: 300
+      CodeUri: ../../bin/Examples/CustomConfiguration/Release/netcoreapp3.1/publish/
+      MemorySize: 512
+      Policies:
+        - AWSLambdaExecute
+
+Outputs:
+  InputPayload:
+    Value: "{}"
+
+  ExpectedOutput:
+    Value: '"Bar"'
