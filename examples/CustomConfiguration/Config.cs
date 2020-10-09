@@ -1,6 +1,6 @@
 using Lambdajection.Attributes;
 
-namespace Lambdajection.Examples.ConfigFactory
+namespace Lambdajection.Examples.CustomConfiguration
 {
     [LambdaOptions(typeof(Handler), "Config")]
     public class Config

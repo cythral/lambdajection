@@ -4,7 +4,7 @@ using Lambdajection.Core;
 
 using Microsoft.Extensions.Configuration;
 
-namespace Lambdajection.Examples.ConfigFactory
+namespace Lambdajection.Examples.CustomConfiguration
 {
     public class ConfigFactory : ILambdaConfigFactory
     {

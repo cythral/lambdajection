@@ -6,7 +6,7 @@ using Lambdajection.Attributes;
 
 using Microsoft.Extensions.Options;
 
-namespace Lambdajection.Examples.ConfigFactory
+namespace Lambdajection.Examples.CustomConfiguration
 {
     [Lambda(typeof(Startup), ConfigFactory = typeof(ConfigFactory))]
     public partial class Handler

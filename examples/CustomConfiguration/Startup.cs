@@ -3,7 +3,7 @@ using Lambdajection.Core;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Lambdajection.Examples.ConfigFactory
+namespace Lambdajection.Examples.CustomConfiguration
 {
     public class Startup : ILambdaStartup
     {
