@@ -48,7 +48,6 @@ dotnet add package Lambdajection
 ```
 
 ### 1.2. Templates
-> ℹ Templates will be available starting in v0.5.0-beta1
 
 ```
 dotnet new -i Lambdajection.Templates
@@ -91,7 +90,6 @@ Finally, you may use development builds by adding the package and version to you
 | Lambdajection.Templates  | ![Nuget](https://img.shields.io/nuget/v/Lambdajection.Templates?label=version&style=flat-square) ![Nuget](https://img.shields.io/nuget/dt/Lambdajection.Templates?color=blue&style=flat-square)   |
 
 ## 3. Templates
-> ℹ Templates will be available starting in v0.5.0-beta1
 
 Lambdajection .NET templates are available for your convenience.  Run `dotnet new [template-name] --help` to see a list of available options for each template.
 
@@ -269,10 +267,10 @@ namespace Your.Namespace
 ```
 
 ### 4.6. Initialization Services
+
 Initialization services can be used to initialize data or perform some task before the lambda is run.  Initialization services should implement [ILambdaInitializationService](src/Core/ILambdaInitializationService.cs) and be injected into the container as singletons at startup.
 
 ### 4.7. Disposers
-> ℹ Disposers will be fully supported starting in v0.5.0-beta1
 
 Disposers can be used to run object finalization and mark for garbage collection. Lambdajection supports Lambdas that implement either [IDisposable](https://docs.microsoft.com/en-us/dotnet/api/system.idisposable), [IAsyncDisposable](https://docs.microsoft.com/en-us/dotnet/api/system.iasyncdisposable) or both.  If you implement both, DisposeAsync will be preferred.
 
