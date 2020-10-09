@@ -241,6 +241,8 @@ namespace Your.Namespace
 }
 ```
 
+See the [full example here](./examples/CustomConfiguration/README.md).
+
 ### 4.5. Adding Options
 
 You can add an options section by defining a class for that section, and annotating it with the [LambdaOptions attribute](src/Attributes/LambdaOptionsAttribute.cs). If any options are in encrypted form, add the [Encrypted attribute](src/Encryption/EncryptedAttribute.cs) to that property. When the options are requested, the [IDecryptionService](src/Encryption/IDecryptionService.cs) singleton in the container will be used to decrypt those properties. The [default decryption service](src/Encryption/DefaultDecryptionService.cs) uses KMS to decrypt values.
@@ -289,6 +291,7 @@ Your.Assembly.Name::Your.Namespace.YourLambda::Run
 - [Injecting and using AWS Services + Factories](examples/AwsClientFactories)
 - [Automatic decryption of encrypted options](examples/EncryptedOptions)
 - [Using a custom serializer](examples/CustomSerializer/README.md)
+- [Using a custom config factory](examples/CustomConfiguration/README.md)
 
 ## 6. Acknowledgments
 
