@@ -24,7 +24,7 @@ jobs:
           fetch-depth: 0
 
       - name: Get Commit Message
-        run: echo COMMIT_MESSAGE=$(git log --format=%B -n 1 ${{ github.event.after }} | sed 's/\\n/%0A/g') >> $GITHUB_ENV
+        run: echo "COMMIT_MESSAGE=$(git log --format=%B -n 1 ${{ github.event.after }} | sed 's/\\n/%0A/g')" >> $GITHUB_ENV
 
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v1
