@@ -52,24 +52,24 @@
 
         <!-- Main -->
         <Exec Command="dotnet format $(MSBuildThisFileDirectory)lambdajection.sln --fix-style info --check" ConsoleToMsBuild="true" IgnoreExitCode="true">
-            <Output TaskParameter="ExitCode" PropertyName="_FormatExitCode" />
+            <Output TaskParameter="ExitCode" PropertyName="_FormatMainExitCode" />
         </Exec>
-        <Message Importance="High" Condition="'$(_FormatExitCode)' != '0'" Text="%0ARun the following command to attempt to automatically fix formatting issues:%0Adotnet msbuild -t:format%0A" />
-        <Error Condition="'$(_FormatExitCode)' != '0'" File="$(MSBuildThisFileDirectory)lambdajection.sln" Text=" Fix formatting issues." />
+        <Message Importance="High" Condition="'$(_FormatMainExitCode)' != '0'" Text="%0ARun the following command to attempt to automatically fix formatting issues:%0Adotnet msbuild -t:format%0A" />
+        <Error Condition="'$(_FormatMainExitCode)' != '0'" File="$(MSBuildThisFileDirectory)lambdajection.sln" Text=" Fix formatting issues." />
 
         <!-- Examples -->
         <Exec Command="dotnet format $(MSBuildThisFileDirectory)examples/examples.sln --fix-style info --check" ConsoleToMsBuild="true" IgnoreExitCode="true">
-            <Output TaskParameter="ExitCode" PropertyName="_FormatExitCode" />
+            <Output TaskParameter="ExitCode" PropertyName="_FormatExamplesExitCode" />
         </Exec>
-        <Message Importance="High" Condition="'$(_FormatExitCode)' != '0'" Text="%0ARun the following command to attempt to automatically fix formatting issues:%0Adotnet msbuild -t:format%0A" />
-        <Error Condition="'$(_FormatExitCode)' != '0'" File="$(MSBuildThisFileDirectory)examples/examples.sln" Text=" Fix formatting issues." />
+        <Message Importance="High" Condition="'$(_FormatExamplesExitCode)' != '0'" Text="%0ARun the following command to attempt to automatically fix formatting issues:%0Adotnet msbuild -t:format%0A" />
+        <Error Condition="'$(_FormatExamplesExitCode)' != '0'" File="$(MSBuildThisFileDirectory)examples/examples.sln" Text=" Fix formatting issues." />
 
         <!-- Templates -->
         <Exec Command="dotnet format $(MSBuildThisFileDirectory)templates/templates.sln --fix-style info --check" ConsoleToMsBuild="true" IgnoreExitCode="true">
-            <Output TaskParameter="ExitCode" PropertyName="_FormatExitCode" />
+            <Output TaskParameter="ExitCode" PropertyName="_FormatTemplatesExitCode" />
         </Exec>
-        <Message Importance="High" Condition="'$(_FormatExitCode)' != '0'" Text="%0ARun the following command to attempt to automatically fix formatting issues:%0Adotnet msbuild -t:format%0A" />
-        <Error Condition="'$(_FormatExitCode)' != '0'" File="$(MSBuildThisFileDirectory)templates/templates.sln" Text=" Fix formatting issues." />
+        <Message Importance="High" Condition="'$(_FormatTemplatesExitCode)' != '0'" Text="%0ARun the following command to attempt to automatically fix formatting issues:%0Adotnet msbuild -t:format%0A" />
+        <Error Condition="'$(_FormatTemplatesExitCode)' != '0'" File="$(MSBuildThisFileDirectory)templates/templates.sln" Text=" Fix formatting issues." />
     </Target>
 
     <Target Name="Format" DependsOnTargets="Restore;RestoreTools">
