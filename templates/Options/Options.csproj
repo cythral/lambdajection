@@ -4,14 +4,11 @@
         <TargetFramework>netcoreapp3.1</TargetFramework>
         <LangVersion>8.0</LangVersion>
         <Nullable>enable</Nullable>
-        <RootNamespace>__Project__</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
         <PackageReference Include="Lambdajection" Version="$(LambdajectionVersion)" />
-        <!--#if (encryption) -->
         <PackageReference Include="Lambdajection.Encryption" Version="$(LambdajectionVersion)" />
-        <!--#endif -->
+        <ProjectReference Include="../Project/Project.csproj" />
     </ItemGroup>
-
 </Project>

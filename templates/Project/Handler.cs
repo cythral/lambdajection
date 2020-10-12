@@ -4,7 +4,7 @@ using Amazon.Lambda.Core;
 
 using Lambdajection.Attributes;
 
-namespace Project
+namespace __Project__
 {
     [Lambda(typeof(Startup))]
     public partial class Handler

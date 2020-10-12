@@ -35,7 +35,8 @@
         "namespace": {
             "type": "parameter",
             "description": "Namespace for the Lambda project",
-            "replaces": "Project"
+            "replaces": "__Project__",
+            "defaultValue": "Project"
         },
         "sectionName": {
             "type": "parameter",
@@ -45,7 +46,9 @@
         "className": {
             "type": "parameter",
             "description": "Name of the options class",
-            "replaces": "Options"
+            "FileRename": "Options",
+            "replaces": "__Options__",
+            "defaultValue": "Options"
         },
         "handlerName": {
             "type": "parameter",

@@ -3,7 +3,7 @@ using Lambdajection.Core;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Project
+namespace __Project__
 {
     public class Startup : ILambdaStartup
     {

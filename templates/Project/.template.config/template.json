@@ -16,7 +16,9 @@
         "namespace": {
             "type": "parameter",
             "description": "Namespace for the Lambda project",
-            "replaces": "Project"
+            "replaces": "__Project__",
+            "FileRename": "Project",
+            "defaultValue": "Project"
         },
         "version": {
             "type": "parameter",
