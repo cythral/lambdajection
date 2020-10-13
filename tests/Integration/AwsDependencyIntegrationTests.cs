@@ -31,13 +31,15 @@ namespace Lambdajection.Tests.Integration.AwsDependency
         private readonly ILogger<ExampleLambda> logger;
         private readonly IAmazonS3 s3Client;
         private readonly IAwsFactory<IAmazonS3> s3Factory;
+        private readonly IAwsFactory<IAmazonSecurityTokenService> stsFactory;
 
-        public ExampleLambda(ExampleBar exampleService, ILogger<ExampleLambda> logger, IAmazonS3 s3Client, IAwsFactory<IAmazonS3> s3Factory)
+        public ExampleLambda(ExampleBar exampleService, ILogger<ExampleLambda> logger, IAmazonS3 s3Client, IAwsFactory<IAmazonS3> s3Factory, IAwsFactory<IAmazonSecurityTokenService> stsFactory)
         {
             this.exampleBar = exampleService;
             this.logger = logger;
             this.s3Client = s3Client;
             this.s3Factory = s3Factory;
+            this.stsFactory = stsFactory;
         }
 
         public Task<string> Handle(string request, ILambdaContext context)
@@ -45,6 +47,7 @@ namespace Lambdajection.Tests.Integration.AwsDependency
             logger.LogInformation("Test Logging Works");
             logger.LogInformation("S3 Client null: " + s3Client is null ? "true" : "false");
             logger.LogInformation("S3 Factory null: " + s3Factory is null ? "true" : "false");
+            logger.LogInformation("STS Factory null: " + stsFactory is null ? "true" : "false");
 
             return Task.FromResult(request + " " + exampleBar.Bar());
         }

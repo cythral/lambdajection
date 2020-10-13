@@ -291,10 +291,9 @@ namespace Lambdajection.Generator
             {
                 var services = scanResults.AwsServices;
 
-                if (includeFactories && services.Any())
+                if (includeFactories && !services.Any(service => service.ServiceName == "SecurityTokenService"))
                 {
-                    services = services.Where(service => service.ServiceName != "SecurityTokenService");
-                    yield return ParseStatement($"services.AddSingleton<IAmazonSecurityTokenService, AmazonSecurityTokenServiceClient>();");
+                    services = services.Prepend(new AwsServiceMetadata("SecurityTokenService", "IAmazonSecurityTokenService", "AmazonSecurityTokenServiceClient", "Amazon.SecurityToken"));
                 }
 
                 foreach (var service in services)
@@ -332,13 +331,20 @@ namespace Lambdajection.Generator
 
             if (includeFactories)
             {
-                if (scanResults.AwsServices.Any())
+                var services = scanResults.AwsServices;
+
+                if (!services.Any(service => service.ServiceName == "SecurityTokenService"))
+                {
+                    services = services.Prepend(new AwsServiceMetadata("SecurityTokenService", "IAmazonSecurityTokenService", "AmazonSecurityTokenServiceClient", "Amazon.SecurityToken"));
+                }
+
+                if (services.Any())
                 {
                     usingsAddedDuringGeneration.Add("Amazon.SecurityToken");
                     usingsAddedDuringGeneration.Add("Amazon.SecurityToken.Model");
                 }
 
-                foreach (var service in scanResults.AwsServices)
+                foreach (var service in services)
                 {
                     var factory = GenerateAwsFactory(service.ServiceName, service.InterfaceName, service.ImplementationName);
                     classDeclaration = classDeclaration.AddMembers(factory);
