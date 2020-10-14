@@ -5,7 +5,7 @@ Resources:
     Properties:
       Handler: CustomConfiguration::Lambdajection.Examples.CustomConfiguration.Handler::Run
       Runtime: dotnetcore3.1
-      FunctionName: CustomConfiguration
+      FunctionName: lambdajection-customconfiguration
       Timeout: 300
       CodeUri: ../../bin/Examples/CustomConfiguration/Release/netcoreapp3.1/publish/
       MemorySize: 512

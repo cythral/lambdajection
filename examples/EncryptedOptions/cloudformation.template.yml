@@ -5,7 +5,7 @@ Resources:
     Properties:
       Handler: EncryptedOptions::Lambdajection.Examples.EncryptedOptions.Handler::Run
       Runtime: dotnetcore3.1
-      FunctionName: EncryptedOptions
+      FunctionName: lambdajection-encryptedoptions
       Timeout: 300
       CodeUri: ../../bin/Examples/EncryptedOptions/Release/netcoreapp3.1/publish/
       MemorySize: 512
