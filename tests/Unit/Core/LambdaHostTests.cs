@@ -80,6 +80,62 @@ namespace Lambdajection.Core.Tests
         }
 
         [Test]
+        public async Task RunDisposesInitializationServices()
+        {
+            var expectedResponse = "expectedResponse";
+            var lambda = Substitute.For<TestLambda>();
+            lambda.Handle(Arg.Any<object>(), Arg.Any<ILambdaContext>()).Returns(expectedResponse);
+
+            var initializationService = Substitute.For<ILambdaInitializationService, IDisposable>();
+
+            var collection = new ServiceCollection();
+            collection.AddSingleton(initializationService);
+            collection.AddSingleton(lambda);
+
+            var provider = collection.BuildServiceProvider();
+            await using var host = new TestLambdaHost(lambdaHost =>
+            {
+                lambdaHost.ServiceProvider = provider;
+                lambdaHost.RunInitializationServices = true;
+            });
+
+            var request = new object();
+            var context = Substitute.For<ILambdaContext>();
+
+            await host.Run(request, context);
+
+            initializationService.As<IDisposable>().Received().Dispose();
+        }
+
+        [Test]
+        public async Task RunDisposesInitializationServicesAsync()
+        {
+            var expectedResponse = "expectedResponse";
+            var lambda = Substitute.For<TestLambda>();
+            lambda.Handle(Arg.Any<object>(), Arg.Any<ILambdaContext>()).Returns(expectedResponse);
+
+            var initializationService = Substitute.For<ILambdaInitializationService, IAsyncDisposable>();
+
+            var collection = new ServiceCollection();
+            collection.AddSingleton(initializationService);
+            collection.AddSingleton(lambda);
+
+            var provider = collection.BuildServiceProvider();
+            await using var host = new TestLambdaHost(lambdaHost =>
+            {
+                lambdaHost.ServiceProvider = provider;
+                lambdaHost.RunInitializationServices = true;
+            });
+
+            var request = new object();
+            var context = Substitute.For<ILambdaContext>();
+
+            await host.Run(request, context);
+
+            await initializationService.As<IAsyncDisposable>().Received().DisposeAsync();
+        }
+
+        [Test]
         public async Task RunDoesNotRunInitializationServicesIfPropertySetToFalse()
         {
             var expectedResponse = "expectedResponse";
