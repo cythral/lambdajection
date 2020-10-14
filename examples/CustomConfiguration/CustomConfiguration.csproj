@@ -3,6 +3,7 @@
     <PropertyGroup>
         <TargetFramework>netcoreapp3.1</TargetFramework>
         <NoWarn>IDE0052</NoWarn>
+        <SkipEndToEndTest>true</SkipEndToEndTest>
     </PropertyGroup>
 
     <ItemGroup>

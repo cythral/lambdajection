@@ -8,12 +8,14 @@
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <NoWarn>NU5118</NoWarn>
     <PackageDescription>Includes the compile-time generator used to generate code needed for Dependency Injection-enabled AWS Lambdas.</PackageDescription>
   </PropertyGroup>
 
   <ItemGroup>
     <None Include="Generator.props" Pack="true" PackagePath="build/" KeepDuplicates="false" />
     <PackageBuildFolderProjectImport Include="@(None->'%(Filename)%(Extension)')" />
+    <PluginRequestedProperty Include="GenerateLambdajectionEntrypoint" />
   </ItemGroup>
 
   <ItemGroup>

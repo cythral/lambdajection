@@ -1,0 +1,8 @@
+<Project>
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <PublishReadyToRun Condition="$([MSBuild]::IsOSPlatform('Linux'))">true</PublishReadyToRun>
+        <RuntimeIdentifier>linux-x64</RuntimeIdentifier>
+        <GenerateLambdajectionEntrypoint>true</GenerateLambdajectionEntrypoint>
+    </PropertyGroup>
+</Project>

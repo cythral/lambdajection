@@ -4,11 +4,13 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Handler: EncryptedOptions::Lambdajection.Examples.EncryptedOptions.Handler::Run
-      Runtime: dotnetcore3.1
+      Runtime: provided.al2
       FunctionName: lambdajection-encryptedoptions
       Timeout: 300
-      CodeUri: ../../bin/Examples/EncryptedOptions/Release/netcoreapp3.1/publish/
+      CodeUri: ../../bin/Examples/EncryptedOptions/Release/net5.0/linux-x64/publish/
       MemorySize: 512
+      Layers:
+        - !Sub arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:net5:2
       Policies:
         - AWSLambdaExecute
         # Replace this with the ARN of a policy containing the kms:Decrypt permission

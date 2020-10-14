@@ -1,5 +1,5 @@
 <Project>
-    <Target Name="EndToEndTest" DependsOnTargets="Publish">
+    <Target Name="EndToEndTest" DependsOnTargets="Publish" Condition="$(SkipEndToEndTest) != 'true'">
         <PropertyGroup>
             <_OutputFileName>$(IntermediateOutputPath)\$(ProjectName)-E2EResponse.txt</_OutputFileName>
             <_LambdaName>lambdajection-$(ProjectName.ToLower())</_LambdaName>
