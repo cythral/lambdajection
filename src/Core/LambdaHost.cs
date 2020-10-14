@@ -71,11 +71,13 @@ namespace Lambdajection.Core
 
         private async Task Initialize()
         {
-            var tasks = ServiceProvider
-                .GetServices<ILambdaInitializationService>()
-                .Select(service => service.Initialize());
+            var services = ServiceProvider.GetServices<ILambdaInitializationService>();
 
-            await Task.WhenAll(tasks);
+            var initializeTasks = services.Select(service => service.Initialize());
+            await Task.WhenAll(initializeTasks);
+
+            var disposeTasks = services.Select(MaybeDispose);
+            await Task.WhenAll(disposeTasks);
         }
 
         /// <summary>
@@ -92,7 +94,7 @@ namespace Lambdajection.Core
             SuppressFinalize(this);
         }
 
-        private static async ValueTask MaybeDispose(object? obj)
+        private static async Task MaybeDispose(object? obj)
         {
             if (obj is IAsyncDisposable asyncDisposable)
             {
