@@ -2,14 +2,15 @@
     <Target Name="EndToEndTest" DependsOnTargets="Publish">
         <PropertyGroup>
             <_OutputFileName>$(IntermediateOutputPath)\$(ProjectName)-E2EResponse.txt</_OutputFileName>
+            <_LambdaName>lambdajection-$(ProjectName.ToLower())</_LambdaName>
         </PropertyGroup>
 
-        <Deploy 
-            TemplateFile="$(MSBuildProjectDirectory)\cloudformation.template.yml" 
-            Package="true" 
-            PackageBucket="$(PackageBucket)" 
-            StackName="$(ProjectName)" 
-            ConfigFile="$(MSBuildProjectDirectory)\cloudformation.config.json" 
+        <Deploy
+            TemplateFile="$(MSBuildProjectDirectory)\cloudformation.template.yml"
+            Package="true"
+            PackageBucket="$(PackageBucket)"
+            StackName="$(_LambdaName)"
+            ConfigFile="$(MSBuildProjectDirectory)\cloudformation.config.json"
             Capabilities="CAPABILITY_IAM;CAPABILITY_AUTO_EXPAND"
             RoleArn="$(RoleArn)"
         />
@@ -24,7 +25,7 @@
             <Output TaskParameter="ConsoleOutput" ItemName="_ExpectedOutputLines" />
         </Exec>
 
-        <Exec Command="aws lambda invoke --function-name $(ProjectName) --payload '@(_InputPayload, '')' $(_OutputFileName)" StandardOutputImportance="low" />
+        <Exec Command="aws lambda invoke --function-name $(_LambdaName) --payload '@(_InputPayload, '')' $(_OutputFileName)" StandardOutputImportance="low" />
 
         <ReadLinesFromFile File="$(_OutputFileName)">
             <Output TaskParameter="Lines" ItemName="_ActualOutputLines" />

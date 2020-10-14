@@ -4,7 +4,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Handler: AwsClientFactories::Lambdajection.Examples.AwsClientFactories.Handler::Run
-      FunctionName: AwsClientFactories
+      FunctionName: lambdajection-awsclientfactories
       Runtime: dotnetcore3.1
       Timeout: 300
       CodeUri: ../../bin/Examples/AwsClientFactories/Release/netcoreapp3.1/publish/
