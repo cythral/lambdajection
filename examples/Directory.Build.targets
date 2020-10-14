@@ -38,5 +38,6 @@
 
         <Message Text="Success!" Condition="$(_ActualOutput) == $(_ExpectedOutput)" Importance="High" />
         <Message Text="Failed!" Condition="$(_ActualOutput) != $(_ExpectedOutput)" Importance="High" />
+        <Error Condition="$(_ActualOutput) != $(_ExpectedOutput)" File="$(MSBuildThisFileDirectory)examples.sln" Text="End to end test failed for $(_LambdaName)%0AGot: $(_ActualOutput)%0AWas expecting: $(_ExpectedOutput)%0A" />
     </Target>
 </Project>

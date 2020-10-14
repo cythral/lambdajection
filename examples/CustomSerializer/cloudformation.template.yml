@@ -22,11 +22,11 @@ Outputs:
   ExpectedOutput:
     Value: |
       {
-        "statusCode": 200,
-        "statusDescription": "200 OK",
-        "headers": {
-          "content-type": "text/html"
+        "statusCode":200,
+        "statusDescription":"200 OK",
+        "headers":{
+          "content-type":"text/html"
         },
-        "body": "<!DOCTYPE html>\n<html>\n<body>\n    <p>This HTML file was brought to you by the Lambdajection Custom Serializer Example.</p>\n</body>\n</html>",
-        "isBase64Encoded": false
+        "body":"<!DOCTYPE html>\n<html>\n<body>\n    <p>This HTML file was brought to you by the Lambdajection Custom Serializer Example.</p>\n</body>\n</html>",
+        "isBase64Encoded":false
       }
