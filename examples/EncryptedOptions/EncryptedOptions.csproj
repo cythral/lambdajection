@@ -3,6 +3,7 @@
     <TargetFramework>net5.0</TargetFramework>
     <RuntimeIdentifiers>osx-x64;linux-x64</RuntimeIdentifiers>
     <SelfContained>false</SelfContained>
+    <InvariantGlobalization>true</InvariantGlobalization>
   </PropertyGroup>
 
   <ItemGroup>
