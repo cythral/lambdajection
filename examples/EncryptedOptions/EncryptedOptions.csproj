@@ -1,13 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
-    <RuntimeIdentifiers>osx-x64;linux-x64</RuntimeIdentifiers>
-    <SelfContained>false</SelfContained>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Lambdajection" Version="$(LambdajectionVersion)" />
     <PackageReference Include="Lambdajection.Encryption" Version="$(LambdajectionVersion)" />
-    <PackageReference Include="Lambdajection.Runtime" Version="$(LambdajectionVersion)" />
   </ItemGroup>
 </Project>

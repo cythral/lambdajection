@@ -5,12 +5,10 @@ Resources:
     Properties:
       Handler: AwsClientFactories::Lambdajection.Examples.AwsClientFactories.Handler::Run
       FunctionName: lambdajection-awsclientfactories
-      Runtime: provided.al2
+      Runtime: dotnetcore3.1
       Timeout: 300
-      CodeUri: ../../bin/Examples/AwsClientFactories/Release/net5.0/linux-x64/publish/
+      CodeUri: ../../bin/Examples/AwsClientFactories/Release/netcoreapp3.1/publish/
       MemorySize: 512
-      Layers:
-        - !Sub arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:net5:3
       Policies:
         - AWSLambdaExecute
 

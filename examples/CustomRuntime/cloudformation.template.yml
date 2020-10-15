@@ -1,4 +1,9 @@
 Transform: AWS::Serverless-2016-10-31
+Parameters:
+  Net5LayerVersion:
+    Type: String
+    Description: Version number of the .NET 5 Lambda Layer to Use
+
 Resources:
   CustomRuntime:
     Type: AWS::Serverless::Function
@@ -10,7 +15,8 @@ Resources:
       CodeUri: ../../bin/Examples/CustomRuntime/Release/net5.0/linux-x64/publish/
       MemorySize: 512
       Layers:
-        - !Sub arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:net5:3
+        # https://github.com/cythral/dotnet-lambda-layer
+        - !Sub arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:net5:${Net5LayerVersion}
       Policies:
         - AWSLambdaExecute
 
