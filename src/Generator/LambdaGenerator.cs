@@ -470,11 +470,16 @@ namespace Lambdajection.Generator
 
             static MemberDeclarationSyntax GenerateDecryptPropertyMethod(string prop)
             {
-                var body = new StatementSyntax[] { ParseStatement($"options.{prop} = await decryptionService.Decrypt(options.{prop});") };
+                IEnumerable<StatementSyntax> GenerateBody()
+                {
+                    yield return ParseStatement($"Console.WriteLine(DateTimeOffset.Now.ToString(\"MM/dd/yyyy hh: mm:ss.fff tt\") + \" Decrypting {prop}\");");
+                    yield return ParseStatement($"options.{prop} = await decryptionService.Decrypt(options.{prop});");
+                    yield return ParseStatement($"Console.WriteLine(DateTimeOffset.Now.ToString(\"MM/dd/yyyy hh: mm:ss.fff tt\") + \" Finished Decrypting {prop}\");");
+                }
 
                 return MethodDeclaration(ParseTypeName("Task"), $"Decrypt{prop}")
                     .WithModifiers(TokenList(Token(PrivateKeyword), Token(AsyncKeyword)))
-                    .WithBody(Block(body));
+                    .WithBody(Block(GenerateBody()));
             }
 
             var decryptMethods = optionClass.EncryptedProperties.Select(prop => GenerateDecryptPropertyMethod(prop));
