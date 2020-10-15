@@ -31,6 +31,7 @@ Community contribution/pull requests are welcome and encouraged! See the [contri
   - [4.6. Initialization Services](#46-initialization-services)
   - [4.7. Disposers](#47-disposers)
   - [4.8. Handler Scheme](#48-handler-scheme)
+  - [4.9. Custom Runtimes](#49-custom-runtimes)
 - [5. Examples](#5-examples)
 - [6. Acknowledgments](#6-acknowledgments)
 - [7. Donations](#7-donations)
@@ -284,12 +285,39 @@ So, going off the example above, the handler scheme would look like this:
 Your.Assembly.Name::Your.Namespace.YourLambda::Run
 ```
 
+### 4.9. Custom Runtimes
+
+Lambdajection can be used with custom runtimes starting in v0.5.0-beta2, that way you can use a newer version of .NET as soon as it comes out, even if it is not an LTS release.  
+
+In order to use custom runtimes, add the `Lambdajection.Runtime` package to your csproj file. You must also specify the `RuntimeIdentifiers` property, with at least `linux-x64` included:
+
+```xml
+<Project>
+    <PropertyGroup>
+        <RuntimeIdentifiers>linux-x64</RuntimeIdentifiers>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Lambdajection" Version="$(LambdajectionVersion)" />
+        <PackageReference Include="Lambdajection.Runtime" Version="$(LambdajectionVersion)" />
+    </ItemGroup>
+</Project>
+```
+
+You may also optionally set the `SelfContained` property:
+  - Set it to true if you want to deploy as a self-contained package.  In this case, Lambdajection will automatically set your assembly name to `bootstrap`.
+  - Set it to false if you want to deploy as a framework dependent package, ie you installed .NET to a Lambda Layer and want to use that to cut-down on deployment package sizes. In this case, your assembly name will remain unchanged.  
+  - In both cases, a main method / program entrypoint will be generated for you with the aid of `Amazon.Lambda.RuntimeSupport`.
+
+See an example of a [non-self contained lambda using a custom runtime here](./examples/CustomRuntime). (Example documentation coming soon).  Note that the example is using [a Lambda Layer we deployed with a custom bootstrap file.](https://github.com/cythral/dotnet-lambda-layer)
+
 ## 5. Examples
 
 - [Injecting and using AWS Services + Factories](examples/AwsClientFactories)
 - [Automatic decryption of encrypted options](examples/EncryptedOptions)
 - [Using a custom serializer](examples/CustomSerializer/README.md)
 - [Using a custom config factory](examples/CustomConfiguration/README.md)
+- [Using a custom runtime](examples/CustomRuntime)
 
 ## 6. Acknowledgments
 
