@@ -63,14 +63,11 @@ namespace Lambdajection.Core
         /// <returns>The return value of the lambda.</returns>
         public async Task<TLambdaOutput> Run(TLambdaParameter parameter, ILambdaContext context)
         {
-            Console.WriteLine(DateTimeOffset.Now.ToString("MM/dd/yyyy hh:mm:ss.fff tt") + " Running initialization services");
             if (RunInitializationServices) await Initialize();
 
-            Console.WriteLine(DateTimeOffset.Now.ToString("MM/dd/yyyy hh:mm:ss.fff tt") + " Getting lambda from container");
             scope = ServiceProvider.CreateScope();
             lambda = scope.ServiceProvider.GetRequiredService<TLambda>();
 
-            Console.WriteLine(DateTimeOffset.Now.ToString("MM/dd/yyyy hh:mm:ss.fff tt") + " Running lambda handler");
             return await lambda.Handle(parameter, context);
         }
 
@@ -81,7 +78,6 @@ namespace Lambdajection.Core
             var initializeTasks = services.Select(service => service.Initialize());
             await Task.WhenAll(initializeTasks);
 
-            Console.WriteLine(DateTimeOffset.Now.ToString("MM/dd/yyyy hh:mm:ss.fff tt") + "Disposing initialization services");
             var disposeTasks = services.Select(MaybeDispose);
             await Task.WhenAll(disposeTasks);
         }

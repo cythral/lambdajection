@@ -244,10 +244,8 @@ namespace Lambdajection.Generator
 
                 IEnumerable<StatementSyntax> GenerateBody()
                 {
-                    yield return ParseStatement("Console.WriteLine(DateTimeOffset.Now.ToString(\"MM/dd/yyyy hh: mm:ss.fff tt\") + \"Lambda Begin\");");
                     yield return ParseStatement($"using var wrapper = HandlerWrapper.GetHandlerWrapper((Func<{inputType}, {contextType}, Task<{returnType}>>)Run, new DefaultLambdaJsonSerializer());");
                     yield return ParseStatement($"using var bootstrap = new LambdaBootstrap(wrapper);");
-                    yield return ParseStatement("Console.WriteLine(DateTimeOffset.Now.ToString(\"MM/dd/yyyy hh: mm:ss.fff tt\") + \" Running Bootstrap\");");
                     yield return ParseStatement($"await bootstrap.RunAsync();");
                 }
 
@@ -472,9 +470,7 @@ namespace Lambdajection.Generator
             {
                 IEnumerable<StatementSyntax> GenerateBody()
                 {
-                    yield return ParseStatement($"Console.WriteLine(DateTimeOffset.Now.ToString(\"MM/dd/yyyy hh: mm:ss.fff tt\") + \" Decrypting {prop}\");");
                     yield return ParseStatement($"options.{prop} = await decryptionService.Decrypt(options.{prop});");
-                    yield return ParseStatement($"Console.WriteLine(DateTimeOffset.Now.ToString(\"MM/dd/yyyy hh: mm:ss.fff tt\") + \" Finished Decrypting {prop}\");");
                 }
 
                 return MethodDeclaration(ParseTypeName("Task"), $"Decrypt{prop}")
