@@ -1,5 +1,6 @@
 <Project>
     <PropertyGroup>
+        <PublishReadyToRunShowWarnings>true</PublishReadyToRunShowWarnings>
         <OutputPath>$(MSBuildThisFileDirectory)..\bin\Examples\$(MSBuildProjectName)\$(Configuration)</OutputPath>
         <BaseIntermediateOutputPath>$(MSBuildThisFileDirectory)..\obj\Examples\$(MSBuildProjectName)</BaseIntermediateOutputPath>
         <PackageOutputPath>$(MSBuildThisFileDirectory)..\bin\Packages\Examples\$(Configuration)</PackageOutputPath>
@@ -19,6 +20,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Cythral.CloudFormation.BuildTasks" Version="0.1.1" />
+        <PackageReference Include="Cythral.CloudFormation.BuildTasks" Version="0.2.3" />
     </ItemGroup>
 </Project>

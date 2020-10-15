@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>netstandard2.1</TargetFramework>
+        <IncludeBuildOutput>false</IncludeBuildOutput>
+        <PackageId>Lambdajection.Runtime</PackageId>
+        <AssemblyName>$(PackageId)</AssemblyName>
+        <NoWarn>NU5128</NoWarn>
+        <PackageDescription>Sets Lambdajection projects up to support custom runtimes.</PackageDescription>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Content Include="build/**" Pack="true" PackagePath="build/" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Amazon.Lambda.RuntimeSupport" Version="1.1.1" />
+    </ItemGroup>
+</Project>

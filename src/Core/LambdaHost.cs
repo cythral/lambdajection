@@ -66,6 +66,7 @@ namespace Lambdajection.Core
 
             scope = ServiceProvider.CreateScope();
             lambda = scope.ServiceProvider.GetRequiredService<TLambda>();
+
             return await lambda.Handle(parameter, context);
         }
 

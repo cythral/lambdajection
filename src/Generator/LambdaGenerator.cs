@@ -29,6 +29,7 @@ namespace Lambdajection.Generator
 
         private readonly string[] usings = new string[]
         {
+            "System",
             "System.Threading.Tasks",
             "System.IO",
             "Microsoft.Extensions.DependencyInjection",
@@ -96,8 +97,11 @@ namespace Lambdajection.Generator
 
         public Task<SyntaxList<MemberDeclarationSyntax>> GenerateAsync(TransformationContext context, IProgress<Diagnostic> progress, CancellationToken cancellationToken = default)
         {
+            context.BuildProperties.TryGetValue("GenerateLambdajectionEntrypoint", out var generateLambdajectionEntrypoint);
+
             var includeFactories = context.Compilation.ReferencedAssemblyNames.Any(assembly => assembly.Name == "AWSSDK.SecurityToken");
             var includeDefaultSerializer = context.Compilation.ReferencedAssemblyNames.Any(assembly => assembly.Name == "Amazon.Lambda.Serialization.SystemTextJson");
+            var generateMainMethod = generateLambdajectionEntrypoint == "true";
             var declaration = (ClassDeclarationSyntax)context.ProcessingNode;
             var namespaceName = declaration.Ancestors().OfType<NamespaceDeclarationSyntax>().ElementAt(0).Name;
             var className = declaration.Identifier.ValueText;
@@ -152,18 +156,19 @@ namespace Lambdajection.Generator
 
             IEnumerable<MemberDeclarationSyntax> GenerateMembers()
             {
-                yield return GenerateLambda(className!, handleMember!, scanResults, includeFactories, includeDefaultSerializer);
+                yield return GenerateLambda(className!, handleMember!, scanResults, includeFactories, includeDefaultSerializer, generateMainMethod);
             }
 
             var result = List(GenerateMembers());
             return Task.FromResult(result);
         }
 
-        public ClassDeclarationSyntax GenerateLambda(string className, MethodDeclarationSyntax handleMethod, LambdaCompilationScanResult scanResults, bool includeFactories, bool includeDefaultSerializer)
+        public ClassDeclarationSyntax GenerateLambda(string className, MethodDeclarationSyntax handleMethod, LambdaCompilationScanResult scanResults, bool includeFactories, bool includeDefaultSerializer, bool generateMainMethod)
         {
             var inputParameter = handleMethod.ParameterList.Parameters[0];
             var contextParameter = handleMethod.ParameterList.Parameters[1];
             var inputType = inputParameter?.Type?.ToString() ?? "";
+            var contextType = contextParameter?.Type?.ToString() ?? "";
             var returnType = handleMethod.ReturnType.ChildNodes().ElementAt(0).ChildNodes().ElementAt(0);
             var typeConstraints = new BaseTypeSyntax[] { SimpleBaseType(ParseTypeName($"ILambda<{inputType},{returnType}>")) };
 
@@ -232,13 +237,37 @@ namespace Lambdajection.Generator
                 yield return ParseStatement($"return await host.Run({inputParameter!.Identifier.ValueText}, {contextParameter!.Identifier.ValueText});");
             }
 
-            return ClassDeclaration(className)
+            MemberDeclarationSyntax GenerateMainMethod()
+            {
+                usingsAddedDuringGeneration.Add("Amazon.Lambda.RuntimeSupport");
+                usingsAddedDuringGeneration.Add("Amazon.Lambda.Serialization.SystemTextJson");
+
+                IEnumerable<StatementSyntax> GenerateBody()
+                {
+                    yield return ParseStatement($"using var wrapper = HandlerWrapper.GetHandlerWrapper((Func<{inputType}, {contextType}, Task<{returnType}>>)Run, new DefaultLambdaJsonSerializer());");
+                    yield return ParseStatement($"using var bootstrap = new LambdaBootstrap(wrapper);");
+                    yield return ParseStatement($"await bootstrap.RunAsync();");
+                }
+
+                return MethodDeclaration(ParseTypeName($"Task"), "Main")
+                    .WithModifiers(TokenList(Token(PublicKeyword), Token(StaticKeyword), Token(AsyncKeyword)))
+                    .WithBody(Block(GenerateBody()));
+            }
+
+            var result = ClassDeclaration(className)
                 .WithBaseList(BaseList(Token(ColonToken), SeparatedList(typeConstraints)))
                 .AddModifiers(Token(PartialKeyword))
                 .AddMembers(
                     GenerateRunMethod(),
                     GenerateConfigurator(scanResults, includeFactories)
                 );
+
+            if (generateMainMethod)
+            {
+                result = result.AddMembers(GenerateMainMethod());
+            }
+
+            return result;
         }
 
         public ClassDeclarationSyntax GenerateConfigurator(LambdaCompilationScanResult scanResults, bool includeFactories)
@@ -439,11 +468,14 @@ namespace Lambdajection.Generator
 
             static MemberDeclarationSyntax GenerateDecryptPropertyMethod(string prop)
             {
-                var body = new StatementSyntax[] { ParseStatement($"options.{prop} = await decryptionService.Decrypt(options.{prop});") };
+                IEnumerable<StatementSyntax> GenerateBody()
+                {
+                    yield return ParseStatement($"options.{prop} = await decryptionService.Decrypt(options.{prop});");
+                }
 
                 return MethodDeclaration(ParseTypeName("Task"), $"Decrypt{prop}")
                     .WithModifiers(TokenList(Token(PrivateKeyword), Token(AsyncKeyword)))
-                    .WithBody(Block(body));
+                    .WithBody(Block(GenerateBody()));
             }
 
             var decryptMethods = optionClass.EncryptedProperties.Select(prop => GenerateDecryptPropertyMethod(prop));

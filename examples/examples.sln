@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomSerializer", "CustomS
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomConfiguration", "CustomConfiguration\CustomConfiguration.csproj", "{02804CA8-1838-47C9-9882-9227FD8B923B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomRuntime", "CustomRuntime\CustomRuntime.csproj", "{6B243FE4-FFD1-4EF3-BFE3-2B1006B5CCCD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -72,5 +74,17 @@ Global
 		{02804CA8-1838-47C9-9882-9227FD8B923B}.Release|x64.Build.0 = Release|Any CPU
 		{02804CA8-1838-47C9-9882-9227FD8B923B}.Release|x86.ActiveCfg = Release|Any CPU
 		{02804CA8-1838-47C9-9882-9227FD8B923B}.Release|x86.Build.0 = Release|Any CPU
+		{6B243FE4-FFD1-4EF3-BFE3-2B1006B5CCCD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6B243FE4-FFD1-4EF3-BFE3-2B1006B5CCCD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6B243FE4-FFD1-4EF3-BFE3-2B1006B5CCCD}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{6B243FE4-FFD1-4EF3-BFE3-2B1006B5CCCD}.Debug|x64.Build.0 = Debug|Any CPU
+		{6B243FE4-FFD1-4EF3-BFE3-2B1006B5CCCD}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{6B243FE4-FFD1-4EF3-BFE3-2B1006B5CCCD}.Debug|x86.Build.0 = Debug|Any CPU
+		{6B243FE4-FFD1-4EF3-BFE3-2B1006B5CCCD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6B243FE4-FFD1-4EF3-BFE3-2B1006B5CCCD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6B243FE4-FFD1-4EF3-BFE3-2B1006B5CCCD}.Release|x64.ActiveCfg = Release|Any CPU
+		{6B243FE4-FFD1-4EF3-BFE3-2B1006B5CCCD}.Release|x64.Build.0 = Release|Any CPU
+		{6B243FE4-FFD1-4EF3-BFE3-2B1006B5CCCD}.Release|x86.ActiveCfg = Release|Any CPU
+		{6B243FE4-FFD1-4EF3-BFE3-2B1006B5CCCD}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
