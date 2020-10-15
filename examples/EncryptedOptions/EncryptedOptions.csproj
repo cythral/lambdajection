@@ -4,7 +4,6 @@
     <RuntimeIdentifiers>osx-x64;linux-x64</RuntimeIdentifiers>
     <SelfContained>false</SelfContained>
     <InvariantGlobalization>true</InvariantGlobalization>
-    <ServerGarbageCollection>true</ServerGarbageCollection>
   </PropertyGroup>
 
   <ItemGroup>
