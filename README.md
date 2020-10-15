@@ -89,6 +89,7 @@ Finally, you may use development builds by adding the package and version to you
 | Lambdajection.Generator  | ![Nuget](https://img.shields.io/nuget/v/Lambdajection.Generator?label=version&style=flat-square) ![Nuget](https://img.shields.io/nuget/dt/Lambdajection.Generator?color=blue&style=flat-square)   |
 | Lambdajection.Encryption | ![Nuget](https://img.shields.io/nuget/v/Lambdajection.Encryption?label=version&style=flat-square) ![Nuget](https://img.shields.io/nuget/dt/Lambdajection.Encryption?color=blue&style=flat-square) |
 | Lambdajection.Templates  | ![Nuget](https://img.shields.io/nuget/v/Lambdajection.Templates?label=version&style=flat-square) ![Nuget](https://img.shields.io/nuget/dt/Lambdajection.Templates?color=blue&style=flat-square)   |
+| Lambdajection.Runtime    | ![Nuget](https://img.shields.io/nuget/v/Lambdajection.Runtime?label=version&style=flat-square) ![Nuget](https://img.shields.io/nuget/dt/Lambdajection.Runtime?color=blue&style=flat-square)       |
 
 ## 3. Templates
 
