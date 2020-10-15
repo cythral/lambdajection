@@ -51,7 +51,6 @@ namespace Lambdajection.Core
         /// <param name="build"></param>
         internal LambdaHost(Action<LambdaHost<TLambda, TLambdaParameter, TLambdaOutput, TLambdaStartup, TLambdaConfigurator, TLambdaConfigFactory>> build)
         {
-            Console.WriteLine(DateTimeOffset.Now.ToString("MM/dd/yyyy hh:mm:ss.fff tt") + " Building host");
             build(this);
         }
 
