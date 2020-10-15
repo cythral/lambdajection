@@ -13,9 +13,6 @@ Resources:
         - !Sub arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:net5:3
       Policies:
         - AWSLambdaExecute
-      Environment:
-        Variables:
-          DOTNET_ROOT: /opt/
 
 Outputs:
   InputPayload:

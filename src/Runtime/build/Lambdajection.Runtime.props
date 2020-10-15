@@ -4,6 +4,6 @@
         <PublishReadyToRun Condition="$([MSBuild]::IsOSPlatform('Linux'))">true</PublishReadyToRun>
         <RuntimeIdentifier>linux-x64</RuntimeIdentifier>
         <GenerateLambdajectionEntrypoint>true</GenerateLambdajectionEntrypoint>
-        <AssemblyName>bootstrap</AssemblyName>
+        <AssemblyName Condition="$(SelfContained) == 'true'">bootstrap</AssemblyName>
     </PropertyGroup>
 </Project>

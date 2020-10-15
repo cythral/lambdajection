@@ -19,7 +19,6 @@ Resources:
         Variables:
           # Replace the value here with a KMS-encrypted string
           Lambda__EncryptedValue: AQICAHhR2Ot7i4uEGcs8aZuMfEC/V5DNL8Ge1TYf7zn4DUiqbgH7hgvX1TFJEqRgJ0feGuy4AAAAdTBzBgkqhkiG9w0BBwagZjBkAgEAMF8GCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMbyLC+JEK1j5VlzMDAgEQgDIZzUfhKehW5e2z5mPuzGOwDBYkip/WUPfHUoVWLsDi+XxYfdmQia4Fub0tV4xrNVwMrQ==
-          DOTNET_ROOT: /opt/
 
 Outputs:
   InputPayload:

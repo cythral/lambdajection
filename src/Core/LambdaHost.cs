@@ -51,6 +51,7 @@ namespace Lambdajection.Core
         /// <param name="build"></param>
         internal LambdaHost(Action<LambdaHost<TLambda, TLambdaParameter, TLambdaOutput, TLambdaStartup, TLambdaConfigurator, TLambdaConfigFactory>> build)
         {
+            Console.WriteLine("Building host");
             build(this);
         }
 
