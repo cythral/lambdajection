@@ -59,8 +59,8 @@ jobs:
         shell: bash
         run: dotnet build --no-restore -m  -bl:obj/logs/build-${{ matrix.os }}.binlog -p:PackageReleaseNotes="$(sed 's/,/%2c/g' .github/releases/v${{ env.VERSION }}.md)"
 
-      # - name: Test
-      #   run: dotnet test --no-build
+      - name: Test
+        run: dotnet test --no-build
 
       - name: Run End to End Tests
         if: matrix.os == 'ubuntu-latest' && (startsWith(github.ref, 'refs/tags/v') || contains(env.COMMIT_MESSAGE, '[e2e]'))

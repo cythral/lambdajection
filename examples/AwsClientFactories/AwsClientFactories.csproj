@@ -6,7 +6,6 @@
 
   <ItemGroup>
     <PackageReference Include="Lambdajection" Version="$(LambdajectionVersion)" />
-    <PackageReference Include="Lambdajection.Runtime" Version="$(LambdajectionVersion)" />
     <PackageReference Include="AWSSDK.S3" Version="3.5.0" />
     <PackageReference Include="AWSSDK.SecurityToken" Version="3.5.0" />
   </ItemGroup>
