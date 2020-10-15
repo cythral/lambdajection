@@ -81,6 +81,7 @@ namespace Lambdajection.Core
             var initializeTasks = services.Select(service => service.Initialize());
             await Task.WhenAll(initializeTasks);
 
+            Console.WriteLine(DateTimeOffset.Now.ToString("MM/dd/yyyy hh:mm:ss.fff tt") + "Disposing initialization services");
             var disposeTasks = services.Select(MaybeDispose);
             await Task.WhenAll(disposeTasks);
         }
