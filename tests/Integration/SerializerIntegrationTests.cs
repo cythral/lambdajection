@@ -49,7 +49,7 @@ namespace Lambdajection.Tests.Integration.Serialization
 
             serializerAttribute.Should().NotBeNull();
 
-            var serializerType = serializerAttribute.ConstructorArguments[0].Value;
+            var serializerType = serializerAttribute?.ConstructorArguments[0].Value;
             serializerType.Should().Be(typeof(TestSerializer));
         }
 
@@ -63,7 +63,7 @@ namespace Lambdajection.Tests.Integration.Serialization
 
             serializerAttribute.Should().NotBeNull();
 
-            var serializerType = serializerAttribute.ConstructorArguments[0].Value;
+            var serializerType = serializerAttribute?.ConstructorArguments[0].Value;
             serializerType.Should().Be(typeof(DefaultLambdaJsonSerializer));
         }
     }
