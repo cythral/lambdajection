@@ -19,6 +19,7 @@ dotnet_diagnostic.CA1062.severity = none
 # We don't do it
 dotnet_diagnostic.CA1303.severity = none
 dotnet_diagnostic.CA1307.severity = none
+dotnet_diagnostic.CA1305.severity = none
 
 # No Static Constructors
 dotnet_diagnostic.CA1810.severity = none
