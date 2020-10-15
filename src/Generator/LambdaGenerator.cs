@@ -244,10 +244,10 @@ namespace Lambdajection.Generator
 
                 IEnumerable<StatementSyntax> GenerateBody()
                 {
-                    yield return ParseStatement("Console.WriteLine(\"Lambda Begin\");");
+                    yield return ParseStatement("Console.WriteLine(DateTimeOffset.Now.ToString(\"MM/dd/yyyy hh: mm:ss.fff tt\") + \"Lambda Begin\");");
                     yield return ParseStatement($"using var wrapper = HandlerWrapper.GetHandlerWrapper((Func<{inputType}, {contextType}, Task<{returnType}>>)Run, new DefaultLambdaJsonSerializer());");
                     yield return ParseStatement($"using var bootstrap = new LambdaBootstrap(wrapper);");
-                    yield return ParseStatement("Console.WriteLine(\"Running Bootstrap\");");
+                    yield return ParseStatement("Console.WriteLine(DateTimeOffset.Now.ToString(\"MM/dd/yyyy hh: mm:ss.fff tt\") + \" Running Bootstrap\");");
                     yield return ParseStatement($"await bootstrap.RunAsync();");
                 }
 

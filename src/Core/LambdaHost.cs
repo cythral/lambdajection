@@ -51,7 +51,7 @@ namespace Lambdajection.Core
         /// <param name="build"></param>
         internal LambdaHost(Action<LambdaHost<TLambda, TLambdaParameter, TLambdaOutput, TLambdaStartup, TLambdaConfigurator, TLambdaConfigFactory>> build)
         {
-            Console.WriteLine("Building host");
+            Console.WriteLine(DateTimeOffset.Now.ToString("MM/dd/yyyy hh:mm:ss.fff tt") + " Building host");
             build(this);
         }
 
@@ -63,14 +63,14 @@ namespace Lambdajection.Core
         /// <returns>The return value of the lambda.</returns>
         public async Task<TLambdaOutput> Run(TLambdaParameter parameter, ILambdaContext context)
         {
-            Console.WriteLine("Running initialization services");
+            Console.WriteLine(DateTimeOffset.Now.ToString("MM/dd/yyyy hh:mm:ss.fff tt") + " Running initialization services");
             if (RunInitializationServices) await Initialize();
 
-            Console.WriteLine("Getting lambda from container");
+            Console.WriteLine(DateTimeOffset.Now.ToString("MM/dd/yyyy hh:mm:ss.fff tt") + " Getting lambda from container");
             scope = ServiceProvider.CreateScope();
             lambda = scope.ServiceProvider.GetRequiredService<TLambda>();
 
-            Console.WriteLine("Running lambda handler");
+            Console.WriteLine(DateTimeOffset.Now.ToString("MM/dd/yyyy hh:mm:ss.fff tt") + " Running lambda handler");
             return await lambda.Handle(parameter, context);
         }
 
