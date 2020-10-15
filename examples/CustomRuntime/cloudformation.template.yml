@@ -10,7 +10,7 @@ Resources:
       CodeUri: ../../bin/Examples/CustomRuntime/Release/net5.0/linux-x64/publish/
       MemorySize: 512
       Layers:
-        - !Sub arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:net5:2
+        - !Sub arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:net5:3
       Policies:
         - AWSLambdaExecute
       Environment:
