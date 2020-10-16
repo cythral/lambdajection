@@ -20,7 +20,7 @@
 
   <Target Name="IncludeBuildOutputAsAnalyzer">
     <ItemGroup>
-      <None Include="$(OutputPath)\**" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+      <None Include="$(OutputPath)/**" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
     </ItemGroup>
   </Target>
 
@@ -30,8 +30,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Attributes\Attributes.csproj" />
-    <ProjectReference Include="..\Encryption\Encryption.csproj" />
+    <ProjectReference Include="../Attributes/Attributes.csproj" />
+    <ProjectReference Include="../Encryption/Encryption.csproj" />
   </ItemGroup>
 
 </Project>
