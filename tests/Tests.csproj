@@ -3,8 +3,10 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
+    <LangVersion>9.0</LangVersion>
     <IsPackable>false</IsPackable>
     <AssemblyName>Lambdajection.Tests</AssemblyName>
+    <NoWarn>CS1591;CA2007;CA1062</NoWarn> <!-- These often turn off if project settings change -->
   </PropertyGroup>
 
   <ItemGroup>

@@ -1,4 +1,5 @@
 using System;
+using System.Reflection;
 using System.Threading.Tasks;
 
 using Amazon.Lambda.Core;
@@ -82,17 +83,21 @@ namespace Lambdajection.Tests.Integration.Disposable
     [Category("Integration")]
     public class DisposableIntegrationTests
     {
+        static MethodInfo Method<TLambda>() => typeof(TLambda).GetMethod("Run", BindingFlags.Public | BindingFlags.Static)!;
+
+        static Task<string> Run<TLambda>() => (Task<string>)Method<TLambda>().Invoke(null, new[] { "", null })!;
+
         [Test]
         public async Task DisposeShouldBeCalled()
         {
-            await DisposableLambda.Run("", null!);
+            await Run<DisposableLambda>();
             DisposableLambda.DisposeWasCalled.Should().BeTrue();
         }
 
         [Test]
         public async Task DisposeAsyncShouldBeCalled()
         {
-            await AsyncDisposableLambda.Run("", null!);
+            await Run<AsyncDisposableLambda>();
             AsyncDisposableLambda.DisposeAsyncWasCalled.Should().BeTrue();
         }
     }

@@ -1,5 +1,6 @@
 <Project>
     <PropertyGroup>
+        <SuppressNETCoreSdkPreviewMessage>true</SuppressNETCoreSdkPreviewMessage>
         <OutputPath>$(MSBuildThisFileDirectory)..\bin\Examples\$(MSBuildProjectName)\$(Configuration)</OutputPath>
         <BaseIntermediateOutputPath>$(MSBuildThisFileDirectory)..\obj\Templates\$(MSBuildProjectName)</BaseIntermediateOutputPath>
         <PackageOutputPath>$(MSBuildThisFileDirectory)..\bin\Packages\Templates\$(Configuration)</PackageOutputPath>

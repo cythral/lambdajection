@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Reflection;
 using System.Threading.Tasks;
 
 using Amazon.Lambda.Core;
@@ -15,7 +16,6 @@ using NUnit.Framework;
 
 namespace Lambdajection.Tests.Integration.ConfigFactory
 {
-
     [Lambda(typeof(TestStartup), ConfigFactory = typeof(TestConfigFactory))]
     public partial class TestLambda
     {
@@ -58,10 +58,14 @@ namespace Lambdajection.Tests.Integration.ConfigFactory
     [Category("Integration")]
     public class ConfigFactoryIntegrationTests
     {
+        static MethodInfo RunMethod => typeof(TestLambda).GetMethod("Run", BindingFlags.Public | BindingFlags.Static)!;
+
+        static Task<string> Run() => (Task<string>)RunMethod.Invoke(null, new[] { "", null })!;
+
         [Test]
         public async Task ConfigFactoryShouldBeUsed()
         {
-            var result = await TestLambda.Run(null!, null!);
+            var result = await Run();
             result.Should().Be("TestValue");
         }
     }

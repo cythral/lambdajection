@@ -91,16 +91,19 @@ namespace Lambdajection.Generator
 
             try
             {
-                var units = generations.Select(generation => (((ClassDeclarationSyntax)generation.Declaration).Identifier.Text, GenerateUnit(generation)));
+                var units = generations.Select(generation => (generation.Declaration.Identifier.Text, GenerateUnit(generation)));
 
                 foreach (var (name, unit) in units)
                 {
                     context.AddSource(name, unit.NormalizeWhitespace().GetText(Encoding.UTF8));
                 }
             }
-            catch (GenerationFailureException)
+            catch (GenerationFailureException e)
             {
-                // (exit)
+                context.ReportDiagnostic(e.Diagnostic);
+
+                using var source = CancellationTokenSource.CreateLinkedTokenSource(context.CancellationToken);
+                source.Cancel();
             }
         }
         private static INamedTypeSymbol? GetAttributeArgument(AttributeData attributeData, string argName)
@@ -150,7 +153,7 @@ namespace Lambdajection.Generator
         {
             var includeFactories = context.SourceGeneratorContext.Compilation.ReferencedAssemblyNames.Any(assembly => assembly.Name == "AWSSDK.SecurityToken");
             var includeDefaultSerializer = context.SourceGeneratorContext.Compilation.ReferencedAssemblyNames.Any(assembly => assembly.Name == "Amazon.Lambda.Serialization.SystemTextJson");
-            var declaration = (ClassDeclarationSyntax)context.Declaration;
+            var declaration = context.Declaration;
             var namespaceName = declaration.Ancestors().OfType<NamespaceDeclarationSyntax>().ElementAt(0).Name;
             var className = declaration.Identifier.ValueText;
             var handleMember = (from member in declaration!.Members
@@ -163,11 +166,13 @@ namespace Lambdajection.Generator
 
             if (handleMember == null)
             {
-                var descriptor = new DiagnosticDescriptor("LJ0001", "Handle Method Not Implemented", "Implement the Handle method to provide Lambda Function Handler code.", "Lambdajection", DiagnosticSeverity.Error, true);
-                var diagnostic = Diagnostic.Create(descriptor, Location.Create(declaration.SyntaxTree, declaration.Span));
-                context.SourceGeneratorContext.ReportDiagnostic(diagnostic);
-                Cancel(context.CancellationToken);
-                throw new GenerationFailureException();
+                throw new GenerationFailureException
+                {
+                    Id = "LJ0001",
+                    Title = "Handle Method Not Implemented",
+                    Description = "Implement the Handle method to provide Lambda Function Handler code.",
+                    Location = Location.Create(declaration.SyntaxTree, declaration.Span),
+                };
             }
 
             if (!includeFactories && constructorArgs.Any())
@@ -188,11 +193,13 @@ namespace Lambdajection.Generator
                         continue;
                     }
 
-                    var descriptor = new DiagnosticDescriptor("LJ0002", "Factories Not Enabled", "[LJ0002] Add AWSSDK.SecurityToken as a dependency of your project to use AWS Factories.", "Lambdajection", DiagnosticSeverity.Error, true);
-                    var diagnostic = Diagnostic.Create(descriptor, Location.Create(declaration.SyntaxTree, declaration.Span));
-                    context.SourceGeneratorContext.ReportDiagnostic(diagnostic);
-                    Cancel(context.CancellationToken);
-                    throw new GenerationFailureException();
+                    throw new GenerationFailureException
+                    {
+                        Id = "LJ0002",
+                        Title = "Factories Not Enabled",
+                        Description = "Add AWSSDK.SecurityToken as a dependency of your project to use AWS Factories.",
+                        Location = Location.Create(declaration.SyntaxTree, declaration.Span)
+                    };
                 }
             }
 
@@ -610,10 +617,5 @@ namespace Lambdajection.Generator
                 );
         }
 
-        private static void Cancel(CancellationToken token)
-        {
-            using var source = CancellationTokenSource.CreateLinkedTokenSource(token);
-            source.Cancel();
-        }
     }
 }

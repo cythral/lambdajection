@@ -11,8 +11,10 @@ using FluentAssertions;
 
 using Lambdajection.Attributes;
 using Lambdajection.Core;
+using Lambdajection.Generator;
 
 using Microsoft.Build.Locator;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.MSBuild;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -88,11 +90,16 @@ namespace Lambdajection.Tests.Integration.AwsDependency
     [Category("Integration")]
     public class AwsDependencyIntegrationTests
     {
+
+        static MethodInfo RunMethod => typeof(ExampleLambda).GetMethod("Run", BindingFlags.Public | BindingFlags.Static)!;
+
+        static Task<string> Run(string request) => (Task<string>)RunMethod.Invoke(null, new[] { request, null })!;
+
         [Test]
         public async Task TestExampleLambdaRun()
         {
             var test = "foo";
-            var result = await ExampleLambda.Run(test, null!);
+            var result = await Run(test);
 
             result.Should().BeEquivalentTo("foo bar");
         }
@@ -129,16 +136,19 @@ namespace Lambdajection.Tests.Integration.AwsDependency
         [Test]
         public async Task TestFactoryGenerationFailsIfRequestingAwsClientFactoryWithoutSecurityTokenAssembly()
         {
-            MSBuildLocator.RegisterDefaults();
+            var path = "../../../../tests/Integration/NoFactoryCompilationTestProject/NoFactoryCompilationTestProject.csproj";
+            var msbuild = MSBuildLocator.RegisterDefaults();
 
             using var workspace = MSBuildWorkspace.Create();
             workspace.LoadMetadataForReferencedProjects = true;
 
-            // this path is relative to the output directory
-            var project = await workspace.OpenProjectAsync("../../../../tests/Integration/NoFactoryCompilationTestProject/NoFactoryCompilationTestProject.csproj");
+            var project = await workspace.OpenProjectAsync(path);
             var compilation = (await project.GetCompilationAsync())!;
+            var generator = new LambdaGenerator();
+            var driver = CSharpGeneratorDriver.Create(new[] { generator });
 
-            workspace.Diagnostics.Should().Contain(diagnostic => diagnostic.Message.Contains("[LJ0002] Add AWSSDK.SecurityToken as a dependency of your project to use AWS Factories."));
+            driver.RunGeneratorsAndUpdateCompilation(compilation, out var _, out var diagnostics);
+            diagnostics.Should().Contain(diagnostic => diagnostic.Id == "LJ0002");
         }
     }
 }

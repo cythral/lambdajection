@@ -29,6 +29,7 @@ dotnet_diagnostic.CA1810.severity = none
 [{tests,obj,src/Generator}/**.{cs,csx}]
 # Unused parameters
 dotnet_diagnostic.CA1801.severity = none
+dotnet_diagnostic.IDE0060.severity = none
 
 # XML comments
 # Not necessary in test projects
@@ -44,3 +45,10 @@ dotnet_diagnostic.IDE0052.severity = none
 
 # Underscores in names
 dotnet_diagnostic.IDE1006.severity = none
+
+# Remove unused parameters
+dotnet_diagnostic.IDE0060.severity = none
+
+[examples/**.{cs,csx}]
+# Remove unused parameters
+dotnet_diagnostic.IDE0060.severity = none
