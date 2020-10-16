@@ -92,7 +92,7 @@ namespace Lambdajection.Tests.Integration.AwsDependency
         public async Task TestExampleLambdaRun()
         {
             var test = "foo";
-            var result = await ExampleLambda.Run(test, null);
+            var result = await ExampleLambda.Run(test, null!);
 
             result.Should().BeEquivalentTo("foo bar");
         }

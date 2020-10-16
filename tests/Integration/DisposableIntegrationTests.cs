@@ -85,14 +85,14 @@ namespace Lambdajection.Tests.Integration.Disposable
         [Test]
         public async Task DisposeShouldBeCalled()
         {
-            await DisposableLambda.Run("", null);
+            await DisposableLambda.Run("", null!);
             DisposableLambda.DisposeWasCalled.Should().BeTrue();
         }
 
         [Test]
         public async Task DisposeAsyncShouldBeCalled()
         {
-            await AsyncDisposableLambda.Run("", null);
+            await AsyncDisposableLambda.Run("", null!);
             AsyncDisposableLambda.DisposeAsyncWasCalled.Should().BeTrue();
         }
     }

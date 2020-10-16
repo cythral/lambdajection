@@ -79,14 +79,14 @@ namespace Lambdajection.Tests.Integration.Configuration
         [Test]
         public async Task ConfigValueShouldBeReadFromEnvironment()
         {
-            var result = await ConfigurationLambda.Run("", null);
+            var result = await ConfigurationLambda.Run("", null!);
             result.ExampleConfigValue.Should().BeEquivalentTo(exampleConfigValue);
         }
 
         [Test]
         public async Task EncryptedConfigValueShouldBeReadFromEnvironmentAndDecrypted()
         {
-            var result = await ConfigurationLambda.Run("", null);
+            var result = await ConfigurationLambda.Run("", null!);
             result.ExampleEncryptedValue.Should().BeEquivalentTo("[decrypted] " + exampleEncryptedValue);
         }
     }
