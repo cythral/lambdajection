@@ -1,5 +1,9 @@
 <Project>
     <PropertyGroup>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <PropertyGroup>
         <PublishReadyToRunShowWarnings>true</PublishReadyToRunShowWarnings>
         <OutputPath>$(MSBuildThisFileDirectory)..\bin\Examples\$(MSBuildProjectName)\$(Configuration)</OutputPath>
         <BaseIntermediateOutputPath>$(MSBuildThisFileDirectory)..\obj\Examples\$(MSBuildProjectName)</BaseIntermediateOutputPath>
@@ -7,6 +11,8 @@
         <RestorePackagesPath>$(MSBuildThisFileDirectory)..\.nuget\examples</RestorePackagesPath>
         <_PackagesDebug>$(MSBuildThisFileDirectory)..\bin\Packages\Debug</_PackagesDebug>
         <_PackagesRelease>$(MSBuildThisFileDirectory)..\bin\Packages\Release</_PackagesRelease>
+        <CompilerGeneratedFilesOutputPath>$(MSBuildThisFileDirectory)..\obj\Examples\$(MSBuildProjectName)\$(Configuration)</CompilerGeneratedFilesOutputPath>
+        <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
         <RestoreAdditionalProjectSources>@(CustomLocalFeed);$(RestoreAdditionalProjectSources)</RestoreAdditionalProjectSources>
     </PropertyGroup>
 

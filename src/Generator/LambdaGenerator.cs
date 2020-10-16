@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
+using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
-using Amazon.Lambda.Serialization.SystemTextJson;
-
-using Cythral.CodeGeneration.Roslyn;
-
-using Lambdajection.Core;
+using Lambdajection.Attributes;
 using Lambdajection.Encryption;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
@@ -19,14 +17,27 @@ using static Microsoft.CodeAnalysis.CSharp.SyntaxKind;
 
 namespace Lambdajection.Generator
 {
-    public class LambdaGenerator : IRichCodeGenerator
+    public class GenerationContext
     {
-        private readonly INamedTypeSymbol startupType;
-        private readonly INamedTypeSymbol? serializerType;
-        private readonly INamedTypeSymbol? configFactoryType;
-        private readonly string startupTypeName;
-        private readonly string startupTypeDisplayName;
+        public ClassDeclarationSyntax Declaration { get; set; } = null!;
+        public SyntaxTree SyntaxTree { get; set; } = null!;
+        public SemanticModel SemanticModel { get; set; } = null!;
+        public AttributeData AttributeData { get; set; } = null!;
+        public GeneratorExecutionContext SourceGeneratorContext { get; set; }
+        public CancellationToken CancellationToken { get; set; }
+        public INamedTypeSymbol StartupType { get; set; } = default!;
+        public INamedTypeSymbol? SerializerType { get; set; }
+        public INamedTypeSymbol? ConfigFactoryType { get; set; }
+        public string StartupTypeName { get; set; }
+        public string StartupTypeDisplayName { get; set; }
+        public HashSet<string> Usings { get; } = new HashSet<string>();
+        public bool Nullable { get; set; }
+        public bool GenerateProgramEntrypoint { get; set; }
+    }
 
+    [Generator]
+    public class LambdaGenerator : ISourceGenerator
+    {
         private readonly string[] usings = new string[]
         {
             "System",
@@ -39,17 +50,59 @@ namespace Lambdajection.Generator
             "Lambdajection.Core"
         };
 
-        private HashSet<string> usingsAddedDuringGeneration = null!;
-
-        public LambdaGenerator(AttributeData attributeData)
+        public void Initialize(GeneratorInitializationContext context)
         {
-            this.startupType = GetAttributeArgument(attributeData, "Startup")!;
-            this.serializerType = GetAttributeArgument(attributeData, "Serializer");
-            this.configFactoryType = GetAttributeArgument(attributeData, "ConfigFactory");
-            this.startupTypeName = this.startupType.Name;
-            this.startupTypeDisplayName = this.startupType.ToDisplayString();
+            Console.WriteLine("Initializing...");
         }
 
+        public void Execute(GeneratorExecutionContext context)
+        {
+            var options = context.AnalyzerConfigOptions.GlobalOptions;
+            options.TryGetValue("build_property.GenerateLambdajectionEntrypoint", out var generateLambdajectionEntrypoint);
+            options.TryGetValue("build_property.Nullable", out var nullable);
+
+            generateLambdajectionEntrypoint ??= "false";
+            nullable ??= "disable";
+
+            var syntaxTrees = context.Compilation.SyntaxTrees;
+            var generations = from tree in syntaxTrees
+                              let semanticModel = context.Compilation.GetSemanticModel(tree)
+                              from node in tree.GetRoot().DescendantNodesAndSelf().OfType<ClassDeclarationSyntax>()
+                              from attr in semanticModel.GetDeclaredSymbol(node)?.GetAttributes() ?? ImmutableArray.Create<AttributeData>()
+                              where attr.AttributeClass?.Name == nameof(LambdaAttribute)
+                              let startupType = GetAttributeArgument(attr, "Startup")!
+                              select new GenerationContext
+                              {
+                                  SourceGeneratorContext = context,
+                                  Declaration = node,
+                                  SyntaxTree = tree,
+                                  SemanticModel = semanticModel,
+                                  AttributeData = attr,
+                                  CancellationToken = context.CancellationToken,
+                                  StartupType = startupType,
+                                  SerializerType = GetAttributeArgument(attr, "Serializer"),
+                                  ConfigFactoryType = GetAttributeArgument(attr, "ConfigFactory"),
+                                  StartupTypeName = startupType.Name,
+                                  StartupTypeDisplayName = startupType.ToDisplayString(),
+                                  GenerateProgramEntrypoint = generateLambdajectionEntrypoint.Equals("true", StringComparison.OrdinalIgnoreCase),
+                                  Nullable = nullable.Equals("enable", StringComparison.OrdinalIgnoreCase),
+                              };
+
+
+            try
+            {
+                var units = generations.Select(generation => (((ClassDeclarationSyntax)generation.Declaration).Identifier.Text, GenerateUnit(generation)));
+
+                foreach (var (name, unit) in units)
+                {
+                    context.AddSource(name, unit.NormalizeWhitespace().GetText(Encoding.UTF8));
+                }
+            }
+            catch (GenerationFailureException)
+            {
+                // (exit)
+            }
+        }
         private static INamedTypeSymbol? GetAttributeArgument(AttributeData attributeData, string argName)
         {
             if (argName == "Startup")
@@ -64,23 +117,22 @@ namespace Lambdajection.Generator
             return query.FirstOrDefault();
         }
 
-        public IEnumerable<UsingDirectiveSyntax> GenerateUsings(IEnumerable<UsingDirectiveSyntax> exclusions)
+        public IEnumerable<UsingDirectiveSyntax> GenerateUsings(HashSet<string> usingsAddedDuringGeneration, IEnumerable<string> existingUsings)
         {
-            var exclusionNames = exclusions.Select(exclusion => exclusion.Name.ToString());
-            var usingsWithoutExclusions = new HashSet<string>(usings);
-            usingsWithoutExclusions.UnionWith(usingsAddedDuringGeneration);
-            usingsWithoutExclusions.ExceptWith(exclusionNames);
+            var emittedUsings = new HashSet<string>(usings);
+            emittedUsings.UnionWith(usingsAddedDuringGeneration);
+            emittedUsings.UnionWith(existingUsings);
 
-            return usingsWithoutExclusions.Select(name => UsingDirective(ParseName(name)));
+            return emittedUsings.Select(name => UsingDirective(ParseName(name)));
         }
 
-        public async Task<RichGenerationResult> GenerateRichAsync(TransformationContext context, IProgress<Diagnostic> progress, CancellationToken cancellationToken = default)
+        public CompilationUnitSyntax GenerateUnit(GenerationContext context)
         {
-            usingsAddedDuringGeneration = new HashSet<string>();
-            var processingNode = (ClassDeclarationSyntax)context.ProcessingNode;
-            var namespaceNode = (NamespaceDeclarationSyntax?)processingNode.Parent;
-
-            var members = await GenerateAsync(context, progress, cancellationToken);
+            var namespaceNode = (NamespaceDeclarationSyntax?)context.Declaration.Parent;
+            var unitRoot = context.SyntaxTree.GetCompilationUnitRoot();
+            var existingUsings = unitRoot.Usings.Select(x => x.WithoutTrivia().Name.ToString());
+            var members = GenerateMembers(context);
+            var usings = GenerateUsings(context.Usings, existingUsings);
 
             if (namespaceNode != null)
             {
@@ -88,28 +140,23 @@ namespace Lambdajection.Generator
                 members = List(new MemberDeclarationSyntax[] { namespacedMembers });
             }
 
-            return new RichGenerationResult
-            {
-                Usings = List(GenerateUsings(context.CompilationUnitUsings)),
-                Members = List(members),
-            };
+            var codes = new ExpressionSyntax[] { ParseExpression("CA2007"), ParseExpression("CA1812"), ParseExpression("CS1591") };
+            var ignoreWarningsTrivia = Trivia(PragmaWarningDirectiveTrivia(Token(DisableKeyword), SeparatedList(codes), true));
+            return CompilationUnit(unitRoot.Externs, List(usings), unitRoot.AttributeLists, members)
+                .WithLeadingTrivia(TriviaList(ignoreWarningsTrivia));
         }
 
-        public Task<SyntaxList<MemberDeclarationSyntax>> GenerateAsync(TransformationContext context, IProgress<Diagnostic> progress, CancellationToken cancellationToken = default)
+        public static SyntaxList<MemberDeclarationSyntax> GenerateMembers(GenerationContext context)
         {
-            context.BuildProperties.TryGetValue("GenerateLambdajectionEntrypoint", out var generateLambdajectionEntrypoint);
-
-            var includeFactories = context.Compilation.ReferencedAssemblyNames.Any(assembly => assembly.Name == "AWSSDK.SecurityToken");
-            var includeDefaultSerializer = context.Compilation.ReferencedAssemblyNames.Any(assembly => assembly.Name == "Amazon.Lambda.Serialization.SystemTextJson");
-            var generateMainMethod = generateLambdajectionEntrypoint == "true";
-            var declaration = (ClassDeclarationSyntax)context.ProcessingNode;
+            var includeFactories = context.SourceGeneratorContext.Compilation.ReferencedAssemblyNames.Any(assembly => assembly.Name == "AWSSDK.SecurityToken");
+            var includeDefaultSerializer = context.SourceGeneratorContext.Compilation.ReferencedAssemblyNames.Any(assembly => assembly.Name == "Amazon.Lambda.Serialization.SystemTextJson");
+            var declaration = (ClassDeclarationSyntax)context.Declaration;
             var namespaceName = declaration.Ancestors().OfType<NamespaceDeclarationSyntax>().ElementAt(0).Name;
             var className = declaration.Identifier.ValueText;
             var handleMember = (from member in declaration!.Members
                                 where (member as MethodDeclarationSyntax)?.Identifier.ValueText == "Handle"
                                 select (MethodDeclarationSyntax)member).FirstOrDefault();
-
-            var constructorArgs = from tree in context.Compilation.SyntaxTrees
+            var constructorArgs = from tree in context.SourceGeneratorContext.Compilation.SyntaxTrees
                                   from constructor in tree.GetRoot().DescendantNodes().OfType<ConstructorDeclarationSyntax>()
                                   from parameter in constructor.ParameterList.Parameters
                                   select parameter;
@@ -118,9 +165,8 @@ namespace Lambdajection.Generator
             {
                 var descriptor = new DiagnosticDescriptor("LJ0001", "Handle Method Not Implemented", "Implement the Handle method to provide Lambda Function Handler code.", "Lambdajection", DiagnosticSeverity.Error, true);
                 var diagnostic = Diagnostic.Create(descriptor, Location.Create(declaration.SyntaxTree, declaration.Span));
-                progress.Report(diagnostic);
-
-                Cancel(cancellationToken);
+                context.SourceGeneratorContext.ReportDiagnostic(diagnostic);
+                Cancel(context.CancellationToken);
                 throw new GenerationFailureException();
             }
 
@@ -128,42 +174,41 @@ namespace Lambdajection.Generator
             {
                 foreach (var arg in constructorArgs)
                 {
-                    if (arg == null || arg.Type == null)
+                    if (arg?.Type == null)
                     {
                         continue;
                     }
 
-                    var semanticModel = context.Compilation.GetSemanticModel(arg.SyntaxTree);
-                    var typeDefinition = semanticModel.GetTypeInfo(arg.Type, cancellationToken).Type?.OriginalDefinition;
+                    var semanticModel = context.SourceGeneratorContext.Compilation.GetSemanticModel(arg.SyntaxTree);
+                    var typeDefinition = semanticModel.GetTypeInfo(arg.Type).Type?.OriginalDefinition;
                     var qualifiedName = typeDefinition?.ContainingNamespace + "." + typeDefinition?.MetadataName + ", " + typeDefinition?.ContainingAssembly;
 
-                    if (qualifiedName != typeof(IAwsFactory<>).AssemblyQualifiedName)
+                    if (qualifiedName != $"Lambdajection.Core.IAwsFactory`1, Lambdajection.Core, Version={ThisAssembly.AssemblyVersion}, Culture=neutral, PublicKeyToken=null")
                     {
                         continue;
                     }
 
                     var descriptor = new DiagnosticDescriptor("LJ0002", "Factories Not Enabled", "[LJ0002] Add AWSSDK.SecurityToken as a dependency of your project to use AWS Factories.", "Lambdajection", DiagnosticSeverity.Error, true);
                     var diagnostic = Diagnostic.Create(descriptor, Location.Create(declaration.SyntaxTree, declaration.Span));
-                    progress.Report(diagnostic);
-
-                    Cancel(cancellationToken);
+                    context.SourceGeneratorContext.ReportDiagnostic(diagnostic);
+                    Cancel(context.CancellationToken);
                     throw new GenerationFailureException();
                 }
             }
 
-            var scanner = new LambdaCompilationScanner(context.Compilation, context.Compilation.SyntaxTrees, $"{namespaceName}.{className}", startupTypeDisplayName);
+            var scanner = new LambdaCompilationScanner(context.SourceGeneratorContext.Compilation, context.SourceGeneratorContext.Compilation.SyntaxTrees, $"{namespaceName}.{className}", context.StartupTypeDisplayName);
             var scanResults = scanner.Scan();
 
             IEnumerable<MemberDeclarationSyntax> GenerateMembers()
             {
-                yield return GenerateLambda(className!, handleMember!, scanResults, includeFactories, includeDefaultSerializer, generateMainMethod);
+                yield return GenerateLambda(context, className!, handleMember!, scanResults, includeFactories, includeDefaultSerializer);
             }
 
             var result = List(GenerateMembers());
-            return Task.FromResult(result);
+            return result;
         }
 
-        public ClassDeclarationSyntax GenerateLambda(string className, MethodDeclarationSyntax handleMethod, LambdaCompilationScanResult scanResults, bool includeFactories, bool includeDefaultSerializer, bool generateMainMethod)
+        public static ClassDeclarationSyntax GenerateLambda(GenerationContext context, string className, MethodDeclarationSyntax handleMethod, LambdaCompilationScanResult scanResults, bool includeFactories, bool includeDefaultSerializer)
         {
             var inputParameter = handleMethod.ParameterList.Parameters[0];
             var contextParameter = handleMethod.ParameterList.Parameters[1];
@@ -174,22 +219,22 @@ namespace Lambdajection.Generator
 
             string? GetSerializerName()
             {
-                if (serializerType != null)
+                if (context.SerializerType != null)
                 {
-                    return serializerType.Name;
+                    return context.SerializerType.Name;
                 }
 
-                return includeDefaultSerializer ? nameof(DefaultLambdaJsonSerializer) : null;
+                return includeDefaultSerializer ? "DefaultLambdaJsonSerializer" : null;
             }
 
             string? GetSerializerNamespace()
             {
-                if (serializerType != null)
+                if (context.SerializerType != null)
                 {
-                    return serializerType.ContainingNamespace?.ToString();
+                    return context.SerializerType.ContainingNamespace?.ToString();
                 }
 
-                return includeDefaultSerializer ? typeof(DefaultLambdaJsonSerializer).Namespace?.ToString() : null;
+                return includeDefaultSerializer ? "Amazon.Lambda.Serialization.SystemTextJson" : null;
             }
 
             MemberDeclarationSyntax GenerateRunMethod()
@@ -221,7 +266,7 @@ namespace Lambdajection.Generator
 
                 if (serializerName != null && serializerNamespace != null)
                 {
-                    usingsAddedDuringGeneration.Add(serializerNamespace);
+                    context.Usings.Add(serializerNamespace);
                 }
 
                 return method;
@@ -229,18 +274,18 @@ namespace Lambdajection.Generator
 
             IEnumerable<StatementSyntax> GenerateRunMethodBody()
             {
-                var configFactory = configFactoryType?.Name ?? nameof(LambdaConfigFactory);
-                var configFactoryNamespace = configFactoryType?.ContainingNamespace?.ToString() ?? "Lambdajection.Core";
-                usingsAddedDuringGeneration.Add(configFactoryNamespace);
+                var configFactory = context.ConfigFactoryType?.Name ?? "LambdaConfigFactory";
+                var configFactoryNamespace = context.ConfigFactoryType?.ContainingNamespace?.ToString() ?? "Lambdajection.Core";
+                context.Usings.Add(configFactoryNamespace);
 
-                yield return ParseStatement($"await using var host = new LambdaHost<{className}, {inputType}, {returnType}, {startupTypeName}, LambdajectionConfigurator, {configFactory}>();");
+                yield return ParseStatement($"await using var host = new LambdaHost<{className}, {inputType}, {returnType}, {context.StartupTypeName}, LambdajectionConfigurator, {configFactory}>();");
                 yield return ParseStatement($"return await host.Run({inputParameter!.Identifier.ValueText}, {contextParameter!.Identifier.ValueText});");
             }
 
             MemberDeclarationSyntax GenerateMainMethod()
             {
-                usingsAddedDuringGeneration.Add("Amazon.Lambda.RuntimeSupport");
-                usingsAddedDuringGeneration.Add("Amazon.Lambda.Serialization.SystemTextJson");
+                context.Usings.Add("Amazon.Lambda.RuntimeSupport");
+                context.Usings.Add("Amazon.Lambda.Serialization.SystemTextJson");
 
                 IEnumerable<StatementSyntax> GenerateBody()
                 {
@@ -259,10 +304,10 @@ namespace Lambdajection.Generator
                 .AddModifiers(Token(PartialKeyword))
                 .AddMembers(
                     GenerateRunMethod(),
-                    GenerateConfigurator(scanResults, includeFactories)
+                    GenerateConfigurator(context, scanResults, includeFactories)
                 );
 
-            if (generateMainMethod)
+            if (context.GenerateProgramEntrypoint)
             {
                 result = result.AddMembers(GenerateMainMethod());
             }
@@ -270,7 +315,7 @@ namespace Lambdajection.Generator
             return result;
         }
 
-        public ClassDeclarationSyntax GenerateConfigurator(LambdaCompilationScanResult scanResults, bool includeFactories)
+        public static ClassDeclarationSyntax GenerateConfigurator(GenerationContext context, LambdaCompilationScanResult scanResults, bool includeFactories)
         {
             var typeConstraints = new BaseTypeSyntax[] { SimpleBaseType(ParseTypeName("ILambdaConfigurator")) };
             var publicModifiersList = new SyntaxToken[] { Token(PublicKeyword) };
@@ -279,7 +324,7 @@ namespace Lambdajection.Generator
             {
                 if (scanResults.IncludeDecryptionFacade)
                 {
-                    usingsAddedDuringGeneration.Add("Amazon.KeyManagementService");
+                    context.Usings.Add("Amazon.KeyManagementService");
 
                     yield return ParseStatement($"services.TryAddSingleton(typeof(IAmazonKeyManagementService), typeof(AmazonKeyManagementServiceClient));");
                     yield return ParseStatement($"services.TryAddSingleton(typeof({nameof(IDecryptionService)}), typeof({nameof(DefaultDecryptionService)}));\n\n");
@@ -295,7 +340,7 @@ namespace Lambdajection.Generator
 
                     if (optionClass.EncryptedProperties.Any())
                     {
-                        yield return ParseStatement($"services.AddSingleton<{nameof(ILambdaInitializationService)}, {sectionName}Decryptor>();");
+                        yield return ParseStatement($"services.AddSingleton<ILambdaInitializationService, {sectionName}Decryptor>();");
                     }
 
                     yield return ParseStatement($"services.Configure<{fullName}>(configuration.GetSection(\"{optionClass.ConfigSectionName}\"));");
@@ -327,7 +372,7 @@ namespace Lambdajection.Generator
 
                 foreach (var service in services)
                 {
-                    usingsAddedDuringGeneration.Add(service.NamespaceName);
+                    context.Usings.Add(service.NamespaceName);
 
                     yield return ParseStatement($"services.AddSingleton<{service.InterfaceName}, {service.ImplementationName}>();");
 
@@ -369,21 +414,21 @@ namespace Lambdajection.Generator
 
                 if (services.Any())
                 {
-                    usingsAddedDuringGeneration.Add("Amazon.SecurityToken");
-                    usingsAddedDuringGeneration.Add("Amazon.SecurityToken.Model");
+                    context.Usings.Add("Amazon.SecurityToken");
+                    context.Usings.Add("Amazon.SecurityToken.Model");
                 }
 
                 foreach (var service in services)
                 {
-                    var factory = GenerateAwsFactory(service.ServiceName, service.InterfaceName, service.ImplementationName);
+                    var factory = GenerateAwsFactory(context, service.ServiceName, service.InterfaceName, service.ImplementationName);
                     classDeclaration = classDeclaration.AddMembers(factory);
                 }
             }
 
             if (scanResults.IncludeDecryptionFacade)
             {
-                usingsAddedDuringGeneration.Add("Lambdajection.Encryption");
-                usingsAddedDuringGeneration.Add("Microsoft.Extensions.Options");
+                context.Usings.Add("Lambdajection.Encryption");
+                context.Usings.Add("Microsoft.Extensions.Options");
 
                 foreach (var optionClass in scanResults.OptionClasses)
                 {
@@ -491,7 +536,7 @@ namespace Lambdajection.Generator
                 .AddMembers(decryptMethods.ToArray());
         }
 
-        public static ClassDeclarationSyntax GenerateAwsFactory(string service, string interfaceName, string implementationName)
+        public static ClassDeclarationSyntax GenerateAwsFactory(GenerationContext context, string service, string interfaceName, string implementationName)
         {
             var typeConstraints = new BaseTypeSyntax[] { SimpleBaseType(ParseTypeName($"IAwsFactory<{interfaceName}>")) };
             var className = $"{service}Factory";
@@ -516,10 +561,11 @@ namespace Lambdajection.Generator
 
             MemberDeclarationSyntax GenerateCreateMethod()
             {
+                var roleArnTypeName = context.Nullable ? "string?" : "string";
                 var roleArnDefaultValue = ParseExpression("null");
                 var parameters = SeparatedList(new ParameterSyntax[]
                 {
-                    Parameter(List<AttributeListSyntax>(), TokenList(), ParseTypeName("string"), Identifier("roleArn"), EqualsValueClause(roleArnDefaultValue)),
+                    Parameter(List<AttributeListSyntax>(), TokenList(), ParseTypeName(roleArnTypeName), Identifier("roleArn"), EqualsValueClause(roleArnDefaultValue)),
                 });
 
                 IEnumerable<StatementSyntax> GenerateBody()

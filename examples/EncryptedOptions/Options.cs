@@ -7,9 +7,9 @@ namespace Lambdajection.Examples.EncryptedOptions
     public class Options
     {
         [Encrypted]
-        public string EncryptedValue { get; set; }
+        public string EncryptedValue { get; set; } = "";
 
         /// <value>expected plaintext version of the encrypted value</value>
-        public string ExpectedValue { get; set; }
+        public string ExpectedValue { get; set; } = "";
     }
 }

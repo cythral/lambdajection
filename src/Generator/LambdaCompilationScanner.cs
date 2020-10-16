@@ -15,15 +15,15 @@ namespace Lambdajection.Generator
     {
         private const string ServiceCollectionDisplayName = "Microsoft.Extensions.DependencyInjection.IServiceCollection";
         private const string UseAwsServiceName = "UseAwsService";
-        private readonly ImmutableArray<SyntaxTree> syntaxTrees;
-        private readonly CSharpCompilation compilation;
+        private readonly IEnumerable<SyntaxTree> syntaxTrees;
+        private readonly Compilation compilation;
         private readonly string lambdaTypeName;
         private readonly string startupDisplayName;
         private readonly HashSet<OptionClass> optionClasses = new HashSet<OptionClass>();
         private readonly HashSet<AwsServiceMetadata> awsServices = new HashSet<AwsServiceMetadata>();
         private bool includeDecryptionFacade;
 
-        public LambdaCompilationScanner(CSharpCompilation compilation, ImmutableArray<SyntaxTree> syntaxTrees, string lambdaTypeName, string startupDisplayName)
+        public LambdaCompilationScanner(Compilation compilation, IEnumerable<SyntaxTree> syntaxTrees, string lambdaTypeName, string startupDisplayName)
         {
             this.compilation = compilation;
             this.syntaxTrees = syntaxTrees;
