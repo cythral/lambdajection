@@ -7,16 +7,22 @@
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
-    <NoWarn>NU5118;CS8618;NU5128</NoWarn>
+    <NoWarn>NU5118;CS8618;NU5128;CS1591</NoWarn>
     <IncludeBuildOutput>false</IncludeBuildOutput>
     <DevelopmentDependency>true</DevelopmentDependency>
     <PackageDescription>Includes the compile-time generator used to generate code needed for Dependency Injection-enabled AWS Lambdas.</PackageDescription>
+    <BeforePack>IncludeBuildOutputAsAnalyzer</BeforePack>
   </PropertyGroup>
 
   <ItemGroup>
     <None Include="build/**" Pack="true" PackagePath="build/" />
-    <None Include="$(OutputPath)/*" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
   </ItemGroup>
+
+  <Target Name="IncludeBuildOutputAsAnalyzer">
+    <ItemGroup>
+      <None Include="$(OutputPath)\**" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+    </ItemGroup>
+  </Target>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.CodeAnalysis" Version="3.8.0-4.final" />

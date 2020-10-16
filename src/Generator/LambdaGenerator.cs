@@ -52,7 +52,6 @@ namespace Lambdajection.Generator
 
         public void Initialize(GeneratorInitializationContext context)
         {
-            Console.WriteLine("Initializing...");
         }
 
         public void Execute(GeneratorExecutionContext context)
