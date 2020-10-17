@@ -19,13 +19,13 @@ namespace Lambdajection.Generator
 {
     public class GenerationContext
     {
-        public ClassDeclarationSyntax Declaration { get; set; } = null!;
-        public SyntaxTree SyntaxTree { get; set; } = null!;
-        public SemanticModel SemanticModel { get; set; } = null!;
-        public AttributeData AttributeData { get; set; } = null!;
+        public ClassDeclarationSyntax Declaration { get; init; }
+        public SyntaxTree SyntaxTree { get; init; }
+        public SemanticModel SemanticModel { get; init; }
+        public AttributeData AttributeData { get; init; }
         public GeneratorExecutionContext SourceGeneratorContext { get; set; }
         public CancellationToken CancellationToken { get; set; }
-        public INamedTypeSymbol StartupType { get; set; } = default!;
+        public INamedTypeSymbol StartupType { get; init; }
         public INamedTypeSymbol? SerializerType { get; set; }
         public INamedTypeSymbol? ConfigFactoryType { get; set; }
         public string StartupTypeName { get; set; }

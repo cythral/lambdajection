@@ -21,17 +21,17 @@ namespace Lambdajection.Generator
 
         public override bool Equals(object? obj)
         {
-            return obj is OptionClass result && result.ConfigSectionName.Equals(ConfigSectionName);
+            return obj is OptionClass result && result.ConfigSectionName.Equals(ConfigSectionName, StringComparison.OrdinalIgnoreCase);
         }
 
         public bool Equals(OptionClass result)
         {
-            return result.ConfigSectionName.Equals(ConfigSectionName);
+            return result.ConfigSectionName.Equals(ConfigSectionName, StringComparison.OrdinalIgnoreCase);
         }
 
         public override int GetHashCode()
         {
-            return ConfigSectionName.GetHashCode();
+            return ConfigSectionName.GetHashCode(StringComparison.OrdinalIgnoreCase);
         }
 
         public static bool operator ==(OptionClass optionClassA, OptionClass optionClassB)
