@@ -2,16 +2,17 @@
 # Lambdajection
 [![Nuget](https://img.shields.io/nuget/v/Lambdajection?label=version&style=flat-square)](https://nuget.org/packages/Lambdajection) [![Nuget](https://img.shields.io/nuget/vpre/Lambdajection?label=pre-release&style=flat-square&color=blueviolet)](https://nuget.org/packages/Lambdajection) [![GitHub](https://img.shields.io/github/license/cythral/lambdajection?style=flat-square&color=lightgrey)](./LICENSE.txt) [![GitHub Workflow Status](https://img.shields.io/github/workflow/status/cythral/lambdajection/Continuous%20Integration?style=flat-square)](https://github.com/cythral/lambdajection/actions?query=workflow%3A%22Continuous+Integration%22) [![Sponsor on Github](https://img.shields.io/badge/sponsor-on%20github-pink?style=flat-square)](https://github.com/sponsor/cythral) [![Donate on Paypal](https://img.shields.io/badge/donate-on%20paypal-blue?style=flat-square)](https://paypal.me/cythral)
 
-Write elegant and testable AWS Lambdas using .NET Core and Microsoft's Dependency Injection + Configuration extensions. No longer do you need to write your own boilerplate to achieve this - just write your Lambda code and service configuration! 
+Write elegant and testable AWS Lambdas using C#/.NET and Microsoft's extensions for dependency injection, configuration and more. Start from a template, add handler code, inject services and let Lambdajection do the rest!
 
-Lambdajection aims to:
-- Facilitate rapid and secure lambda development using C#.
-- Increase Lambda testability by enabling use of Microsoft's [dependency injection](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection), [configuration](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration/) and [logging](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/logging/) extensions. 
-- Achieve faster startup times (and lower costs) by using compile-time code generation rather than reflection wherever possible.
-- Optimize for container reuse by reusing service collections and services between invocations.
-- Be highly extensible and configurable.
+Why Lambdajection?
+- Easy dependency management: configure dependencies/services using a Startup class, similar to how it is done in ASP.NET Core.
+- Easy secrets management: automatically decrypt options marked as `[Encrypted]` using KMS or your own provided cryptography service.
+- Faster startup times: we're using code generation over reflection wherever possible to help minimize cold-start times.
+- Highly configurable: customize serialization, configuration, and run custom code before your main handler is invoked.
+- Highly testable: facilitates use of dependency-injection to make testing your Lambda easier.
+- Flexibility: you can use AWS' provided runtime or roll your own runtime containing .NET. Lambdajection works both ways, and can even generate code for running on a custom/provided runtime.
 
-Community contribution/pull requests are welcome and encouraged! See the [contributing guide](CONTRIBUTING.md) for instructions. Report issues on [JIRA](https://cythral.atlassian.net/jira/software/c/projects/LAMBJ/issues) - you can report anonymously or include github username/contact info in the ticket summary.
+Community contribution/pull requests are welcome and encouraged! See the [contributing guide](CONTRIBUTING.md) for instructions. Report issues on [JIRA](https://cythral.atlassian.net/jira/software/c/projects/LAMBJ/issues) - you can report anonymously or include github username/contact info on the ticket.
 
 <!-- omit in toc -->
 ## Table of Contents
@@ -42,7 +43,7 @@ Community contribution/pull requests are welcome and encouraged! See the [contri
 ## 1. Installation
 
 ### 1.1. Metapackage
-See the [packages](#2-packages) section for a list of available packages.  Starting in v0.5.0-beta2, you will need to have the .NET 5 SDK installed (projects must be built with Roslyn 3.8 or higher).
+See the [packages](#2-packages) section for a list of available packages.  Starting in v0.5.0-beta2, you will need to have the .NET 5 SDK installed.
 
 ```
 dotnet add package Lambdajection
@@ -78,6 +79,8 @@ Finally, you may use development builds by adding the package and version to you
 ```xml
 <PackageReference Include="Lambdajection" Version="0.3.0-gc2ca768d3f" />
 ```
+
+Browse development builds [here](https://github.com/orgs/cythral/packages?repo_name=lambdajection).
 
 ## 2. Packages
 
@@ -274,7 +277,7 @@ Initialization services can be used to initialize data or perform some task befo
 
 ### 4.7. Disposers
 
-Disposers can be used to run object finalization and mark for garbage collection. Lambdajection supports Lambdas that implement either [IDisposable](https://docs.microsoft.com/en-us/dotnet/api/system.idisposable), [IAsyncDisposable](https://docs.microsoft.com/en-us/dotnet/api/system.iasyncdisposable) or both.  If you implement both, DisposeAsync will be preferred.
+Disposers can be used to cleanup unmanaged resources, such as open file-handles and network connections. Lambdajection supports Lambdas that implement either [IDisposable](https://docs.microsoft.com/en-us/dotnet/api/system.idisposable), [IAsyncDisposable](https://docs.microsoft.com/en-us/dotnet/api/system.iasyncdisposable) or both.  If you implement both, DisposeAsync will be preferred.
 
 ### 4.8. Handler Scheme
 
@@ -322,7 +325,7 @@ See an example of a [non-self contained lambda using a custom runtime here](./ex
 
 ## 6. Acknowledgments
 
-1. [CodeGeneration.Roslyn](https://github.com/aarnott/codegeneration.roslyn) - Used for compile-time code generation using attributes.
+1. [CodeGeneration.Roslyn](https://github.com/aarnott/codegeneration.roslyn) - Was used for compile-time code generation using attributes in versions v0.1.0 - v0.4.0.  Newer versions use .NET 5 Source Generators.
 2. [Simple Lambda Dependency Injection in AWS Lambda .NET Core](https://dev.to/gary_woodfine/simple-dependency-injection-in-aws-lambda-net-core-n0g) by Gary Woodfine - primary inspiration for this project.
 
 ## 7. Donations
