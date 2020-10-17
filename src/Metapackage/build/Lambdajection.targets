@@ -5,6 +5,6 @@
     </PropertyGroup>
 
     <Target Name="Lambdajection_MinimumSdkRequirement" Condition="$([MSBuild]::VersionLessThan('$(NETCoreSdkVersion)', '$(MinimumNETCoreSdkVersion)'))">
-        <Error Text="Please upgrade your .NET SDK to $(MinimumNETCoreSdkVersion) in order to use Lambdajection" File="$(MSBuildThisFile)" />
+        <Error Text="Please upgrade your .NET SDK to at least $(MinimumNETCoreSdkVersion) in order to use Lambdajection" File="$(MSBuildThisFile)" />
     </Target>
 </Project>
