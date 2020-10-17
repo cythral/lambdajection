@@ -2,6 +2,7 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup>
         <RunFormatter Condition="$(RunFormatter) == ''">true</RunFormatter>
+        <BuildExamplesAndTemplates Condition="$(BuildExamplesAndTemplates) == ''">true</BuildExamplesAndTemplates>
     </PropertyGroup>
 
     <ItemGroup>
@@ -15,7 +16,7 @@
         <Exec Command="dotnet tool restore" ConsoleToMsBuild="true" />
     </Target>
 
-    <Target Name="RestoreNoFactoryCompilationTestProject" AfterTargets="Restore">
+    <Target Name="RestoreNoFactoryCompilationTestProject" AfterTargets="Restore" Condition="'$(DesignTimeBuild)' != 'true'">
         <MSBuild Projects="$(MSBuildThisFileDirectory)tests\Integration\NoFactoryCompilationTestProject\NoFactoryCompilationTestProject.csproj" Targets="Restore" />
     </Target>
 
@@ -29,11 +30,11 @@
         </ItemGroup>
     </Target>
 
-    <Target Name="CleanExamplesAndTemplates" AfterTargets="Clean" DependsOnTargets="Restore;RetrievePackageVersionFromTool">
+    <Target Name="CleanExamplesAndTemplates" AfterTargets="Clean" DependsOnTargets="Restore;RetrievePackageVersionFromTool" Condition="'$(DesignTimeBuild)' != 'true'">
         <MSBuild Projects="@(_SubSolution)" Targets="Clean" Properties="@(_SubSolutionProp)" />
     </Target>
 
-    <Target Name="BuildExamplesAndTemplates" AfterTargets="Build" DependsOnTargets="Build;RetrievePackageVersionFromTool">
+    <Target Name="BuildExamplesAndTemplates" AfterTargets="Build" DependsOnTargets="Build;RetrievePackageVersionFromTool" Condition="'$(BuildExamplesAndTemplates)' == 'true' and '$(DesignTimeBuild)' != 'true'">
         <Message Importance="High" Text="%0A%0ABuilding Examples and Templates%0A---------------------------------%0A" />
         <RemoveDir Directories="$(MSBuildThisFileDirectory)examples\.nuget" />
         <MSBuild Projects="@(_SubSolution)" Targets="Restore;Build;Publish" Properties="@(_SubSolutionProp)" />
@@ -47,7 +48,7 @@
         <MSBuild Projects="@(_Examples)" Targets="EndToEndTest" Properties="LambdajectionVersion=$(PackageVersion);Configuration=$(Configuration);Architecture=$(Architecture);PackageBucket=$(PackageBucket);RoleArn=$(RoleArn)" />
     </Target>
 
-    <Target Name="CheckFormatting" AfterTargets="Build" Condition="$(RunFormatter) == 'true'">
+    <Target Name="CheckFormatting" AfterTargets="Build" Condition="$(RunFormatter) == 'true' and '$(DesignTimeBuild)' != 'true'">
         <Message Importance="High" Text="%0A" />
 
         <!-- Main -->

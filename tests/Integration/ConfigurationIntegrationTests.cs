@@ -1,4 +1,5 @@
 using System;
+using System.Reflection;
 using System.Threading.Tasks;
 
 using Amazon.Lambda.Core;
@@ -68,6 +69,10 @@ namespace Lambdajection.Tests.Integration.Configuration
         private const string exampleConfigValue = "example config value";
         private const string exampleEncryptedValue = "example encrypted config value";
 
+        static MethodInfo RunMethod => typeof(ConfigurationLambda).GetMethod("Run", BindingFlags.Public | BindingFlags.Static)!;
+
+        static Task<ExampleOptions> Run() => (Task<ExampleOptions>)RunMethod.Invoke(null, new[] { "", null })!;
+
         [SetUp]
         public void SetupEnvironmentVariables()
         {
@@ -79,14 +84,14 @@ namespace Lambdajection.Tests.Integration.Configuration
         [Test]
         public async Task ConfigValueShouldBeReadFromEnvironment()
         {
-            var result = await ConfigurationLambda.Run("", null);
+            var result = await Run();
             result.ExampleConfigValue.Should().BeEquivalentTo(exampleConfigValue);
         }
 
         [Test]
         public async Task EncryptedConfigValueShouldBeReadFromEnvironmentAndDecrypted()
         {
-            var result = await ConfigurationLambda.Run("", null);
+            var result = await Run();
             result.ExampleEncryptedValue.Should().BeEquivalentTo("[decrypted] " + exampleEncryptedValue);
         }
     }

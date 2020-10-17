@@ -19,17 +19,17 @@ namespace Lambdajection.Generator
 
         public override bool Equals(object? obj)
         {
-            return obj is AwsServiceMetadata result && result.ServiceName.Equals(ServiceName);
+            return obj is AwsServiceMetadata result && result.ServiceName.Equals(ServiceName, StringComparison.OrdinalIgnoreCase);
         }
 
         public bool Equals(AwsServiceMetadata result)
         {
-            return result.ServiceName.Equals(ServiceName);
+            return result.ServiceName.Equals(ServiceName, StringComparison.OrdinalIgnoreCase);
         }
 
         public override int GetHashCode()
         {
-            return ServiceName.GetHashCode();
+            return ServiceName.GetHashCode(StringComparison.OrdinalIgnoreCase);
         }
 
         public static bool operator ==(AwsServiceMetadata metadataA, AwsServiceMetadata metadataB)

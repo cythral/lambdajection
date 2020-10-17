@@ -1,23 +1,20 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  <Sdk Name="Cythral.CodeGeneration.Roslyn.PluginMetapackage.Sdk" />
-
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
     <IncludeBuildOutput>false</IncludeBuildOutput>
     <PackageId>Lambdajection</PackageId>
     <AssemblyName>$(PackageId)</AssemblyName>
-    <AddImplicitCodeGenerationRoslynToolReference>false</AddImplicitCodeGenerationRoslynToolReference>
+    <NoWarn>NU5128</NoWarn>
     <PackageDescription>Write AWS Lambda Functions using Dependency Injection.</PackageDescription>
-    <BuildDependsOn>$(BuildDependsOn);BuildExamples</BuildDependsOn>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Cythral.CodeGeneration.Roslyn.Tool" Version="0.9.2" PrivateAssets="none" />
+    <None Include="build/**" Pack="true" PackagePath="build/" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Attributes\Attributes.csproj" />
     <ProjectReference Include="..\Core\Core.csproj" />
-    <NupkgAdditionalDependency Include="Lambdajection.Generator" IncludeAssets="all" />
+    <ProjectReference Include="..\Generator\Generator.csproj" OutputItemType="Analyzer" />
   </ItemGroup>
 </Project>

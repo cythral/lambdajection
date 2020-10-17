@@ -1,0 +1,10 @@
+<Project>
+    <PropertyGroup>
+        <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <CompilerVisibleProperty Include="GenerateLambdajectionEntrypoint" />
+        <CompilerVisibleProperty Include="Nullable" />
+    </ItemGroup>
+</Project>

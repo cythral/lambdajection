@@ -2,17 +2,16 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <IsPackable>false</IsPackable>
+    <NoWarn>CS8019</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="AWSSDK.S3" Version="3.5.2" />
-    <PackageReference Include="Cythral.CodeGeneration.Roslyn.Tool" Version="0.9.2" ReferenceOutputAssembly="false" OutputItemType="CodeGeneratorToolPathItem" SkipGetTargetFrameworkProperties="true" UndefineProperties="TargetFramework" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\src\Core\Core.csproj" />
     <ProjectReference Include="..\..\..\src\Attributes\Attributes.csproj" />
-    <ProjectReference Include="..\..\..\src\Encryption\Encryption.csproj" />
-    <ProjectReference Include="..\..\..\src\Generator\Generator.csproj" IncludeAssets="all" OutputItemType="CodeGenerationRoslynPlugin" />
+    <ProjectReference Include="..\..\..\src\Generator\Generator.csproj" IncludeAssets="all" OutputItemType="Analyzer" />
   </ItemGroup>
 </Project>

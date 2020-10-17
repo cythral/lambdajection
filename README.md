@@ -42,7 +42,7 @@ Community contribution/pull requests are welcome and encouraged! See the [contri
 ## 1. Installation
 
 ### 1.1. Metapackage
-See the [packages](#2-packages) section for a list of available packages.
+See the [packages](#2-packages) section for a list of available packages.  Starting in v0.5.0-beta2, you will need to have the .NET 5 SDK installed (projects must be built with Roslyn 3.8 or higher).
 
 ```
 dotnet add package Lambdajection
@@ -149,7 +149,7 @@ namespace Your.Namespace
 
 ### 4.2. Serialization
 
-If your Lambda targets the `netcoreapp3.1` framework, then by default, the serializer is set to  `DefaultLambdaJsonSerializer` from the `Amazon.Lambda.Serialization.SystemTextJson` package.  With any TFM, you may specify the serializer you want to use by setting the Lambda attribute's `Serializer` argument:
+If your Lambda targets the `netcoreapp3.1` or `net5.0` frameworks, then by default, the serializer is set to  `DefaultLambdaJsonSerializer` from the `Amazon.Lambda.Serialization.SystemTextJson` package.  With any TFM, you may specify the serializer you want to use by setting the Lambda attribute's `Serializer` argument:
 
 ```cs
 [Lambda(typeof(Startup), Serializer = typeof(Serializer))]
