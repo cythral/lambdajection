@@ -4,7 +4,7 @@
         <CoreCompileDependsOn>Lambdajection_MinimumSdkRequirement;$(CoreCompileDependsOn)</CoreCompileDependsOn>
     </PropertyGroup>
 
-    <Target Name="Lambdajection_MinimumSdkRequirement" Condition="$([System.Text.RegularExpressions.Regex]::Replace($(NETCoreSdkVersion), '-.*$', '')) &lt; 5.0.100">
-        <Error Text="Please upgrade your .NET SDK to $(MinimumNETCoreSdkVersion) in order to use Lambdajection" File="$(MSBuildThisFile)" />
+    <Target Name="Lambdajection_MinimumSdkRequirement" Condition="$([MSBuild]::VersionLessThan('$(NETCoreSdkVersion)', '$(MinimumNETCoreSdkVersion)'))">
+        <Error Text="Please upgrade your .NET SDK to at least $(MinimumNETCoreSdkVersion) in order to use Lambdajection" File="$(MSBuildThisFile)" />
     </Target>
 </Project>

@@ -15,6 +15,16 @@
         <Configuration Condition="$(Configuration) == ''">Debug</Configuration>
         <Nullable>enable</Nullable>
         <LangVersion>8.0</LangVersion>
+        <MinClientVersion>2.5</MinClientVersion>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <SuppressNETCoreSdkPreviewMessage>true</SuppressNETCoreSdkPreviewMessage>
+        <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+        <RestoreLockedMode>true</RestoreLockedMode>
+        <DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
+        <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
+        <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
         <SkipDefaultEditorConfigAsAdditionalFile>true</SkipDefaultEditorConfigAsAdditionalFile>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -22,17 +32,11 @@
     </PropertyGroup>
 
     <PropertyGroup>
-        <SuppressNETCoreSdkPreviewMessage>true</SuppressNETCoreSdkPreviewMessage>
-        <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
-        <RestoreLockedMode>true</RestoreLockedMode>
         <OutputPath>$(MSBuildThisFileDirectory)bin\$(MSBuildProjectName)\$(Configuration)</OutputPath>
         <BaseIntermediateOutputPath>$(MSBuildThisFileDirectory)obj\$(MSBuildProjectName)</BaseIntermediateOutputPath>
         <PackageOutputPath>$(MSBuildThisFileDirectory)bin\Packages\$(Configuration)</PackageOutputPath>
         <RestorePackagesPath>$(MSBuildThisFileDirectory).nuget</RestorePackagesPath>
         <CompilerGeneratedFilesOutputPath>$(MSBuildThisFileDirectory)obj\$(MSBuildProjectName)\$(Configuration)</CompilerGeneratedFilesOutputPath>
-        <DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
-        <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
-        <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
     </PropertyGroup>
 
     <ItemGroup>
