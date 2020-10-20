@@ -35,6 +35,9 @@ dotnet_diagnostic.IDE0060.severity = none
 # Not necessary in test projects
 dotnet_diagnostic.CS1591.severity = none
 
+# Underscores in names
+dotnet_diagnostic.CA1707.severity = none
+
 [obj/**.{cs,csx}]
 # Unnecessary usings - we don't have much control over these
 dotnet_diagnostic.CS8019.severity = none
