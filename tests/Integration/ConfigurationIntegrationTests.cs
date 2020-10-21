@@ -1,4 +1,3 @@
-using System;
 using System.Reflection;
 using System.Threading.Tasks;
 
@@ -17,6 +16,9 @@ using Microsoft.Extensions.Options;
 using NSubstitute;
 
 using NUnit.Framework;
+
+// This is another test - can we use static usings in our source file? See LAMBJ-89
+using static System.Environment;
 
 namespace Lambdajection.Tests.Integration.Configuration
 {
@@ -76,8 +78,8 @@ namespace Lambdajection.Tests.Integration.Configuration
         [SetUp]
         public void SetupEnvironmentVariables()
         {
-            Environment.SetEnvironmentVariable("Example:ExampleConfigValue", exampleConfigValue);
-            Environment.SetEnvironmentVariable("Example:ExampleEncryptedValue", exampleEncryptedValue);
+            SetEnvironmentVariable("Example:ExampleConfigValue", exampleConfigValue);
+            SetEnvironmentVariable("Example:ExampleEncryptedValue", exampleEncryptedValue);
         }
 
 
