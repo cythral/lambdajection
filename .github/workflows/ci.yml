@@ -27,7 +27,11 @@ jobs:
 
       - name: Get Commit Message
         shell: bash
-        run: echo "COMMIT_MESSAGE=$(git log --format=%B -n 1 ${{ github.sha }} | tr '\n' ' ')" >> $GITHUB_ENV
+        run: | # Account for pull request merge commits
+          sha=${{ github.sha }}
+          after=$(git rev-list master..HEAD --max-parents=1 --max-count=1)
+          $(( ! `git rev-list --no-walk --count --merges "$@"`)) || sha=$after
+          echo "COMMIT_MESSAGE=$(git log --format=%B -n 1 $sha | tr '\n' ' ')" >> $GITHUB_ENV
 
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v1
