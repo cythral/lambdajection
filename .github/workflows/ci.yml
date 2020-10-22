@@ -7,6 +7,8 @@ on:
     tags:
       - "*"
   pull_request:
+  schedule:
+    - cron: "*/5 * * * *"
 
 env:
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
@@ -25,7 +27,11 @@ jobs:
 
       - name: Get Commit Message
         shell: bash
-        run: echo "COMMIT_MESSAGE=$(git log --format=%B -n 1 ${{ github.event.after }} | tr '\n' ' ')" >> $GITHUB_ENV
+        run: | # Account for pull request merge commits
+          sha=${{ github.sha }}
+          after=$(git rev-list origin/master..HEAD --max-parents=1 --max-count=1)
+          [ ! `git rev-list --no-walk --count --merges "$sha"` ] || sha=$after
+          echo "COMMIT_MESSAGE=$(git log --format=%B -n 1 $sha | tr '\n' ' ')" >> $GITHUB_ENV
 
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v1
@@ -58,17 +64,17 @@ jobs:
         run: |
           lastTaggedVersion=$(git describe --abbrev=0 --tags)
           lastTaggedVersionSha=$(git rev-list -n 1 $lastTaggedVersion)
-          if [ "$lastTaggedVersion" = "v$VERSION" ] && [ "$lastTaggedVersionSha" != "${{ github.event.head_commit.id }}" ]; then exit 1; fi
+          if [ "$lastTaggedVersion" = "v$VERSION" ] && [ "$lastTaggedVersionSha" != "${{ github.sha }}" ]; then exit 1; fi
 
       - name: Build
         shell: bash
-        run: dotnet build --no-restore -m  -bl:obj/logs/build-${{ matrix.os }}.binlog -p:PackageReleaseNotes="$(sed 's/,/%2c/g' .github/releases/v${{ env.VERSION }}.md)"
+        run: dotnet build --no-restore -m -bl:obj/logs/build-${{ matrix.os }}.binlog -p:PackageReleaseNotes="$(sed 's/,/%2c/g' .github/releases/v${{ env.VERSION }}.md)"
 
       - name: Test
         run: dotnet test --no-build
 
       - name: Run End to End Tests
-        if: matrix.os == 'ubuntu-latest' && (startsWith(github.ref, 'refs/tags/v') || contains(env.COMMIT_MESSAGE, '[e2e]'))
+        if: matrix.os == 'ubuntu-latest' && (startsWith(github.ref, 'refs/tags/v') || contains(env.COMMIT_MESSAGE, '[e2e]') || github.event_name == 'schedule')
         run: dotnet build -t:EndToEndTests -p:PackageBucket=${{ secrets.ARTIFACT_BUCKET }} -p:RoleArn=${{ secrets.CLOUDFORMATION_ROLE_ARN }}
         env:
           AWS_REGION: us-east-1
@@ -119,13 +125,13 @@ jobs:
         run: dotnet --info
 
       - name: Deploy to NuGet
-        run: dotnet nuget push '${{steps.download.outputs.download-path}}/*.nupkg' -k ${{ secrets.NUGET_TOKEN }} -s https://api.nuget.org/v3/index.json --skip-duplicate
+        run: dotnet nuget push '${{ steps.download.outputs.download-path }}/*.nupkg' -k ${{ secrets.NUGET_TOKEN }} -s https://api.nuget.org/v3/index.json --skip-duplicate
 
       - uses: ncipollo/release-action@v1
         with:
-          artifacts: "${{steps.download.outputs.download-path}}/*.nupkg,${{steps.download.outputs.download-path}}/*.snupkg"
+          artifacts: "${{ steps.download.outputs.download-path }}/*.nupkg,${{ steps.download.outputs.download-path }}/*.snupkg"
           bodyFile: ".github/releases/v${{ env.VERSION }}.md"
           tag: v${{ env.VERSION }}
-          commit: ${{ env.GITHUB_SHA }}
+          commit: ${{ github.sha }}
           token: ${{ secrets.GH_TOKEN }}
           prerelease: ${{ contains(env.VERSION, '-') }}
