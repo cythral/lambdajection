@@ -1,0 +1,5 @@
+class TestMetadata
+{
+    public static string TestDirectory => @"__TestDirectory__";
+    public static string PackageVersion => "__PackageVersion__";
+}

@@ -49,6 +49,16 @@
           "System.Configuration.ConfigurationManager": "4.4.0"
         }
       },
+      "McMaster.NETCore.Plugins": {
+        "type": "Direct",
+        "requested": "[0.3.1, )",
+        "resolved": "0.3.1",
+        "contentHash": "z/1HgdS29vO16PcULKdhcTpgPaDlFP5BpipRUKd9+AUIDkb0vxNuLnuY6GO7VbwN9JsRxDwe5dXVdNfnJ5AKww==",
+        "dependencies": {
+          "Microsoft.DotNet.PlatformAbstractions": "3.0.0",
+          "Microsoft.Extensions.DependencyModel": "3.0.0"
+        }
+      },
       "Microsoft.Build.Locator": {
         "type": "Direct",
         "requested": "[1.2.6, )",
@@ -388,6 +398,11 @@
           "System.Runtime.InteropServices.RuntimeInformation": "4.0.0"
         }
       },
+      "Microsoft.DotNet.PlatformAbstractions": {
+        "type": "Transitive",
+        "resolved": "3.0.0",
+        "contentHash": "vNXBo/KzMer6lP6HBrPcM8mH57b/onaUPFwCcNTGCsuzvsRlWTYE/Cc04K6mdRxZSxLz3jtdli5vEkeuM/jjRA=="
+      },
       "Microsoft.Extensions.Configuration": {
         "type": "Transitive",
         "resolved": "3.1.8",
@@ -432,6 +447,14 @@
         "type": "Transitive",
         "resolved": "3.1.8",
         "contentHash": "YP0kEBkSLTVl3znqZEux+xyJpz5iVNwFZf0OPS7nupdKbojSlO7Fa+JuQjLYpWfpAshaMcznu27tjWzfXRJnOA=="
+      },
+      "Microsoft.Extensions.DependencyModel": {
+        "type": "Transitive",
+        "resolved": "3.0.0",
+        "contentHash": "Iaectmzg9Dc4ZbKX/FurrRjgO/I8rTumL5UU+Uube6vZuGetcnXoIgTA94RthFWePhdMVm8MMhVFJZdbzMsdyQ==",
+        "dependencies": {
+          "System.Text.Json": "4.6.0"
+        }
       },
       "Microsoft.Extensions.Logging": {
         "type": "Transitive",
@@ -1332,6 +1355,11 @@
           "System.Text.Encoding": "4.3.0"
         }
       },
+      "System.Text.Json": {
+        "type": "Transitive",
+        "resolved": "4.6.0",
+        "contentHash": "4F8Xe+JIkVoDJ8hDAZ7HqLkjctN/6WItJIzQaifBwClC7wmoLSda/Sv2i6i1kycqDb3hWF4JCVbpAweyOKHEUA=="
+      },
       "System.Text.RegularExpressions": {
         "type": "Transitive",
         "resolved": "4.3.0",
@@ -1505,7 +1533,9 @@
       "Lambdajection.Generator": {
         "type": "Project",
         "dependencies": {
+          "AWSSDK.Core": "3.5.1.20",
           "Lambdajection.Attributes": "1.0.0",
+          "Lambdajection.Core": "1.0.0",
           "Lambdajection.Encryption": "1.0.0",
           "Microsoft.CodeAnalysis": "3.8.0-4.final",
           "Microsoft.CodeAnalysis.CSharp.Workspaces": "3.8.0-4.final"

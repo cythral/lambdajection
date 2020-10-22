@@ -16,10 +16,6 @@
         <Exec Command="dotnet tool restore" ConsoleToMsBuild="true" />
     </Target>
 
-    <Target Name="RestoreNoFactoryCompilationTestProject" AfterTargets="Restore" Condition="'$(DesignTimeBuild)' != 'true'">
-        <MSBuild Projects="$(MSBuildThisFileDirectory)tests\Integration\NoFactoryCompilationTestProject\NoFactoryCompilationTestProject.csproj" Targets="Restore" />
-    </Target>
-
     <Target Name="RetrievePackageVersionFromTool">
         <Exec Command="dotnet nbgv get-version -v NuGetPackageVersion" ConsoleToMsBuild="true" StandardOutputImportance="Low">
             <Output TaskParameter="ConsoleOutput" PropertyName="PackageVersion" />

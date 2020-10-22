@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 
 using Lambdajection.Attributes;
+using Lambdajection.Core;
 using Lambdajection.Encryption;
 
 using Microsoft.CodeAnalysis;
@@ -156,7 +158,7 @@ namespace Lambdajection.Generator
                     var typeDefinition = semanticModel.GetTypeInfo(arg.Type).Type?.OriginalDefinition;
                     var qualifiedName = typeDefinition?.ContainingNamespace + "." + typeDefinition?.MetadataName + ", " + typeDefinition?.ContainingAssembly;
 
-                    if (qualifiedName != $"Lambdajection.Core.IAwsFactory`1, Lambdajection.Core, Version={ThisAssembly.AssemblyVersion}, Culture=neutral, PublicKeyToken=null")
+                    if (qualifiedName != typeof(IAwsFactory<>).AssemblyQualifiedName)
                     {
                         continue;
                     }
