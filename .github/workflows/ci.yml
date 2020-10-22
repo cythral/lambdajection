@@ -8,7 +8,7 @@ on:
       - "*"
   pull_request:
   schedule:
-    - cron: "*/5 * * * *"
+    - cron: "0 0 * * *"
 
 env:
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
