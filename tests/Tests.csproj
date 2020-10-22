@@ -40,7 +40,7 @@
     <PropertyGroup>
       <FileContents>
         $([System.IO.File]::ReadAllText('TestMetadata.txt')
-            .Replace('__TestDirectory__','$(MSBuildThisFileDirectory)')
+            .Replace('__TestDirectory__','$(MSBuildThisFileDirectory.Replace('\\', '\\\\'))')
             .Replace('__PackageVersion__', '$(PackageVersion)')
         )
       </FileContents>
