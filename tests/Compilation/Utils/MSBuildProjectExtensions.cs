@@ -28,7 +28,6 @@ namespace Microsoft.CodeAnalysis.MSBuild
             var compilation = (await project.GetCompilationAsync())!;
             var generator = new LambdaGenerator();
             var driver = CSharpGeneratorDriver.Create(new[] { generator });
-
             driver.RunGeneratorsAndUpdateCompilation(compilation, out var _, out var diagnotics);
 
             return diagnotics;
@@ -41,25 +40,21 @@ namespace Microsoft.CodeAnalysis.MSBuild
                 .WithOptimizationLevel(OptimizationLevel.Release);
 
             var compilation = (await project.GetCompilationAsync())!;
-            var generator = new LambdaGenerator();
-            var driver = CSharpGeneratorDriver.Create(new[] { generator });
+            var diagnostics = compilation.GetDiagnostics();
 
-            driver.RunGeneratorsAndUpdateCompilation(compilation, out var result, out var _);
-
-            var diagnostics = result.GetDiagnostics();
             if (diagnostics.Where(diagnostic => diagnostic.Severity == DiagnosticSeverity.Error).Any())
             {
                 throw new Exception("Compilation failed to generate\n" + string.Join('\n', diagnostics.Select(diagnostic => diagnostic.GetMessage())));
             }
 
             using var stream = new MemoryStream();
-            result.WithOptions(options).Emit(stream);
+            compilation.WithOptions(options).Emit(stream);
             stream.Position = 0;
 
             var context = new AssemblyLoadContext(Path.GetRandomFileName(), true);
             var tempContext = new AssemblyLoadContext(Path.GetRandomFileName(), true);
 
-            foreach (var reference in result.References)
+            foreach (var reference in compilation.References)
             {
                 var display = reference.Display!;
 

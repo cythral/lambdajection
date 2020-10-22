@@ -1,6 +1,6 @@
 <Project>
     <PropertyGroup>
-        <!-- <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles> -->
+        <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
     </PropertyGroup>
 
     <PropertyGroup>
