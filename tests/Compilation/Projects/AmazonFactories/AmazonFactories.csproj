@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <IsPackable>false</IsPackable>
+    <NoWarn>CS8019</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AWSSDK.S3" Version="3.5.2" />
+    <PackageReference Include="AWSSDK.SecurityToken" Version="3.5.1.2" />
+    <PackageReference Include="Lambdajection" Version="$(LambdajectionVersion)" />
+  </ItemGroup>
+</Project>

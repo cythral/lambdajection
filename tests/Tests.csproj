@@ -7,6 +7,7 @@
     <IsPackable>false</IsPackable>
     <AssemblyName>Lambdajection.Tests</AssemblyName>
     <NoWarn>CS1591;CA2007;CA1062</NoWarn> <!-- These often turn off if project settings change -->
+    <CoreCompileDependsOn>GenerateTestMetadata</CoreCompileDependsOn>
   </PropertyGroup>
 
   <ItemGroup>
@@ -23,6 +24,7 @@
     <PackageReference Include="nunit" Version="3.12.0" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.17.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.1" />
+    <PackageReference Include="McMaster.NETCore.Plugins" Version="0.3.1" />
 
     <!-- Added to resolve a version conflict, this isn't used directly -->
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.7.0" />
@@ -30,13 +32,28 @@
 
   <ItemGroup>
     <!-- Don't compile the NoFactoryCompilationTestProject, a test will do that at runtime. -->
-    <Compile Remove="Integration\NoFactoryCompilationTestProject\**" />
+    <Compile Remove="Compilation\Projects\**" />
+    <Compile Include="$(IntermediateOutputPath)\TestMetadata.cs" />
   </ItemGroup>
 
+  <Target Name="GenerateTestMetadata" DependsOnTargets="GetBuildVersion">
+    <PropertyGroup>
+      <FileContents>
+        $([System.IO.File]::ReadAllText('TestMetadata.txt')
+            .Replace('__TestDirectory__','$(MSBuildThisFileDirectory)')
+            .Replace('__PackageVersion__', '$(PackageVersion)')
+        )
+      </FileContents>
+    </PropertyGroup>
+
+    <WriteLinesToFile Lines="$(FileContents)" File="$(IntermediateOutputPath)\TestMetadata.cs" Overwrite="true" />
+  </Target>
+
   <ItemGroup>
-    <ProjectReference Include="..\src\Core\Core.csproj" SetTargetFramework="TargetFramework=netstandard2.1"/>
     <ProjectReference Include="..\src\Attributes\Attributes.csproj" />
+    <ProjectReference Include="..\src\Core\Core.csproj" SetTargetFramework="TargetFramework=netstandard2.1" />
     <ProjectReference Include="..\src\Encryption\Encryption.csproj" />
-    <ProjectReference Include="..\src\Generator\Generator.csproj" IncludeAssets="all" OutputItemType="Analyzer" />
+    <ProjectReference Include="..\src\Generator\Generator.csproj" />
+    <ProjectReference Include="..\src\Metapackage\Metapackage.csproj" PrivateAssets="all" ReferenceOutputAssembly="false" />
   </ItemGroup>
 </Project>
