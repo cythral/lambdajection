@@ -30,7 +30,7 @@ jobs:
         run: | # Account for pull request merge commits
           sha=${{ github.sha }}
           after=$(git rev-list origin/master..HEAD --max-parents=1 --max-count=1)
-          $(( ! `git rev-list --no-walk --count --merges "$@"`)) || sha=$after
+          [ `git rev-list --no-walk --count --merges "$sha"` ] || sha=$after
           echo "COMMIT_MESSAGE=$(git log --format=%B -n 1 $sha | tr '\n' ' ')" >> $GITHUB_ENV
 
       - name: Setup .NET Core
