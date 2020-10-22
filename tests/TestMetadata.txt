@@ -1,5 +1,5 @@
 class TestMetadata
 {
-    public static string TestDirectory { get; } = "__TestDirectory__";
-    public static string PackageVersion { get; } = "__PackageVersion__";
+    public static string TestDirectory => @"__TestDirectory__";
+    public static string PackageVersion => "__PackageVersion__";
 }
