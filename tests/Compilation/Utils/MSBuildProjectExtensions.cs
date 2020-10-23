@@ -11,6 +11,7 @@ using Lambdajection.Generator;
 
 using Microsoft.CodeAnalysis.CSharp;
 
+#pragma warning disable SA1009
 namespace Microsoft.CodeAnalysis.MSBuild
 {
     public static class MSBuildProjectExtensions
@@ -68,7 +69,9 @@ namespace Microsoft.CodeAnalysis.MSBuild
                         context.LoadFromAssemblyPath(display);
                     }
                 }
-                catch (BadImageFormatException) { }
+                catch (BadImageFormatException)
+                {
+                }
             }
 
             tempContext.Unload();
@@ -83,7 +86,7 @@ namespace Microsoft.CodeAnalysis.MSBuild
         public static Project WithoutReference(this Project project, string name)
         {
             var query = from reference in project.MetadataReferences
-                        where reference.Display!.Contains(name, System.StringComparison.OrdinalIgnoreCase)
+                        where reference.Display!.Contains(name, StringComparison.OrdinalIgnoreCase)
                         select reference;
 
             var referenceToRemove = query.First();

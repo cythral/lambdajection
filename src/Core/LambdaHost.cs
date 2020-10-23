@@ -24,35 +24,44 @@ namespace Lambdajection.Core
         where TLambdaConfigurator : class, ILambdaConfigurator
         where TLambdaConfigFactory : class, ILambdaConfigFactory, new()
     {
-        /// <value>Provides services to the lambda.</value>
-        public IServiceProvider ServiceProvider { get; internal set; } = default!;
-
-        /// <value>Whether the lambda host should run its initialization services.</value>
-        public bool RunInitializationServices { get; internal set; }
-
-        /// <value>Function to suppress the finalization of an object.</value>
-        public Action<object> SuppressFinalize { get; internal set; } = GC.SuppressFinalize;
-
         private TLambda? lambda;
 
         private IServiceScope? scope;
 
-
         /// <summary>
-        /// Constructs a new Lambda Host / IoC Container with the default host builder function.
+        /// Initializes a new instance of the <see cref="LambdaHost{TLambda, TLambdaParameter, TLambdaOutput, TLambdaStartup, TLambdaConfigurator, TLambdaConfigFactory}" /> class.
         /// </summary>
-        public LambdaHost() : this(LambdaHostBuilder<TLambda, TLambdaParameter, TLambdaOutput, TLambdaStartup, TLambdaConfigurator, TLambdaConfigFactory>.Build)
+        public LambdaHost()
+            : this(LambdaHostBuilder<TLambda, TLambdaParameter, TLambdaOutput, TLambdaStartup, TLambdaConfigurator, TLambdaConfigFactory>.Build)
         {
         }
 
         /// <summary>
-        /// Constructs a new Lambda Host / IoC Container with the given host builder function.
+        /// Initializes a new instance of the <see cref="LambdaHost{TLambda, TLambdaParameter, TLambdaOutput, TLambdaStartup, TLambdaConfigurator, TLambdaConfigFactory}" /> class.
         /// </summary>
-        /// <param name="build"></param>
+        /// <param name="build">The builder action to run on this lambda.</param>
         internal LambdaHost(Action<LambdaHost<TLambda, TLambdaParameter, TLambdaOutput, TLambdaStartup, TLambdaConfigurator, TLambdaConfigFactory>> build)
         {
             build(this);
         }
+
+        /// <summary>
+        /// Gets the service provider to use for the lambda.
+        /// </summary>
+        /// <value>Provides services to the lambda.</value>
+        public IServiceProvider ServiceProvider { get; internal set; } = default!;
+
+        /// <summary>
+        /// Gets a value indicating whether to run initialization services on the lambda.
+        /// </summary>
+        /// <value>Whether the lambda host should run its initialization services.</value>
+        public bool RunInitializationServices { get; internal set; }
+
+        /// <summary>
+        /// Gets the function used to suppress finalizers.
+        /// </summary>
+        /// <value>Function to suppress the finalization of an object.</value>
+        public Action<object> SuppressFinalize { get; internal set; } = GC.SuppressFinalize;
 
         /// <summary>
         /// Runs the lambda.
@@ -62,7 +71,10 @@ namespace Lambdajection.Core
         /// <returns>The return value of the lambda.</returns>
         public async Task<TLambdaOutput> Run(TLambdaParameter parameter, ILambdaContext context)
         {
-            if (RunInitializationServices) await Initialize();
+            if (RunInitializationServices)
+            {
+                await Initialize();
+            }
 
             scope = ServiceProvider.CreateScope();
             lambda = scope.ServiceProvider.GetRequiredService<TLambda>();
@@ -70,20 +82,10 @@ namespace Lambdajection.Core
             return await lambda.Handle(parameter, context);
         }
 
-        private async Task Initialize()
-        {
-            var services = ServiceProvider.GetServices<ILambdaInitializationService>();
-
-            var initializeTasks = services.Select(service => service.Initialize());
-            await Task.WhenAll(initializeTasks);
-
-            var disposeTasks = services.Select(MaybeDispose);
-            await Task.WhenAll(disposeTasks);
-        }
-
         /// <summary>
-        /// Disposes the Lambda Host and its subresources asynchronously
+        /// Disposes the Lambda Host and its subresources asynchronously.
         /// </summary>
+        /// <returns>The disposal task.</returns>
         public async ValueTask DisposeAsync()
         {
             await MaybeDispose(scope);
@@ -104,6 +106,17 @@ namespace Lambdajection.Core
             }
 
             (obj as IDisposable)?.Dispose();
+        }
+
+        private async Task Initialize()
+        {
+            var services = ServiceProvider.GetServices<ILambdaInitializationService>();
+
+            var initializeTasks = services.Select(service => service.Initialize());
+            await Task.WhenAll(initializeTasks);
+
+            var disposeTasks = services.Select(MaybeDispose);
+            await Task.WhenAll(disposeTasks);
         }
     }
 }

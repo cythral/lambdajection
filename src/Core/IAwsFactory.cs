@@ -9,7 +9,8 @@ namespace Lambdajection.Core
     /// of assuming a role.
     /// </summary>
     /// <typeparam name="TAmazonService">The interface type of the Amazon Service Client to create.</typeparam>
-    public interface IAwsFactory<TAmazonService> where TAmazonService : IAmazonService
+    public interface IAwsFactory<TAmazonService>
+        where TAmazonService : IAmazonService
     {
         /// <summary>
         /// Creates an Amazon Service Client of type TAmazonService.

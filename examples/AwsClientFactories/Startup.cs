@@ -13,7 +13,7 @@ namespace Lambdajection.Examples.AwsClientFactories
 
         public Startup(IConfiguration configuration)
         {
-            this.Configuration = configuration;
+            Configuration = configuration;
         }
 
         public void ConfigureServices(IServiceCollection services)

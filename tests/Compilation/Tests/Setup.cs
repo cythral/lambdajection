@@ -9,10 +9,9 @@ using static System.Environment;
 
 namespace Lambdajection.Tests.Compilation
 {
-
     [SetUpFixture]
     [Category("Integration")]
-    public class CompilationSetup
+    public class Setup
     {
         [OneTimeSetUp]
         public void RestoreCompilationProjects()

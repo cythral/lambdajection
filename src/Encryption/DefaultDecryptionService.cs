@@ -15,7 +15,7 @@ namespace Lambdajection.Encryption
         private readonly IAmazonKeyManagementService kmsClient;
 
         /// <summary>
-        /// Constructs a new DefaultDecryptionService
+        /// Initializes a new instance of the <see cref="DefaultDecryptionService" /> class.
         /// </summary>
         /// <param name="kmsClient">The KMS Client to use when decrypting values.</param>
         public DefaultDecryptionService(IAmazonKeyManagementService kmsClient)

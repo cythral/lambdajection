@@ -1,4 +1,3 @@
-
 using System;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -21,6 +20,7 @@ using NUnit.Framework;
 
 using static NSubstitute.Arg;
 
+#pragma warning disable SA1009
 namespace Lambdajection.Tests.Compilation
 {
     [Category("Integration")]

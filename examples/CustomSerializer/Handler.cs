@@ -26,8 +26,11 @@ namespace Lambdajection.Examples.CustomSerializer
             var path = Regex.Replace(request.Path, @"^\/", "");
             var contents = await reader.ReadAsString(path);
 
+#pragma warning disable IDE0046
             if (contents == null)
             {
+#pragma warning restore IDE0046
+
                 return new ApplicationLoadBalancerResponse
                 {
                     StatusCode = (int)HttpStatusCode.NotFound,

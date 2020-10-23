@@ -10,6 +10,7 @@ namespace Lambdajection.Core
         /// <summary>
         /// Runs the initialization service's instructions.
         /// </summary>
+        /// <returns>The initialization task.</returns>
         Task Initialize();
     }
 }

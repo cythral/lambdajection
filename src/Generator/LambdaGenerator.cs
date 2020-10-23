@@ -17,6 +17,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxKind;
 
+#pragma warning disable SA1204, SA1009
 namespace Lambdajection.Generator
 {
     [Generator]
@@ -55,7 +56,7 @@ namespace Lambdajection.Generator
                                       ConfigFactoryType = GetAttributeArgument(attr, "ConfigFactory"),
                                       StartupTypeName = startupType.Name,
                                       StartupTypeDisplayName = startupType.ToDisplayString(),
-                                      Settings = settings
+                                      Settings = settings,
                                   }
 
                                   let unit = GenerateUnit(generationContext)
@@ -87,7 +88,8 @@ namespace Lambdajection.Generator
                 }
             }
         }
-        private static INamedTypeSymbol? GetAttributeArgument(AttributeData attributeData, string argName)
+
+        public static INamedTypeSymbol? GetAttributeArgument(AttributeData attributeData, string argName)
         {
             if (argName == "Startup")
             {
@@ -168,7 +170,7 @@ namespace Lambdajection.Generator
                         Id = "LJ0002",
                         Title = "Factories Not Enabled",
                         Description = "Add AWSSDK.SecurityToken as a dependency of your project to use AWS Factories.",
-                        Location = Location.Create(declaration.SyntaxTree, declaration.Span)
+                        Location = Location.Create(declaration.SyntaxTree, declaration.Span),
                     };
                 }
             }
@@ -189,29 +191,23 @@ namespace Lambdajection.Generator
         {
             var inputParameter = handleMethod.ParameterList.Parameters[0];
             var contextParameter = handleMethod.ParameterList.Parameters[1];
-            var inputType = inputParameter?.Type?.ToString() ?? "";
-            var contextType = contextParameter?.Type?.ToString() ?? "";
+            var inputType = inputParameter?.Type?.ToString() ?? string.Empty;
+            var contextType = contextParameter?.Type?.ToString() ?? string.Empty;
             var returnType = handleMethod.ReturnType.ChildNodes().ElementAt(0).ChildNodes().ElementAt(0);
             var typeConstraints = new BaseTypeSyntax[] { SimpleBaseType(ParseTypeName($"ILambda<{inputType},{returnType}>")) };
 
             string? GetSerializerName()
             {
-                if (context.SerializerType != null)
-                {
-                    return context.SerializerType.Name;
-                }
-
-                return context.Settings.IncludeDefaultSerializer ? "DefaultLambdaJsonSerializer" : null;
+                var result = context.SerializerType?.Name;
+                result ??= context.Settings.IncludeDefaultSerializer ? "DefaultLambdaJsonSerializer" : null;
+                return result;
             }
 
             string? GetSerializerNamespace()
             {
-                if (context.SerializerType != null)
-                {
-                    return context.SerializerType.ContainingNamespace?.ToString();
-                }
-
-                return context.Settings.IncludeDefaultSerializer ? "Amazon.Lambda.Serialization.SystemTextJson" : null;
+                var result = context.SerializerType?.ContainingNamespace?.ToString();
+                result ??= context.Settings.IncludeDefaultSerializer ? "Amazon.Lambda.Serialization.SystemTextJson" : null;
+                return result;
             }
 
             MemberDeclarationSyntax GenerateRunMethod()
@@ -281,8 +277,7 @@ namespace Lambdajection.Generator
                 .AddModifiers(Token(PartialKeyword))
                 .AddMembers(
                     GenerateRunMethod(),
-                    GenerateConfigurator(context, scanResults)
-                );
+                    GenerateConfigurator(context, scanResults));
 
             if (context.Settings.GenerateEntrypoint)
             {
@@ -336,7 +331,7 @@ namespace Lambdajection.Generator
                     .WithModifiers(TokenList(publicModifiersList))
                     .WithParameterList(ParameterList(parameters))
                     .WithBody(Block(GenerateConfigureMethodBody()));
-            };
+            }
 
             IEnumerable<StatementSyntax> GenerateConfigureAwsServicesMethodBody()
             {
@@ -377,8 +372,7 @@ namespace Lambdajection.Generator
                 .WithBaseList(BaseList(Token(ColonToken), SeparatedList(typeConstraints)))
                 .AddMembers(
                     GenerateConfigureOptionsMethod(),
-                    GenerateConfigureAwsServicesMethod()
-                );
+                    GenerateConfigureAwsServicesMethod());
 
             if (context.Settings.IncludeAmazonFactories)
             {
@@ -547,7 +541,8 @@ namespace Lambdajection.Generator
 
                 IEnumerable<StatementSyntax> GenerateBody()
                 {
-                    yield return IfStatement(ParseExpression("roleArn != null"),
+                    yield return IfStatement(
+                        ParseExpression("roleArn != null"),
                         Block(
                             ParseStatement("var request = new AssumeRoleRequest { RoleArn = roleArn, RoleSessionName = \"lambdajection-assume-role\" };"),
                             ParseStatement("var response = await stsClient.AssumeRoleAsync(request);"),
@@ -586,6 +581,5 @@ namespace Lambdajection.Generator
                     GenerateCreateMethod()
                 );
         }
-
     }
 }

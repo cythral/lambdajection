@@ -7,9 +7,9 @@ namespace Lambdajection.Generator
     {
         public LambdaCompilationScanResult(HashSet<OptionClass> optionClasses, IEnumerable<AwsServiceMetadata> awsServices, bool includeDecryptionFacade)
         {
-            this.OptionClasses = optionClasses;
-            this.AwsServices = awsServices;
-            this.IncludeDecryptionFacade = includeDecryptionFacade;
+            OptionClasses = optionClasses;
+            AwsServices = awsServices;
+            IncludeDecryptionFacade = includeDecryptionFacade;
         }
 
         public HashSet<OptionClass> OptionClasses { get; }
@@ -18,6 +18,15 @@ namespace Lambdajection.Generator
 
         public bool IncludeDecryptionFacade { get; }
 
+        public static bool operator ==(LambdaCompilationScanResult scanA, LambdaCompilationScanResult scanB)
+        {
+            return scanA.Equals(scanB);
+        }
+
+        public static bool operator !=(LambdaCompilationScanResult scanA, LambdaCompilationScanResult scanB)
+        {
+            return !scanA.Equals(scanB);
+        }
 
         public override bool Equals(object? obj)
         {
@@ -36,17 +45,7 @@ namespace Lambdajection.Generator
 
         public override int GetHashCode()
         {
-            return new { OptionClasses, AwsServices, IncludeDecryptionFacade }.GetHashCode();
-        }
-
-        public static bool operator ==(LambdaCompilationScanResult scanA, LambdaCompilationScanResult scanB)
-        {
-            return scanA.Equals(scanB);
-        }
-
-        public static bool operator !=(LambdaCompilationScanResult scanA, LambdaCompilationScanResult scanB)
-        {
-            return !scanA.Equals(scanB);
+            return HashCode.Combine(OptionClasses, AwsServices, IncludeDecryptionFacade);
         }
     }
 }

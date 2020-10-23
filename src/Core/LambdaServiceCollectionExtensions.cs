@@ -9,7 +9,6 @@ namespace Lambdajection.Core
     /// </summary>
     public static class LambdaServiceCollectionExtensions
     {
-
 #pragma warning disable IDE0060
 
         /// <summary>
@@ -18,7 +17,8 @@ namespace Lambdajection.Core
         /// </summary>
         /// <param name="serviceCollection">Services to be injected into the lambda's container.</param>
         /// <typeparam name="TAwsService">The interface type of the Amazon Service Client to use.</typeparam>
-        public static void UseAwsService<TAwsService>(this IServiceCollection serviceCollection) where TAwsService : IAmazonService
+        public static void UseAwsService<TAwsService>(this IServiceCollection serviceCollection)
+            where TAwsService : IAmazonService
         {
             // logic handled by generator
         }

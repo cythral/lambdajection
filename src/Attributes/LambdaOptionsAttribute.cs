@@ -12,19 +12,21 @@ namespace Lambdajection.Attributes
     public class LambdaOptionsAttribute : Attribute
     {
         /// <summary>
-        /// Constructs a new LambdaOptionsAttribute.
+        /// Initializes a new instance of the <see cref="LambdaOptionsAttribute" /> class.
         /// </summary>
         /// <param name="lambdaType">The lambda type to add options to.</param>
         /// <param name="sectionName">The section name to read option values from.</param>
         public LambdaOptionsAttribute(Type lambdaType, string sectionName)
         {
-            this.LambdaType = lambdaType;
-            this.SectionName = sectionName;
+            LambdaType = lambdaType;
+            SectionName = sectionName;
         }
 
+        /// <summary>Gets or sets the lambda handler type to add options to.</summary>
         /// <value>The lambda type to add options to.</value>
         public Type LambdaType { get; set; }
 
+        /// <summary>Gets or sets the options section name.</summary>
         /// <value>The section name to read option values from.</value>
         public string SectionName { get; set; }
     }

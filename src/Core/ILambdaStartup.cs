@@ -19,6 +19,8 @@ namespace Lambdajection.Core
         /// Configures the logging to be used in the lambda's IoC container.
         /// </summary>
         /// <param name="logging">Object used to build a lambda logger.</param>
-        void ConfigureLogging(ILoggingBuilder logging) { }
+        void ConfigureLogging(ILoggingBuilder logging)
+        {
+        }
     }
 }
