@@ -13,7 +13,8 @@ on:
 env:
   DOTNET_NOLOGO: "true"
   CONFIGURATION: Release
-  PACKAGES_FEED_URL: https://nuget.pkg.github.com/cythral/index.json
+  NUGET_FEED_URL: https://api.nuget.org/v3/index.json
+  GITHUB_PACKAGES_FEED_URL: https://nuget.pkg.github.com/cythral/index.json
 
 jobs:
   build:
@@ -37,6 +38,10 @@ jobs:
 
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v1
+        with:
+          source-url: ${{ env.GITHUB_PACKAGES_FEED_URL }}
+        env:
+          NUGET_AUTH_TOKEN: ${{ secrets.GH_TOKEN }}
 
       - name: Display .NET Info
         run: dotnet --info
@@ -92,9 +97,7 @@ jobs:
 
       - name: Deploy to Github Packages
         if: matrix.os == 'ubuntu-latest'
-        run: dotnet nuget push bin/Packages/${CONFIGURATION}/*.nupkg -k ${GITHUB_TOKEN} -s ${PACKAGES_FEED_URL}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: dotnet nuget push 'bin/Packages/${CONFIGURATION}/*.nupkg' --skip-duplicate
 
   release:
     needs: build
@@ -117,12 +120,16 @@ jobs:
 
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v1
+        with:
+          source-url: ${{ env.NUGET_FEED_URL }}
+        env:
+          NUGET_AUTH_TOKEN: ${{ secrets.NUGET_TOKEN }}
 
       - name: Display .NET Info
         run: dotnet --info
 
       - name: Deploy to NuGet
-        run: dotnet nuget push '${{ steps.download.outputs.download-path }}/*.nupkg' -k ${{ secrets.NUGET_TOKEN }} -s https://api.nuget.org/v3/index.json --skip-duplicate
+        run: dotnet nuget push '${{ steps.download.outputs.download-path }}/*.nupkg' --skip-duplicate
 
       - uses: ncipollo/release-action@v1
         with:
