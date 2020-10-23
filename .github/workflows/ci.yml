@@ -87,7 +87,7 @@ jobs:
         uses: actions/upload-artifact@v1
         with:
           name: nugets
-          path: bin/Packages/${CONFIGURATION}
+          path: bin/Packages/${{ env.CONFIGURATION }}
 
       - name: Upload Logs
         uses: actions/upload-artifact@v1
