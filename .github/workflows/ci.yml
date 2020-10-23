@@ -35,8 +35,13 @@ jobs:
           [ ! `git rev-list --no-walk --count --merges "$sha"` ] || sha=$after
           echo "COMMIT_MESSAGE=$(git log --format=%B -n 1 $sha | tr '\n' ' ')" >> $GITHUB_ENV
 
-      - name: Setup .NET Core
+      - name: Setup .NET Core (Current)
         uses: actions/setup-dotnet@v1
+
+      - name: Setup .NET Core (3.1)
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 3.1.x
 
       - name: Display .NET Info
         run: dotnet --info
@@ -77,14 +82,14 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
-      - name: Upload nugets
+      - name: Upload Nugets
         if: matrix.os == 'ubuntu-latest'
         uses: actions/upload-artifact@v1
         with:
           name: nugets
           path: bin/Packages/${CONFIGURATION}
 
-      - name: Upload logs
+      - name: Upload Logs
         uses: actions/upload-artifact@v1
         with:
           name: logs-${{ matrix.os }}
