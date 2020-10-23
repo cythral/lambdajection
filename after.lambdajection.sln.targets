@@ -45,7 +45,7 @@
         DependsOnTargets="RetrievePackageVersionFromTool" 
         Condition="'$(DesignTimeBuild)' != 'true'"
     >
-        <Exec Command="dotnet json get version.json version" ConsoleToMsBuild="true" StandardOutputImportance="Low">
+        <Exec Command="dotnet json get $(MSBuildThisFileDirectory)version.json version" ConsoleToMsBuild="true" StandardOutputImportance="Low">
             <Output TaskParameter="ConsoleOutput" PropertyName="SimpleVersion" />
         </Exec>
 
