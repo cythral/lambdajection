@@ -20,8 +20,13 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Setup .NET Core
+      - name: Setup .NET Core (Current)
         uses: actions/setup-dotnet@v1
+
+      - name: Setup .NET Core (3.1)
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 3.1.x
 
       - run: git checkout HEAD^2
         if: ${{ github.event_name == 'pull_request' }}
