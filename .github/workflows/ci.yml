@@ -35,13 +35,8 @@ jobs:
           [ ! `git rev-list --no-walk --count --merges "$sha"` ] || sha=$after
           echo "COMMIT_MESSAGE=$(git log --format=%B -n 1 $sha | tr '\n' ' ')" >> $GITHUB_ENV
 
-      - name: Setup .NET Core (Current)
+      - name: Setup .NET Core
         uses: actions/setup-dotnet@v1
-
-      - name: Setup .NET Core (3.1)
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: 3.1.x
 
       - name: Display .NET Info
         run: dotnet --info
