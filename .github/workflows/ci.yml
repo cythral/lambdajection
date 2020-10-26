@@ -40,6 +40,7 @@ jobs:
         uses: actions/setup-dotnet@v1
         with:
           source-url: ${{ env.GITHUB_PACKAGES_FEED_URL }}
+          owner: cythral
         env:
           NUGET_AUTH_TOKEN: ${{ secrets.GH_TOKEN }}
 
