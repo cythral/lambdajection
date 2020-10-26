@@ -98,7 +98,9 @@ jobs:
 
       - name: Deploy to Github Packages
         if: matrix.os == 'ubuntu-latest'
-        run: dotnet nuget push "bin/Packages/${CONFIGURATION}/*.nupkg" --skip-duplicate --no-symbols 1
+        run: dotnet nuget push "bin/Packages/${CONFIGURATION}/*.nupkg" -k ${GH_TOKEN} --skip-duplicate --no-symbols 1
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
 
   release:
     needs: build
