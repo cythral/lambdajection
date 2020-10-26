@@ -53,8 +53,6 @@ jobs:
 
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v1
-        with:
-          source-url: ${{ env.GITHUB_PACKAGES_FEED_URL }}
 
       - name: Display .NET Info
         run: dotnet --info
@@ -95,9 +93,10 @@ jobs:
 
       - name: Deploy to Github Packages
         if: matrix.os == 'ubuntu-latest'
-        run: dotnet nuget push "bin/Packages/${CONFIGURATION}/*.nupkg" -k ${FEED_TOKEN} --skip-duplicate --no-symbols 1
+        run: dotnet nuget push "bin/Packages/${CONFIGURATION}/*.nupkg" -k ${FEED_TOKEN} -s ${FEED_URL} --skip-duplicate --no-symbols 1
         env:
           FEED_TOKEN: ${{ secrets.GH_TOKEN }}
+          FEED_URL: ${{ env.GITHUB_PACKAGES_FEED_URL }}
 
   release:
     needs: build
@@ -120,16 +119,15 @@ jobs:
 
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v1
-        with:
-          source-url: ${{ env.NUGET_FEED_URL }}
 
       - name: Display .NET Info
         run: dotnet --info
 
       - name: Deploy to NuGet
-        run: dotnet nuget push '${{ steps.download.outputs.download-path }}/*.nupkg' -k ${FEED_TOKEN} --skip-duplicate
+        run: dotnet nuget push '${{ steps.download.outputs.download-path }}/*.nupkg' -k ${FEED_TOKEN} -s ${FEED_URL} --skip-duplicate
         env:
           FEED_TOKEN: ${{ secrets.NUGET_TOKEN }}
+          FEED_URL: ${{ env.NUGET_FEED_URL }}
 
       - uses: ncipollo/release-action@v1
         with:
