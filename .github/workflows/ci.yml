@@ -97,7 +97,7 @@ jobs:
 
       - name: Deploy to Github Packages
         if: matrix.os == 'ubuntu-latest'
-        run: dotnet nuget push 'bin/Packages/${CONFIGURATION}/*.nupkg' --skip-duplicate
+        run: dotnet nuget push "bin/Packages/${CONFIGURATION}/*.nupkg" --skip-duplicate
 
   release:
     needs: build
