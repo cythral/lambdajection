@@ -36,21 +36,7 @@ jobs:
           [ ! `git rev-list --no-walk --count --merges "$sha"` ] || sha=$after
           echo "COMMIT_MESSAGE=$(git log --format=%B -n 1 $sha | tr '\n' ' ')" >> $GITHUB_ENV
 
-      - name: Setup .NET Core
-        uses: actions/setup-dotnet@v1
-        with:
-          source-url: ${{ env.GITHUB_PACKAGES_FEED_URL }}
-          owner: cythral-ci
-        env:
-          NUGET_AUTH_TOKEN: ${{ secrets.GH_TOKEN }}
-
-      - name: Display .NET Info
-        run: dotnet --info
-
-      - name: Restore
-        run: dotnet restore
-
-      - name: Set version
+            - name: Set version
         shell: bash
         run: echo "VERSION=$(cat version.json | jq -r '.version')" >> $GITHUB_ENV
 
@@ -64,6 +50,17 @@ jobs:
           lastTaggedVersion=$(git describe --abbrev=0 --tags)
           lastTaggedVersionSha=$(git rev-list -n 1 $lastTaggedVersion)
           if [ "$lastTaggedVersion" = "v$VERSION" ] && [ "$lastTaggedVersionSha" != "${{ github.sha }}" ]; then exit 1; fi
+
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          source-url: ${{ env.GITHUB_PACKAGES_FEED_URL }}
+
+      - name: Display .NET Info
+        run: dotnet --info
+
+      - name: Restore
+        run: dotnet restore
 
       - name: Build
         shell: bash
@@ -98,9 +95,9 @@ jobs:
 
       - name: Deploy to Github Packages
         if: matrix.os == 'ubuntu-latest'
-        run: dotnet nuget push "bin/Packages/${CONFIGURATION}/*.nupkg" -k ${GH_TOKEN} --skip-duplicate --no-symbols 1
+        run: dotnet nuget push "bin/Packages/${CONFIGURATION}/*.nupkg" -k ${FEED_TOKEN} --skip-duplicate --no-symbols 1
         env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          FEED_TOKEN: ${{ secrets.GH_TOKEN }}
 
   release:
     needs: build
@@ -125,14 +122,14 @@ jobs:
         uses: actions/setup-dotnet@v1
         with:
           source-url: ${{ env.NUGET_FEED_URL }}
-        env:
-          NUGET_AUTH_TOKEN: ${{ secrets.NUGET_TOKEN }}
 
       - name: Display .NET Info
         run: dotnet --info
 
       - name: Deploy to NuGet
-        run: dotnet nuget push '${{ steps.download.outputs.download-path }}/*.nupkg' --skip-duplicate
+        run: dotnet nuget push '${{ steps.download.outputs.download-path }}/*.nupkg' -k ${FEED_TOKEN} --skip-duplicate
+        env:
+          FEED_TOKEN: ${{ secrets.NUGET_TOKEN }}
 
       - uses: ncipollo/release-action@v1
         with:
