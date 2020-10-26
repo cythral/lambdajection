@@ -16,17 +16,29 @@
     </ItemGroup>
 
     <Target Name="RestoreTools" AfterTargets="Restore">
-        <Exec 
-            Command="dotnet nbgv --help" 
-            ConsoleToMsBuild="true" 
-            IgnoreExitCode="true" 
-            StandardOutputImportance="Low" 
+        <Exec
+            Command="dotnet json --help"
+            ConsoleToMsBuild="true"
+            StandardOutputImportance="Low"
             StandardErrorImportance="Low"
         >
-            <Output TaskParameter="ExitCode" PropertyName="NGBV_ExitCode" />
+            <Output TaskParameter="ExitCode" PropertyName="Tool_JSON_ExitCode" />
         </Exec>
 
-        <Exec Command="dotnet tool restore" ConsoleToMsBuild="true" Condition="'$(NGBV_ExitCode)' != '0'" />
+        <Exec
+            Command="dotnet nbgv --help"
+            ConsoleToMsBuild="true"
+            StandardOutputImportance="Low"
+            StandardErrorImportance="Low"
+        >
+            <Output TaskParameter="ExitCode" PropertyName="Tool_NBGV_ExitCode" />
+        </Exec>
+
+        <Exec
+            Command="dotnet tool restore"
+            ConsoleToMsBuild="true"
+            Condition="$(Tool_JSON_ExitCode) != '0' or $(Tool_NBGV_ExitCode) != '0'"
+        />
     </Target>
 
     <Target Name="RetrievePackageVersionFromTool" DependsOnTargets="RestoreTools">
@@ -39,10 +51,10 @@
         </ItemGroup>
     </Target>
 
-    <Target 
+    <Target
         Name="GetReleaseNotes"
         BeforeTargets="Build"
-        DependsOnTargets="RetrievePackageVersionFromTool" 
+        DependsOnTargets="RetrievePackageVersionFromTool"
         Condition="'$(DesignTimeBuild)' != 'true'"
     >
         <Exec Command="dotnet json get $(MSBuildThisFileDirectory)version.json version" ConsoleToMsBuild="true" StandardOutputImportance="Low">
@@ -67,19 +79,19 @@
         <Message Importance="High" Text="Release Notes:%0A$(PackageReleaseNotes)%0A" />
     </Target>
 
-    <Target 
-        Name="CleanExamplesAndTemplates" 
-        AfterTargets="Clean" 
-        DependsOnTargets="Restore;RetrievePackageVersionFromTool" 
+    <Target
+        Name="CleanExamplesAndTemplates"
+        AfterTargets="Clean"
+        DependsOnTargets="Restore;RetrievePackageVersionFromTool"
         Condition="'$(DesignTimeBuild)' != 'true'"
     >
         <MSBuild Projects="@(ChildSolution)" Targets="Clean" Properties="@(ChildSolutionProp)" />
     </Target>
 
-    <Target 
-        Name="BuildExamplesAndTemplates" 
-        AfterTargets="Build" 
-        DependsOnTargets="Build;RetrievePackageVersionFromTool" 
+    <Target
+        Name="BuildExamplesAndTemplates"
+        AfterTargets="Build"
+        DependsOnTargets="Build;RetrievePackageVersionFromTool"
         Condition="'$(BuildExamplesAndTemplates)' == 'true' and '$(DesignTimeBuild)' != 'true'"
     >
         <ItemGroup>
