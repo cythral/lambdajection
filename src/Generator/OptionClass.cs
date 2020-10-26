@@ -9,15 +9,26 @@ namespace Lambdajection.Generator
     {
         public OptionClass(string configSectionName, ClassDeclarationSyntax classDeclaration, IEnumerable<string> encryptedProperties)
         {
-            this.ConfigSectionName = configSectionName;
-            this.ClassDeclaration = classDeclaration;
-            this.EncryptedProperties = encryptedProperties;
+            ConfigSectionName = configSectionName;
+            ClassDeclaration = classDeclaration;
+            EncryptedProperties = encryptedProperties;
         }
 
         public string ConfigSectionName { get; }
+
         public ClassDeclarationSyntax ClassDeclaration { get; }
+
         public IEnumerable<string> EncryptedProperties { get; }
 
+        public static bool operator ==(OptionClass optionClassA, OptionClass optionClassB)
+        {
+            return optionClassA.Equals(optionClassB);
+        }
+
+        public static bool operator !=(OptionClass optionClassA, OptionClass optionClassB)
+        {
+            return !optionClassA.Equals(optionClassB);
+        }
 
         public override bool Equals(object? obj)
         {
@@ -32,16 +43,6 @@ namespace Lambdajection.Generator
         public override int GetHashCode()
         {
             return ConfigSectionName.GetHashCode(StringComparison.OrdinalIgnoreCase);
-        }
-
-        public static bool operator ==(OptionClass optionClassA, OptionClass optionClassB)
-        {
-            return optionClassA.Equals(optionClassB);
-        }
-
-        public static bool operator !=(OptionClass optionClassA, OptionClass optionClassB)
-        {
-            return !optionClassA.Equals(optionClassB);
         }
     }
 }

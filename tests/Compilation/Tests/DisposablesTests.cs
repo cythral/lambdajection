@@ -7,9 +7,9 @@ using Microsoft.CodeAnalysis.MSBuild;
 
 using NUnit.Framework;
 
+#pragma warning disable SA1009
 namespace Lambdajection.Tests.Compilation
 {
-
     [Category("Integration")]
     public class DisposablesTests
     {
@@ -23,7 +23,6 @@ namespace Lambdajection.Tests.Compilation
             project = await MSBuildProjectExtensions.LoadProject(projectPath);
         }
 
-
         [Test]
         public async Task Run_DisposesLambda()
         {
@@ -32,7 +31,7 @@ namespace Lambdajection.Tests.Compilation
             var handlerType = assembly.GetType("Lambdajection.CompilationTests.Disposables.DisposableHandler")!;
             var runMethod = handlerType.GetMethod("Run")!;
 
-            var task = (Task)runMethod.Invoke(null, new[] { "", null })!;
+            var task = (Task)runMethod.Invoke(null, new[] { string.Empty, null })!;
             await task;
 
             var dynamicTask = (dynamic)task;
@@ -50,7 +49,7 @@ namespace Lambdajection.Tests.Compilation
             var handlerType = assembly.GetType("Lambdajection.CompilationTests.Disposables.AsyncDisposableHandler")!;
             var runMethod = handlerType.GetMethod("Run")!;
 
-            var task = (Task)runMethod.Invoke(null, new[] { "", null })!;
+            var task = (Task)runMethod.Invoke(null, new[] { string.Empty, null })!;
             await task;
 
             var dynamicTask = (dynamic)task;

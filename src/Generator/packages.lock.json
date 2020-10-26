@@ -23,9 +23,9 @@
       },
       "Microsoft.CodeAnalysis.CSharp.CodeStyle": {
         "type": "Direct",
-        "requested": "[3.8.0-1.20330.5, )",
-        "resolved": "3.8.0-1.20330.5",
-        "contentHash": "0zUYloT5NiZGNjK0IvSSoe7gCg9RpQT0CmtgkHqp5VVNw8KvdlqXuVGawutAGvBuISMfCqlQ3Wu30VYbeI1DqA=="
+        "requested": "[3.8.0-4.final, )",
+        "resolved": "3.8.0-4.final",
+        "contentHash": "nW1pIP4Mw97u8rIvqc4XshfTFRXaYNT2xd5udW4rfJ8sex7OjMFdLWMpGaaPFFVM/OsqMnRf2dkctQZQEmY/3g=="
       },
       "Microsoft.CodeAnalysis.CSharp.Workspaces": {
         "type": "Direct",
@@ -66,6 +66,15 @@
         "requested": "[3.3.37, )",
         "resolved": "3.3.37",
         "contentHash": "YlDKV/gSHQGDThWSGqVyPfKeNP/kx1fj/NPFFgGc/cxzgIbXv4jtYOcbFOz3ZIeAKtpCcSAmVNDOikBs3OxI/A=="
+      },
+      "StyleCop.Analyzers": {
+        "type": "Direct",
+        "requested": "[1.2.0-beta.205, )",
+        "resolved": "1.2.0-beta.205",
+        "contentHash": "ORvUXKlJRqAWstZiSH9LgEuM5hBye8mUDDSpMoQhiKLFUtFEGesfr88Qa8jC0KKVaBTUZzdo4fNZM4oHeV/JsQ==",
+        "dependencies": {
+          "StyleCop.Analyzers.Unstable": "1.2.0.205"
+        }
       },
       "Amazon.Lambda.Core": {
         "type": "Transitive",
@@ -468,6 +477,11 @@
         "type": "Transitive",
         "resolved": "4.3.0",
         "contentHash": "VB5cn/7OzUfzdnC8tqAIMQciVLiq2epm2NrAm1E9OjNRyG4lVhfR61SMcLizejzQP8R8Uf/0l5qOIbUEi+RdEg=="
+      },
+      "StyleCop.Analyzers.Unstable": {
+        "type": "Transitive",
+        "resolved": "1.2.0.205",
+        "contentHash": "YiRjba3yBp2mCvtsOeQf8XU1tPaOZFTKxcsj44tTpGrhRchmtuKtgyMCV9kkOFdfKISnHk0gzhigITlrrrvMuA=="
       },
       "System.AppContext": {
         "type": "Transitive",

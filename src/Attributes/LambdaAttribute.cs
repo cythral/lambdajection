@@ -12,20 +12,23 @@ namespace Lambdajection.Attributes
     public class LambdaAttribute : Attribute
     {
         /// <summary>
-        /// Constructs a new LambdaAttribute.
+        /// Initializes a new instance of the <see cref="LambdaAttribute" /> class.
         /// </summary>
         /// <param name="startup">The type of startup class to use for the lambda.</param>
         public LambdaAttribute(Type startup)
         {
-            this.Startup = startup;
+            Startup = startup;
         }
 
+        /// <summary>Gets the type of startup class to use for the lambda.</summary>
         /// <value>The type of Startup class to use for the Lambda.  The type passed must implement <c>ILambdaStartup</c>.</value>
         public Type Startup { get; } = null!;
 
-        /// <value>The type of Serializer to use for the Lambda.</value>
+        /// <summary>Gets or sets the serializer to use for the Lambda.</summary>
+        /// <value>The type of serializer to use for the Lambda.</value>
         public Type Serializer { get; set; } = null!;
 
+        /// <summary>Gets or sets the Config Factory to use for the Lambda.</summary>
         /// <value>The type of Config Factory to use for the Lambda.</value>
         public Type ConfigFactory { get; set; } = null!;
     }

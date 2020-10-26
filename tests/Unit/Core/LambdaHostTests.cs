@@ -32,7 +32,7 @@ namespace Lambdajection.Core.Tests
         {
             var expectedResponse = "expectedResponse";
             var lambda = Substitute.For<TestLambda>();
-            lambda.Handle(Arg.Any<object>(), Arg.Any<ILambdaContext>()).Returns(expectedResponse);
+            lambda.Handle(Any<object>(), Any<ILambdaContext>()).Returns(expectedResponse);
 
             var collection = new ServiceCollection();
             collection.AddSingleton(lambda);
@@ -48,7 +48,7 @@ namespace Lambdajection.Core.Tests
             var response = await host.Run(request, context);
 
             response.Should().Be(expectedResponse);
-            await lambda.Received().Handle(Arg.Is(request), Arg.Is(context));
+            await lambda.Received().Handle(Is(request), Is(context));
         }
 
         [Test]
@@ -56,7 +56,7 @@ namespace Lambdajection.Core.Tests
         {
             var expectedResponse = "expectedResponse";
             var lambda = Substitute.For<TestLambda>();
-            lambda.Handle(Arg.Any<object>(), Arg.Any<ILambdaContext>()).Returns(expectedResponse);
+            lambda.Handle(Any<object>(), Any<ILambdaContext>()).Returns(expectedResponse);
 
             var initializationService = Substitute.For<ILambdaInitializationService>();
 
@@ -84,7 +84,7 @@ namespace Lambdajection.Core.Tests
         {
             var expectedResponse = "expectedResponse";
             var lambda = Substitute.For<TestLambda>();
-            lambda.Handle(Arg.Any<object>(), Arg.Any<ILambdaContext>()).Returns(expectedResponse);
+            lambda.Handle(Any<object>(), Any<ILambdaContext>()).Returns(expectedResponse);
 
             var initializationService = Substitute.For<ILambdaInitializationService, IDisposable>();
 
@@ -112,7 +112,7 @@ namespace Lambdajection.Core.Tests
         {
             var expectedResponse = "expectedResponse";
             var lambda = Substitute.For<TestLambda>();
-            lambda.Handle(Arg.Any<object>(), Arg.Any<ILambdaContext>()).Returns(expectedResponse);
+            lambda.Handle(Any<object>(), Any<ILambdaContext>()).Returns(expectedResponse);
 
             var initializationService = Substitute.For<ILambdaInitializationService, IAsyncDisposable>();
 
@@ -140,7 +140,7 @@ namespace Lambdajection.Core.Tests
         {
             var expectedResponse = "expectedResponse";
             var lambda = Substitute.For<TestLambda>();
-            lambda.Handle(Arg.Any<object>(), Arg.Any<ILambdaContext>()).Returns(expectedResponse);
+            lambda.Handle(Any<object>(), Any<ILambdaContext>()).Returns(expectedResponse);
 
             var initializationService = Substitute.For<ILambdaInitializationService>();
 
@@ -179,7 +179,6 @@ namespace Lambdajection.Core.Tests
                 lambdaHost.RunInitializationServices = false;
             }))
             {
-
                 var request = new object();
                 var context = Substitute.For<ILambdaContext>();
                 await host.Run(request, context);
@@ -206,7 +205,6 @@ namespace Lambdajection.Core.Tests
                 lambdaHost.SuppressFinalize = suppressor;
             }))
             {
-
                 var request = new object();
                 var context = Substitute.For<ILambdaContext>();
                 await host.Run(request, context);
@@ -231,7 +229,6 @@ namespace Lambdajection.Core.Tests
                 lambdaHost.RunInitializationServices = false;
             }))
             {
-
                 var request = new object();
                 var context = Substitute.For<ILambdaContext>();
                 await host.Run(request, context);
@@ -260,7 +257,6 @@ namespace Lambdajection.Core.Tests
                 lambdaHost.SuppressFinalize = suppressor;
             }))
             {
-
                 var request = new object();
                 var context = Substitute.For<ILambdaContext>();
                 await host.Run(request, context);

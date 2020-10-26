@@ -9,11 +9,11 @@ using NUnit.Framework;
 
 using static System.Environment;
 
+#pragma warning disable SA1009
 namespace Lambdajection.Tests.Compilation
 {
-
     [Category("Integration")]
-    public class ConfigurationIntegrationTests
+    public class ConfigurationTests
     {
         private const string exampleConfigValue = "example config value";
 
@@ -31,7 +31,6 @@ namespace Lambdajection.Tests.Compilation
             project = await MSBuildProjectExtensions.LoadProject(projectPath);
         }
 
-
         [Test]
         public async Task Handle_ReturnsConfiguration()
         {
@@ -40,7 +39,7 @@ namespace Lambdajection.Tests.Compilation
             var handlerType = assembly.GetType("Lambdajection.CompilationTests.Configuration.Handler")!;
             var runMethod = handlerType.GetMethod("Run")!;
 
-            var task = (Task)runMethod.Invoke(null, new[] { "", null })!;
+            var task = (Task)runMethod.Invoke(null, new[] { string.Empty, null })!;
             await task;
 
             var dynamicTask = (dynamic)task;
@@ -58,7 +57,7 @@ namespace Lambdajection.Tests.Compilation
             var handlerType = assembly.GetType("Lambdajection.CompilationTests.Configuration.Handler")!;
             var runMethod = handlerType.GetMethod("Run")!;
 
-            var task = (Task)runMethod.Invoke(null, new[] { "", null })!;
+            var task = (Task)runMethod.Invoke(null, new[] { string.Empty, null })!;
             await task;
 
             var dynamicTask = (dynamic)task;

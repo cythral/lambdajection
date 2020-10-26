@@ -11,9 +11,9 @@ using Microsoft.CodeAnalysis.MSBuild;
 
 using NUnit.Framework;
 
+#pragma warning disable SA1009
 namespace Lambdajection.Tests.Compilation
 {
-
     [Category("Integration")]
     public class SerializerTests
     {

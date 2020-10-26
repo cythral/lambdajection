@@ -8,8 +8,11 @@ namespace Lambdajection.Generator
     public class GenerationSettings
     {
         public bool Nullable { get; init; }
+
         public bool GenerateEntrypoint { get; init; }
+
         public bool IncludeAmazonFactories { get; init; }
+
         public bool IncludeDefaultSerializer { get; init; }
 
         public static GenerationSettings FromContext(GeneratorExecutionContext context)
@@ -30,7 +33,7 @@ namespace Lambdajection.Generator
                 Nullable = nullable.Equals("enable", StringComparison.OrdinalIgnoreCase),
                 GenerateEntrypoint = generateLambdajectionEntrypoint.Equals("true", StringComparison.OrdinalIgnoreCase),
                 IncludeAmazonFactories = includeAmazonFactories,
-                IncludeDefaultSerializer = includeDefaultSerializer
+                IncludeDefaultSerializer = includeDefaultSerializer,
             };
         }
     }

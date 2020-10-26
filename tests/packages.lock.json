@@ -77,9 +77,9 @@
       },
       "Microsoft.CodeAnalysis.CSharp.CodeStyle": {
         "type": "Direct",
-        "requested": "[3.8.0-1.20330.5, )",
-        "resolved": "3.8.0-1.20330.5",
-        "contentHash": "0zUYloT5NiZGNjK0IvSSoe7gCg9RpQT0CmtgkHqp5VVNw8KvdlqXuVGawutAGvBuISMfCqlQ3Wu30VYbeI1DqA=="
+        "requested": "[3.8.0-4.final, )",
+        "resolved": "3.8.0-4.final",
+        "contentHash": "nW1pIP4Mw97u8rIvqc4XshfTFRXaYNT2xd5udW4rfJ8sex7OjMFdLWMpGaaPFFVM/OsqMnRf2dkctQZQEmY/3g=="
       },
       "Microsoft.CodeAnalysis.FxCopAnalyzers": {
         "type": "Direct",
@@ -173,6 +173,15 @@
           "System.Threading.Thread": "4.3.0",
           "System.Xml.XPath.XmlDocument": "4.3.0",
           "System.Xml.XmlDocument": "4.3.0"
+        }
+      },
+      "StyleCop.Analyzers": {
+        "type": "Direct",
+        "requested": "[1.2.0-beta.205, )",
+        "resolved": "1.2.0-beta.205",
+        "contentHash": "ORvUXKlJRqAWstZiSH9LgEuM5hBye8mUDDSpMoQhiKLFUtFEGesfr88Qa8jC0KKVaBTUZzdo4fNZM4oHeV/JsQ==",
+        "dependencies": {
+          "StyleCop.Analyzers.Unstable": "1.2.0.205"
         }
       },
       "System.Configuration.ConfigurationManager": {
@@ -701,6 +710,11 @@
           "Microsoft.NETCore.Platforms": "1.1.0",
           "Microsoft.NETCore.Targets": "1.1.0"
         }
+      },
+      "StyleCop.Analyzers.Unstable": {
+        "type": "Transitive",
+        "resolved": "1.2.0.205",
+        "contentHash": "YiRjba3yBp2mCvtsOeQf8XU1tPaOZFTKxcsj44tTpGrhRchmtuKtgyMCV9kkOFdfKISnHk0gzhigITlrrrvMuA=="
       },
       "System.AppContext": {
         "type": "Transitive",

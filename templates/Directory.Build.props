@@ -17,5 +17,6 @@
 
     <ItemGroup>
         <AdditionalFiles Include="$(MSBuildThisFileDirectory)..\.editorconfig" />
+        <PackageReference Include="Microsoft.CodeAnalysis.CSharp.CodeStyle" Version="3.8.0-4.final" PrivateAssets="all" />
     </ItemGroup>
 </Project>

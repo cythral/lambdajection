@@ -29,5 +29,6 @@
 
     <ItemGroup>
         <PackageReference Include="Cythral.CloudFormation.BuildTasks" Version="0.2.3" PrivateAssets="all" />
+        <PackageReference Include="Microsoft.CodeAnalysis.CSharp.CodeStyle" Version="3.8.0-4.final" PrivateAssets="all" />
     </ItemGroup>
 </Project>

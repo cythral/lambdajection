@@ -67,7 +67,6 @@ namespace Lambdajection.Generator
                 var typeArgName = typeArg.ToDisplayString();
                 var configSectionName = (string)attribute.ConstructorArguments[1].Value!;
 
-
                 if (typeArgName == lambdaTypeName)
                 {
                     var encryptedProperties = from prop in classNode.DescendantNodes().OfType<PropertyDeclarationSyntax>()
@@ -98,18 +97,15 @@ namespace Lambdajection.Generator
                                    where invocation.Expression is MemberAccessExpressionSyntax memberAccess
                                         && semanticModel.GetTypeInfo(memberAccess.Expression).Type?.ToDisplayString() == ServiceCollectionDisplayName
                                         && memberAccess.Name.Identifier.ValueText == UseAwsServiceName
-
                                    let memberAccess = (MemberAccessExpressionSyntax)invocation.Expression
                                    let genericName = (GenericNameSyntax)memberAccess.Name
                                    let interfaceType = genericName.TypeArgumentList.Arguments[0]
                                    let serviceType = semanticModel.GetTypeInfo(interfaceType).Type
-
                                    let interfaceName = serviceType.Name.ToString()
                                    let interfaceNameWithoutPrefix = interfaceName[1..]
                                    let serviceName = interfaceNameWithoutPrefix[6..]
                                    let implementationName = $"{interfaceNameWithoutPrefix}Client"
                                    let namespaceName = serviceType.ContainingNamespace.ToDisplayString()
-
                                    select new AwsServiceMetadata(serviceName, interfaceName, implementationName, namespaceName);
 
             awsServices.UnionWith(serviceMetadatas);

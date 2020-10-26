@@ -11,14 +11,17 @@ on:
     - cron: "0 0 * * *"
 
 env:
-  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
-  Configuration: Release
+  DOTNET_NOLOGO: "true"
+  CONFIGURATION: Release
+  NUGET_FEED_URL: https://api.nuget.org/v3/index.json
+  GITHUB_PACKAGES_FEED_URL: https://nuget.pkg.github.com/cythral/index.json
 
 jobs:
   build:
     strategy:
       matrix:
         os: [windows-latest, ubuntu-latest, macos-latest]
+
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
@@ -33,30 +36,12 @@ jobs:
           [ ! `git rev-list --no-walk --count --merges "$sha"` ] || sha=$after
           echo "COMMIT_MESSAGE=$(git log --format=%B -n 1 $sha | tr '\n' ' ')" >> $GITHUB_ENV
 
-      - name: Setup .NET Core
-        uses: actions/setup-dotnet@v1
-
-      - name: Setup .NET Core 3.1 (Needed for GPR)
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: "3.1.x"
-
-      - name: Display .NET Info
-        run: dotnet --info
-
-      - name: Restore
-        run: dotnet restore
-
       - name: Set version
         shell: bash
         run: echo "VERSION=$(cat version.json | jq -r '.version')" >> $GITHUB_ENV
 
       - name: Display version
         run: echo ${{ env.VERSION }}
-
-      - name: Check for Release Notes
-        shell: bash
-        run: if [ ! -f .github/releases/v$VERSION.md ]; then exit 1; fi
 
       - name: Check for Stale Version Number
         if: ${{ !startsWith(github.ref , 'refs/tags/v') }}
@@ -66,30 +51,41 @@ jobs:
           lastTaggedVersionSha=$(git rev-list -n 1 $lastTaggedVersion)
           if [ "$lastTaggedVersion" = "v$VERSION" ] && [ "$lastTaggedVersionSha" != "${{ github.sha }}" ]; then exit 1; fi
 
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+
+      - name: Display .NET Info
+        run: dotnet --info
+
+      - name: Restore
+        run: dotnet restore
+
       - name: Build
         shell: bash
-        run: dotnet build --no-restore -m -bl:obj/logs/build-${{ matrix.os }}.binlog -p:PackageReleaseNotes="$(sed 's/,/%2c/g' .github/releases/v${{ env.VERSION }}.md)"
+        run: dotnet build --no-restore -m -bl:obj/logs/build-${{ matrix.os }}.binlog
 
       - name: Test
         run: dotnet test --no-build
 
       - name: Run End to End Tests
         if: matrix.os == 'ubuntu-latest' && (startsWith(github.ref, 'refs/tags/v') || contains(env.COMMIT_MESSAGE, '[e2e]') || github.event_name == 'schedule')
-        run: dotnet build -t:EndToEndTests -p:PackageBucket=${{ secrets.ARTIFACT_BUCKET }} -p:RoleArn=${{ secrets.CLOUDFORMATION_ROLE_ARN }}
+        run: dotnet build -t:EndToEndTests -p:PackageBucket=${BUCKET} -p:RoleArn=${ROLE_ARN}
         env:
+          BUCKET: ${{ secrets.ARTIFACT_BUCKET }}
+          ROLE_ARN: ${{ secrets.CLOUDFORMATION_ROLE_ARN }}
           AWS_REGION: us-east-1
           AWS_DEFAULT_REGION: us-east-1
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
-      - name: Upload nugets
+      - name: Upload Nugets
         if: matrix.os == 'ubuntu-latest'
         uses: actions/upload-artifact@v1
         with:
           name: nugets
-          path: bin/Packages/${{ env.Configuration }}
+          path: bin/Packages/${{ env.CONFIGURATION }}
 
-      - name: Upload logs
+      - name: Upload Logs
         uses: actions/upload-artifact@v1
         with:
           name: logs-${{ matrix.os }}
@@ -97,7 +93,10 @@ jobs:
 
       - name: Deploy to Github Packages
         if: matrix.os == 'ubuntu-latest'
-        run: dotnet gpr push bin/Packages/${{ env.Configuration }}/*.nupkg -k ${{ secrets.GH_TOKEN }} || true
+        run: dotnet nuget push "bin/Packages/${CONFIGURATION}/*.nupkg" -k ${FEED_TOKEN} -s ${FEED_URL} --skip-duplicate --no-symbols 1
+        env:
+          FEED_TOKEN: ${{ secrets.GH_TOKEN }}
+          FEED_URL: ${{ env.GITHUB_PACKAGES_FEED_URL }}
 
   release:
     needs: build
@@ -125,7 +124,10 @@ jobs:
         run: dotnet --info
 
       - name: Deploy to NuGet
-        run: dotnet nuget push '${{ steps.download.outputs.download-path }}/*.nupkg' -k ${{ secrets.NUGET_TOKEN }} -s https://api.nuget.org/v3/index.json --skip-duplicate
+        run: dotnet nuget push '${{ steps.download.outputs.download-path }}/*.nupkg' -k ${FEED_TOKEN} -s ${FEED_URL} --skip-duplicate
+        env:
+          FEED_TOKEN: ${{ secrets.NUGET_TOKEN }}
+          FEED_URL: ${{ env.NUGET_FEED_URL }}
 
       - uses: ncipollo/release-action@v1
         with:

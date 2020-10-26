@@ -16,16 +16,6 @@ namespace Lambdajection.Encryption.Tests
     [Category("Unit")]
     public class DefaultDecryptionServiceTests
     {
-
-        private static async Task<MemoryStream> CreateStreamFromString(string value)
-        {
-            var bytes = Encoding.ASCII.GetBytes(value);
-            var stream = new MemoryStream();
-            await stream.WriteAsync(bytes);
-            stream.Seek(0, SeekOrigin.Begin);
-            return stream;
-        }
-
         [Test]
         public async Task DecryptShouldDecryptTheCiphertext()
         {
@@ -37,7 +27,7 @@ namespace Lambdajection.Encryption.Tests
             .DecryptAsync(Arg.Any<DecryptRequest>())
             .Returns(new DecryptResponse
             {
-                Plaintext = await CreateStreamFromString(expectedValue)
+                Plaintext = await CreateStreamFromString(expectedValue),
             });
 
             var facade = new DefaultDecryptionService(kmsClient);
@@ -45,6 +35,15 @@ namespace Lambdajection.Encryption.Tests
 
             response.Should().BeEquivalentTo(expectedValue);
             await kmsClient.Received().DecryptAsync(Arg.Is<DecryptRequest>(req => req.CiphertextBlob != null));
+        }
+
+        private static async Task<MemoryStream> CreateStreamFromString(string value)
+        {
+            var bytes = Encoding.ASCII.GetBytes(value);
+            var stream = new MemoryStream();
+            await stream.WriteAsync(bytes);
+            stream.Seek(0, SeekOrigin.Begin);
+            return stream;
         }
     }
 }

@@ -3,75 +3,131 @@
     <PropertyGroup>
         <RunFormatter Condition="$(RunFormatter) == ''">true</RunFormatter>
         <BuildExamplesAndTemplates Condition="$(BuildExamplesAndTemplates) == ''">true</BuildExamplesAndTemplates>
+        <ToolsAvailable>false</ToolsAvailable>
     </PropertyGroup>
 
     <ItemGroup>
-        <_SubSolution Include="$(MSBuildThisFileDirectory)examples\examples.sln" />
-        <_SubSolution Include="$(MSBuildThisFileDirectory)templates\templates.sln" />
-        <_SubSolutionProp Include="Configuration=$(Configuration)" />
-        <_SubSolutionProp Include="Architecture=$(Architecture)" />
+        <ChildSolution Include="$(MSBuildThisFileDirectory)examples\examples.sln" Key="examples" />
+        <ChildSolution Include="$(MSBuildThisFileDirectory)templates\templates.sln" Key="templates" />
+        <AnySolution Include="$(MSBuildThisFileDirectory)lambdajection.sln" />
+        <AnySolution Include="@(ChildSolution)" />
+        <ChildSolutionProp Include="Configuration=$(Configuration)" />
+        <ChildSolutionProp Include="Architecture=$(Architecture)" />
     </ItemGroup>
 
     <Target Name="RestoreTools" AfterTargets="Restore">
-        <Exec Command="dotnet tool restore" ConsoleToMsBuild="true" />
+        <Exec
+            Command="dotnet json --help"
+            ConsoleToMsBuild="true"
+            StandardOutputImportance="Low"
+            StandardErrorImportance="Low"
+            IgnoreExitCode="true"
+        >
+            <Output TaskParameter="ExitCode" PropertyName="Tool_JSON_ExitCode" />
+        </Exec>
+
+        <Exec
+            Command="dotnet nbgv --help"
+            ConsoleToMsBuild="true"
+            StandardOutputImportance="Low"
+            StandardErrorImportance="Low"
+            IgnoreExitCode="true"
+        >
+            <Output TaskParameter="ExitCode" PropertyName="Tool_NBGV_ExitCode" />
+        </Exec>
+
+        <Exec
+            Command="dotnet tool restore"
+            ConsoleToMsBuild="true"
+            Condition="$(Tool_JSON_ExitCode) != '0' or $(Tool_NBGV_ExitCode) != '0'"
+        />
     </Target>
 
-    <Target Name="RetrievePackageVersionFromTool">
+    <Target Name="RetrievePackageVersionFromTool" DependsOnTargets="RestoreTools">
         <Exec Command="dotnet nbgv get-version -v NuGetPackageVersion" ConsoleToMsBuild="true" StandardOutputImportance="Low">
             <Output TaskParameter="ConsoleOutput" PropertyName="PackageVersion" />
         </Exec>
 
         <ItemGroup>
-            <_SubSolutionProp Include="LambdajectionVersion=$(PackageVersion)" />
+            <ChildSolutionProp Include="LambdajectionVersion=$(PackageVersion)" />
         </ItemGroup>
     </Target>
 
-    <Target Name="CleanExamplesAndTemplates" AfterTargets="Clean" DependsOnTargets="Restore;RetrievePackageVersionFromTool" Condition="'$(DesignTimeBuild)' != 'true'">
-        <MSBuild Projects="@(_SubSolution)" Targets="Clean" Properties="@(_SubSolutionProp)" />
+    <Target
+        Name="GetReleaseNotes"
+        BeforeTargets="Build"
+        DependsOnTargets="RetrievePackageVersionFromTool"
+        Condition="'$(DesignTimeBuild)' != 'true'"
+    >
+        <Exec Command="dotnet json get $(MSBuildThisFileDirectory)version.json version" ConsoleToMsBuild="true" StandardOutputImportance="Low">
+            <Output TaskParameter="ConsoleOutput" PropertyName="SimpleVersion" />
+        </Exec>
+
+        <PropertyGroup>
+            <ReleaseNotesFile>$(MSBuildThisFileDirectory).github/releases/v$(SimpleVersion).md</ReleaseNotesFile>
+        </PropertyGroup>
+
+        <Error
+            Condition="!Exists('$(ReleaseNotesFile)')"
+            File="$(ReleaseNotesFile)"
+            Text="Release notes file missing."
+        />
+
+        <PropertyGroup>
+            <PackageReleaseNotes>$([System.IO.File]::ReadAllText('$(ReleaseNotesFile)'))</PackageReleaseNotes>
+        </PropertyGroup>
+
+        <Message Importance="High" Text="Version: $(PackageVersion)" />
+        <Message Importance="High" Text="Release Notes:%0A$(PackageReleaseNotes)%0A" />
     </Target>
 
-    <Target Name="BuildExamplesAndTemplates" AfterTargets="Build" DependsOnTargets="Build;RetrievePackageVersionFromTool" Condition="'$(BuildExamplesAndTemplates)' == 'true' and '$(DesignTimeBuild)' != 'true'">
+    <Target
+        Name="CleanExamplesAndTemplates"
+        AfterTargets="Clean"
+        DependsOnTargets="Restore;RetrievePackageVersionFromTool"
+        Condition="'$(DesignTimeBuild)' != 'true'"
+    >
+        <MSBuild Projects="@(ChildSolution)" Targets="Clean" Properties="@(ChildSolutionProp)" />
+    </Target>
+
+    <Target
+        Name="BuildExamplesAndTemplates"
+        AfterTargets="Build"
+        DependsOnTargets="Build;RetrievePackageVersionFromTool"
+        Condition="'$(BuildExamplesAndTemplates)' == 'true' and '$(DesignTimeBuild)' != 'true'"
+    >
+        <ItemGroup>
+            <PackagesToRemove Include="$(MSBuildThisFileDirectory).nuget\%(ChildSolution.Key)\lambdajection/" />
+            <PackagesToRemove Include="$(MSBuildThisFileDirectory).nuget\%(ChildSolution.Key)\lambdajection.attributes/" />
+            <PackagesToRemove Include="$(MSBuildThisFileDirectory).nuget\%(ChildSolution.Key)\lambdajection.core/" />
+            <PackagesToRemove Include="$(MSBuildThisFileDirectory).nuget\%(ChildSolution.Key)\lambdajection.encryption/" />
+            <PackagesToRemove Include="$(MSBuildThisFileDirectory).nuget\%(ChildSolution.Key)\lambdajection.generator/" />
+            <PackagesToRemove Include="$(MSBuildThisFileDirectory).nuget\%(ChildSolution.Key)\lambdajection.runtime/" />
+            <PackagesToRemove Include="$(MSBuildThisFileDirectory).nuget\%(ChildSolution.Key)\lambdajection.templates/" />
+        </ItemGroup>
+
         <Message Importance="High" Text="%0A%0ABuilding Examples and Templates%0A---------------------------------%0A" />
-        <RemoveDir Directories="$(MSBuildThisFileDirectory)examples\.nuget" />
-        <MSBuild Projects="@(_SubSolution)" Targets="Restore;Build;Publish" Properties="@(_SubSolutionProp)" />
+        <RemoveDir Directories="@(PackagesToRemove)" />
+        <MSBuild Projects="%(ChildSolution.Identity)" Targets="Restore;Build;Publish" Properties="@(ChildSolutionProp)" />
     </Target>
 
     <Target Name="EndToEndTests" DependsOnTargets="RetrievePackageVersionFromTool" Condition="$(Configuration) == 'Release'">
         <CreateItem Include="$(MSBuildThisFileDirectory)examples\*\*.csproj">
-            <Output TaskParameter="Include" ItemName="_Examples" />
+            <Output TaskParameter="Include" ItemName="Examples" />
         </CreateItem>
 
-        <MSBuild Projects="@(_Examples)" Targets="EndToEndTest" Properties="LambdajectionVersion=$(PackageVersion);Configuration=$(Configuration);Architecture=$(Architecture);PackageBucket=$(PackageBucket);RoleArn=$(RoleArn)" />
+        <ItemGroup>
+            <EndToEndTestProp Include="LambdajectionVersion=$(PackageVersion)" />
+            <EndToEndTestProp Include="Configuration=$(Configuration)" />
+            <EndToEndTestProp Include="Architecture=$(Architecture)" />
+            <EndToEndTestProp Include="PackageBucket=$(PackageBucket)" />
+            <EndToEndTestProp Include="RoleArn=$(RoleArn)" />
+        </ItemGroup>
+
+        <MSBuild Projects="@(Examples)" Targets="EndToEndTest" Properties="@(EndToEndTestProp)" />
     </Target>
 
-    <Target Name="CheckFormatting" AfterTargets="Build" Condition="$(RunFormatter) == 'true' and '$(DesignTimeBuild)' != 'true'">
-        <Message Importance="High" Text="%0A" />
-
-        <!-- Main -->
-        <Exec Command="dotnet format $(MSBuildThisFileDirectory)lambdajection.sln --fix-style info --check" ConsoleToMsBuild="true" IgnoreExitCode="true">
-            <Output TaskParameter="ExitCode" PropertyName="_FormatMainExitCode" />
-        </Exec>
-        <Message Importance="High" Condition="'$(_FormatMainExitCode)' != '0'" Text="%0ARun the following command to attempt to automatically fix formatting issues:%0Adotnet msbuild -t:format%0A" />
-        <Error Condition="'$(_FormatMainExitCode)' != '0'" File="$(MSBuildThisFileDirectory)lambdajection.sln" Text=" Fix formatting issues." />
-
-        <!-- Examples -->
-        <Exec Command="dotnet format $(MSBuildThisFileDirectory)examples/examples.sln --fix-style info --check" ConsoleToMsBuild="true" IgnoreExitCode="true">
-            <Output TaskParameter="ExitCode" PropertyName="_FormatExamplesExitCode" />
-        </Exec>
-        <Message Importance="High" Condition="'$(_FormatExamplesExitCode)' != '0'" Text="%0ARun the following command to attempt to automatically fix formatting issues:%0Adotnet msbuild -t:format%0A" />
-        <Error Condition="'$(_FormatExamplesExitCode)' != '0'" File="$(MSBuildThisFileDirectory)examples/examples.sln" Text=" Fix formatting issues." />
-
-        <!-- Templates -->
-        <Exec Command="dotnet format $(MSBuildThisFileDirectory)templates/templates.sln --fix-style info --check" ConsoleToMsBuild="true" IgnoreExitCode="true">
-            <Output TaskParameter="ExitCode" PropertyName="_FormatTemplatesExitCode" />
-        </Exec>
-        <Message Importance="High" Condition="'$(_FormatTemplatesExitCode)' != '0'" Text="%0ARun the following command to attempt to automatically fix formatting issues:%0Adotnet msbuild -t:format%0A" />
-        <Error Condition="'$(_FormatTemplatesExitCode)' != '0'" File="$(MSBuildThisFileDirectory)templates/templates.sln" Text=" Fix formatting issues." />
-    </Target>
-
-    <Target Name="Format" DependsOnTargets="Restore;RestoreTools">
-        <Exec Command="dotnet format $(MSBuildThisFileDirectory)lambdajection.sln --fix-style info" />
-        <Exec Command="dotnet format $(MSBuildThisFileDirectory)examples/examples.sln --fix-style info" />
-        <Exec Command="dotnet format $(MSBuildThisFileDirectory)templates/templates.sln --fix-style info" />
+    <Target Name="Format" DependsOnTargets="RestoreTools">
+        <Exec Command="dotnet format %(AnySolution.Identity) --fix-analyzers" />
     </Target>
 </Project>

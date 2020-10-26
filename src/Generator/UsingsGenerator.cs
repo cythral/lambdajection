@@ -19,14 +19,14 @@ namespace Lambdajection.Generator
             "Microsoft.Extensions.DependencyInjection.Extensions",
             "Microsoft.Extensions.Configuration",
             "Amazon.Lambda.Core",
-            "Lambdajection.Core"
+            "Lambdajection.Core",
         };
 
         private readonly string[] defaultUsings;
 
-        public UsingsGenerator() : this(DefaultUsings)
+        public UsingsGenerator()
+            : this(DefaultUsings)
         {
-
         }
 
         internal UsingsGenerator(string[] defaultUsings)
