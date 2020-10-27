@@ -4,19 +4,19 @@
     ".NETStandard,Version=v2.1": {
       "Amazon.Lambda.RuntimeSupport": {
         "type": "Direct",
-        "requested": "[1.1.1, )",
-        "resolved": "1.1.1",
-        "contentHash": "ctOEoYGLQ8ZG4Mr9HGE6gbxyvVFnTRFvcC829cQQWAQwJsTL5oeCY+K87kscF5Vnyai7pjvLsWyMriyLMgL/+w==",
+        "requested": "[1.2.0, )",
+        "resolved": "1.2.0",
+        "contentHash": "eCNthjnvM5yQnM4KvdvYVd6/gMIJ51T5K0BAQ9GAP0coF4izniFMrRnv2C14qZ/RkssYX5kKN2H3RUxjQlpfmQ==",
         "dependencies": {
-          "Amazon.Lambda.Core": "1.1.0",
+          "Amazon.Lambda.Core": "1.2.0",
           "NSwag.MSBuild": "12.0.4"
         }
       },
       "Microsoft.CodeAnalysis.CSharp.CodeStyle": {
         "type": "Direct",
-        "requested": "[3.8.0-4.final, )",
-        "resolved": "3.8.0-4.final",
-        "contentHash": "nW1pIP4Mw97u8rIvqc4XshfTFRXaYNT2xd5udW4rfJ8sex7OjMFdLWMpGaaPFFVM/OsqMnRf2dkctQZQEmY/3g=="
+        "requested": "[3.8.0-5.final, )",
+        "resolved": "3.8.0-5.final",
+        "contentHash": "fc0GooFJCJUbAXuatlAhKJw3Uv3ZL9p3zVVn+Ew4U8q0jZY+aTa1fRtn1IrjeZx7rbzNrrQbJX8S90VZhOwJ/g=="
       },
       "Microsoft.CodeAnalysis.FxCopAnalyzers": {
         "type": "Direct",
@@ -57,8 +57,8 @@
       },
       "Amazon.Lambda.Core": {
         "type": "Transitive",
-        "resolved": "1.1.0",
-        "contentHash": "ueGId8b4DEHoVWkHDs3iAJH8IUSAUGu5AqkoI/Syl4RuByzik7lz9IjoImiGAlGhtsQV02MHNeTo04IFjS37gQ=="
+        "resolved": "1.2.0",
+        "contentHash": "goaq1LaH1UJB18BNG/Apxmn0P7dAlLWFbxU2nKxK+M4lH2KJaZDbtlP2gFEAJ+aENOMBHthaLPEtk3944J2OOg=="
       },
       "Microsoft.Build.Tasks.Git": {
         "type": "Transitive",

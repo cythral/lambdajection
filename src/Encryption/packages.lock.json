@@ -4,18 +4,18 @@
     ".NETStandard,Version=v2.1": {
       "AWSSDK.KeyManagementService": {
         "type": "Direct",
-        "requested": "[3.5.0.22, )",
-        "resolved": "3.5.0.22",
-        "contentHash": "sFCtvLNcfdyVxrANC/VFMb7pLzAwhUE6rHz0EfzC2VXvtcRp1PL8bbImBsAAoyjM3NupVyXH8tlYdJSoo4B5iA==",
+        "requested": "[3.5.0.32, )",
+        "resolved": "3.5.0.32",
+        "contentHash": "+MdVmnCFC4DSLcaX1BO2yqUj0SYqA0pQHBw3IBKWSv+lL22hvgbYr1t5ZKYgzsL62nG3quS5tyrcqNnSsJfcGg==",
         "dependencies": {
-          "AWSSDK.Core": "[3.5.1.20, 3.6.0)"
+          "AWSSDK.Core": "[3.5.1.30, 3.6.0)"
         }
       },
       "Microsoft.CodeAnalysis.CSharp.CodeStyle": {
         "type": "Direct",
-        "requested": "[3.8.0-4.final, )",
-        "resolved": "3.8.0-4.final",
-        "contentHash": "nW1pIP4Mw97u8rIvqc4XshfTFRXaYNT2xd5udW4rfJ8sex7OjMFdLWMpGaaPFFVM/OsqMnRf2dkctQZQEmY/3g=="
+        "requested": "[3.8.0-5.final, )",
+        "resolved": "3.8.0-5.final",
+        "contentHash": "fc0GooFJCJUbAXuatlAhKJw3Uv3ZL9p3zVVn+Ew4U8q0jZY+aTa1fRtn1IrjeZx7rbzNrrQbJX8S90VZhOwJ/g=="
       },
       "Microsoft.CodeAnalysis.FxCopAnalyzers": {
         "type": "Direct",
@@ -56,8 +56,8 @@
       },
       "AWSSDK.Core": {
         "type": "Transitive",
-        "resolved": "3.5.1.20",
-        "contentHash": "F5ySGV/HiWnNBcei0Fr0A6JXAb+wGYSxCnawuCzoEQGq4BDMEcjpTmrmzxcepaq3kPFJESlosqB/T4DZqIOp5g==",
+        "resolved": "3.5.1.30",
+        "contentHash": "kNqzY/py4pDlW9aPn2SpnG7y7Mr4Z0jg/BdkHiRr9WLt7k/lwGMmJ5hd3x/ZHDkv8kIdjllkVrrhYkXvj6AkCA==",
         "dependencies": {
           "Microsoft.Bcl.AsyncInterfaces": "1.1.0"
         }
