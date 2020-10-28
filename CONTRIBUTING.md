@@ -45,7 +45,7 @@ Before opening a pull request, please perform the following checks:
 To automatically fix any formatting errors, run the following command:
 
 ```shell
-dotnet msbuild -t:format
+dotnet build -t:format
 ```
 
 ## 4. Testing
@@ -74,6 +74,8 @@ If you use Visual Studio Code, tasks have been added for the three above command
 
 Testing is done with NUnit, NSubstitute and FluentAssertions. Please use FluentAssertions wherever possible over the assertion utilities that NUnit provides.
 
+A minimum of 80% code coverage is required for testing, and is enforced via CI with codecov.   
+
 ## 5. Versioning
 
 We use SemVer for versioning our project, and every tag pushed to the repository indicates a release (packages will automatically deploy to NuGet from tags and Github Packages everywhere else).
@@ -92,9 +94,8 @@ We try to use a roll-forward method of making changes, rather than going back an
 
 ## 6. Gotchas & Tips
 
-- To add a new dependency to a project, run `dotnet add package [package] --no-restore` then `dotnet restore --force-evaluate`
+- To add a new dependency to a project, delete that project's lock file then run `dotnet add package PackageId`
 - The [Markdown All-In-One VSCode extension](https://marketplace.visualstudio.com/items?itemName=yzhang.markdown-all-in-one) can be used to update table of contents in the README and contributing guide.
-- To run a build without checking formatting, do `dotnet build -p:RunFormatter=false` (formatting can sometimes take awhile, be sure to run formatters after you're done iterating though).
 
 ## 7. Licensing
 
