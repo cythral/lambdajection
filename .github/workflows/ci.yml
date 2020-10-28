@@ -65,7 +65,13 @@ jobs:
         run: dotnet build --no-restore -m -bl:obj/logs/build-${{ matrix.os }}.binlog
 
       - name: Test
-        run: dotnet test --no-build
+        run: dotnet test --no-build --collect:"XPlat Code coverage"
+
+      - uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: ./obj/Tests/Release/net5.0/coverage.xml
+          fail_ci_if_error: true
 
       - name: Run End to End Tests
         if: matrix.os == 'ubuntu-latest' && (startsWith(github.ref, 'refs/tags/v') || contains(env.COMMIT_MESSAGE, '[e2e]') || github.event_name == 'schedule')
