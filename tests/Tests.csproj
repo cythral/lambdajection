@@ -7,7 +7,7 @@
     <IsPackable>false</IsPackable>
     <AssemblyName>Lambdajection.Tests</AssemblyName>
     <NoWarn>CS1591;CA2007;CA1062</NoWarn> <!-- These often turn off if project settings change -->
-    <CoreCompileDependsOn>PrepareVSTestProps;GenerateTestMetadata;CleanTestResultsDirectory</CoreCompileDependsOn>
+    <CoreCompileDependsOn>GenerateTestMetadata;CleanTestResultsDirectory;$(CoreCompileDependsOn)</CoreCompileDependsOn>
   </PropertyGroup>
 
   <ItemGroup>
@@ -53,7 +53,7 @@
     <WriteLinesToFile Lines="$(FileContents)" File="$(IntermediateOutputPath)\TestMetadata.cs" Overwrite="true" />
   </Target>
 
-  <Target Name="PrepareVSTestProps">
+  <Target Name="PrepareVSTestProps" BeforeTargets="VSTest">
     <PropertyGroup>
       <VSTestResultsDirectory>$(IntermediateOutputPath)TestResults/</VSTestResultsDirectory>
     </PropertyGroup>
