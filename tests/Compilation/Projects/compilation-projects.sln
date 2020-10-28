@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Disposables", "Disposables\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Serializer", "Serializer\Serializer.csproj", "{F8DB4AF4-7E10-4B0A-A377-39C7B1F370B0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NoHandleMethod", "NoHandleMethod\NoHandleMethod.csproj", "{B91ABA3F-12B2-4451-AAF0-63ABE1A13696}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -86,5 +88,17 @@ Global
 		{F8DB4AF4-7E10-4B0A-A377-39C7B1F370B0}.Release|x64.Build.0 = Release|Any CPU
 		{F8DB4AF4-7E10-4B0A-A377-39C7B1F370B0}.Release|x86.ActiveCfg = Release|Any CPU
 		{F8DB4AF4-7E10-4B0A-A377-39C7B1F370B0}.Release|x86.Build.0 = Release|Any CPU
+		{B91ABA3F-12B2-4451-AAF0-63ABE1A13696}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B91ABA3F-12B2-4451-AAF0-63ABE1A13696}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B91ABA3F-12B2-4451-AAF0-63ABE1A13696}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{B91ABA3F-12B2-4451-AAF0-63ABE1A13696}.Debug|x64.Build.0 = Debug|Any CPU
+		{B91ABA3F-12B2-4451-AAF0-63ABE1A13696}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{B91ABA3F-12B2-4451-AAF0-63ABE1A13696}.Debug|x86.Build.0 = Debug|Any CPU
+		{B91ABA3F-12B2-4451-AAF0-63ABE1A13696}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B91ABA3F-12B2-4451-AAF0-63ABE1A13696}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B91ABA3F-12B2-4451-AAF0-63ABE1A13696}.Release|x64.ActiveCfg = Release|Any CPU
+		{B91ABA3F-12B2-4451-AAF0-63ABE1A13696}.Release|x64.Build.0 = Release|Any CPU
+		{B91ABA3F-12B2-4451-AAF0-63ABE1A13696}.Release|x86.ActiveCfg = Release|Any CPU
+		{B91ABA3F-12B2-4451-AAF0-63ABE1A13696}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

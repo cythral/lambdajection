@@ -44,8 +44,8 @@
         <None Include="$(MSBuildThisFileDirectory)LICENSE.txt" Pack="true" PackagePath="LICENSE.txt" />
     </ItemGroup>
 
-    <ItemGroup Condition="Exists('$(MSBuildThisFileDirectory)\.editorconfig')">
-        <AdditionalFiles Include="$(MSBuildThisFileDirectory)\.editorconfig" />
+    <ItemGroup Condition="Exists('$(MSBuildThisFileDirectory).editorconfig')">
+        <AdditionalFiles Include="$(MSBuildThisFileDirectory).editorconfig" />
     </ItemGroup>
 
     <ItemGroup>
