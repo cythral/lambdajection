@@ -67,7 +67,8 @@ jobs:
       - name: Test
         run: dotnet test --no-build --collect:"XPlat Code coverage"
 
-      - uses: codecov/codecov-action@v1
+      - name: Upload Coverage
+        uses: codecov/codecov-action@v1
         if: matrix.os == 'ubuntu-latest'
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
