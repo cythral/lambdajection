@@ -31,6 +31,12 @@
             "description": "Whether to include the Encryption package",
             "datatype": "bool",
             "defaultValue": "false"
+        },
+        "disposable": {
+            "type": "parameter",
+            "description": "Whether or not the Lambda uses unmanaged resources",
+            "datatype": "bool",
+            "defaultValue": "false"
         }
     }
 }
