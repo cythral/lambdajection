@@ -10,4 +10,18 @@
     <PackageReference Include="AWSSDK.SecurityToken" Version="3.5.0" />
   </ItemGroup>
 
+  <Target Name="EndToEndTestCleanup">
+    <Exec
+      Command="aws cloudformation describe-stacks --stack-name $(LambdaName) --query &apos;Stacks[0].Outputs[?OutputKey==`BucketName`].OutputValue&apos; --output text"
+      StandardOutputImportance="low"
+      ConsoleToMsBuild="true"
+    >
+      <Output TaskParameter="ConsoleOutput" PropertyName="BucketName" />
+    </Exec>
+
+    <Exec
+      Command="aws s3 rb s3://$(BucketName) --force"
+      StandardOutputImportance="low"
+    />
+  </Target>
 </Project>

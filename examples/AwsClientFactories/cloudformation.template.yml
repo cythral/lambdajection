@@ -40,6 +40,9 @@ Resources:
               AWS: !GetAtt AwsClientFactoriesRole.Arn
 
 Outputs:
+  BucketName:
+    Value: !Ref Bucket
+
   InputPayload:
     Value: !Sub |
       {
