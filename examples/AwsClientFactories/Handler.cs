@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
 using Amazon.Lambda.Core;
 using Amazon.S3;
@@ -10,9 +11,13 @@ using Lambdajection.Core;
 namespace Lambdajection.Examples.AwsClientFactories
 {
     [Lambda(typeof(Startup))]
-    public partial class Handler
+    public partial class Handler : IDisposable
     {
         private readonly IAwsFactory<IAmazonS3> s3Factory;
+
+        private IAmazonS3? s3Client;
+
+        private bool disposed;
 
         public Handler(IAwsFactory<IAmazonS3> s3Factory)
         {
@@ -21,7 +26,7 @@ namespace Lambdajection.Examples.AwsClientFactories
 
         public async Task<string> Handle(Request request, ILambdaContext context)
         {
-            var s3Client = await s3Factory.Create(request.RoleArn);
+            s3Client = await s3Factory.Create(request.RoleArn);
 
             await s3Client.PutObjectAsync(new PutObjectRequest
             {
@@ -32,5 +37,27 @@ namespace Lambdajection.Examples.AwsClientFactories
 
             return $"Successfully written to file {request.FileName} in bucket {request.BucketName}";
         }
+
+        #region Disposable Methods
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(true);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposed)
+            {
+                return;
+            }
+
+            s3Client?.Dispose();
+            s3Client = null;
+            disposed = true;
+        }
+
+        #endregion
     }
 }

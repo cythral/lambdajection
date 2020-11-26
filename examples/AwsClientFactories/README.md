@@ -1,6 +1,6 @@
 # AWS Client Factories Example
 
-This example illustrates the use of both the IServiceCollection.UseAwsServices helper and IAwsFactory features.
+This example illustrates the use of both the IServiceCollection.UseAwsServices helper and IAwsFactory features.  It also takes advantage of IDisposable to dispose the AWS client used in the invocation once it is complete.
 
 ## Files
 

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -12,9 +13,11 @@ using Lambdajection.Attributes;
 namespace Lambdajection.Examples.CustomSerializer
 {
     [Lambda(typeof(Startup), Serializer = typeof(CamelCaseLambdaJsonSerializer))]
-    public partial class Handler
+    public partial class Handler : IAsyncDisposable
     {
         private readonly EmbeddedResourceReader reader;
+
+        private bool disposed;
 
         public Handler(EmbeddedResourceReader reader)
         {
@@ -50,5 +53,22 @@ namespace Lambdajection.Examples.CustomSerializer
                 IsBase64Encoded = false,
             };
         }
+
+        #region Disposable Methods
+
+        public async ValueTask DisposeAsync()
+        {
+            if (disposed)
+            {
+                return;
+            }
+
+            disposed = true;
+
+            await reader.DisposeOpenContexts();
+            GC.SuppressFinalize(this);
+        }
+
+        #endregion
     }
 }
