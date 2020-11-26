@@ -1,6 +1,10 @@
 # Encrypted Options Example
 
-This example illustrates the use of a custom serializer, which is set using the Serializer argument on the Lambda handler.  This also makes use of embedded resources and application load balancer events.
+This example illustrates the use of a custom serializer, which is set using the Serializer argument on the Lambda handler.  This also makes use of:
+
+- Embedded resources 
+- Application load balancer events
+- IAsyncDisposable methods - waits to dispose resources used in the invocation until that invocation is completed.
 
 ## Files
 
