@@ -27,6 +27,15 @@ Resources:
             Resource: !Sub arn:aws:s3:::${Bucket}/*
             Principal:
               AWS: !GetAtt PutBucketRole.Arn
+          - Effect: Allow
+            Action:
+              - s3:DeleteBucket
+              - s3:DeleteObject
+            Resource:
+              - !Sub arn:aws:s3:::${Bucket}
+              - !Sub arn:aws:s3:::${Bucket}/*
+            Principal:
+              AWS: !ImportValue lambdajection-infrastructure:GithubUserArn
 
   PutBucketRole:
     Type: AWS::IAM::Role
