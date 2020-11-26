@@ -2,14 +2,13 @@
     <Target Name="EndToEndTest" DependsOnTargets="Publish" Condition="$(SkipEndToEndTest) != 'true'">
         <PropertyGroup>
             <_OutputFileName>$(IntermediateOutputPath)\$(ProjectName)-E2EResponse.txt</_OutputFileName>
-            <_LambdaName>lambdajection-$(ProjectName.ToLower())</_LambdaName>
         </PropertyGroup>
 
         <Deploy
             TemplateFile="$(MSBuildProjectDirectory)\cloudformation.template.yml"
             Package="true"
             PackageBucket="$(PackageBucket)"
-            StackName="$(_LambdaName)"
+            StackName="$(LambdaName)"
             ConfigFile="$(MSBuildProjectDirectory)\cloudformation.config.json"
             Capabilities="CAPABILITY_IAM;CAPABILITY_AUTO_EXPAND"
             RoleArn="$(RoleArn)"
@@ -17,15 +16,26 @@
 
         <Message Text="Running End to End Test for $(ProjectName)..." Importance="High" />
 
-        <Exec Command="aws cloudformation describe-stacks --stack-name $(_LambdaName) --query &apos;Stacks[0].Outputs[?OutputKey==`InputPayload`].OutputValue&apos; --output text" StandardOutputImportance="low" ConsoleToMsBuild="true">
+        <Exec
+            Command="aws cloudformation describe-stacks --stack-name $(LambdaName) --query &apos;Stacks[0].Outputs[?OutputKey==`InputPayload`].OutputValue&apos; --output text"
+            StandardOutputImportance="low"
+            ConsoleToMsBuild="true"
+        >
             <Output TaskParameter="ConsoleOutput" ItemName="_InputPayload" />
         </Exec>
 
-        <Exec Command="aws cloudformation describe-stacks --stack-name $(_LambdaName) --query &apos;Stacks[0].Outputs[?OutputKey==`ExpectedOutput`].OutputValue&apos; --output text" StandardOutputImportance="low" ConsoleToMsBuild="true">
+        <Exec
+            Command="aws cloudformation describe-stacks --stack-name $(LambdaName) --query &apos;Stacks[0].Outputs[?OutputKey==`ExpectedOutput`].OutputValue&apos; --output text"
+            StandardOutputImportance="low"
+            ConsoleToMsBuild="true"
+        >
             <Output TaskParameter="ConsoleOutput" ItemName="_ExpectedOutputLines" />
         </Exec>
 
-        <Exec Command="aws lambda invoke --function-name $(_LambdaName) --payload '@(_InputPayload, '')' $(_OutputFileName)" StandardOutputImportance="low" />
+        <Exec
+            Command="aws lambda invoke --function-name $(LambdaName) --payload '@(_InputPayload, '')' $(_OutputFileName)"
+            StandardOutputImportance="low"
+        />
 
         <ReadLinesFromFile File="$(_OutputFileName)">
             <Output TaskParameter="Lines" ItemName="_ActualOutputLines" />
@@ -35,6 +45,10 @@
             <_ActualOutput>@(_ActualOutputLines, '')</_ActualOutput>
             <_ExpectedOutput>@(_ExpectedOutputLines, '')</_ExpectedOutput>
         </PropertyGroup>
+
+        <Message Importance="High" Text="Cleaning up..." />
+        <CallTarget Targets="EndToEndTestCleanup" />
+        <DeleteStack StackName="$(LambdaName)" />
 
         <Message Text="Success!" Condition="$(_ActualOutput) == $(_ExpectedOutput)" Importance="High" />
         <Message Text="Failed!" Condition="$(_ActualOutput) != $(_ExpectedOutput)" Importance="High" />

@@ -2,6 +2,7 @@
     <PropertyGroup>
         <LangVersion>9.0</LangVersion>
         <Nullable>enable</Nullable>
+        <LambdaName>lambdajection-$(MSBuildProjectName.ToLower())</LambdaName>
     </PropertyGroup>
 
     <PropertyGroup>
@@ -28,7 +29,9 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Cythral.CloudFormation.BuildTasks" Version="0.2.3" PrivateAssets="all" />
+        <PackageReference Include="Cythral.CloudFormation.BuildTasks" Version="0.3.1" PrivateAssets="all" />
         <PackageReference Include="Microsoft.CodeAnalysis.CSharp.CodeStyle" Version="3.8.0-4.final" PrivateAssets="all" />
     </ItemGroup>
+
+    <Target Name="EndToEndTestCleanup" />
 </Project>
