@@ -2,29 +2,27 @@ using System.Threading.Tasks;
 
 using Amazon.Lambda.Core;
 
-using Amazon.S3;
-
 using Lambdajection.Attributes;
 using Lambdajection.Core;
 
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Lambdajection.CompilationTests.AmazonFactories
+namespace Lambdajection.CompilationTests.LambdaContext
 {
     [Lambda(typeof(Startup))]
     public partial class Handler
     {
-        private readonly S3Utility utility;
+        private readonly ILambdaContext context;
 
-        public Handler(S3Utility utility)
+        public Handler(ILambdaContext context)
         {
-            this.utility = utility;
+            this.context = context;
         }
 
-        public Task<IAwsFactory<IAmazonS3>> Handle(string request)
+        public Task<ILambdaContext> Handle(string request)
         {
-            return Task.FromResult(utility.Factory);
+            return Task.FromResult(context);
         }
     }
 }

@@ -24,7 +24,7 @@ namespace Lambdajection.Examples.CustomSerializer
             this.reader = reader;
         }
 
-        public async Task<ApplicationLoadBalancerResponse> Handle(ApplicationLoadBalancerRequest request, ILambdaContext context)
+        public async Task<ApplicationLoadBalancerResponse> Handle(ApplicationLoadBalancerRequest request)
         {
             var path = Regex.Replace(request.Path, @"^\/", "");
             var contents = await reader.ReadAsString(path);

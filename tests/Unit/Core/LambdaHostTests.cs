@@ -32,10 +32,12 @@ namespace Lambdajection.Core.Tests
         {
             var expectedResponse = "expectedResponse";
             var lambda = Substitute.For<TestLambda>();
-            lambda.Handle(Any<object>(), Any<ILambdaContext>()).Returns(expectedResponse);
+            lambda.Handle(Any<object>()).Returns(expectedResponse);
 
+            var scope = Substitute.For<LambdaScope>();
             var collection = new ServiceCollection();
             collection.AddSingleton(lambda);
+            collection.AddSingleton(scope);
 
             var provider = collection.BuildServiceProvider();
             await using var host = new TestLambdaHost(lambdaHost =>
@@ -48,7 +50,7 @@ namespace Lambdajection.Core.Tests
             var response = await host.Run(request, context);
 
             response.Should().Be(expectedResponse);
-            await lambda.Received().Handle(Is(request), Is(context));
+            await lambda.Received().Handle(Is(request));
         }
 
         [Test]
@@ -56,13 +58,15 @@ namespace Lambdajection.Core.Tests
         {
             var expectedResponse = "expectedResponse";
             var lambda = Substitute.For<TestLambda>();
-            lambda.Handle(Any<object>(), Any<ILambdaContext>()).Returns(expectedResponse);
+            lambda.Handle(Any<object>()).Returns(expectedResponse);
 
             var initializationService = Substitute.For<ILambdaInitializationService>();
+            var scope = Substitute.For<LambdaScope>();
 
             var collection = new ServiceCollection();
             collection.AddSingleton(initializationService);
             collection.AddSingleton(lambda);
+            collection.AddSingleton(scope);
 
             var provider = collection.BuildServiceProvider();
             await using var host = new TestLambdaHost(lambdaHost =>
@@ -80,17 +84,49 @@ namespace Lambdajection.Core.Tests
         }
 
         [Test]
-        public async Task RunDisposesInitializationServices()
+        public async Task RunSetsLambdaContextOnScope()
         {
             var expectedResponse = "expectedResponse";
             var lambda = Substitute.For<TestLambda>();
-            lambda.Handle(Any<object>(), Any<ILambdaContext>()).Returns(expectedResponse);
+            lambda.Handle(Any<object>()).Returns(expectedResponse);
 
-            var initializationService = Substitute.For<ILambdaInitializationService, IDisposable>();
+            var initializationService = Substitute.For<ILambdaInitializationService>();
+            var scope = Substitute.For<LambdaScope>();
 
             var collection = new ServiceCollection();
             collection.AddSingleton(initializationService);
             collection.AddSingleton(lambda);
+            collection.AddSingleton(scope);
+
+            var provider = collection.BuildServiceProvider();
+            await using var host = new TestLambdaHost(lambdaHost =>
+            {
+                lambdaHost.ServiceProvider = provider;
+                lambdaHost.RunInitializationServices = true;
+            });
+
+            var request = new object();
+            var context = Substitute.For<ILambdaContext>();
+
+            await host.Run(request, context);
+
+            scope.LambdaContext.Should().Be(context);
+        }
+
+        [Test]
+        public async Task RunDisposesInitializationServices()
+        {
+            var expectedResponse = "expectedResponse";
+            var lambda = Substitute.For<TestLambda>();
+            lambda.Handle(Any<object>()).Returns(expectedResponse);
+
+            var initializationService = Substitute.For<ILambdaInitializationService, IDisposable>();
+            var scope = Substitute.For<LambdaScope>();
+
+            var collection = new ServiceCollection();
+            collection.AddSingleton(initializationService);
+            collection.AddSingleton(lambda);
+            collection.AddSingleton(scope);
 
             var provider = collection.BuildServiceProvider();
             await using var host = new TestLambdaHost(lambdaHost =>
@@ -112,13 +148,15 @@ namespace Lambdajection.Core.Tests
         {
             var expectedResponse = "expectedResponse";
             var lambda = Substitute.For<TestLambda>();
-            lambda.Handle(Any<object>(), Any<ILambdaContext>()).Returns(expectedResponse);
+            lambda.Handle(Any<object>()).Returns(expectedResponse);
 
             var initializationService = Substitute.For<ILambdaInitializationService, IAsyncDisposable>();
+            var scope = Substitute.For<LambdaScope>();
 
             var collection = new ServiceCollection();
             collection.AddSingleton(initializationService);
             collection.AddSingleton(lambda);
+            collection.AddSingleton(scope);
 
             var provider = collection.BuildServiceProvider();
             await using var host = new TestLambdaHost(lambdaHost =>
@@ -140,13 +178,15 @@ namespace Lambdajection.Core.Tests
         {
             var expectedResponse = "expectedResponse";
             var lambda = Substitute.For<TestLambda>();
-            lambda.Handle(Any<object>(), Any<ILambdaContext>()).Returns(expectedResponse);
+            lambda.Handle(Any<object>()).Returns(expectedResponse);
 
             var initializationService = Substitute.For<ILambdaInitializationService>();
+            var scope = Substitute.For<LambdaScope>();
 
             var collection = new ServiceCollection();
             collection.AddSingleton(initializationService);
             collection.AddSingleton(lambda);
+            collection.AddSingleton(scope);
 
             var provider = collection.BuildServiceProvider();
             await using var host = new TestLambdaHost(lambdaHost =>
@@ -168,9 +208,11 @@ namespace Lambdajection.Core.Tests
         {
             var lambda = Substitute.For<AsyncDisposableLambda>();
             var initializationService = Substitute.For<ILambdaInitializationService>();
+            var scope = Substitute.For<LambdaScope>();
             var collection = new ServiceCollection();
             collection.AddSingleton(initializationService);
             collection.AddSingleton<TestLambda>(lambda);
+            collection.AddSingleton(scope);
 
             var provider = collection.BuildServiceProvider();
             await using (var host = new TestLambdaHost(lambdaHost =>
@@ -193,9 +235,11 @@ namespace Lambdajection.Core.Tests
             var lambda = Substitute.For<DisposableLambda>();
             var suppressor = Substitute.For<Action<object>>();
             var initializationService = Substitute.For<ILambdaInitializationService>();
+            var scope = Substitute.For<LambdaScope>();
             var collection = new ServiceCollection();
             collection.AddSingleton(initializationService);
             collection.AddSingleton<TestLambda>(lambda);
+            collection.AddSingleton(scope);
 
             var provider = collection.BuildServiceProvider();
             await using (var host = new TestLambdaHost(lambdaHost =>
@@ -218,9 +262,11 @@ namespace Lambdajection.Core.Tests
         {
             var lambda = Substitute.For<MultiDisposableLambda>();
             var initializationService = Substitute.For<ILambdaInitializationService>();
+            var scope = Substitute.For<LambdaScope>();
             var collection = new ServiceCollection();
             collection.AddSingleton(initializationService);
             collection.AddSingleton<TestLambda>(lambda);
+            collection.AddSingleton(scope);
 
             var provider = collection.BuildServiceProvider();
             await using (var host = new TestLambdaHost(lambdaHost =>
@@ -244,9 +290,11 @@ namespace Lambdajection.Core.Tests
             var lambda = Substitute.For<MultiDisposableLambda>();
             var suppressor = Substitute.For<Action<object>>();
             var initializationService = Substitute.For<ILambdaInitializationService>();
+            var scope = Substitute.For<LambdaScope>();
             var collection = new ServiceCollection();
             collection.AddSingleton(initializationService);
             collection.AddSingleton<TestLambda>(lambda);
+            collection.AddSingleton(scope);
 
             TestLambdaHost host;
             var provider = collection.BuildServiceProvider();

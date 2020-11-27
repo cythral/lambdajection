@@ -9,7 +9,7 @@ namespace Lambdajection.Examples.CustomRuntime
     [Lambda(typeof(Startup))]
     public partial class Handler
     {
-        public async Task<string> Handle(object request, ILambdaContext context)
+        public async Task<string> Handle(object request)
         {
             return await Task.FromResult("Hello World!");
         }

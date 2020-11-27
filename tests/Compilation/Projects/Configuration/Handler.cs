@@ -21,7 +21,7 @@ namespace Lambdajection.CompilationTests.Configuration
             this.exampleOptions = exampleOptions.Value;
         }
 
-        public Task<Options> Handle(string request, ILambdaContext context)
+        public Task<Options> Handle(string request)
         {
             return Task.FromResult(exampleOptions);
         }
