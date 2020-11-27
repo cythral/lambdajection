@@ -128,6 +128,6 @@
     </Target>
 
     <Target Name="Format" DependsOnTargets="RestoreTools">
-        <Exec Command="dotnet format %(AnySolution.Identity) --fix-analyzers" />
+        <Exec Command="dotnet format %(AnySolution.Identity) --fix-analyzers --fix-style info" />
     </Target>
 </Project>
