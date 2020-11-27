@@ -17,7 +17,7 @@ namespace Lambdajection.CompilationTests.Disposables
     {
         public bool DisposeWasCalled = false;
 
-        public Task<DisposableHandler> Handle(string request, ILambdaContext context)
+        public Task<DisposableHandler> Handle(string request)
         {
             return Task.FromResult(this);
         }

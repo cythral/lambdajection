@@ -17,7 +17,7 @@ namespace __Project__
         private bool disposed;
 
 #endif
-        public async Task<object> Handle(object request, ILambdaContext context)
+        public async Task<object> Handle(object request)
         {
             return await Task.FromResult(new { });
         }

@@ -1,7 +1,5 @@
 using System.Threading.Tasks;
 
-using Amazon.Lambda.Core;
-
 namespace Lambdajection.Core
 {
     /// <summary>
@@ -15,8 +13,7 @@ namespace Lambdajection.Core
         /// The lambda's entrypoint.
         /// </summary>
         /// <param name="parameter">The lambda's input parameter.</param>
-        /// <param name="context">The lambda's context object.</param>
         /// <returns>The lambda's return value.</returns>
-        Task<TLambdaOutput> Handle(TLambdaParameter parameter, ILambdaContext context);
+        Task<TLambdaOutput> Handle(TLambdaParameter parameter);
     }
 }

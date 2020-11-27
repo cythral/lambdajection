@@ -1,5 +1,7 @@
 using System;
 
+using Amazon.Lambda.Core;
+
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -35,6 +37,11 @@ namespace Lambdajection.Core
         /// </summary>
         internal static bool runInitializationServices = true;
 
+        /// <summary>
+        /// The context for the current invocation.
+        /// </summary>
+        internal static ILambdaContext? context;
+
 #pragma warning restore SA1401, SA1311, SA1304
 
         /// <summary>
@@ -57,8 +64,8 @@ namespace Lambdajection.Core
             var configuration = new TLambdaConfigFactory().Create();
             var serviceCollection = BuildServiceCollection(configuration);
             using var intermediateProvider = serviceCollection.BuildServiceProvider();
-            RunLambdaStartup(intermediateProvider, serviceCollection);
-            RunOptionsConfigurator(intermediateProvider, serviceCollection);
+            _ = RunLambdaStartup(intermediateProvider, serviceCollection);
+            _ = RunOptionsConfigurator(intermediateProvider, serviceCollection);
             return serviceCollection.BuildServiceProvider();
         }
 
@@ -69,12 +76,17 @@ namespace Lambdajection.Core
         /// <returns>The built service collection.</returns>
         public static IServiceCollection BuildServiceCollection(IConfigurationRoot configuration)
         {
-            var serviceCollection = new ServiceCollection();
-            serviceCollection.AddSingleton<IConfiguration>(configuration);
-            serviceCollection.AddSingleton<ILambdaStartup, TLambdaStartup>();
-            serviceCollection.AddSingleton<ILambdaConfigurator, TLambdaConfigurator>();
-            serviceCollection.AddScoped<TLambda>();
-            return serviceCollection;
+            return new ServiceCollection()
+            .AddSingleton<IConfiguration>(configuration)
+            .AddSingleton<ILambdaStartup, TLambdaStartup>()
+            .AddSingleton<ILambdaConfigurator, TLambdaConfigurator>()
+            .AddScoped<TLambda>()
+            .AddScoped<LambdaScope>()
+            .AddScoped(provider =>
+            {
+                var scope = provider.GetRequiredService<LambdaScope>();
+                return scope.LambdaContext ?? throw new Exception("The Lambda Context has not been registered.");
+            });
         }
 
         /// <summary>

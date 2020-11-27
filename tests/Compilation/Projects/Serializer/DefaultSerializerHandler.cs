@@ -15,7 +15,7 @@ namespace Lambdajection.CompilationTests.Serializer
     [Lambda(typeof(Startup))]
     public partial class DefaultSerializerHandler
     {
-        public Task<string> Handle(string request, ILambdaContext context)
+        public Task<string> Handle(string request)
         {
             return Task.FromResult("");
         }

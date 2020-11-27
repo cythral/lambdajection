@@ -24,7 +24,7 @@ namespace Lambdajection.Examples.AwsClientFactories
             this.s3Factory = s3Factory;
         }
 
-        public async Task<string> Handle(Request request, ILambdaContext context)
+        public async Task<string> Handle(Request request)
         {
             s3Client = await s3Factory.Create(request.RoleArn);
 

@@ -20,7 +20,7 @@ namespace Lambdajection.CompilationTests.ConfigFactory
             this.config = config;
         }
 
-        public Task<string> Handle(string _, ILambdaContext context)
+        public Task<string> Handle(string _)
         {
             var value = config.GetValue<string>("TestKey");
             return Task.FromResult(value);

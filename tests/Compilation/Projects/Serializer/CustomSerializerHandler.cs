@@ -15,7 +15,7 @@ namespace Lambdajection.CompilationTests.Serializer
     [Lambda(typeof(Startup), Serializer = typeof(TestSerializer))]
     public partial class CustomSerializerHandler
     {
-        public Task<string> Handle(string request, ILambdaContext context)
+        public Task<string> Handle(string request)
         {
             return Task.FromResult("");
         }

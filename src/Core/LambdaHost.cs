@@ -6,6 +6,8 @@ using Amazon.Lambda.Core;
 
 using Microsoft.Extensions.DependencyInjection;
 
+#pragma warning disable IDE0060, CA1801
+
 namespace Lambdajection.Core
 {
     /// <summary>
@@ -64,6 +66,12 @@ namespace Lambdajection.Core
         public Action<object> SuppressFinalize { get; internal set; } = GC.SuppressFinalize;
 
         /// <summary>
+        /// Gets the context object used for the current invocation.
+        /// </summary>
+        /// <value>Context object used for the current lambda invocation.</value>
+        public ILambdaContext? Context { get; private set; }
+
+        /// <summary>
         /// Runs the lambda.
         /// </summary>
         /// <param name="parameter">The input parameter to pass to the lambda.</param>
@@ -77,9 +85,13 @@ namespace Lambdajection.Core
             }
 
             scope = ServiceProvider.CreateScope();
-            lambda = scope.ServiceProvider.GetRequiredService<TLambda>();
 
-            return await lambda.Handle(parameter, context);
+            var provider = scope.ServiceProvider;
+            var scopeContext = provider.GetRequiredService<LambdaScope>();
+            scopeContext.LambdaContext = context;
+
+            lambda = provider.GetRequiredService<TLambda>();
+            return await lambda.Handle(parameter);
         }
 
         /// <summary>

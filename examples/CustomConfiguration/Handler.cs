@@ -18,7 +18,7 @@ namespace Lambdajection.Examples.CustomConfiguration
             this.config = config.Value;
         }
 
-        public Task<string> Handle(object request, ILambdaContext context)
+        public Task<string> Handle(object request)
         {
             return Task.FromResult(config.Foo);
         }
