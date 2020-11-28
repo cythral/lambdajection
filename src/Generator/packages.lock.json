@@ -4,39 +4,39 @@
     ".NETStandard,Version=v2.1": {
       "AWSSDK.Core": {
         "type": "Direct",
-        "requested": "[3.5.1.34, )",
-        "resolved": "3.5.1.34",
-        "contentHash": "U7+LuL8NN20NP+Fg3l9HfH5nuKi+EPxh1zaP1JLg7Twj2OnIf6TuUkJyoTCggJ7mXzfmiLr3YyGu6/MjcvoMrA==",
+        "requested": "[3.5.1.42, )",
+        "resolved": "3.5.1.42",
+        "contentHash": "X4JXKzpJNp6jOO34Hdpcow/scx3weQsssgCuj1GGdDpMWwOptlobOw/yrUNYrqoP315Gep7QRX5qnA9b9tf5fw==",
         "dependencies": {
           "Microsoft.Bcl.AsyncInterfaces": "1.1.0"
         }
       },
       "Microsoft.CodeAnalysis": {
         "type": "Direct",
-        "requested": "[3.8.0-5.final, )",
-        "resolved": "3.8.0-5.final",
-        "contentHash": "oKFoB4JUutzkmXM/xAv1g3Yz5P02Y7ffkPIRqCBvZOyA1c5pDstWBzU5iY5xoFM1lWuLI+L+Vjr7zYsWQpWVMw==",
+        "requested": "[3.8.0, )",
+        "resolved": "3.8.0",
+        "contentHash": "nUV9lqfbNL6uw8WhDW7ih2vc37P3+xctlExv6n7x0vIP/KSaCBTZGzJZcCnD+uJH3WKY2+xGMLFr+sG4QQ90zQ==",
         "dependencies": {
-          "Microsoft.CodeAnalysis.CSharp.Workspaces": "[3.8.0-5.final]",
-          "Microsoft.CodeAnalysis.VisualBasic.Workspaces": "[3.8.0-5.final]"
+          "Microsoft.CodeAnalysis.CSharp.Workspaces": "[3.8.0]",
+          "Microsoft.CodeAnalysis.VisualBasic.Workspaces": "[3.8.0]"
         }
       },
       "Microsoft.CodeAnalysis.CSharp.CodeStyle": {
         "type": "Direct",
-        "requested": "[3.8.0-5.final, )",
-        "resolved": "3.8.0-5.final",
-        "contentHash": "fc0GooFJCJUbAXuatlAhKJw3Uv3ZL9p3zVVn+Ew4U8q0jZY+aTa1fRtn1IrjeZx7rbzNrrQbJX8S90VZhOwJ/g=="
+        "requested": "[3.8.0, )",
+        "resolved": "3.8.0",
+        "contentHash": "utN0fgby7YvyLhLYq1ThYZpJmcxc3mKT6nWi5EIIKzWz5IF+S/N/uNM/1g+1Ga0PMshIwutCdmzPhxrXt3iATg=="
       },
       "Microsoft.CodeAnalysis.CSharp.Workspaces": {
         "type": "Direct",
-        "requested": "[3.8.0-5.final, )",
-        "resolved": "3.8.0-5.final",
-        "contentHash": "FXngu0Iobnl4mcP+Y8UW2hn1H3nPBU6UyA6RtttmlbSDH2ZQPPl3FPoyVsJD8Xb8pk2ck9MDrNZU7yUZaDjVGA==",
+        "requested": "[3.8.0, )",
+        "resolved": "3.8.0",
+        "contentHash": "rdEBvPWqe/IIscsnp7OkZ4tQin8khxBcSLyV9tU+sHdw9uW9U0GKL+Dv2rD4voC1bZBaO18Hp+m4Vkyfmaz0OA==",
         "dependencies": {
           "Humanizer.Core": "2.2.0",
-          "Microsoft.CodeAnalysis.CSharp": "[3.8.0-5.final]",
-          "Microsoft.CodeAnalysis.Common": "[3.8.0-5.final]",
-          "Microsoft.CodeAnalysis.Workspaces.Common": "[3.8.0-5.final]"
+          "Microsoft.CodeAnalysis.CSharp": "[3.8.0]",
+          "Microsoft.CodeAnalysis.Common": "[3.8.0]",
+          "Microsoft.CodeAnalysis.Workspaces.Common": "[3.8.0]"
         }
       },
       "Microsoft.CodeAnalysis.FxCopAnalyzers": {
@@ -83,10 +83,10 @@
       },
       "AWSSDK.KeyManagementService": {
         "type": "Transitive",
-        "resolved": "3.5.0.36",
-        "contentHash": "I1GFu123/0+WRDyCT3OiUZRraCtQLQXWw5nr8tAG7s9aa3/CS+X26BW+gcynTiRf4we72nkwLI2K0uD4zmpenw==",
+        "resolved": "3.5.0.42",
+        "contentHash": "/Q+tphYUiG5WmAn0n+2lVv6een0uzvxEB63PGjNDEzeKNpoPn6kt5cCtvUhQ+Ni7rCeKmbLTEG5DI1j8um9NyQ==",
         "dependencies": {
-          "AWSSDK.Core": "[3.5.1.34, 3.6.0)"
+          "AWSSDK.Core": "[3.5.1.42, 3.6.0)"
         }
       },
       "Humanizer.Core": {
@@ -114,13 +114,13 @@
       },
       "Microsoft.CodeAnalysis.Common": {
         "type": "Transitive",
-        "resolved": "3.8.0-5.final",
-        "contentHash": "n3W3VDptsxu7DV1+PKnXssU6HZUdTLgcqUggL/jcMtN0fD0d7tb9yhNOY1jzJaAd1WIhrJbjTrh0SbQqbeikbg==",
+        "resolved": "3.8.0",
+        "contentHash": "8YTZ7GpsbTdC08DITx7/kwV0k4SC6cbBAFqc13cOm5vKJZcEIAh51tNSyGSkWisMgYCr96B2wb5Zri1bsla3+g==",
         "dependencies": {
           "Microsoft.CodeAnalysis.Analyzers": "3.0.0",
-          "System.Collections.Immutable": "5.0.0-preview.8.20407.11",
+          "System.Collections.Immutable": "5.0.0",
           "System.Memory": "4.5.4",
-          "System.Reflection.Metadata": "5.0.0-preview.8.20407.11",
+          "System.Reflection.Metadata": "5.0.0",
           "System.Runtime.CompilerServices.Unsafe": "4.7.1",
           "System.Text.Encoding.CodePages": "4.5.1",
           "System.Threading.Tasks.Extensions": "4.5.4"
@@ -128,10 +128,10 @@
       },
       "Microsoft.CodeAnalysis.CSharp": {
         "type": "Transitive",
-        "resolved": "3.8.0-5.final",
-        "contentHash": "N3fjYDlvubwDSYSY0H5ByEpHFpva64LrdR0u60Fq8Ng1YZNAqR5Om7VjzjkWcAn7O1mCImowrFRyjRrTmSP5NQ==",
+        "resolved": "3.8.0",
+        "contentHash": "hKqFCUSk9TIMBDjiYMF8/ZfK9p9mzpU+slM73CaCHu4ctfkoqJGHLQhyT8wvrYsIg+ufrUWBF8hcJYmyr5rc5Q==",
         "dependencies": {
-          "Microsoft.CodeAnalysis.Common": "[3.8.0-5.final]"
+          "Microsoft.CodeAnalysis.Common": "[3.8.0]"
         }
       },
       "Microsoft.CodeAnalysis.VersionCheckAnalyzer": {
@@ -141,29 +141,29 @@
       },
       "Microsoft.CodeAnalysis.VisualBasic": {
         "type": "Transitive",
-        "resolved": "3.8.0-5.final",
-        "contentHash": "Lmmsb8P5Ne+l7LsudSbHKV1j1KWHmU0hs6tMqsAovELrI0uVjKsmvobiM2QN0CYn60YSqwulHfgXLGLlhbvENQ==",
+        "resolved": "3.8.0",
+        "contentHash": "G3/0o6sb9ZZQjBD+6bHj7GaxyeMZbBJXNtBC6YGmbSodMup9A1QPgCSrSn/ktbxWjKI8AMlJHP6CHCwfBXTmpg==",
         "dependencies": {
-          "Microsoft.CodeAnalysis.Common": "[3.8.0-5.final]"
+          "Microsoft.CodeAnalysis.Common": "[3.8.0]"
         }
       },
       "Microsoft.CodeAnalysis.VisualBasic.Workspaces": {
         "type": "Transitive",
-        "resolved": "3.8.0-5.final",
-        "contentHash": "AOAaWaYHYmVaNq3uz1zt/mVJXzJov+LsToB920cZ3/BMI9aQH5rbtTUzMw+RS1239TvAUscPMnL4SyusfZef0w==",
+        "resolved": "3.8.0",
+        "contentHash": "qBkq9WB7NLdMf65FJ7HkoGlZbr8G7QYI5jtJsqBzHbF5RUclKHRmpQwLq2RgcyLQY8qGpBPDbJX9OMG3+VOlvA==",
         "dependencies": {
-          "Microsoft.CodeAnalysis.Common": "[3.8.0-5.final]",
-          "Microsoft.CodeAnalysis.VisualBasic": "[3.8.0-5.final]",
-          "Microsoft.CodeAnalysis.Workspaces.Common": "[3.8.0-5.final]"
+          "Microsoft.CodeAnalysis.Common": "[3.8.0]",
+          "Microsoft.CodeAnalysis.VisualBasic": "[3.8.0]",
+          "Microsoft.CodeAnalysis.Workspaces.Common": "[3.8.0]"
         }
       },
       "Microsoft.CodeAnalysis.Workspaces.Common": {
         "type": "Transitive",
-        "resolved": "3.8.0-5.final",
-        "contentHash": "lFknalC/6cotf9gd8xYTUFsWFCOLrSz9yk1XUQQirivRr3Iyh1h31TWaKqAATZtkoTvCmIr+OJh7YtapVLT2qg==",
+        "resolved": "3.8.0",
+        "contentHash": "GPYVydsmOmScOWDJA1LFky7/MkoXpx1JI3lZJShxC+bvVUvL9zVKE8WDZMLsYJ5MAbry2xkZftdfeMpZ+kvLDQ==",
         "dependencies": {
           "Microsoft.Bcl.AsyncInterfaces": "1.1.1",
-          "Microsoft.CodeAnalysis.Common": "[3.8.0-5.final]",
+          "Microsoft.CodeAnalysis.Common": "[3.8.0]",
           "System.Composition": "1.0.31"
         }
       },
@@ -539,8 +539,8 @@
       },
       "System.Collections.Immutable": {
         "type": "Transitive",
-        "resolved": "5.0.0-preview.8.20407.11",
-        "contentHash": "vEWzQwM4B9A6icQtaL3Ftf3QeIRTxNOxzVRcGZxC9V3xel9xZ8nvl2U9RPK3bFiH7wTecReCVlGRQr2nl9TrHw==",
+        "resolved": "5.0.0",
+        "contentHash": "FXkLXiK0sVVewcso0imKQoOxjoPAj42R8HtjjbSjVPAzwDfzoyoznWxgA3c38LDbN9SJux1xXoXYAhz98j7r2g==",
         "dependencies": {
           "System.Memory": "4.5.4"
         }
@@ -977,10 +977,10 @@
       },
       "System.Reflection.Metadata": {
         "type": "Transitive",
-        "resolved": "5.0.0-preview.8.20407.11",
-        "contentHash": "gS/9KNzFSuRrODXNQFyMJAT0JcKgiIVVIDqfgxemGO1oceuNYPIQAh2TLofv+CgesXhKh54EkNi9yxGw2+UyYQ==",
+        "resolved": "5.0.0",
+        "contentHash": "5NecZgXktdGg34rh1OenY1rFNDCI8xSjFr+Z4OU4cU06AQHUdRnIIEeWENu3Wl4YowbzkymAIMvi3WyK9U53pQ==",
         "dependencies": {
-          "System.Collections.Immutable": "5.0.0-preview.8.20407.11"
+          "System.Collections.Immutable": "5.0.0"
         }
       },
       "System.Reflection.Primitives": {
@@ -1387,7 +1387,7 @@
       "Lambdajection.Encryption": {
         "type": "Project",
         "dependencies": {
-          "AWSSDK.KeyManagementService": "3.5.0.36"
+          "AWSSDK.KeyManagementService": "3.5.0.42"
         }
       }
     }

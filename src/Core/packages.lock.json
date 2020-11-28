@@ -19,15 +19,15 @@
       },
       "AWSSDK.Core": {
         "type": "Direct",
-        "requested": "[3.5.1.34, )",
-        "resolved": "3.5.1.34",
-        "contentHash": "U7+LuL8NN20NP+Fg3l9HfH5nuKi+EPxh1zaP1JLg7Twj2OnIf6TuUkJyoTCggJ7mXzfmiLr3YyGu6/MjcvoMrA=="
+        "requested": "[3.5.1.42, )",
+        "resolved": "3.5.1.42",
+        "contentHash": "X4JXKzpJNp6jOO34Hdpcow/scx3weQsssgCuj1GGdDpMWwOptlobOw/yrUNYrqoP315Gep7QRX5qnA9b9tf5fw=="
       },
       "Microsoft.CodeAnalysis.CSharp.CodeStyle": {
         "type": "Direct",
-        "requested": "[3.8.0-5.final, )",
-        "resolved": "3.8.0-5.final",
-        "contentHash": "fc0GooFJCJUbAXuatlAhKJw3Uv3ZL9p3zVVn+Ew4U8q0jZY+aTa1fRtn1IrjeZx7rbzNrrQbJX8S90VZhOwJ/g=="
+        "requested": "[3.8.0, )",
+        "resolved": "3.8.0",
+        "contentHash": "utN0fgby7YvyLhLYq1ThYZpJmcxc3mKT6nWi5EIIKzWz5IF+S/N/uNM/1g+1Ga0PMshIwutCdmzPhxrXt3iATg=="
       },
       "Microsoft.CodeAnalysis.FxCopAnalyzers": {
         "type": "Direct",
@@ -249,18 +249,18 @@
       },
       "AWSSDK.Core": {
         "type": "Direct",
-        "requested": "[3.5.1.34, )",
-        "resolved": "3.5.1.34",
-        "contentHash": "U7+LuL8NN20NP+Fg3l9HfH5nuKi+EPxh1zaP1JLg7Twj2OnIf6TuUkJyoTCggJ7mXzfmiLr3YyGu6/MjcvoMrA==",
+        "requested": "[3.5.1.42, )",
+        "resolved": "3.5.1.42",
+        "contentHash": "X4JXKzpJNp6jOO34Hdpcow/scx3weQsssgCuj1GGdDpMWwOptlobOw/yrUNYrqoP315Gep7QRX5qnA9b9tf5fw==",
         "dependencies": {
           "Microsoft.Bcl.AsyncInterfaces": "1.1.0"
         }
       },
       "Microsoft.CodeAnalysis.CSharp.CodeStyle": {
         "type": "Direct",
-        "requested": "[3.8.0-5.final, )",
-        "resolved": "3.8.0-5.final",
-        "contentHash": "fc0GooFJCJUbAXuatlAhKJw3Uv3ZL9p3zVVn+Ew4U8q0jZY+aTa1fRtn1IrjeZx7rbzNrrQbJX8S90VZhOwJ/g=="
+        "requested": "[3.8.0, )",
+        "resolved": "3.8.0",
+        "contentHash": "utN0fgby7YvyLhLYq1ThYZpJmcxc3mKT6nWi5EIIKzWz5IF+S/N/uNM/1g+1Ga0PMshIwutCdmzPhxrXt3iATg=="
       },
       "Microsoft.CodeAnalysis.FxCopAnalyzers": {
         "type": "Direct",
@@ -554,15 +554,15 @@
       },
       "AWSSDK.Core": {
         "type": "Direct",
-        "requested": "[3.5.1.34, )",
-        "resolved": "3.5.1.34",
-        "contentHash": "U7+LuL8NN20NP+Fg3l9HfH5nuKi+EPxh1zaP1JLg7Twj2OnIf6TuUkJyoTCggJ7mXzfmiLr3YyGu6/MjcvoMrA=="
+        "requested": "[3.5.1.42, )",
+        "resolved": "3.5.1.42",
+        "contentHash": "X4JXKzpJNp6jOO34Hdpcow/scx3weQsssgCuj1GGdDpMWwOptlobOw/yrUNYrqoP315Gep7QRX5qnA9b9tf5fw=="
       },
       "Microsoft.CodeAnalysis.CSharp.CodeStyle": {
         "type": "Direct",
-        "requested": "[3.8.0-5.final, )",
-        "resolved": "3.8.0-5.final",
-        "contentHash": "fc0GooFJCJUbAXuatlAhKJw3Uv3ZL9p3zVVn+Ew4U8q0jZY+aTa1fRtn1IrjeZx7rbzNrrQbJX8S90VZhOwJ/g=="
+        "requested": "[3.8.0, )",
+        "resolved": "3.8.0",
+        "contentHash": "utN0fgby7YvyLhLYq1ThYZpJmcxc3mKT6nWi5EIIKzWz5IF+S/N/uNM/1g+1Ga0PMshIwutCdmzPhxrXt3iATg=="
       },
       "Microsoft.CodeAnalysis.FxCopAnalyzers": {
         "type": "Direct",
