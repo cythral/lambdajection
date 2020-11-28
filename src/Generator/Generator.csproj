@@ -17,9 +17,9 @@
 
   <ItemGroup>
     <!-- AWSSDK.Core here for getting path to package, needed for loading Lambdajection.Core types -->
-    <PackageReference Include="AWSSDK.Core" Version="3.5.1.34" GeneratePathProperty="true" />
-    <PackageReference Include="Microsoft.CodeAnalysis" Version="3.8.0-5.final" />
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="3.8.0-5.final" />
+    <PackageReference Include="AWSSDK.Core" Version="3.5.1.42" GeneratePathProperty="true" />
+    <PackageReference Include="Microsoft.CodeAnalysis" Version="3.8.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="3.8.0" />
   </ItemGroup>
 
   <ItemGroup>
