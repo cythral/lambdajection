@@ -2,7 +2,8 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup>
         <RunFormatter Condition="$(RunFormatter) == ''">true</RunFormatter>
-        <BuildExamplesAndTemplates Condition="$(BuildExamplesAndTemplates) == ''">true</BuildExamplesAndTemplates>
+        <BuildChildProjects Condition="$(BuildChildProjects) == ''">true</BuildChildProjects>
+        <SkipLayer Condition="$(SkipLayer) == ''">false</SkipLayer>
         <ToolsAvailable>false</ToolsAvailable>
     </PropertyGroup>
 
@@ -91,10 +92,10 @@
     </Target>
 
     <Target
-        Name="BuildExamplesAndTemplates"
+        Name="BuildChildProjects"
         AfterTargets="Build"
         DependsOnTargets="Build;RetrievePackageVersionFromTool"
-        Condition="'$(BuildExamplesAndTemplates)' == 'true' and '$(DesignTimeBuild)' != 'true'"
+        Condition="'$(BuildChildProjects)' == 'true' and '$(DesignTimeBuild)' != 'true'"
     >
         <ItemGroup>
             <PackagesToRemove Include="$(MSBuildThisFileDirectory).nuget\%(ChildSolution.Key)\lambdajection/" />
@@ -106,12 +107,28 @@
             <PackagesToRemove Include="$(MSBuildThisFileDirectory).nuget\%(ChildSolution.Key)\lambdajection.templates/" />
         </ItemGroup>
 
-        <Message Importance="High" Text="%0A%0ABuilding Examples and Templates%0A---------------------------------%0A" />
+        <Message Importance="High" Text="%0A%0ABuilding Examples, Templates and Layer%0A---------------------------------%0A" />
         <RemoveDir Directories="@(PackagesToRemove)" />
-        <MSBuild Projects="%(ChildSolution.Identity)" Targets="Restore;Build;Publish" Properties="@(ChildSolutionProp)" />
+
+        <MSBuild
+            Projects="%(ChildSolution.Identity)"
+            Targets="Restore;Build;Publish"
+            Properties="@(ChildSolutionProp)"
+        />
+
+        <MSBuild
+            Projects="$(MSBuildThisFileDirectory)\src\Layer\Layer.csproj"
+            Targets="Restore;Build;Pack"
+            Properties="@(ChildSolutionProp)"
+            Condition="$(SkipLayer) != 'true'"
+        />
     </Target>
 
-    <Target Name="EndToEndTests" DependsOnTargets="RetrievePackageVersionFromTool" Condition="$(Configuration) == 'Release'">
+    <Target
+        Name="EndToEndTests"
+        DependsOnTargets="RetrievePackageVersionFromTool"
+        Condition="$(Configuration) == 'Release'"
+    >
         <CreateItem Include="$(MSBuildThisFileDirectory)examples\*\*.csproj">
             <Output TaskParameter="Include" ItemName="Examples" />
         </CreateItem>

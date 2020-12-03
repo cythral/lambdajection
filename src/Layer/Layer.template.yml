@@ -1,0 +1,27 @@
+Description: Lambda Layer for Lambdajection
+Transform: AWS::Serverless-2016-10-31
+Metadata:
+  AWS::ServerlessRepo::Application:
+    Name: lambdajection-layer
+    Description: Lambda Layer containing a .NET Runtime Package Store of Lambdajection and its dependencies.
+    Author: Cythral LLC
+    SpdxLicenseId: MIT
+    LicenseUrl: ./LICENSE.txt
+    ReadmeUrl: ./README.md
+    Labels:
+      - lambda
+      - dotnet
+      - layer
+      - dependency-injection
+      - lambdajection
+    HomePageUrl: https://github.com/cythral/lambdajection
+    SourceCodeUrl: https://github.com/cythral/lambdajection
+Resources:
+  Layer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      LayerName: lambdajection
+      Description: Lambda Layer for Lambajection
+      CompatibleRuntimes:
+        - provided.al2
+      ContentUri: ./layer

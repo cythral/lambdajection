@@ -1,0 +1,69 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+        <PackageId>Lambdajection.Layer</PackageId>
+        <AssemblyName>$(PackageId)</AssemblyName>
+        <NoWarn>NU5128</NoWarn>
+        <PackageDescription>Runtime package store layer for Lambdajection.</PackageDescription>
+        <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
+        <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
+        <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+        <BeforePack>CreateStore;$(BeforePack)</BeforePack>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <None Include="build/**" Pack="true" PackagePath="build/" />
+        <None Include="Layer.template.yml" CopyToOutputDirectory="always" />
+        <None Include="../../README.md" CopyToOutputDirectory="always" TargetPath="layer/README.md" />
+        <None Include="../../LICENSE.txt" CopyToOutputDirectory="always" TargetPath="layer/LICENSE.txt" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Cythral.CloudFormation.BuildTasks" Version="0.3.2" PrivateAssets="all" />
+    </ItemGroup>
+
+    <Target Name="CreateStore" DependsOnTargets="GetBuildVersion">
+        <ItemGroup>
+            <StoreArgs Include="--manifest $(MSBuildThisFileDirectory)/Manifest/Manifest.csproj" />
+            <StoreArgs Include="--runtime linux-x64" />
+            <StoreArgs Include="--output $(OutputPath)/layer" />
+            <StoreArgs Include="--skip-optimization" Condition="!$([MSBuild]::IsOsPlatform('linux'))" />
+            <StoreArgs Include="/p:Configuration=$(Configuration)" />
+            <StoreArgs Include="/p:LambdajectionVersion=$(PackageVersion)" />
+        </ItemGroup>
+
+        <PropertyGroup>
+            <DirectoriesToRemove>$([System.IO.Directory]::GetDirectories('$(MSBuildThisFileDirectory)Manifest/.nuget', 'lambdajection*'))</DirectoriesToRemove>
+        </PropertyGroup>
+
+        <RemoveDir Directories="$(DirectoriesToRemove)" />
+        <Exec Command="dotnet store @(StoreArgs, ' ')" StandardOutputImportance="low" />
+
+        <ItemGroup>
+            <Content Include="$(OutputPath)layer/x64/net5.0/artifact.xml" />
+        </ItemGroup>
+    </Target>
+
+    <Target Name="PackLayer" AfterTargets="Pack" Condition="$(CI) == 'true'">
+        <PropertyGroup>
+            <BucketExportName>lambdajection-infrastructure:LayerBucket</BucketExportName>
+            <TemplateFilePath Condition="$(TemplateFilePath) == ''">$(OutputPath)Layer.template.yml</TemplateFilePath>
+            <OutputLayerTemplateFilePath Condition="$(OutputLayerTemplateFilePath) == ''">$(OutputPath)Layer.template.yml.packaged</OutputLayerTemplateFilePath>
+        </PropertyGroup>
+
+        <!-- Get the Layer Bucket Name -->
+        <Exec
+            Command="aws cloudformation list-exports --query Exports[?Name==\`$(BucketExportName)\`].Value --output text"
+            ConsoleToMsBuild="true"
+            StandardOutputImportance="low"
+        >
+            <Output TaskParameter="ConsoleOutput" PropertyName="LayerBucket" />
+        </Exec>
+
+        <PackageTemplate
+            TemplateFile="$(TemplateFilePath)"
+            PackageBucket="$(LayerBucket)"
+            OutputTemplateFile="$(OutputLayerTemplateFilePath)"
+        />
+    </Target>
+</Project>
