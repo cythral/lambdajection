@@ -29,6 +29,9 @@ Resources:
         - !Ref LambdajectionLayer
       Policies:
         - AWSLambdaExecute
+      Environment:
+        Variables:
+          DOTNET_SHARED_STORE: /opt/
 
 Outputs:
   InputPayload:
