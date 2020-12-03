@@ -111,16 +111,16 @@
         <RemoveDir Directories="@(PackagesToRemove)" />
 
         <MSBuild
-            Projects="%(ChildSolution.Identity)"
-            Targets="Restore;Build;Publish"
-            Properties="@(ChildSolutionProp)"
-        />
-
-        <MSBuild
             Projects="$(MSBuildThisFileDirectory)\src\Layer\Layer.csproj"
             Targets="Restore;Build;Pack"
             Properties="@(ChildSolutionProp)"
             Condition="$(SkipLayer) != 'true'"
+        />
+
+        <MSBuild
+            Projects="%(ChildSolution.Identity)"
+            Targets="Restore;Build;Publish"
+            Properties="@(ChildSolutionProp)"
         />
     </Target>
 
