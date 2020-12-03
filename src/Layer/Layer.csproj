@@ -46,7 +46,7 @@
         </ItemGroup>
     </Target>
 
-    <Target Name="PackLayer" AfterTargets="Pack" Condition="$(CI) == 'true'">
+    <Target Name="PackLayer" AfterTargets="Pack" Condition="$(UPLOAD_LAYER_TEMPLATE) == 'true'">
         <PropertyGroup>
             <BucketExportName>lambdajection-infrastructure:LayerBucket</BucketExportName>
             <TemplateFilePath Condition="$(TemplateFilePath) == ''">$(OutputPath)Layer.template.yml</TemplateFilePath>

@@ -11,11 +11,11 @@ on:
     - cron: "0 0 * * *"
 
 env:
-  CI: "true"
   DOTNET_NOLOGO: "true"
   CONFIGURATION: Release
   NUGET_FEED_URL: https://api.nuget.org/v3/index.json
   GITHUB_PACKAGES_FEED_URL: https://nuget.pkg.github.com/cythral/index.json
+  UPLOAD_LAYER_TEMPLATE: "true"
 
 jobs:
   build:
@@ -66,6 +66,7 @@ jobs:
         run: dotnet build --no-restore -m -bl:obj/logs/build-${{ matrix.os }}.binlog -p:OutputLayerTemplateFilePath=$(pwd)/Layer.template.yml
         env:
           AWS_REGION: us-east-1
+          AWS_DEFAULT_REGION: us-east-1
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
