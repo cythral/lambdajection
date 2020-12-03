@@ -117,7 +117,7 @@ jobs:
   release:
     needs: build
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+    # if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
     steps:
       - uses: actions/checkout@v2
         with:
@@ -145,29 +145,29 @@ jobs:
       - name: Display .NET Info
         run: dotnet --info
 
-      - name: Deploy to NuGet
-        run: dotnet nuget push '${{ steps.download-nugets.outputs.download-path }}/*.nupkg' -k ${FEED_TOKEN} -s ${FEED_URL} --skip-duplicate
-        env:
-          FEED_TOKEN: ${{ secrets.NUGET_TOKEN }}
-          FEED_URL: ${{ env.NUGET_FEED_URL }}
+      # - name: Deploy to NuGet
+      #   run: dotnet nuget push '${{ steps.download-nugets.outputs.download-path }}/*.nupkg' -k ${FEED_TOKEN} -s ${FEED_URL} --skip-duplicate
+      #   env:
+      #     FEED_TOKEN: ${{ secrets.NUGET_TOKEN }}
+      #     FEED_URL: ${{ env.NUGET_FEED_URL }}
 
       - name: Publish to SAR
         run: |
           set -eo pipefail
+          dotnet restore
           sam publish \
             --template ${{ steps.download-layer-template.outputs.download-path }}/Layer.template.yml \
             --region us-east-1 \
-            --semantic-version ${VERSION}
+            --semantic-version $(dotnet nbgv get-version -v NuGetPackageVersion)
         env:
           AWS_DEFAULT_REGION: us-east-1
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-
-      - uses: ncipollo/release-action@v1
-        with:
-          artifacts: "${{ steps.download.outputs.download-path }}/*.nupkg,${{ steps.download.outputs.download-path }}/*.snupkg"
-          bodyFile: ".github/releases/v${{ env.VERSION }}.md"
-          tag: v${{ env.VERSION }}
-          commit: ${{ github.sha }}
-          token: ${{ secrets.GH_TOKEN }}
-          prerelease: ${{ contains(env.VERSION, '-') }}
+      # - uses: ncipollo/release-action@v1
+      #   with:
+      #     artifacts: "${{ steps.download.outputs.download-path }}/*.nupkg,${{ steps.download.outputs.download-path }}/*.snupkg"
+      #     bodyFile: ".github/releases/v${{ env.VERSION }}.md"
+      #     tag: v${{ env.VERSION }}
+      #     commit: ${{ github.sha }}
+      #     token: ${{ secrets.GH_TOKEN }}
+      #     prerelease: ${{ contains(env.VERSION, '-') }}

@@ -32,6 +32,8 @@
             <StoreArgs Include="/p:LambdajectionVersion=$(PackageVersion)" />
         </ItemGroup>
 
+        <MakeDir Directories="$(MSBuildThisFileDirectory)Manifest/.nuget" />
+
         <PropertyGroup>
             <DirectoriesToRemove>$([System.IO.Directory]::GetDirectories('$(MSBuildThisFileDirectory)Manifest/.nuget', 'lambdajection*'))</DirectoriesToRemove>
         </PropertyGroup>
