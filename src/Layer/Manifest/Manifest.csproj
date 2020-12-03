@@ -7,11 +7,28 @@
         <RestorePackagesPath>$(MSBuildThisFileDirectory).nuget</RestorePackagesPath>
         <RestoreAdditionalProjectSources>$(PackageOutputPath);$(RestoreAdditionalProjectSources)</RestoreAdditionalProjectSources>
         <RestorePackagesWithLockFile>false</RestorePackagesWithLockFile>
+        <AWSSDKCoreVersion>3.5.1.42</AWSSDKCoreVersion>
+        <MicrosoftBclAsyncInterfacesVersion>1.1.0</MicrosoftBclAsyncInterfacesVersion>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="AWSSDK.Core" Version="3.5.1.42" />
+        <PackageReference Include="AWSSDK.Core" Version="$(AWSSDKCoreVersion)" />
+        <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="$(MicrosoftBclAsyncInterfacesVersion)" />
         <PackageReference Include="Lambdajection.Core" Version="$(LambdajectionVersion)" />
         <PackageReference Include="Lambdajection.Encryption" Version="$(LambdajectionVersion)" />
     </ItemGroup>
+
+    <!-- Because AWSSDK.Core is sometimes optional, it doesn't get restored alongside Lambdajection.Core.
+        Therefore, for ReadyToRun to do its thing, we have to copy the aws sdk core assembly and its dependencies
+        into the directory where the lambdajection.core assembly is located. -->
+    <Target Name="PrepareForReadyToRun" AfterTargets="Restore">
+        <Copy
+            SourceFiles="$(MSBuildThisFileDirectory).nuget/awssdk.core/$(AWSSDKCoreVersion)/lib/netstandard2.0/AWSSDK.Core.dll"
+            DestinationFiles="$(MSBuildThisFileDirectory).nuget/lambdajection.core/$(LambdajectionVersion)/lib/net5.0/AWSSDK.Core.dll"
+        />
+        <Copy
+            SourceFiles="$(MSBuildThisFileDirectory).nuget/microsoft.bcl.asyncinterfaces/$(MicrosoftBclAsyncInterfacesVersion)/lib/netstandard2.0/Microsoft.Bcl.AsyncInterfaces.dll"
+            DestinationFiles="$(MSBuildThisFileDirectory).nuget/lambdajection.core/$(LambdajectionVersion)/lib/net5.0/Microsoft.Bcl.AsyncInterfaces.dll"
+        />
+    </Target>
 </Project>

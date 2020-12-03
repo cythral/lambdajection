@@ -64,6 +64,10 @@ jobs:
       - name: Build
         shell: bash
         run: dotnet build --no-restore -m -bl:obj/logs/build-${{ matrix.os }}.binlog -p:OutputLayerTemplateFilePath=$(pwd)/Layer.template.yml
+        env:
+          AWS_REGION: us-east-1
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
       - name: Test
         run: dotnet test --no-build --collect:"XPlat Code coverage"
