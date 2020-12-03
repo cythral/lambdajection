@@ -21,7 +21,7 @@
     <!-- Because AWSSDK.Core is sometimes optional, it doesn't get restored alongside Lambdajection.Core.
         Therefore, for ReadyToRun to do its thing, we have to copy the aws sdk core assembly and its dependencies
         into the directory where the lambdajection.core assembly is located. -->
-    <Target Name="PrepareForReadyToRun" AfterTargets="Restore" Condition="$([MSBuild]::IsOsPlatform('linux')">
+    <Target Name="PrepareForReadyToRun" AfterTargets="Restore" Condition="$([MSBuild]::IsOsPlatform('linux'))">
         <Copy
             SourceFiles="$(MSBuildThisFileDirectory).nuget/awssdk.core/$(AWSSDKCoreVersion)/lib/netstandard2.0/AWSSDK.Core.dll"
             DestinationFiles="$(MSBuildThisFileDirectory).nuget/lambdajection.core/$(LambdajectionVersion)/lib/net5.0/AWSSDK.Core.dll"
