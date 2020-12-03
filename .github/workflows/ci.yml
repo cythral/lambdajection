@@ -15,7 +15,6 @@ env:
   CONFIGURATION: Release
   NUGET_FEED_URL: https://api.nuget.org/v3/index.json
   GITHUB_PACKAGES_FEED_URL: https://nuget.pkg.github.com/cythral/index.json
-  UPLOAD_LAYER_TEMPLATE: "true"
 
 jobs:
   build:
@@ -65,6 +64,7 @@ jobs:
         shell: bash
         run: dotnet build --no-restore -m -bl:obj/logs/build-${{ matrix.os }}.binlog -p:OutputLayerTemplateFilePath=$(pwd)/Layer.template.yml
         env:
+          UPLOAD_LAYER_TEMPLATE: ${{ secrets.AWS_ACCESS_KEY_ID != '' }}
           AWS_REGION: us-east-1
           AWS_DEFAULT_REGION: us-east-1
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
