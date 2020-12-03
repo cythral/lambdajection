@@ -30,6 +30,7 @@
             <StoreArgs Include="--skip-optimization" Condition="!$([MSBuild]::IsOsPlatform('linux'))" />
             <StoreArgs Include="/p:Configuration=$(Configuration)" />
             <StoreArgs Include="/p:LambdajectionVersion=$(PackageVersion)" />
+            <StoreArgs Include="/m:1" />
         </ItemGroup>
 
         <MakeDir Directories="$(MSBuildThisFileDirectory)Manifest/.nuget" />
