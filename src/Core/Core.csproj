@@ -31,6 +31,4 @@
   <ItemGroup>
     <InternalsVisibleTo Include="Lambdajection.Tests" />
   </ItemGroup>
-
-  <Target Name="Publish" />
 </Project>
