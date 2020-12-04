@@ -1,5 +1,12 @@
 {
     "Parameters": {
         "Net5LayerVersion": "3"
+    },
+    "Tags": {
+        "Name": "lambdajection-customruntime",
+        "Owner": "Cythral",
+        "OwnerContact": "Talen Fisher",
+        "Customer": "Cythral",
+        "CustomerContact": "Talen Fisher"
     }
 }
