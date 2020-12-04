@@ -9,6 +9,7 @@
     <ItemGroup>
         <PackageReference Include="Lambdajection" Version="$(LambdajectionVersion)" />
         <PackageReference Include="Lambdajection.Runtime" Version="$(LambdajectionVersion)" />
+        <PackageReference Include="Lambdajection.Layer" Version="$(LambdajectionVersion)" />
 
         <!-- Ready to run compiler looks for AWSSDK.Core since Lambdajection.Core has references to it -->
         <PackageReference Include="AWSSDK.Core" Version="3.5.1.2" />

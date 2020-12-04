@@ -1,1 +1,6 @@
-{}
+{
+    "Parameters": {
+        "Net5LayerVersion": "3",
+        "EncryptedValue": "AQICAHhIUP9wSo8526GK0EpgereFuvGyNnQqxZ6QyX0eg47x7gGIRymCOlsszKlmoEwdxhxYAAAAdTBzBgkqhkiG9w0BBwagZjBkAgEAMF8GCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMLyTV3PqW7spKORzPAgEQgDIce2Gxv2mRHEk58kZ/Jg5PnEHa9U5/VVb2snVrwbTnHBYnsD1oehv+uzO2+WKcDj8jrg=="
+    }
+}

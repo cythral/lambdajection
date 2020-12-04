@@ -1,4 +1,13 @@
 Transform: AWS::Serverless-2016-10-31
+Parameters:
+  Net5LayerVersion:
+    Type: String
+    Description: Version number of the .NET 5 Lambda Layer to Use
+
+  EncryptedValue:
+    Type: String
+    Description: A value for the encrypted options lambda to decrypt
+
 Resources:
   EncryptedOptions:
     Type: AWS::Serverless::Function
@@ -10,7 +19,7 @@ Resources:
       CodeUri: ../../bin/Examples/EncryptedOptions/Release/netcoreapp3.1/publish/
       MemorySize: 512
       Layers:
-        - !Sub arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:net5:3
+        - !Sub arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:net5:${Net5LayerVersion}
       Policies:
         - AWSLambdaExecute
         # Replace this with the ARN of a policy containing the kms:Decrypt permission
@@ -18,7 +27,7 @@ Resources:
       Environment:
         Variables:
           # Replace the value here with a KMS-encrypted string
-          Lambda__EncryptedValue: AQICAHhR2Ot7i4uEGcs8aZuMfEC/V5DNL8Ge1TYf7zn4DUiqbgH7hgvX1TFJEqRgJ0feGuy4AAAAdTBzBgkqhkiG9w0BBwagZjBkAgEAMF8GCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMbyLC+JEK1j5VlzMDAgEQgDIZzUfhKehW5e2z5mPuzGOwDBYkip/WUPfHUoVWLsDi+XxYfdmQia4Fub0tV4xrNVwMrQ==
+          Lambda__EncryptedValue: !Ref EncryptedValue
 
 Outputs:
   InputPayload:

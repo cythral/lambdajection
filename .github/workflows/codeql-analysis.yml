@@ -9,6 +9,10 @@ on:
   schedule:
     - cron: "0 0 * * *"
 
+env:
+  DOTNET_NOLOGO: "true"
+  UPLOAD_LAYER_TEMPLATE: "false"
+
 jobs:
   analyze:
     name: Analyze

@@ -1,4 +1,3 @@
-<!-- omit in toc -->
 # Lambdajection
 [![Nuget](https://img.shields.io/nuget/v/Lambdajection?label=version&style=flat-square)](https://nuget.org/packages/Lambdajection) [![Nuget](https://img.shields.io/nuget/vpre/Lambdajection?label=pre-release&style=flat-square&color=blueviolet)](https://nuget.org/packages/Lambdajection) [![GitHub](https://img.shields.io/github/license/cythral/lambdajection?style=flat-square&color=lightgrey)](./LICENSE.txt) [![GitHub Workflow Status](https://img.shields.io/github/workflow/status/cythral/lambdajection/Continuous%20Integration?style=flat-square)](https://github.com/cythral/lambdajection/actions?query=workflow%3A%22Continuous+Integration%22) [![Codecov](https://img.shields.io/codecov/c/github/cythral/lambdajection?style=flat-square&token=L8FWGHHVU1)](https://codecov.io/gh/cythral/lambdajection/) [![Sponsor on Github](https://img.shields.io/badge/sponsor-on%20github-pink?style=flat-square)](https://github.com/sponsors/cythral) [![Donate on Paypal](https://img.shields.io/badge/donate-on%20paypal-blue?style=flat-square)](https://paypal.me/cythral)
 
@@ -33,6 +32,7 @@ Community contribution/pull requests are welcome and encouraged! See the [contri
   - [4.7. Disposers](#47-disposers)
   - [4.8. Handler Scheme](#48-handler-scheme)
   - [4.9. Custom Runtimes](#49-custom-runtimes)
+  - [4.10. Lambda Layer](#410-lambda-layer)
 - [5. Examples](#5-examples)
 - [6. Acknowledgments](#6-acknowledgments)
 - [7. Donations](#7-donations)
@@ -93,6 +93,7 @@ Browse development builds [here](https://github.com/orgs/cythral/packages?repo_n
 | Lambdajection.Encryption | ![Nuget](https://img.shields.io/nuget/v/Lambdajection.Encryption?label=version&style=flat-square) ![Nuget](https://img.shields.io/nuget/dt/Lambdajection.Encryption?color=blue&style=flat-square) |
 | Lambdajection.Templates  | ![Nuget](https://img.shields.io/nuget/v/Lambdajection.Templates?label=version&style=flat-square) ![Nuget](https://img.shields.io/nuget/dt/Lambdajection.Templates?color=blue&style=flat-square)   |
 | Lambdajection.Runtime    | ![Nuget](https://img.shields.io/nuget/v/Lambdajection.Runtime?label=version&style=flat-square) ![Nuget](https://img.shields.io/nuget/dt/Lambdajection.Runtime?color=blue&style=flat-square)       |
+| Lambdajection.Layer      | ![Nuget](https://img.shields.io/nuget/v/Lambdajection.Layer?label=version&style=flat-square) ![Nuget](https://img.shields.io/nuget/dt/Lambdajection.Layer?color=blue&style=flat-square)           |
 
 ## 3. Templates
 
@@ -314,6 +315,12 @@ You may also optionally set the `SelfContained` property:
   - In both cases, a main method / program entrypoint will be generated for you with the aid of `Amazon.Lambda.RuntimeSupport`.
 
 See an example of a [non-self contained lambda using a custom runtime here](./examples/CustomRuntime). (Example documentation coming soon).  Note that the example is using [a Lambda Layer we deployed with a custom bootstrap file.](https://github.com/cythral/dotnet-lambda-layer)
+
+### 4.10. Lambda Layer
+
+Starting in v0.6.0-beta2, you can use a Lambda Layer containing Lambdajection and all of its dependencies to cut down on package sizes. The layer will be available on the serverless application repository.  Once deployed, you can use it on functions that use the Lambdajection.Runtime package on custom runtimes containing .NET 5.
+
+After adding the Layer to your function, you will need to set the `DOTNET_SHARED_STORE` environment variable to `/opt/`.  This is because Lambda Layers are unzipped to that directory, and .NET needs to know where to look for the runtime package store.  If using [dotnet-lambda-layer](https://github.com/cythral/dotnet-lambda-layer), this environment variable is set for you automatically.
 
 ## 5. Examples
 

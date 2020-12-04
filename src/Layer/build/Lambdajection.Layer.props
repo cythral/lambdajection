@@ -1,0 +1,6 @@
+<Project>
+    <PropertyGroup>
+        <LayerManifestFile>$(MSBuildThisFileDirectory)..\content\artifact.xml</LayerManifestFile>
+        <TargetManifestFiles>$(TargetManifestFiles);$(LayerManifestFile)</TargetManifestFiles>
+    </PropertyGroup>
+</Project>

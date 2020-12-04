@@ -62,7 +62,13 @@ jobs:
 
       - name: Build
         shell: bash
-        run: dotnet build --no-restore -m -bl:obj/logs/build-${{ matrix.os }}.binlog
+        run: dotnet build --no-restore -m -bl:obj/logs/build-${{ matrix.os }}.binlog -p:OutputLayerTemplateFilePath=$(pwd)/Layer.template.yml
+        env:
+          UPLOAD_LAYER_TEMPLATE: ${{ secrets.AWS_ACCESS_KEY_ID != '' && matrix.os == 'ubuntu-latest' }}
+          AWS_REGION: us-east-1
+          AWS_DEFAULT_REGION: us-east-1
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
       - name: Test
         run: dotnet test --no-build --collect:"XPlat Code coverage"
@@ -99,6 +105,13 @@ jobs:
           name: logs-${{ matrix.os }}
           path: obj/logs/
 
+      - name: Upload Layer Template
+        if: matrix.os == 'ubuntu-latest'
+        uses: actions/upload-artifact@v1
+        with:
+          name: layer-template
+          path: Layer.template.yml
+
       - name: Deploy to Github Packages
         if: matrix.os == 'ubuntu-latest'
         run: dotnet nuget push "bin/Packages/${CONFIGURATION}/*.nupkg" -k ${FEED_TOKEN} -s ${FEED_URL} --skip-duplicate --no-symbols 1
@@ -115,11 +128,17 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Download Artifacts
+      - name: Download NuGets
         uses: actions/download-artifact@v2
-        id: download
+        id: download-nugets
         with:
           name: nugets
+
+      - name: Download Layer Template
+        uses: actions/download-artifact@v2
+        id: download-layer-template
+        with:
+          name: layer-template
 
       - name: Set version
         shell: bash
@@ -132,10 +151,22 @@ jobs:
         run: dotnet --info
 
       - name: Deploy to NuGet
-        run: dotnet nuget push '${{ steps.download.outputs.download-path }}/*.nupkg' -k ${FEED_TOKEN} -s ${FEED_URL} --skip-duplicate
+        run: dotnet nuget push '${{ steps.download-nugets.outputs.download-path }}/*.nupkg' -k ${FEED_TOKEN} -s ${FEED_URL} --skip-duplicate
         env:
           FEED_TOKEN: ${{ secrets.NUGET_TOKEN }}
           FEED_URL: ${{ env.NUGET_FEED_URL }}
+
+      - name: Publish to SAR
+        run: |
+          set -eo pipefail
+          sam publish \
+            --template ${{ steps.download-layer-template.outputs.download-path }}/Layer.template.yml \
+            --region us-east-1 \
+            --semantic-version ${VERSION}
+        env:
+          AWS_DEFAULT_REGION: us-east-1
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
       - uses: ncipollo/release-action@v1
         with:
