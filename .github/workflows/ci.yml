@@ -170,7 +170,7 @@ jobs:
 
       - uses: ncipollo/release-action@v1
         with:
-          artifacts: "${{ steps.download.outputs.download-path }}/*.nupkg,${{ steps.download.outputs.download-path }}/*.snupkg"
+          artifacts: "${{ steps.download-nugets.outputs.download-path }}/*.nupkg,${{ steps.download.outputs.download-path }}/*.snupkg"
           bodyFile: ".github/releases/v${{ env.VERSION }}.md"
           tag: v${{ env.VERSION }}
           commit: ${{ github.sha }}
