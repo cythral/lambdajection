@@ -14,8 +14,9 @@
     <ItemGroup>
         <None Include="build/**" Pack="true" PackagePath="build/" />
         <None Include="Layer.template.yml" CopyToOutputDirectory="always" />
-        <None Include="../../README.md" CopyToOutputDirectory="always" TargetPath="layer/README.md" />
-        <None Include="../../LICENSE.txt" CopyToOutputDirectory="always" TargetPath="layer/LICENSE.txt" />
+        <ContentWithTargetPath Include="../../README.md" CopyToOutputDirectory="always" TargetPath="layer/README.md" />
+        <ContentWithTargetPath Include="../../LICENSE.txt" CopyToOutputDirectory="always" TargetPath="layer/LICENSE.txt" />
+        <ContentWithTargetPath Include="./THIRD-PARTY-NOTICES.txt" CopyToOutputDirectory="always" TargetPath="layer/THIRD-PARTY-NOTICES.txt" />
     </ItemGroup>
 
     <ItemGroup>
