@@ -41,7 +41,7 @@ namespace Lambdajection.Generator
                                   from attr in semanticModel.GetDeclaredSymbol(node)?.GetAttributes() ?? ImmutableArray.Create<AttributeData>()
                                   where attr.AttributeClass?.Name == nameof(LambdaAttribute)
 
-                                  let startupType = GetAttributeArgument(attr, "Startup")!
+                                  let startupType = GetAttributeArgument<INamedTypeSymbol>(attr, "Startup")!
                                   let generationContext = new GenerationContext
                                   {
                                       SourceGeneratorContext = context,
@@ -51,8 +51,9 @@ namespace Lambdajection.Generator
                                       AttributeData = attr,
                                       CancellationToken = context.CancellationToken,
                                       StartupType = startupType,
-                                      SerializerType = GetAttributeArgument(attr, "Serializer"),
-                                      ConfigFactoryType = GetAttributeArgument(attr, "ConfigFactory"),
+                                      SerializerType = GetAttributeArgument<INamedTypeSymbol>(attr, "Serializer"),
+                                      ConfigFactoryType = GetAttributeArgument<INamedTypeSymbol>(attr, "ConfigFactory"),
+                                      RunnerMethodName = GetAttributeArgument<string>(attr, "RunnerMethod") ?? "Run",
                                       StartupTypeName = startupType.Name,
                                       StartupTypeDisplayName = startupType.ToDisplayString(),
                                       Settings = settings,
@@ -88,16 +89,16 @@ namespace Lambdajection.Generator
             }
         }
 
-        public static INamedTypeSymbol? GetAttributeArgument(AttributeData attributeData, string argName)
+        public static T? GetAttributeArgument<T>(AttributeData attributeData, string argName)
         {
             if (argName == "Startup")
             {
-                return (INamedTypeSymbol?)attributeData.ConstructorArguments[0].Value;
+                return (T?)attributeData.ConstructorArguments[0].Value;
             }
 
             var query = from arg in attributeData.NamedArguments
                         where arg.Key == argName
-                        select (INamedTypeSymbol?)arg.Value.Value;
+                        select (T?)arg.Value.Value;
 
             return query.FirstOrDefault();
         }

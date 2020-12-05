@@ -31,5 +31,15 @@ namespace Lambdajection.Attributes
         /// <summary>Gets or sets the Config Factory to use for the Lambda.</summary>
         /// <value>The type of Config Factory to use for the Lambda.</value>
         public Type ConfigFactory { get; set; } = null!;
+
+        /// <summary>
+        /// Gets or sets the runner method name.
+        /// At compile-time, lambdajection generates a runner method, which is what gets invoked
+        /// by the runtime instead of your lambda's handle method.  The runner method is what sets
+        /// up dependency injection, configuration etc.  You can customize the runner method's name
+        /// with this property.
+        /// </summary>
+        /// <value>The name of the lambda's runner method.</value>
+        public string RunnerMethod { get; set; } = "Run";
     }
 }

@@ -290,6 +290,9 @@ So, going off the example above, the handler scheme would look like this:
 Your.Assembly.Name::Your.Namespace.YourLambda::Run
 ```
 
+You can customize the name of the "Run" method via the
+RunnerMethod property of `LambdaAttribute`.
+
 ### 4.9. Custom Runtimes
 
 Lambdajection can be used with custom runtimes starting in v0.5.0-beta2, that way you can use a newer version of .NET as soon as it comes out, even if it is not an LTS release.  

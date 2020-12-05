@@ -44,7 +44,7 @@ namespace Lambdajection.Generator
                 .WithBaseList(BaseList(Token(ColonToken), SeparatedList(typeConstraints)))
                 .AddModifiers(Token(PartialKeyword))
                 .AddMembers(
-                    GenerateRunMethod(),
+                    GenerateRunnerMethod(),
                     configurator);
 
             if (context.Settings.GenerateEntrypoint)
@@ -69,7 +69,7 @@ namespace Lambdajection.Generator
             return result;
         }
 
-        public MemberDeclarationSyntax GenerateRunMethod()
+        public MemberDeclarationSyntax GenerateRunnerMethod()
         {
             var modifiers = new SyntaxToken[]
             {
@@ -91,10 +91,11 @@ namespace Lambdajection.Generator
             });
 
             var parameterList = ParameterList(parameters);
-            var method = MethodDeclaration(ParseTypeName($"Task<{returnType}>"), "Run")
+            var body = Block(GenerateRunnerMethodBody());
+            var method = MethodDeclaration(ParseTypeName($"Task<{returnType}>"), context.RunnerMethodName)
                 .WithModifiers(TokenList(modifiers))
                 .WithParameterList(parameterList)
-                .WithBody(Block(GenerateRunMethodBody()));
+                .WithBody(body);
 
             var serializerName = GetSerializerName();
             var serializerNamespace = GetSerializerNamespace();
@@ -117,14 +118,15 @@ namespace Lambdajection.Generator
             return method;
         }
 
-        public IEnumerable<StatementSyntax> GenerateRunMethodBody()
+        public IEnumerable<StatementSyntax> GenerateRunnerMethodBody()
         {
             var configFactory = context.ConfigFactoryType?.Name ?? "LambdaConfigFactory";
             var configFactoryNamespace = context.ConfigFactoryType?.ContainingNamespace?.ToString() ?? "Lambdajection.Core";
             context.Usings.Add(configFactoryNamespace);
 
+            var inputParameterName = inputParameter!.Identifier.ValueText;
             yield return ParseStatement($"await using var host = new LambdaHost<{className}, {inputType}, {returnType}, {context.StartupTypeName}, LambdajectionConfigurator, {configFactory}>();");
-            yield return ParseStatement($"return await host.Run({inputParameter!.Identifier.ValueText}, context);");
+            yield return ParseStatement($"return await host.Run({inputParameterName}, context);");
         }
 
         public MemberDeclarationSyntax GenerateMainMethod()
@@ -134,7 +136,8 @@ namespace Lambdajection.Generator
 
             IEnumerable<StatementSyntax> GenerateBody()
             {
-                yield return ParseStatement($"using var wrapper = HandlerWrapper.GetHandlerWrapper((Func<{inputType}, ILambdaContext, Task<{returnType}>>)Run, new DefaultLambdaJsonSerializer());");
+                var runnerMethodName = context.RunnerMethodName;
+                yield return ParseStatement($"using var wrapper = HandlerWrapper.GetHandlerWrapper((Func<{inputType}, ILambdaContext, Task<{returnType}>>){runnerMethodName}, new DefaultLambdaJsonSerializer());");
                 yield return ParseStatement($"using var bootstrap = new LambdaBootstrap(wrapper);");
                 yield return ParseStatement($"await bootstrap.RunAsync();");
             }
