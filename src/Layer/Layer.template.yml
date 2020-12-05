@@ -6,8 +6,8 @@ Metadata:
     Description: Lambda Layer containing a .NET Runtime Package Store of Lambdajection and its dependencies.
     Author: Cythral LLC
     SpdxLicenseId: MIT
-    LicenseUrl: ./LICENSE.txt
-    ReadmeUrl: ./README.md
+    LicenseUrl: ./layer/LICENSE.txt
+    ReadmeUrl: ./layer/README.md
     Labels:
       - lambda
       - dotnet
@@ -16,6 +16,7 @@ Metadata:
       - lambdajection
     HomePageUrl: https://github.com/cythral/lambdajection
     SourceCodeUrl: https://github.com/cythral/lambdajection
+
 Resources:
   Layer:
     Type: AWS::Serverless::LayerVersion
@@ -25,3 +26,9 @@ Resources:
       CompatibleRuntimes:
         - provided.al2
       ContentUri: ./layer
+      LicenseInfo: MIT
+
+Outputs:
+  LayerArn:
+    Description: ARN of the Lambdajection Layer
+    Value: !Ref Layer
