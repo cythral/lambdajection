@@ -30,6 +30,8 @@ namespace Lambdajection.Generator
 
         public string StartupTypeDisplayName { get; set; }
 
+        public string RunnerMethodName { get; set; }
+
         public HashSet<string> Usings { get; } = new HashSet<string>();
 
         public GenerationSettings Settings { get; init; }

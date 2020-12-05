@@ -205,6 +205,15 @@
         "resolved": "1.2.0",
         "contentHash": "goaq1LaH1UJB18BNG/Apxmn0P7dAlLWFbxU2nKxK+M4lH2KJaZDbtlP2gFEAJ+aENOMBHthaLPEtk3944J2OOg=="
       },
+      "Amazon.Lambda.RuntimeSupport": {
+        "type": "Transitive",
+        "resolved": "1.2.0",
+        "contentHash": "eCNthjnvM5yQnM4KvdvYVd6/gMIJ51T5K0BAQ9GAP0coF4izniFMrRnv2C14qZ/RkssYX5kKN2H3RUxjQlpfmQ==",
+        "dependencies": {
+          "Amazon.Lambda.Core": "1.2.0",
+          "NSwag.MSBuild": "12.0.4"
+        }
+      },
       "Amazon.Lambda.Serialization.SystemTextJson": {
         "type": "Transitive",
         "resolved": "2.1.0",
@@ -655,6 +664,11 @@
           "System.Xml.ReaderWriter": "4.0.11",
           "System.Xml.XDocument": "4.0.11"
         }
+      },
+      "NSwag.MSBuild": {
+        "type": "Transitive",
+        "resolved": "12.0.4",
+        "contentHash": "4Gqf64I2j3Y5UyxtdvPW4H8h8RgY2e6Cp6++T30/v0aXS9UhErPKg35GKz3nSKRUesjYQh7Duy3cPnDCDdGlMg=="
       },
       "NuGet.Common": {
         "type": "Transitive",
@@ -1571,6 +1585,12 @@
           "Lambdajection.Encryption": "1.0.0",
           "Microsoft.CodeAnalysis": "3.8.0",
           "Microsoft.CodeAnalysis.CSharp.Workspaces": "3.8.0"
+        }
+      },
+      "Lambdajection.Runtime": {
+        "type": "Project",
+        "dependencies": {
+          "Amazon.Lambda.RuntimeSupport": "1.2.0"
         }
       }
     }

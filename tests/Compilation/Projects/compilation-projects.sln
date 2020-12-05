@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NoHandleMethod", "NoHandleM
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LambdaContext", "LambdaContext\LambdaContext.csproj", "{158E8279-AA96-4505-99AA-315DB2E67892}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomRunnerMethod", "CustomRunnerMethod\CustomRunnerMethod.csproj", "{69DA8F57-3808-47D1-9529-D545EC34F0C9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -114,5 +116,17 @@ Global
 		{158E8279-AA96-4505-99AA-315DB2E67892}.Release|x64.Build.0 = Release|Any CPU
 		{158E8279-AA96-4505-99AA-315DB2E67892}.Release|x86.ActiveCfg = Release|Any CPU
 		{158E8279-AA96-4505-99AA-315DB2E67892}.Release|x86.Build.0 = Release|Any CPU
+		{69DA8F57-3808-47D1-9529-D545EC34F0C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{69DA8F57-3808-47D1-9529-D545EC34F0C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{69DA8F57-3808-47D1-9529-D545EC34F0C9}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{69DA8F57-3808-47D1-9529-D545EC34F0C9}.Debug|x64.Build.0 = Debug|Any CPU
+		{69DA8F57-3808-47D1-9529-D545EC34F0C9}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{69DA8F57-3808-47D1-9529-D545EC34F0C9}.Debug|x86.Build.0 = Debug|Any CPU
+		{69DA8F57-3808-47D1-9529-D545EC34F0C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{69DA8F57-3808-47D1-9529-D545EC34F0C9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{69DA8F57-3808-47D1-9529-D545EC34F0C9}.Release|x64.ActiveCfg = Release|Any CPU
+		{69DA8F57-3808-47D1-9529-D545EC34F0C9}.Release|x64.Build.0 = Release|Any CPU
+		{69DA8F57-3808-47D1-9529-D545EC34F0C9}.Release|x86.ActiveCfg = Release|Any CPU
+		{69DA8F57-3808-47D1-9529-D545EC34F0C9}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
