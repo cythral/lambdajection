@@ -26,6 +26,7 @@ Resources:
       CompatibleRuntimes:
         - provided.al2
       ContentUri: ./layer
+      LicenseInfo: MIT
 
 Outputs:
   LayerArn:
