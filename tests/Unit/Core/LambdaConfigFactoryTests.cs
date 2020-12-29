@@ -9,10 +9,11 @@ namespace Lambdajection.Core.Tests
     [Category("Unit")]
     public class LambdaConfigFactoryTests
     {
-        [Test]
-        public void CreateShouldAddEnvironmentVariables()
+        [Test, Auto]
+        public void CreateShouldAddEnvironmentVariables(
+            [Target] LambdaConfigFactory factory
+        )
         {
-            var factory = new LambdaConfigFactory();
             var configuration = factory.Create();
             configuration.Providers.Should().Contain(provider => provider.GetType() == typeof(EnvironmentVariablesConfigurationProvider));
         }

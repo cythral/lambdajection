@@ -19,12 +19,12 @@ public class TargetRelay : ISpecimenBuilder
         }
 
         var type = parameterRequest.ParameterType;
-        var constructors = from ctor in type.GetConstructors()
+        var constructors = from ctor in type.GetConstructors(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance)
                            where ctor.GetParameters().Any()
                            select ctor;
 
-        var constructor = constructors.First();
-        var parameterTypes = from parameter in constructor.GetParameters()
+        var constructor = constructors.FirstOrDefault();
+        var parameterTypes = from parameter in constructor?.GetParameters() ?? Array.Empty<ParameterInfo>()
                              let @override = GetOrDefault(targetAttribute.Overrides, parameter.ParameterType)
                              select
                                 @override ??
@@ -32,13 +32,16 @@ public class TargetRelay : ISpecimenBuilder
                                 context.Resolve(new SubstituteRequest(parameter.ParameterType));
 
         var parameters = parameterTypes.ToArray();
-        var instance = Activator.CreateInstance(type, parameters);
+        var instance = parameters.Any()
+            ? Activator.CreateInstance(type, parameters)
+            : Activator.CreateInstance(type, true);
+
         return instance ?? new NoSpecimen();
     }
 
     private static object? GetOrDefault(Dictionary<Type, object> dictionary, Type key)
     {
-        dictionary.TryGetValue(key, out object? result);
+        dictionary.TryGetValue(key, out var result);
         return result;
     }
 }
