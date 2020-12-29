@@ -22,7 +22,7 @@ namespace Lambdajection.Generator
     [Generator]
     public class UnitGenerator : ISourceGenerator
     {
-        private readonly UsingsGenerator usingsGenerator = new UsingsGenerator();
+        private readonly UsingsGenerator usingsGenerator = new();
 
         public void Initialize(GeneratorInitializationContext context)
         {

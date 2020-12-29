@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 using Amazon.Lambda.Core;
@@ -24,7 +25,7 @@ namespace Lambdajection.Examples.AwsClientFactories
             this.s3Factory = s3Factory;
         }
 
-        public async Task<string> Handle(Request request)
+        public async Task<string> Handle(Request request, CancellationToken cancellationToken = default)
         {
             s3Client = await s3Factory.Create(request.RoleArn);
 

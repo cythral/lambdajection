@@ -1,3 +1,4 @@
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Lambdajection.Encryption
@@ -11,7 +12,8 @@ namespace Lambdajection.Encryption
         /// Decrypts a value.
         /// </summary>
         /// <param name="ciphertext">The value to be decrypted.</param>
+        /// <param name="cancellationToken">Token to cancel the operation with.</param>
         /// <returns>The decrypted value.</returns>
-        Task<string> Decrypt(string ciphertext);
+        Task<string> Decrypt(string ciphertext, CancellationToken cancellationToken = default);
     }
 }

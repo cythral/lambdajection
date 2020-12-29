@@ -1,3 +1,4 @@
+using System.Threading;
 using System.Threading.Tasks;
 
 using Amazon.Lambda.Core;
@@ -18,7 +19,7 @@ namespace Lambdajection.Examples.CustomConfiguration
             this.config = config.Value;
         }
 
-        public Task<string> Handle(object request)
+        public Task<string> Handle(object request, CancellationToken cancellationToken = default)
         {
             return Task.FromResult(config.Foo);
         }

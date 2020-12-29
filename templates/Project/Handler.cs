@@ -1,3 +1,4 @@
+using System.Threading;
 using System.Threading.Tasks;
 
 using Amazon.Lambda.Core;
@@ -17,7 +18,7 @@ namespace __Project__
         private bool disposed;
 
 #endif
-        public async Task<object> Handle(object request)
+        public async Task<object> Handle(object request, CancellationToken cancellationToken = default)
         {
             return await Task.FromResult(new { });
         }

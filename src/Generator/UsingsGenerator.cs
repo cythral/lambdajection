@@ -13,6 +13,7 @@ namespace Lambdajection.Generator
         private static readonly string[] DefaultUsings = new string[]
         {
             "System",
+            "System.Threading",
             "System.Threading.Tasks",
             "System.IO",
             "Microsoft.Extensions.DependencyInjection",

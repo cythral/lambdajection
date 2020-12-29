@@ -1,3 +1,4 @@
+using System.Threading;
 using System.Threading.Tasks;
 
 using Amazon.Lambda.Core;
@@ -21,7 +22,7 @@ namespace Lambdajection.CompilationTests.Configuration
             this.exampleOptions = exampleOptions.Value;
         }
 
-        public Task<Options> Handle(string request)
+        public Task<Options> Handle(string request, CancellationToken cancellationToken = default)
         {
             return Task.FromResult(exampleOptions);
         }

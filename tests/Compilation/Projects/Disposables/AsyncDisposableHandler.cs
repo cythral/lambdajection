@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 using Amazon.Lambda.Core;
@@ -17,7 +18,7 @@ namespace Lambdajection.CompilationTests.Disposables
     {
         public bool DisposeAsyncWasCalled = false;
 
-        public Task<AsyncDisposableHandler> Handle(string request)
+        public Task<AsyncDisposableHandler> Handle(string request, CancellationToken cancellationToken = default)
         {
             return Task.FromResult(this);
         }

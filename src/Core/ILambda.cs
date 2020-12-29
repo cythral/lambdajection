@@ -1,3 +1,4 @@
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Lambdajection.Core
@@ -13,7 +14,8 @@ namespace Lambdajection.Core
         /// The lambda's entrypoint.
         /// </summary>
         /// <param name="parameter">The lambda's input parameter.</param>
+        /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <returns>The lambda's return value.</returns>
-        Task<TLambdaOutput> Handle(TLambdaParameter parameter);
+        Task<TLambdaOutput> Handle(TLambdaParameter parameter, CancellationToken cancellationToken = default);
     }
 }
