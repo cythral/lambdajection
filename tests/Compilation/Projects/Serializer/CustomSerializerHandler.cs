@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 using Amazon.Lambda.Core;
@@ -15,7 +16,7 @@ namespace Lambdajection.CompilationTests.Serializer
     [Lambda(typeof(Startup), Serializer = typeof(TestSerializer))]
     public partial class CustomSerializerHandler
     {
-        public Task<string> Handle(string request)
+        public Task<string> Handle(string request, CancellationToken cancellationToken = default)
         {
             return Task.FromResult("");
         }

@@ -19,8 +19,8 @@ namespace Lambdajection.Generator
         private readonly Compilation compilation;
         private readonly string lambdaTypeName;
         private readonly string startupDisplayName;
-        private readonly HashSet<OptionClass> optionClasses = new HashSet<OptionClass>();
-        private readonly HashSet<AwsServiceMetadata> awsServices = new HashSet<AwsServiceMetadata>();
+        private readonly HashSet<OptionClass> optionClasses = new();
+        private readonly HashSet<AwsServiceMetadata> awsServices = new();
         private bool includeDecryptionFacade;
 
         public LambdaCompilationScanner(Compilation compilation, IEnumerable<SyntaxTree> syntaxTrees, string lambdaTypeName, string startupDisplayName)

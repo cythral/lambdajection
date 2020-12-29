@@ -1,3 +1,4 @@
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Lambdajection.Core
@@ -10,7 +11,8 @@ namespace Lambdajection.Core
         /// <summary>
         /// Runs the initialization service's instructions.
         /// </summary>
+        /// <param name="cancellationToken">Token used to cancel operation.</param>
         /// <returns>The initialization task.</returns>
-        Task Initialize();
+        Task Initialize(CancellationToken cancellationToken = default);
     }
 }

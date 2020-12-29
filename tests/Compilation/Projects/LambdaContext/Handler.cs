@@ -1,3 +1,4 @@
+using System.Threading;
 using System.Threading.Tasks;
 
 using Amazon.Lambda.Core;
@@ -20,7 +21,7 @@ namespace Lambdajection.CompilationTests.LambdaContext
             this.context = context;
         }
 
-        public Task<ILambdaContext> Handle(string request)
+        public Task<ILambdaContext> Handle(string request, CancellationToken cancellationToken = default)
         {
             return Task.FromResult(context);
         }

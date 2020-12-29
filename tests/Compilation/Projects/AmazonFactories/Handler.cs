@@ -1,3 +1,4 @@
+using System.Threading;
 using System.Threading.Tasks;
 
 using Amazon.Lambda.Core;
@@ -22,7 +23,7 @@ namespace Lambdajection.CompilationTests.AmazonFactories
             this.utility = utility;
         }
 
-        public Task<IAwsFactory<IAmazonS3>> Handle(string request)
+        public Task<IAwsFactory<IAmazonS3>> Handle(string request, CancellationToken cancellationToken = default)
         {
             return Task.FromResult(utility.Factory);
         }

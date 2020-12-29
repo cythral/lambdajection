@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 
 using Amazon.Lambda.ApplicationLoadBalancerEvents;
@@ -24,7 +25,7 @@ namespace Lambdajection.Examples.CustomSerializer
             this.reader = reader;
         }
 
-        public async Task<ApplicationLoadBalancerResponse> Handle(ApplicationLoadBalancerRequest request)
+        public async Task<ApplicationLoadBalancerResponse> Handle(ApplicationLoadBalancerRequest request, CancellationToken cancellationToken = default)
         {
             var path = Regex.Replace(request.Path, @"^\/", "");
             var contents = await reader.ReadAsString(path);

@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 using Amazon.Lambda.Core;
@@ -76,14 +77,16 @@ namespace Lambdajection.Core
         /// </summary>
         /// <param name="parameter">The input parameter to pass to the lambda.</param>
         /// <param name="context">The context object to pass to the lambda.</param>
+        /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <returns>The return value of the lambda.</returns>
-        public async Task<TLambdaOutput> Run(TLambdaParameter parameter, ILambdaContext context)
+        public async Task<TLambdaOutput> Run(TLambdaParameter parameter, ILambdaContext context, CancellationToken cancellationToken = default)
         {
             if (RunInitializationServices)
             {
-                await Initialize();
+                await Initialize(cancellationToken);
             }
 
+            cancellationToken.ThrowIfCancellationRequested();
             scope = ServiceProvider.CreateScope();
 
             var provider = scope.ServiceProvider;
@@ -91,7 +94,7 @@ namespace Lambdajection.Core
             scopeContext.LambdaContext = context;
 
             lambda = provider.GetRequiredService<TLambda>();
-            return await lambda.Handle(parameter);
+            return await lambda.Handle(parameter, cancellationToken);
         }
 
         /// <summary>
@@ -120,11 +123,12 @@ namespace Lambdajection.Core
             (obj as IDisposable)?.Dispose();
         }
 
-        private async Task Initialize()
+        private async Task Initialize(CancellationToken cancellationToken = default)
         {
+            cancellationToken.ThrowIfCancellationRequested();
             var services = ServiceProvider.GetServices<ILambdaInitializationService>();
 
-            var initializeTasks = services.Select(service => service.Initialize());
+            var initializeTasks = services.Select(service => service.Initialize(cancellationToken));
             await Task.WhenAll(initializeTasks);
 
             var disposeTasks = services.Select(MaybeDispose);

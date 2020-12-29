@@ -70,7 +70,7 @@ namespace Lambdajection.Generator
             {
                 foreach (var prop in properties)
                 {
-                    yield return ParseExpression($"Decrypt{prop}()");
+                    yield return ParseExpression($"Decrypt{prop}(cancellationToken)");
                 }
             }
 
@@ -89,8 +89,15 @@ namespace Lambdajection.Generator
                 yield return ExpressionStatement(awaitExpression);
             }
 
+            var defaultValue = EqualsValueClause(ParseToken("="), ParseExpression("default"));
+            var parameters = SeparatedList(new ParameterSyntax[]
+            {
+                Parameter(List<AttributeListSyntax>(), TokenList(), ParseTypeName("CancellationToken"), ParseToken("cancellationToken"), defaultValue),
+            });
+
             return MethodDeclaration(ParseTypeName("Task"), "Initialize")
                 .WithModifiers(TokenList(Token(PublicKeyword), Token(AsyncKeyword)))
+                .WithParameterList(ParameterList(parameters))
                 .WithBody(Block(GenerateBody()));
         }
 
@@ -111,11 +118,18 @@ namespace Lambdajection.Generator
         {
             IEnumerable<StatementSyntax> GenerateBody()
             {
-                yield return ParseStatement($"options.{prop} = await decryptionService.Decrypt(options.{prop});");
+                yield return ParseStatement($"options.{prop} = await decryptionService.Decrypt(options.{prop}, cancellationToken);");
             }
+
+            var defaultValue = EqualsValueClause(ParseToken("="), ParseExpression("default"));
+            var parameters = SeparatedList(new ParameterSyntax[]
+            {
+                Parameter(List<AttributeListSyntax>(), TokenList(), ParseTypeName("CancellationToken"), ParseToken("cancellationToken"), defaultValue),
+            });
 
             return MethodDeclaration(ParseTypeName("Task"), $"Decrypt{prop}")
                 .WithModifiers(TokenList(Token(PrivateKeyword), Token(AsyncKeyword)))
+                .WithParameterList(ParameterList(parameters))
                 .WithBody(Block(GenerateBody()));
         }
     }

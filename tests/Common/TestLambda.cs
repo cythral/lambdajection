@@ -1,3 +1,4 @@
+using System.Threading;
 using System.Threading.Tasks;
 
 using Lambdajection.Core;
@@ -8,7 +9,7 @@ namespace Lambdajection
     {
         public object Request { get; set; } = null!;
 
-        public virtual Task<object> Handle(object request)
+        public virtual Task<object> Handle(object request, CancellationToken cancellationToken = default)
         {
             Request = request;
 

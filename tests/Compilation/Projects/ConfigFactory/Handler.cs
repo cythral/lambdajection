@@ -1,3 +1,4 @@
+using System.Threading;
 using System.Threading.Tasks;
 
 using Amazon.Lambda.Core;
@@ -20,7 +21,7 @@ namespace Lambdajection.CompilationTests.ConfigFactory
             this.config = config;
         }
 
-        public Task<string> Handle(string _)
+        public Task<string> Handle(string _, CancellationToken cancellationToken = default)
         {
             var value = config.GetValue<string>("TestKey");
             return Task.FromResult(value);

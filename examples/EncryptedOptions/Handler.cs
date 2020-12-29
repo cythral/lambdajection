@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 
 using Amazon.Lambda.Core;
 
@@ -18,7 +19,7 @@ namespace Lambdajection.Examples.EncryptedOptions
             this.options = options.Value;
         }
 
-        public Task<string> Handle(object request)
+        public Task<string> Handle(object request, CancellationToken cancellationToken = default)
         {
             return Task.FromResult(options.EncryptedValue); // despite the name, this value will have already been decrypted for you.
         }
