@@ -1,9 +1,13 @@
 using System.IO;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 using Amazon.KeyManagementService;
 using Amazon.KeyManagementService.Model;
+
+using AutoFixture.AutoNSubstitute;
+using AutoFixture.NUnit3;
 
 using FluentAssertions;
 
@@ -11,30 +15,34 @@ using NSubstitute;
 
 using NUnit.Framework;
 
+using static NSubstitute.Arg;
+
 namespace Lambdajection.Encryption.Tests
 {
     [Category("Unit")]
     public class DefaultDecryptionServiceTests
     {
-        [Test]
-        public async Task DecryptShouldDecryptTheCiphertext()
+        [Test, Auto]
+        public async Task DecryptShouldDecryptTheCiphertext(
+            [Frozen, Substitute] IAmazonKeyManagementService kmsClient,
+            [Target] DefaultDecryptionService service
+        )
         {
-            var kmsClient = Substitute.For<IAmazonKeyManagementService>();
             var value = "ZW5jcnlwdGVkIHZhcmlhYmxlCg==";
             var expectedValue = "decrypted variable";
 
             kmsClient
-            .DecryptAsync(Arg.Any<DecryptRequest>())
+            .DecryptAsync(Any<DecryptRequest>())
             .Returns(new DecryptResponse
             {
                 Plaintext = await CreateStreamFromString(expectedValue),
             });
 
-            var facade = new DefaultDecryptionService(kmsClient);
-            var response = await facade.Decrypt(value);
+            var cancellationToken = new CancellationToken(false);
+            var response = await service.Decrypt(value);
 
             response.Should().BeEquivalentTo(expectedValue);
-            await kmsClient.Received().DecryptAsync(Arg.Is<DecryptRequest>(req => req.CiphertextBlob != null));
+            await kmsClient.Received().DecryptAsync(Is<DecryptRequest>(req => req.CiphertextBlob != null), Is(cancellationToken));
         }
 
         private static async Task<MemoryStream> CreateStreamFromString(string value)

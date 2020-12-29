@@ -1,7 +1,10 @@
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 using Amazon.Lambda.Core;
+
+using AutoFixture.AutoNSubstitute;
 
 using FluentAssertions;
 
@@ -27,15 +30,17 @@ namespace Lambdajection.Core.Tests
     [Category("Unit")]
     public class LambdaHostTests
     {
-        [Test]
-        public async Task RunCreatesLambdaAndCallsHandle()
+        [Test, Auto]
+        public async Task RunCreatesLambdaAndCallsHandle(
+            string expectedResponse,
+            object request,
+            ServiceCollection collection,
+            [Substitute] TestLambda lambda,
+            [Substitute] LambdaScope scope,
+            [Substitute] ILambdaContext context
+        )
         {
-            var expectedResponse = "expectedResponse";
-            var lambda = Substitute.For<TestLambda>();
-            lambda.Handle(Any<object>()).Returns(expectedResponse);
-
-            var scope = Substitute.For<LambdaScope>();
-            var collection = new ServiceCollection();
+            lambda.Handle(Any<object>(), Any<CancellationToken>()).Returns(expectedResponse);
             collection.AddSingleton(lambda);
             collection.AddSingleton(scope);
 
@@ -45,25 +50,26 @@ namespace Lambdajection.Core.Tests
                 lambdaHost.ServiceProvider = provider;
             });
 
-            var request = new object();
-            var context = Substitute.For<ILambdaContext>();
-            var response = await host.Run(request, context);
+            var cancellationToken = new CancellationToken(false);
+            var response = await host.Run(request, context, cancellationToken);
 
             response.Should().Be(expectedResponse);
-            await lambda.Received().Handle(Is(request));
+            await lambda.Received().Handle(Is(request), Is(cancellationToken));
         }
 
-        [Test]
-        public async Task RunRunsInitializationServices()
+        [Test, Auto]
+        public async Task RunRunsInitializationServices(
+            string expectedResponse,
+            object request,
+            ServiceCollection collection,
+            [Substitute] ILambdaInitializationService initializationService,
+            [Substitute] TestLambda lambda,
+            [Substitute] LambdaScope scope,
+            [Substitute] ILambdaContext context
+        )
         {
-            var expectedResponse = "expectedResponse";
-            var lambda = Substitute.For<TestLambda>();
-            lambda.Handle(Any<object>()).Returns(expectedResponse);
+            lambda.Handle(Any<object>(), Any<CancellationToken>()).Returns(expectedResponse);
 
-            var initializationService = Substitute.For<ILambdaInitializationService>();
-            var scope = Substitute.For<LambdaScope>();
-
-            var collection = new ServiceCollection();
             collection.AddSingleton(initializationService);
             collection.AddSingleton(lambda);
             collection.AddSingleton(scope);
@@ -75,25 +81,25 @@ namespace Lambdajection.Core.Tests
                 lambdaHost.RunInitializationServices = true;
             });
 
-            var request = new object();
-            var context = Substitute.For<ILambdaContext>();
+            var cancellationToken = new CancellationToken(false);
+            await host.Run(request, context, cancellationToken);
 
-            await host.Run(request, context);
-
-            await initializationService.Received().Initialize();
+            await initializationService.Received().Initialize(Is(cancellationToken));
         }
 
-        [Test]
-        public async Task RunSetsLambdaContextOnScope()
+        [Test, Auto]
+        public async Task RunSetsLambdaContextOnScope(
+            string expectedResponse,
+            object request,
+            ServiceCollection collection,
+            [Substitute] ILambdaInitializationService initializationService,
+            [Substitute] TestLambda lambda,
+            [Substitute] LambdaScope scope,
+            [Substitute] ILambdaContext context
+        )
         {
-            var expectedResponse = "expectedResponse";
-            var lambda = Substitute.For<TestLambda>();
             lambda.Handle(Any<object>()).Returns(expectedResponse);
 
-            var initializationService = Substitute.For<ILambdaInitializationService>();
-            var scope = Substitute.For<LambdaScope>();
-
-            var collection = new ServiceCollection();
             collection.AddSingleton(initializationService);
             collection.AddSingleton(lambda);
             collection.AddSingleton(scope);
@@ -104,26 +110,25 @@ namespace Lambdajection.Core.Tests
                 lambdaHost.ServiceProvider = provider;
                 lambdaHost.RunInitializationServices = true;
             });
-
-            var request = new object();
-            var context = Substitute.For<ILambdaContext>();
 
             await host.Run(request, context);
 
             scope.LambdaContext.Should().Be(context);
         }
 
-        [Test]
-        public async Task RunDisposesInitializationServices()
+        [Test, Auto]
+        public async Task RunDisposesInitializationServices(
+            string expectedResponse,
+            object request,
+            ServiceCollection collection,
+            [Substitute] TestLambda lambda,
+            [Substitute] LambdaScope scope,
+            [Substitute] ILambdaContext context
+        )
         {
-            var expectedResponse = "expectedResponse";
-            var lambda = Substitute.For<TestLambda>();
-            lambda.Handle(Any<object>()).Returns(expectedResponse);
-
             var initializationService = Substitute.For<ILambdaInitializationService, IDisposable>();
-            var scope = Substitute.For<LambdaScope>();
 
-            var collection = new ServiceCollection();
+            lambda.Handle(Any<object>()).Returns(expectedResponse);
             collection.AddSingleton(initializationService);
             collection.AddSingleton(lambda);
             collection.AddSingleton(scope);
@@ -134,26 +139,24 @@ namespace Lambdajection.Core.Tests
                 lambdaHost.ServiceProvider = provider;
                 lambdaHost.RunInitializationServices = true;
             });
-
-            var request = new object();
-            var context = Substitute.For<ILambdaContext>();
 
             await host.Run(request, context);
 
             initializationService.As<IDisposable>().Received().Dispose();
         }
 
-        [Test]
-        public async Task RunDisposesInitializationServicesAsync()
+        [Test, Auto]
+        public async Task RunDisposesInitializationServicesAsync(
+            string expectedResponse,
+            object request,
+            ServiceCollection collection,
+            [Substitute] TestLambda lambda,
+            [Substitute] LambdaScope scope,
+            [Substitute] ILambdaContext context
+        )
         {
-            var expectedResponse = "expectedResponse";
-            var lambda = Substitute.For<TestLambda>();
-            lambda.Handle(Any<object>()).Returns(expectedResponse);
-
             var initializationService = Substitute.For<ILambdaInitializationService, IAsyncDisposable>();
-            var scope = Substitute.For<LambdaScope>();
-
-            var collection = new ServiceCollection();
+            lambda.Handle(Any<object>()).Returns(expectedResponse);
             collection.AddSingleton(initializationService);
             collection.AddSingleton(lambda);
             collection.AddSingleton(scope);
@@ -165,25 +168,23 @@ namespace Lambdajection.Core.Tests
                 lambdaHost.RunInitializationServices = true;
             });
 
-            var request = new object();
-            var context = Substitute.For<ILambdaContext>();
-
             await host.Run(request, context);
 
             await initializationService.As<IAsyncDisposable>().Received().DisposeAsync();
         }
 
-        [Test]
-        public async Task RunDoesNotRunInitializationServicesIfPropertySetToFalse()
+        [Test, Auto]
+        public async Task RunDoesNotRunInitializationServicesIfPropertySetToFalse(
+            string expectedResponse,
+            object request,
+            ServiceCollection collection,
+            [Substitute] ILambdaInitializationService initializationService,
+            [Substitute] TestLambda lambda,
+            [Substitute] LambdaScope scope,
+            [Substitute] ILambdaContext context
+        )
         {
-            var expectedResponse = "expectedResponse";
-            var lambda = Substitute.For<TestLambda>();
-            lambda.Handle(Any<object>()).Returns(expectedResponse);
-
-            var initializationService = Substitute.For<ILambdaInitializationService>();
-            var scope = Substitute.For<LambdaScope>();
-
-            var collection = new ServiceCollection();
+            lambda.Handle(Any<object>(), Any<CancellationToken>()).Returns(expectedResponse);
             collection.AddSingleton(initializationService);
             collection.AddSingleton(lambda);
             collection.AddSingleton(scope);
@@ -195,21 +196,23 @@ namespace Lambdajection.Core.Tests
                 lambdaHost.RunInitializationServices = false;
             });
 
-            var request = new object();
-            var context = Substitute.For<ILambdaContext>();
+            var cancellationToken = new CancellationToken(false);
+            await host.Run(request, context, cancellationToken);
 
-            await host.Run(request, context);
-
-            await initializationService.DidNotReceive().Initialize();
+            await initializationService.DidNotReceive().Initialize(Is(cancellationToken));
         }
 
-        [Test]
-        public async Task DisposeAsyncIsCalled()
+        [Test, Auto]
+        public async Task DisposeAsyncIsCalled(
+            string expectedResponse,
+            object request,
+            ServiceCollection collection,
+            [Substitute] ILambdaInitializationService initializationService,
+            [Substitute] AsyncDisposableLambda lambda,
+            [Substitute] LambdaScope scope,
+            [Substitute] ILambdaContext context
+        )
         {
-            var lambda = Substitute.For<AsyncDisposableLambda>();
-            var initializationService = Substitute.For<ILambdaInitializationService>();
-            var scope = Substitute.For<LambdaScope>();
-            var collection = new ServiceCollection();
             collection.AddSingleton(initializationService);
             collection.AddSingleton<TestLambda>(lambda);
             collection.AddSingleton(scope);
@@ -221,22 +224,24 @@ namespace Lambdajection.Core.Tests
                 lambdaHost.RunInitializationServices = false;
             }))
             {
-                var request = new object();
-                var context = Substitute.For<ILambdaContext>();
                 await host.Run(request, context);
             }
 
             await lambda.Received().DisposeAsync();
         }
 
-        [Test]
-        public async Task DisposeIsCalled()
+        [Test, Auto]
+        public async Task DisposeIsCalled(
+            string expectedResponse,
+            object request,
+            ServiceCollection collection,
+            [Substitute] Action<object> suppressor,
+            [Substitute] ILambdaInitializationService initializationService,
+            [Substitute] DisposableLambda lambda,
+            [Substitute] LambdaScope scope,
+            [Substitute] ILambdaContext context
+        )
         {
-            var lambda = Substitute.For<DisposableLambda>();
-            var suppressor = Substitute.For<Action<object>>();
-            var initializationService = Substitute.For<ILambdaInitializationService>();
-            var scope = Substitute.For<LambdaScope>();
-            var collection = new ServiceCollection();
             collection.AddSingleton(initializationService);
             collection.AddSingleton<TestLambda>(lambda);
             collection.AddSingleton(scope);
@@ -249,21 +254,23 @@ namespace Lambdajection.Core.Tests
                 lambdaHost.SuppressFinalize = suppressor;
             }))
             {
-                var request = new object();
-                var context = Substitute.For<ILambdaContext>();
                 await host.Run(request, context);
             }
 
             lambda.Received().Dispose();
         }
 
-        [Test]
-        public async Task DisposeAsyncIsPreferred()
+        [Test, Auto]
+        public async Task DisposeAsyncIsPreferred(
+            string expectedResponse,
+            object request,
+            ServiceCollection collection,
+            [Substitute] ILambdaInitializationService initializationService,
+            [Substitute] MultiDisposableLambda lambda,
+            [Substitute] LambdaScope scope,
+            [Substitute] ILambdaContext context
+        )
         {
-            var lambda = Substitute.For<MultiDisposableLambda>();
-            var initializationService = Substitute.For<ILambdaInitializationService>();
-            var scope = Substitute.For<LambdaScope>();
-            var collection = new ServiceCollection();
             collection.AddSingleton(initializationService);
             collection.AddSingleton<TestLambda>(lambda);
             collection.AddSingleton(scope);
@@ -275,8 +282,6 @@ namespace Lambdajection.Core.Tests
                 lambdaHost.RunInitializationServices = false;
             }))
             {
-                var request = new object();
-                var context = Substitute.For<ILambdaContext>();
                 await host.Run(request, context);
             }
 
@@ -284,14 +289,18 @@ namespace Lambdajection.Core.Tests
             lambda.DidNotReceive().Dispose();
         }
 
-        [Test]
-        public async Task FinalizationIsSuppressed()
+        [Test, Auto]
+        public async Task FinalizationIsSuppressed(
+            string expectedResponse,
+            object request,
+            ServiceCollection collection,
+            [Substitute] Action<object> suppressor,
+            [Substitute] ILambdaInitializationService initializationService,
+            [Substitute] MultiDisposableLambda lambda,
+            [Substitute] LambdaScope scope,
+            [Substitute] ILambdaContext context
+        )
         {
-            var lambda = Substitute.For<MultiDisposableLambda>();
-            var suppressor = Substitute.For<Action<object>>();
-            var initializationService = Substitute.For<ILambdaInitializationService>();
-            var scope = Substitute.For<LambdaScope>();
-            var collection = new ServiceCollection();
             collection.AddSingleton(initializationService);
             collection.AddSingleton<TestLambda>(lambda);
             collection.AddSingleton(scope);
@@ -305,8 +314,6 @@ namespace Lambdajection.Core.Tests
                 lambdaHost.SuppressFinalize = suppressor;
             }))
             {
-                var request = new object();
-                var context = Substitute.For<ILambdaContext>();
                 await host.Run(request, context);
             }
 
