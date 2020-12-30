@@ -20,7 +20,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Cythral.CloudFormation.BuildTasks" Version="0.3.2" PrivateAssets="all" />
+        <PackageReference Include="Cythral.CloudFormation.BuildTasks" Version="0.4.1" PrivateAssets="all" />
     </ItemGroup>
 
     <Target Name="CreateStore" DependsOnTargets="GetBuildVersion">
