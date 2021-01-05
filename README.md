@@ -122,6 +122,7 @@ Creates a new Options class to be injected into your Lambda as an `IOption<>`.
 Writing the lambda is simple: Just define a public, partial class that contains a Handle method and annotate the class with the `Lambda` attribute. The `Lambda` attribute requires that you specify a startup class - more on this in the next step. You are not limited to an request/input parameter of type object - this can be any serializable value or reference type. Same goes for the return value, however the return value must be enclosed in a `Task`.
 
 ```cs
+using System.Threading;
 using System.Threading.Tasks;
 
 using Amazon.Lambda.Core;
@@ -140,7 +141,7 @@ namespace Your.Namespace
             this.yourService = yourService;
         }
 
-        public Task<object> Handle(object request, ILambdaContext context)
+        public Task<object> Handle(object request, CancellationToken cancellationToken)
         {
             return new {
                 foo = request
