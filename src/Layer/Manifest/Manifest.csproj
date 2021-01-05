@@ -7,7 +7,7 @@
         <RestorePackagesPath>$(MSBuildThisFileDirectory).nuget</RestorePackagesPath>
         <RestoreAdditionalProjectSources>$(PackageOutputPath);$(RestoreAdditionalProjectSources)</RestoreAdditionalProjectSources>
         <RestorePackagesWithLockFile>false</RestorePackagesWithLockFile>
-        <AWSSDKCoreVersion>3.5.1.42</AWSSDKCoreVersion>
+        <AWSSDKCoreVersion>3.5.1.57</AWSSDKCoreVersion>
         <MicrosoftBclAsyncInterfacesVersion>1.1.0</MicrosoftBclAsyncInterfacesVersion>
     </PropertyGroup>
 
