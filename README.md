@@ -322,9 +322,17 @@ See an example of a [non-self contained lambda using a custom runtime here](./ex
 
 ### 4.10. Lambda Layer
 
-Starting in v0.6.0-beta2, you can use a Lambda Layer containing Lambdajection and all of its dependencies to cut down on package sizes. The layer will be available on the serverless application repository.  Once deployed, you can use it on functions that use the Lambdajection.Runtime package on custom runtimes containing .NET 5.
+You can use a Lambda Layer containing Lambdajection and all of its dependencies to cut down on package sizes. The layer will be available on the serverless application repository.  Once deployed, you can use it on functions that use the Lambdajection.Runtime package on custom runtimes containing .NET 5.
 
-After adding the Layer to your function, you will need to set the `DOTNET_SHARED_STORE` environment variable to `/opt/`.  This is because Lambda Layers are unzipped to that directory, and .NET needs to know where to look for the runtime package store.  If using [dotnet-lambda-layer](https://github.com/cythral/dotnet-lambda-layer), this environment variable is set for you automatically.
+To use the layer:
+
+1. Deploy lambdajection-layer from the [Serverless Application Repository](https://console.aws.amazon.com/lambda/home?region=us-east-1#/create/app?applicationId=arn:aws:serverlessrepo:us-east-1:918601311641:applications/lambdajection-layer) to your AWS Account.
+   - You must use the same semantic version as the `Lambdajection` package in your project.
+2. Note the value of the `LayerArn` output in the resulting stack and add it to your Lambda's list of layers.  See the [custom runtime example template](./examples/CustomRuntime/cloudformation.template.yml) on how to do this - specifically the CustomRuntime resource's Layers section.
+3. Add the `Lambdajection.Runtime` and `Lambdajection.Layer` packages to your project (run `dotnet add package Lambdajection.Layer`).
+   - Make sure to use the same version as the `Lambdajection` package in your project.
+4. Finally, you will need to set the `DOTNET_SHARED_STORE` environment variable to `/opt/`.  This is because Lambda Layers are unzipped to that directory, and .NET needs to know where to look for the runtime package store.  
+   - If using [dotnet-lambda-layer](https://github.com/cythral/dotnet-lambda-layer), this environment variable is set for you automatically.
 
 ## 5. Examples
 
@@ -332,7 +340,7 @@ After adding the Layer to your function, you will need to set the `DOTNET_SHARED
 - [Automatic decryption of encrypted options](examples/EncryptedOptions)
 - [Using a custom serializer](examples/CustomSerializer/README.md)
 - [Using a custom config factory](examples/CustomConfiguration/README.md)
-- [Using a custom runtime](examples/CustomRuntime)
+- [Using a custom runtime + layer](examples/CustomRuntime)
 
 ## 6. Acknowledgments
 
