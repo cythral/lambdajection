@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <PackageId>Lambdajection.CustomResource</PackageId>
+    <AssemblyName>$(PackageId)</AssemblyName>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <PackageDescription>Includes interfaces and runtime support classes for writing Lambdajection-backed Custom Resources using Dependency Injection.</PackageDescription>
+  </PropertyGroup>
+
+</Project>

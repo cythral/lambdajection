@@ -1,6 +1,6 @@
 using System;
 
-namespace Lambdajection.Core.CustomResources
+namespace Lambdajection.Core.CustomResource
 {
     /// <summary>
     /// Describes a request from CloudFormation to create,

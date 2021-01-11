@@ -1,4 +1,4 @@
-namespace Lambdajection.Core.CustomResources
+namespace Lambdajection.Core.CustomResource
 {
     /// <summary>
     /// Describes a response to a request to create/update/delete a custom resource.

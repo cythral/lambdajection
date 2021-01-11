@@ -1,4 +1,4 @@
-namespace Lambdajection.Core.CustomResources
+namespace Lambdajection.Core.CustomResource
 {
     /// <summary>
     /// Describes the type of custom resource request
