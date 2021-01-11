@@ -14,7 +14,7 @@
     <PropertyGroup>
         <Configuration Condition="$(Configuration) == ''">Debug</Configuration>
         <Nullable>enable</Nullable>
-        <LangVersion>8.0</LangVersion>
+        <LangVersion>9.0</LangVersion>
         <MinClientVersion>2.5</MinClientVersion>
     </PropertyGroup>
 
