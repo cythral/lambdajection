@@ -84,16 +84,17 @@ Browse development builds [here](https://github.com/orgs/cythral/packages?repo_n
 
 ## 2. Packages
 
-|                          |                                                                                                                                                                                                   |
-| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Lambdajection            | ![Nuget](https://img.shields.io/nuget/v/Lambdajection?label=version&style=flat-square) ![Nuget](https://img.shields.io/nuget/dt/Lambdajection?color=blue&style=flat-square)                       |
-| Lambdajection.Attributes | ![Nuget](https://img.shields.io/nuget/v/Lambdajection.Attributes?label=version&style=flat-square) ![Nuget](https://img.shields.io/nuget/dt/Lambdajection.Attributes?color=blue&style=flat-square) |
-| Lambdajection.Core       | ![Nuget](https://img.shields.io/nuget/v/Lambdajection.Core?label=version&style=flat-square) ![Nuget](https://img.shields.io/nuget/dt/Lambdajection.Core?color=blue&style=flat-square)             |
-| Lambdajection.Generator  | ![Nuget](https://img.shields.io/nuget/v/Lambdajection.Generator?label=version&style=flat-square) ![Nuget](https://img.shields.io/nuget/dt/Lambdajection.Generator?color=blue&style=flat-square)   |
-| Lambdajection.Encryption | ![Nuget](https://img.shields.io/nuget/v/Lambdajection.Encryption?label=version&style=flat-square) ![Nuget](https://img.shields.io/nuget/dt/Lambdajection.Encryption?color=blue&style=flat-square) |
-| Lambdajection.Templates  | ![Nuget](https://img.shields.io/nuget/v/Lambdajection.Templates?label=version&style=flat-square) ![Nuget](https://img.shields.io/nuget/dt/Lambdajection.Templates?color=blue&style=flat-square)   |
-| Lambdajection.Runtime    | ![Nuget](https://img.shields.io/nuget/v/Lambdajection.Runtime?label=version&style=flat-square) ![Nuget](https://img.shields.io/nuget/dt/Lambdajection.Runtime?color=blue&style=flat-square)       |
-| Lambdajection.Layer      | ![Nuget](https://img.shields.io/nuget/v/Lambdajection.Layer?label=version&style=flat-square) ![Nuget](https://img.shields.io/nuget/dt/Lambdajection.Layer?color=blue&style=flat-square)           |
+|                              |                                                                                                                                                                                                           |
+| ---------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Lambdajection                | ![Nuget](https://img.shields.io/nuget/v/Lambdajection?label=version&style=flat-square) ![Nuget](https://img.shields.io/nuget/dt/Lambdajection?color=blue&style=flat-square)                               |
+| Lambdajection.Attributes     | ![Nuget](https://img.shields.io/nuget/v/Lambdajection.Attributes?label=version&style=flat-square) ![Nuget](https://img.shields.io/nuget/dt/Lambdajection.Attributes?color=blue&style=flat-square)         |
+| Lambdajection.Core           | ![Nuget](https://img.shields.io/nuget/v/Lambdajection.Core?label=version&style=flat-square) ![Nuget](https://img.shields.io/nuget/dt/Lambdajection.Core?color=blue&style=flat-square)                     |
+| Lambdajection.Generator      | ![Nuget](https://img.shields.io/nuget/v/Lambdajection.Generator?label=version&style=flat-square) ![Nuget](https://img.shields.io/nuget/dt/Lambdajection.Generator?color=blue&style=flat-square)           |
+| Lambdajection.Encryption     | ![Nuget](https://img.shields.io/nuget/v/Lambdajection.Encryption?label=version&style=flat-square) ![Nuget](https://img.shields.io/nuget/dt/Lambdajection.Encryption?color=blue&style=flat-square)         |
+| Lambdajection.Templates      | ![Nuget](https://img.shields.io/nuget/v/Lambdajection.Templates?label=version&style=flat-square) ![Nuget](https://img.shields.io/nuget/dt/Lambdajection.Templates?color=blue&style=flat-square)           |
+| Lambdajection.Runtime        | ![Nuget](https://img.shields.io/nuget/v/Lambdajection.Runtime?label=version&style=flat-square) ![Nuget](https://img.shields.io/nuget/dt/Lambdajection.Runtime?color=blue&style=flat-square)               |
+| Lambdajection.Layer          | ![Nuget](https://img.shields.io/nuget/v/Lambdajection.Layer?label=version&style=flat-square) ![Nuget](https://img.shields.io/nuget/dt/Lambdajection.Layer?color=blue&style=flat-square)                   |
+| Lambdajection.CustomResource | ![Nuget](https://img.shields.io/nuget/v/Lambdajection.CustomResource?label=version&style=flat-square) ![Nuget](https://img.shields.io/nuget/dt/Lambdajection.CustomResource?color=blue&style=flat-square) |
 
 ## 3. Templates
 
