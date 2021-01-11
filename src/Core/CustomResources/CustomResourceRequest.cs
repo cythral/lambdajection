@@ -11,7 +11,6 @@ namespace Lambdajection.Core.CustomResources
     /// by this custom resource provider.
     /// </typeparam>
     public class CustomResourceRequest<TResourceProperties>
-        where TResourceProperties : class
     {
         /// <summary>
         /// Gets or sets the type of Custom Resource request.
