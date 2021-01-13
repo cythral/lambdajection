@@ -1,0 +1,53 @@
+{
+  "version": 1,
+  "dependencies": {
+    ".NETStandard,Version=v2.1": {
+      "Microsoft.CodeAnalysis.CSharp.CodeStyle": {
+        "type": "Direct",
+        "requested": "[3.8.0, )",
+        "resolved": "3.8.0",
+        "contentHash": "utN0fgby7YvyLhLYq1ThYZpJmcxc3mKT6nWi5EIIKzWz5IF+S/N/uNM/1g+1Ga0PMshIwutCdmzPhxrXt3iATg=="
+      },
+      "Microsoft.SourceLink.GitHub": {
+        "type": "Direct",
+        "requested": "[1.0.0, )",
+        "resolved": "1.0.0",
+        "contentHash": "aZyGyGg2nFSxix+xMkPmlmZSsnGQ3w+mIG23LTxJZHN+GPwTQ5FpPgDo7RMOq+Kcf5D4hFWfXkGhoGstawX13Q==",
+        "dependencies": {
+          "Microsoft.Build.Tasks.Git": "1.0.0",
+          "Microsoft.SourceLink.Common": "1.0.0"
+        }
+      },
+      "Nerdbank.GitVersioning": {
+        "type": "Direct",
+        "requested": "[3.3.37, )",
+        "resolved": "3.3.37",
+        "contentHash": "YlDKV/gSHQGDThWSGqVyPfKeNP/kx1fj/NPFFgGc/cxzgIbXv4jtYOcbFOz3ZIeAKtpCcSAmVNDOikBs3OxI/A=="
+      },
+      "StyleCop.Analyzers": {
+        "type": "Direct",
+        "requested": "[1.2.0-beta.321, )",
+        "resolved": "1.2.0-beta.321",
+        "contentHash": "immyDIuCjDT2sxv+mAhQ2IH4HyiHJkAvKqK7l1ksJDWAOdeAvkco7EZ14IGWbiWNOEBRm1p7P9UAbfgT9aJSEA==",
+        "dependencies": {
+          "StyleCop.Analyzers.Unstable": "1.2.0.321"
+        }
+      },
+      "Microsoft.Build.Tasks.Git": {
+        "type": "Transitive",
+        "resolved": "1.0.0",
+        "contentHash": "z2fpmmt+1Jfl+ZnBki9nSP08S1/tbEOxFdsK1rSR+LBehIJz1Xv9/6qOOoGNqlwnAGGVGis1Oj6S8Kt9COEYlQ=="
+      },
+      "Microsoft.SourceLink.Common": {
+        "type": "Transitive",
+        "resolved": "1.0.0",
+        "contentHash": "G8DuQY8/DK5NN+3jm5wcMcd9QYD90UV7MiLmdljSJixi3U/vNaeBKmmXUqI4DJCOeWizIUEh4ALhSt58mR+5eg=="
+      },
+      "StyleCop.Analyzers.Unstable": {
+        "type": "Transitive",
+        "resolved": "1.2.0.321",
+        "contentHash": "CLL1cwvzGyXsCDzHQuAV3STrkIfTXqlS/vnxJTlSiRmmFjnTnoNVIZWwv738/hWxoh8MjPyHlp7eLossZIB5kg=="
+      }
+    }
+  }
+}
