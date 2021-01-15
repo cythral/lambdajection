@@ -1,4 +1,4 @@
-namespace Lambdajection.Core.CustomResource
+namespace Lambdajection.CustomResource
 {
     /// <summary>
     /// Describes the status of a response returned

@@ -1,7 +1,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Lambdajection.Core.CustomResource
+namespace Lambdajection.CustomResource
 {
     /// <summary>
     /// Describes a lambdajection-backed custom resource provider.

@@ -14,7 +14,7 @@ using NSubstitute;
 
 using NUnit.Framework;
 
-using TestLambdaHost = Lambdajection.Core.LambdaHost<
+using TestLambdaHost = Lambdajection.Core.DefaultLambdaHost<
     Lambdajection.TestLambda,
     object,
     object,

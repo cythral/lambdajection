@@ -12,7 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 namespace Lambdajection.Core
 {
     /// <summary>
-    /// IoC container / host used for lambdas of type TLambda.
+    /// Abstract IoC container / host used for lambdas of type TLambda.
     /// </summary>
     /// <typeparam name="TLambda">The type of lambda to host.</typeparam>
     /// <typeparam name="TLambdaParameter">The type of the lambda's input parameter.</typeparam>
@@ -20,30 +20,26 @@ namespace Lambdajection.Core
     /// <typeparam name="TLambdaStartup">The type to use for lambda startup (sets up services).</typeparam>
     /// <typeparam name="TLambdaConfigurator">The type to use for the lambda configurator (sets up options and aws services).</typeparam>
     /// <typeparam name="TLambdaConfigFactory">The type to use for the lambda's config factory.</typeparam>
-    public sealed class LambdaHost<TLambda, TLambdaParameter, TLambdaOutput, TLambdaStartup, TLambdaConfigurator, TLambdaConfigFactory>
+    public abstract class LambdaHostBase<TLambda, TLambdaParameter, TLambdaOutput, TLambdaStartup, TLambdaConfigurator, TLambdaConfigFactory>
         : IAsyncDisposable
-        where TLambda : class, ILambda<TLambdaParameter, TLambdaOutput>
+        where TLambda : class
         where TLambdaStartup : class, ILambdaStartup
         where TLambdaConfigurator : class, ILambdaConfigurator
         where TLambdaConfigFactory : class, ILambdaConfigFactory, new()
     {
-        private TLambda? lambda;
-
-        private IServiceScope? scope;
-
         /// <summary>
-        /// Initializes a new instance of the <see cref="LambdaHost{TLambda, TLambdaParameter, TLambdaOutput, TLambdaStartup, TLambdaConfigurator, TLambdaConfigFactory}" /> class.
+        /// Initializes a new instance of the <see cref="LambdaHostBase{TLambda, TLambdaParameter, TLambdaOutput, TLambdaStartup, TLambdaConfigurator, TLambdaConfigFactory}" /> class.
         /// </summary>
-        public LambdaHost()
+        public LambdaHostBase()
             : this(LambdaHostBuilder<TLambda, TLambdaParameter, TLambdaOutput, TLambdaStartup, TLambdaConfigurator, TLambdaConfigFactory>.Build)
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="LambdaHost{TLambda, TLambdaParameter, TLambdaOutput, TLambdaStartup, TLambdaConfigurator, TLambdaConfigFactory}" /> class.
+        /// Initializes a new instance of the <see cref="LambdaHostBase{TLambda, TLambdaParameter, TLambdaOutput, TLambdaStartup, TLambdaConfigurator, TLambdaConfigFactory}" /> class.
         /// </summary>
         /// <param name="build">The builder action to run on this lambda.</param>
-        internal LambdaHost(Action<LambdaHost<TLambda, TLambdaParameter, TLambdaOutput, TLambdaStartup, TLambdaConfigurator, TLambdaConfigFactory>> build)
+        internal LambdaHostBase(Action<LambdaHostBase<TLambda, TLambdaParameter, TLambdaOutput, TLambdaStartup, TLambdaConfigurator, TLambdaConfigFactory>> build)
         {
             build(this);
         }
@@ -70,10 +66,24 @@ namespace Lambdajection.Core
         /// Gets the context object used for the current invocation.
         /// </summary>
         /// <value>Context object used for the current lambda invocation.</value>
-        public ILambdaContext? Context { get; private set; }
+        public ILambdaContext Context { get; private set; } = null!;
 
         /// <summary>
-        /// Runs the lambda.
+        /// Gets the lambda to be invoked.
+        /// </summary>
+        /// <value>The lambda to be invoked.</value>
+        protected internal TLambda Lambda { get; internal set; } = null!;
+
+        /// <summary>
+        /// Gets the service scope capable of retrieving scoped services.
+        /// </summary>
+        /// <value>The service scope.</value>
+        protected internal IServiceScope Scope { get; internal set; } = null!;
+
+        /// <summary>
+        /// Runs the lambda host:
+        /// - Runs initialization services.
+        /// - Invokes the lambda.
         /// </summary>
         /// <param name="parameter">The input parameter to pass to the lambda.</param>
         /// <param name="context">The context object to pass to the lambda.</param>
@@ -87,15 +97,23 @@ namespace Lambdajection.Core
             }
 
             cancellationToken.ThrowIfCancellationRequested();
-            scope = ServiceProvider.CreateScope();
+            Scope = ServiceProvider.CreateScope();
 
-            var provider = scope.ServiceProvider;
+            var provider = Scope.ServiceProvider;
             var scopeContext = provider.GetRequiredService<LambdaScope>();
             scopeContext.LambdaContext = context;
 
-            lambda = provider.GetRequiredService<TLambda>();
-            return await lambda.Handle(parameter, cancellationToken);
+            Lambda = provider.GetRequiredService<TLambda>();
+            return await InvokeLambda(parameter, cancellationToken);
         }
+
+        /// <summary>
+        /// Invokes the Lambda.
+        /// </summary>
+        /// <param name="parameter">The parameter to pass to the lambda to invoke it with.</param>
+        /// <param name="cancellationToken">Token used to cancel the operation.</param>
+        /// <returns>The return value of the lambda.</returns>
+        public abstract Task<TLambdaOutput> InvokeLambda(TLambdaParameter parameter, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Disposes the Lambda Host and its subresources asynchronously.
@@ -103,11 +121,11 @@ namespace Lambdajection.Core
         /// <returns>The disposal task.</returns>
         public async ValueTask DisposeAsync()
         {
-            await MaybeDispose(scope);
-            await MaybeDispose(lambda);
+            await MaybeDispose(Scope);
+            await MaybeDispose(Lambda);
 
-            lambda = null;
-            scope = null;
+            Lambda = null!;
+            Scope = null!;
 
             SuppressFinalize(this);
         }

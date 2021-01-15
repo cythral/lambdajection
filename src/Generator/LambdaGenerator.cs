@@ -125,7 +125,7 @@ namespace Lambdajection.Generator
             context.Usings.Add(configFactoryNamespace);
 
             var inputParameterName = inputParameter!.Identifier.ValueText;
-            yield return ParseStatement($"await using var host = new LambdaHost<{className}, {inputType}, {returnType}, {context.StartupTypeName}, LambdajectionConfigurator, {configFactory}>();");
+            yield return ParseStatement($"await using var host = new DefaultLambdaHost<{className}, {inputType}, {returnType}, {context.StartupTypeName}, LambdajectionConfigurator, {configFactory}>();");
             yield return ParseStatement($"return await host.Run({inputParameterName}, context);");
         }
 

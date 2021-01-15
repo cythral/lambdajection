@@ -1,4 +1,4 @@
-namespace Lambdajection.Core.CustomResource
+namespace Lambdajection.CustomResource
 {
     /// <summary>
     /// Describes a response to a request to create/update/delete a custom resource.
@@ -8,7 +8,7 @@ namespace Lambdajection.Core.CustomResource
     /// and/or associated entities.
     /// </typeparam>
     public class CustomResourceResponse<TResourceOutputData>
-        where TResourceOutputData : ICustomResourceOutputData
+       where TResourceOutputData : ICustomResourceOutputData
     {
         /// <summary>
         /// Gets or sets the status of the custom resource response.
