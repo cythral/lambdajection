@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 
 using AutoFixture.AutoNSubstitute;
 
+using FluentAssertions;
+
 using Lambdajection.Core;
 
 using Microsoft.Extensions.DependencyInjection;
@@ -28,6 +30,15 @@ namespace Lambdajection.CustomResource.Tests
     [Category("Unit")]
     public class CustomResourceLambdaHostTests
     {
+        [Test]
+        public void DefaultConstructorShouldNotThrow()
+        {
+#pragma warning disable CA1806
+            Action func = () => new TestCustomResourceLambda();
+            func.Should().NotThrow();
+#pragma warning restore CA1806
+        }
+
         [TestFixture, Category("Unit")]
         public class InvokeLambda
         {
