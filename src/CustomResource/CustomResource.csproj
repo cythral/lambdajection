@@ -10,4 +10,11 @@
     <PackageDescription>Includes interfaces and runtime support classes for writing Lambdajection-backed Custom Resources using Dependency Injection.</PackageDescription>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="../Core/Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="Lambdajection.Tests" />
+  </ItemGroup>
 </Project>

@@ -71,6 +71,7 @@
   <ItemGroup>
     <ProjectReference Include="..\src\Attributes\Attributes.csproj" />
     <ProjectReference Include="..\src\Core\Core.csproj" SetTargetFramework="TargetFramework=netstandard2.1" />
+    <ProjectReference Include="..\src\CustomResource\CustomResource.csproj" />
     <ProjectReference Include="..\src\Runtime\Runtime.csproj" />
     <ProjectReference Include="..\src\Encryption\Encryption.csproj" />
     <ProjectReference Include="..\src\Generator\Generator.csproj" />

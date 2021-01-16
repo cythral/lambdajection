@@ -16,7 +16,7 @@ using NUnit.Framework;
 
 using static NSubstitute.Arg;
 
-using TestLambdaHost = Lambdajection.Core.LambdaHost<
+using TestLambdaHost = Lambdajection.Core.DefaultLambdaHost<
     Lambdajection.TestLambda,
     object,
     object,
@@ -28,7 +28,7 @@ using TestLambdaHost = Lambdajection.Core.LambdaHost<
 namespace Lambdajection.Core.Tests
 {
     [Category("Unit")]
-    public class LambdaHostTests
+    public class DefaultLambdaHostTests
     {
         [Test, Auto]
         public async Task RunCreatesLambdaAndCallsHandle(

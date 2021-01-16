@@ -1,4 +1,4 @@
-namespace Lambdajection.Core.CustomResource
+namespace Lambdajection.CustomResource
 {
     /// <summary>
     /// Describes output data concerning a custom resource

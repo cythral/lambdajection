@@ -1551,6 +1551,12 @@
           "Microsoft.Extensions.Logging.Console": "5.0.0"
         }
       },
+      "Lambdajection.CustomResource": {
+        "type": "Project",
+        "dependencies": {
+          "Lambdajection.Core": "1.0.0"
+        }
+      },
       "Lambdajection.Encryption": {
         "type": "Project",
         "dependencies": {

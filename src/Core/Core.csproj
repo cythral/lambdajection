@@ -29,6 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <InternalsVisibleTo Include="Lambdajection.CustomResource" />
     <InternalsVisibleTo Include="Lambdajection.Tests" />
   </ItemGroup>
 </Project>

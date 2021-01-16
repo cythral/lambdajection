@@ -18,7 +18,7 @@ namespace Lambdajection.Core
     /// <typeparam name="TLambdaConfigurator">The type of configurator class to use when building the lambda.</typeparam>
     /// <typeparam name="TLambdaConfigFactory">The type of config factory to use when building the lambda.</typeparam>
     internal static class LambdaHostBuilder<TLambda, TLambdaParameter, TLambdaOutput, TLambdaStartup, TLambdaConfigurator, TLambdaConfigFactory>
-        where TLambda : class, ILambda<TLambdaParameter, TLambdaOutput>
+        where TLambda : class
         where TLambdaStartup : class, ILambdaStartup
         where TLambdaConfigurator : class, ILambdaConfigurator
         where TLambdaConfigFactory : class, ILambdaConfigFactory, new()
@@ -48,7 +48,7 @@ namespace Lambdajection.Core
         /// Builds a new lambda host.
         /// </summary>
         /// <param name="host">The host to build.</param>
-        public static void Build(LambdaHost<TLambda, TLambdaParameter, TLambdaOutput, TLambdaStartup, TLambdaConfigurator, TLambdaConfigFactory> host)
+        public static void Build(LambdaHostBase<TLambda, TLambdaParameter, TLambdaOutput, TLambdaStartup, TLambdaConfigurator, TLambdaConfigFactory> host)
         {
             host.ServiceProvider = serviceProvider;
             host.RunInitializationServices = runInitializationServices;
@@ -80,6 +80,7 @@ namespace Lambdajection.Core
             .AddSingleton<IConfiguration>(configuration)
             .AddSingleton<ILambdaStartup, TLambdaStartup>()
             .AddSingleton<ILambdaConfigurator, TLambdaConfigurator>()
+            .AddSingleton<IHttpClient, DefaultHttpClient>()
             .AddScoped<TLambda>()
             .AddScoped<LambdaScope>()
             .AddScoped(provider =>
