@@ -2,6 +2,11 @@ coverage:
   precision: 2
   round: down
   range: "80...100"
-
-ignore:
-  - src/Core/DefaultHttpClient.cs
+  
+  status:
+    project:
+      threshold: 3%
+    patch:
+      threshold: 3%
+    changes:
+      threshold: 3%
