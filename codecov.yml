@@ -6,7 +6,7 @@ coverage:
   status:
     project:
       threshold: 3%
+
     patch:
-      threshold: 3%
-    changes:
+      target: 50%
       threshold: 3%
