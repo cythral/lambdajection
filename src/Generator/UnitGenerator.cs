@@ -8,6 +8,7 @@ using System.Threading;
 
 using Lambdajection.Attributes;
 using Lambdajection.Core;
+using Lambdajection.Generator.Attributes;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -39,16 +40,20 @@ namespace Lambdajection.Generator
 
                                   from node in tree.GetRoot().DescendantNodesAndSelf().OfType<ClassDeclarationSyntax>()
                                   from attr in semanticModel.GetDeclaredSymbol(node)?.GetAttributes() ?? ImmutableArray.Create<AttributeData>()
-                                  where attr.AttributeClass?.Name == nameof(LambdaAttribute)
+                                  where IsAssignableTo(attr.AttributeClass, nameof(LambdaAttribute))
 
+                                  let metadataAttributes = attr.AttributeClass?.GetAttributes() ?? ImmutableArray.Create<AttributeData>()
                                   let startupType = GetAttributeArgument<INamedTypeSymbol>(attr, "Startup")!
                                   let generationContext = new GenerationContext
                                   {
                                       SourceGeneratorContext = context,
                                       Declaration = node,
                                       SyntaxTree = tree,
+                                      Compilation = context.Compilation,
                                       SemanticModel = semanticModel,
                                       AttributeData = attr,
+                                      LambdaHostAttribute = GetMetadataAttribute<LambdaHostAttribute>(metadataAttributes),
+                                      LambdaInterfaceAttribute = GetMetadataAttribute<LambdaInterfaceAttribute>(metadataAttributes),
                                       CancellationToken = context.CancellationToken,
                                       StartupType = startupType,
                                       SerializerType = GetAttributeArgument<INamedTypeSymbol>(attr, "Serializer"),
@@ -89,6 +94,19 @@ namespace Lambdajection.Generator
             }
         }
 
+        public static TAttribute GetMetadataAttribute<TAttribute>(ImmutableArray<AttributeData> attributes)
+        {
+            foreach (var attr in attributes)
+            {
+                if (attr.AttributeClass?.Name == typeof(TAttribute).Name)
+                {
+                    return AttributeFactory.Create<TAttribute>(attr);
+                }
+            }
+
+            throw new Exception();
+        }
+
         public static T? GetAttributeArgument<T>(AttributeData attributeData, string argName)
         {
             if (argName == "Startup")
@@ -101,6 +119,23 @@ namespace Lambdajection.Generator
                         select (T?)arg.Value.Value;
 
             return query.FirstOrDefault();
+        }
+
+        public static bool IsAssignableTo(INamedTypeSymbol? symbol, string assignableTo)
+        {
+            var baseType = symbol;
+
+            while (baseType != null)
+            {
+                if (baseType.Name == assignableTo)
+                {
+                    return true;
+                }
+
+                baseType = baseType.BaseType;
+            }
+
+            return false;
         }
 
         public CompilationUnitSyntax GenerateUnit(GenerationContext context)
@@ -128,24 +163,15 @@ namespace Lambdajection.Generator
             var declaration = context.Declaration;
             var namespaceName = declaration.Ancestors().OfType<NamespaceDeclarationSyntax>().ElementAt(0).Name;
             var className = declaration.Identifier.ValueText;
-            var handleMember = (from member in declaration!.Members
-                                where (member as MethodDeclarationSyntax)?.Identifier.ValueText == "Handle"
-                                select (MethodDeclarationSyntax)member).FirstOrDefault();
+            InterfaceImplementationAnalyzer.Results results;
+
+            var interfaceAnalyzer = new InterfaceImplementationAnalyzer(declaration, context);
+            results = interfaceAnalyzer.Validate();
+
             var constructorArgs = from tree in context.SourceGeneratorContext.Compilation.SyntaxTrees
                                   from constructor in tree.GetRoot().DescendantNodes().OfType<ConstructorDeclarationSyntax>()
                                   from parameter in constructor.ParameterList.Parameters
                                   select parameter;
-
-            if (handleMember == null)
-            {
-                throw new GenerationFailureException
-                {
-                    Id = "LJ0001",
-                    Title = "Handle Method Not Implemented",
-                    Description = "Implement the Handle method to provide Lambda Function Handler code.",
-                    Location = Location.Create(declaration.SyntaxTree, declaration.Span),
-                };
-            }
 
             if (!context.Settings.IncludeAmazonFactories && constructorArgs.Any())
             {
@@ -180,7 +206,7 @@ namespace Lambdajection.Generator
 
             IEnumerable<MemberDeclarationSyntax> GenerateMembers()
             {
-                var generator = new LambdaGenerator(context, className!, handleMember!, scanResults);
+                var generator = new LambdaGenerator(context, className!, results.InputTypeName!, results.OutputTypeName!, scanResults);
                 yield return generator.Generate();
             }
 

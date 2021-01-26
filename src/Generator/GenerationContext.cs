@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Threading;
 
+using Lambdajection.Attributes;
+
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -9,6 +11,8 @@ namespace Lambdajection.Generator
     public class GenerationContext
     {
         public ClassDeclarationSyntax Declaration { get; init; }
+
+        public Compilation Compilation { get; init; }
 
         public SyntaxTree SyntaxTree { get; init; }
 
@@ -35,5 +39,9 @@ namespace Lambdajection.Generator
         public HashSet<string> Usings { get; } = new HashSet<string>();
 
         public GenerationSettings Settings { get; init; }
+
+        internal LambdaInterfaceAttribute LambdaInterfaceAttribute { get; init; }
+
+        internal LambdaHostAttribute LambdaHostAttribute { get; init; }
     }
 }

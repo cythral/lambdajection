@@ -9,6 +9,8 @@ namespace Lambdajection.Attributes
     /// </summary>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
     [Conditional("CodeGeneration")]
+    [LambdaHost("Lambdajection.Core", "DefaultLambdaHost")]
+    [LambdaInterface("Lambdajection.Core", "ILambda")]
     public class LambdaAttribute : Attribute
     {
         /// <summary>
