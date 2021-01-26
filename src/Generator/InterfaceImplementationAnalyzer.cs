@@ -11,6 +11,7 @@ namespace Lambdajection.Generator
     {
         private readonly ClassDeclarationSyntax classDeclaration;
         private readonly GenerationContext context;
+        private readonly string?[] typeMatches = new string?[2];
 
         public InterfaceImplementationAnalyzer(
             ClassDeclarationSyntax classDeclaration,
@@ -23,7 +24,6 @@ namespace Lambdajection.Generator
 
         public Results Analyze()
         {
-            var results = new Results();
             var classType = context.SemanticModel.GetDeclaredSymbol(classDeclaration) as ITypeSymbol;
             var attr = context.LambdaInterfaceAttribute;
             var interfaceTypeName = $"{attr.AssemblyName}.{attr.InterfaceName}`2";
@@ -61,41 +61,10 @@ namespace Lambdajection.Generator
                     var interfaceMethodReturnType = interfaceMemberMethod.ReturnType;
                     var classMethodParameters = classMemberMethod.Parameters;
                     var interfaceMethodParameters = interfaceMemberMethod.Parameters;
+                    var parametersMatches = ParametersMatch(classMethodParameters, interfaceMethodParameters);
+                    var returnTypeMatches = TypesMatch(classMethodReturnType, interfaceMethodReturnType, 1);
 
-                    if (IsIncompatibleGeneric(
-                        classType: classMethodReturnType,
-                        interfaceType: interfaceMethodReturnType,
-                        ordinal: 1,
-                        typeName: out var outputTypeName,
-                        namespaceName: out var outputNamespaceName,
-                        newInterfaceType: out var genericInterfaceReturnType
-                    ))
-                    {
-                        continue;
-                    }
-
-                    if (genericInterfaceReturnType != null)
-                    {
-                        interfaceMethodReturnType = genericInterfaceReturnType;
-                        results.OutputTypeName ??= outputTypeName;
-                        results.OutputNamespaceName ??= outputNamespaceName;
-                    }
-
-                    if (interfaceMethodReturnType is ITypeParameterSymbol returnTypeParameterSymbol
-                        && returnTypeParameterSymbol.Ordinal == 1)
-                    {
-                        interfaceMethodReturnType = classMethodReturnType;
-                        results.OutputTypeName ??= interfaceMethodReturnType.ToDisplayString();
-                        results.OutputNamespaceName ??= interfaceMethodReturnType.ContainingNamespace.Name;
-                    }
-
-                    var parametersMatch = ParametersMatch(classMethodParameters, interfaceMethodParameters, out var inputTypeName, out var inputNamespaceName);
-                    var returnTypeMatches = interfaceMethodReturnType.ToDisplayString() == classMethodReturnType.ToDisplayString();
-
-                    results.InputTypeName ??= inputTypeName;
-                    results.InputNamespaceName ??= inputNamespaceName;
-
-                    if (parametersMatch && returnTypeMatches)
+                    if (parametersMatches && returnTypeMatches)
                     {
                         found = true;
                     }
@@ -113,25 +82,25 @@ namespace Lambdajection.Generator
                 }
             }
 
-            return results;
+            return new Results
+            {
+                InputTypeName = typeMatches[0],
+                OutputTypeName = typeMatches[1],
+            };
         }
 
         private bool IsIncompatibleGeneric(
             ITypeSymbol classType,
             ITypeSymbol interfaceType,
             int ordinal,
-            out string? typeName,
-            out string? namespaceName,
             out INamedTypeSymbol? newInterfaceType
         )
         {
-            typeName = null;
-            namespaceName = null;
             newInterfaceType = null;
 
             if (interfaceType is INamedTypeSymbol namedInterfaceType
-                            && classType is INamedTypeSymbol namedClassType
-                            && namedInterfaceType.TypeArguments.Any(arg => arg is ITypeParameterSymbol))
+                && classType is INamedTypeSymbol namedClassType
+                && namedInterfaceType.TypeArguments.Any(arg => arg is ITypeParameterSymbol))
             {
                 if (!namedClassType.IsGenericType ||
                     namedClassType.TypeParameters.Length != namedInterfaceType.TypeParameters.Length)
@@ -145,64 +114,42 @@ namespace Lambdajection.Generator
                 var position = namedInterfaceType.TypeArguments
                 .ToList()
                 .FindIndex(param =>
-                    param is ITypeParameterSymbol typeParameterSymbol
-                    && typeParameterSymbol.Ordinal == ordinal
+                    param is ITypeParameterSymbol typeParameterSymbol && typeParameterSymbol.Ordinal == ordinal
                 );
 
-                var type = position != -1
-                    ? newInterfaceType.TypeArguments[position]
-                    : null;
+                var type = position != -1 ? newInterfaceType.TypeArguments[position] : null;
+                var typeName = type?.ToDisplayString();
 
-                typeName = type?.ToDisplayString();
-                namespaceName = type?.ContainingNamespace.Name;
+                if (typeMatches[ordinal] != null && typeName != typeMatches[ordinal])
+                {
+                    return true;
+                }
+
+                typeMatches[ordinal] ??= typeName;
             }
 
             return false;
         }
 
+        /// <summary>
+        /// Runs a check to see if the parameters of a class match
+        /// a generic interface.
+        /// </summary>
         private bool ParametersMatch(
-            ImmutableArray<IParameterSymbol> classMethodParameters,
-            ImmutableArray<IParameterSymbol> interfaceMethodParameters,
-            out string? inputTypeName,
-            out string? inputNamespaceName
+            ImmutableArray<IParameterSymbol> classParameters,
+            ImmutableArray<IParameterSymbol> interfaceParameters
         )
         {
-            inputTypeName = null;
-            inputNamespaceName = null;
-
-            for (var i = 0; i < classMethodParameters.Length; i++)
+            for (var i = 0; i < classParameters.Length; i++)
             {
-                var classMethodParameterType = classMethodParameters[i].Type;
-                var interfaceMethodParameterType = interfaceMethodParameters[i].Type;
+                var classParameterType = classParameters[i].Type;
+                var interfaceParameterType = interfaceParameters[i].Type;
 
-                if (IsIncompatibleGeneric(
-                    classType: classMethodParameterType,
-                    interfaceType: interfaceMethodParameterType,
-                    ordinal: 0,
-                    typeName: out var newInputTypeName,
-                    namespaceName: out var newInputNamespaceName,
-                    newInterfaceType: out var genericInterfaceParameter
+                if (!TypesMatch(
+                    classType: classParameterType,
+                    interfaceType: interfaceParameterType,
+                    ordinal: 0
                 ))
-                {
-                    continue;
-                }
-
-                if (genericInterfaceParameter != null)
-                {
-                    interfaceMethodParameterType = genericInterfaceParameter;
-                    inputTypeName = newInputTypeName;
-                    inputNamespaceName = newInputNamespaceName;
-                }
-
-                if (interfaceMethodParameterType is ITypeParameterSymbol typeParameterSymbol
-                    && typeParameterSymbol.Ordinal == 0)
-                {
-                    interfaceMethodParameterType = classMethodParameterType;
-                    inputTypeName = classMethodParameterType.ToDisplayString();
-                    inputNamespaceName = classMethodParameterType.ContainingNamespace.Name;
-                }
-
-                if (interfaceMethodParameterType.ToDisplayString() != classMethodParameterType.ToDisplayString())
                 {
                     return false;
                 }
@@ -211,17 +158,39 @@ namespace Lambdajection.Generator
             return true;
         }
 
+        private bool TypesMatch(ITypeSymbol classType, ITypeSymbol interfaceType, int ordinal)
+        {
+            if (IsIncompatibleGeneric(
+                classType: classType,
+                interfaceType: interfaceType,
+                ordinal: ordinal,
+                newInterfaceType: out var genericInterfaceType
+            ))
+            {
+                return false;
+            }
+
+            if (genericInterfaceType != null)
+            {
+                interfaceType = genericInterfaceType;
+            }
+
+            var classTypeName = classType.ToDisplayString();
+            var interfaceTypeName = interfaceType.ToDisplayString();
+
+            if (interfaceType is ITypeParameterSymbol interfaceTypeParameter
+                && interfaceTypeParameter.Ordinal == ordinal)
+            {
+                typeMatches[ordinal] ??= classTypeName;
+                interfaceTypeName = typeMatches[ordinal];
+            }
+
+            return classTypeName == interfaceTypeName;
+        }
+
         public class Results
         {
-            public string? EncapsulatedTypeName { get; set; }
-
-            public string? EncapsulatedNamespaceName { get; set; }
-
-            public string? InputNamespaceName { get; set; }
-
             public string? InputTypeName { get; set; }
-
-            public string? OutputNamespaceName { get; set; }
 
             public string? OutputTypeName { get; set; }
         }
