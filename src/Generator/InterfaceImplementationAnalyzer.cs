@@ -85,7 +85,7 @@ namespace Lambdajection.Generator
                         && returnTypeParameterSymbol.Ordinal == 1)
                     {
                         interfaceMethodReturnType = classMethodReturnType;
-                        results.OutputTypeName ??= interfaceMethodReturnType.Name;
+                        results.OutputTypeName ??= interfaceMethodReturnType.ToDisplayString();
                         results.OutputNamespaceName ??= interfaceMethodReturnType.ContainingNamespace.Name;
                     }
 
@@ -153,7 +153,7 @@ namespace Lambdajection.Generator
                     ? newInterfaceType.TypeArguments[position]
                     : null;
 
-                typeName = type?.Name;
+                typeName = type?.ToDisplayString();
                 namespaceName = type?.ContainingNamespace.Name;
             }
 
@@ -198,7 +198,7 @@ namespace Lambdajection.Generator
                     && typeParameterSymbol.Ordinal == 0)
                 {
                     interfaceMethodParameterType = classMethodParameterType;
-                    inputTypeName = classMethodParameterType.Name;
+                    inputTypeName = classMethodParameterType.ToDisplayString();
                     inputNamespaceName = classMethodParameterType.ContainingNamespace.Name;
                 }
 
