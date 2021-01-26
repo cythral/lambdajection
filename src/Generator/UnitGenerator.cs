@@ -163,10 +163,9 @@ namespace Lambdajection.Generator
             var declaration = context.Declaration;
             var namespaceName = declaration.Ancestors().OfType<NamespaceDeclarationSyntax>().ElementAt(0).Name;
             var className = declaration.Identifier.ValueText;
-            InterfaceImplementationAnalyzer.Results results;
 
             var interfaceAnalyzer = new InterfaceImplementationAnalyzer(declaration, context);
-            results = interfaceAnalyzer.Validate();
+            var results = interfaceAnalyzer.Analyze();
 
             var constructorArgs = from tree in context.SourceGeneratorContext.Compilation.SyntaxTrees
                                   from constructor in tree.GetRoot().DescendantNodes().OfType<ConstructorDeclarationSyntax>()

@@ -21,7 +21,7 @@ namespace Lambdajection.Generator
             this.context = context;
         }
 
-        public Results Validate()
+        public Results Analyze()
         {
             var results = new Results();
             var classType = context.SemanticModel.GetDeclaredSymbol(classDeclaration) as ITypeSymbol;
@@ -116,7 +116,14 @@ namespace Lambdajection.Generator
             return results;
         }
 
-        private bool IsIncompatibleGeneric(ITypeSymbol classType, ITypeSymbol interfaceType, int ordinal, out string? typeName, out string? namespaceName, out INamedTypeSymbol? newInterfaceType)
+        private bool IsIncompatibleGeneric(
+            ITypeSymbol classType,
+            ITypeSymbol interfaceType,
+            int ordinal,
+            out string? typeName,
+            out string? namespaceName,
+            out INamedTypeSymbol? newInterfaceType
+        )
         {
             typeName = null;
             namespaceName = null;
