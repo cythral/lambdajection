@@ -12,6 +12,7 @@ namespace Lambdajection.Generator
         private readonly ClassDeclarationSyntax classDeclaration;
         private readonly GenerationContext context;
         private readonly string?[] typeMatches = new string?[2];
+        private readonly string?[] typeMatchEncapsulations = new string?[2];
 
         public InterfaceImplementationAnalyzer(
             ClassDeclarationSyntax classDeclaration,
@@ -85,6 +86,7 @@ namespace Lambdajection.Generator
             return new Results
             {
                 InputTypeName = typeMatches[0],
+                InputEncapsulationTypeName = typeMatchEncapsulations[0],
                 OutputTypeName = typeMatches[1],
             };
         }
@@ -126,6 +128,7 @@ namespace Lambdajection.Generator
                 }
 
                 typeMatches[ordinal] ??= typeName;
+                typeMatchEncapsulations[ordinal] ??= namedInterfaceType.Name;
             }
 
             return false;
@@ -191,6 +194,8 @@ namespace Lambdajection.Generator
         public class Results
         {
             public string? InputTypeName { get; set; }
+
+            public string? InputEncapsulationTypeName { get; set; }
 
             public string? OutputTypeName { get; set; }
         }

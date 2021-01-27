@@ -205,7 +205,7 @@ namespace Lambdajection.Generator
 
             IEnumerable<MemberDeclarationSyntax> GenerateMembers()
             {
-                var generator = new LambdaGenerator(context, className!, results.InputTypeName!, results.OutputTypeName!, scanResults);
+                var generator = new LambdaGenerator(context, className!, results.InputTypeName!, results.InputEncapsulationTypeName!, results.OutputTypeName!, scanResults);
                 yield return generator.Generate();
             }
 

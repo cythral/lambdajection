@@ -15,6 +15,7 @@ namespace Lambdajection.Generator
         private readonly string className;
         private readonly LambdaCompilationScanResult scanResults;
         private readonly string inputType;
+        private readonly string inputParameterType;
         private readonly string returnType;
         private readonly BaseTypeSyntax[] typeConstraints;
 
@@ -22,6 +23,7 @@ namespace Lambdajection.Generator
             GenerationContext context,
             string className,
             string inputType,
+            string? inputEncapsulationType,
             string returnType,
             LambdaCompilationScanResult scanResults
         )
@@ -32,9 +34,13 @@ namespace Lambdajection.Generator
             this.inputType = inputType;
             this.returnType = returnType;
 
-            context.Usings.Add(context.LambdaInterfaceAttribute.AssemblyName);
+            inputParameterType = inputEncapsulationType != null
+                ? $"{inputEncapsulationType}<{inputType}>"
+                : inputType;
+
             var interfaceName = context.LambdaInterfaceAttribute.InterfaceName;
             typeConstraints = new[] { SimpleBaseType(ParseTypeName($"{interfaceName}<{inputType},{returnType}>")) };
+            context.Usings.Add(context.LambdaInterfaceAttribute.AssemblyName);
         }
 
         public ClassDeclarationSyntax Generate()
@@ -84,7 +90,7 @@ namespace Lambdajection.Generator
                 Parameter(
                     attributeLists: List<AttributeListSyntax>(),
                     modifiers: TokenList(),
-                    type: ParseTypeName(inputType),
+                    type: ParseTypeName(inputParameterType),
                     identifier: ParseToken("input"),
                     @default: null
                 ),
