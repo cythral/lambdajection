@@ -69,7 +69,6 @@ namespace Lambdajection
             return Task.Run(
                 async () =>
                 {
-                    // GetContext method blocks while waiting for a request.
                     while (true)
                     {
                         cancellationToken.ThrowIfCancellationRequested();
