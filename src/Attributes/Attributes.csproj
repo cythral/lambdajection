@@ -20,4 +20,9 @@
     </ItemGroup>
   </Target>
 
+  <ItemGroup>
+    <InternalsVisibleTo Include="Lambdajection.Generator" />
+    <InternalsVisibleTo Include="Lambdajection.Tests" />
+    <InternalsVisibleTo Include="Lambdajection.CompilationTests.MissingLambdaInterface" />
+  </ItemGroup>
 </Project>

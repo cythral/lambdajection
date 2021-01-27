@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -15,25 +14,33 @@ namespace Lambdajection.Generator
         private readonly GenerationContext context;
         private readonly string className;
         private readonly LambdaCompilationScanResult scanResults;
-        private readonly ParameterSyntax inputParameter;
         private readonly string inputType;
-        private readonly SyntaxNode returnType;
+        private readonly string inputParameterType;
+        private readonly string returnType;
         private readonly BaseTypeSyntax[] typeConstraints;
 
         public LambdaGenerator(
             GenerationContext context,
             string className,
-            MethodDeclarationSyntax handleMethod,
+            string inputType,
+            string? inputEncapsulationType,
+            string returnType,
             LambdaCompilationScanResult scanResults
         )
         {
             this.context = context;
             this.className = className;
             this.scanResults = scanResults;
-            inputParameter = handleMethod.ParameterList.Parameters[0];
-            inputType = inputParameter?.Type?.ToString() ?? string.Empty;
-            returnType = handleMethod.ReturnType.ChildNodes().ElementAt(0).ChildNodes().ElementAt(0);
-            typeConstraints = new[] { SimpleBaseType(ParseTypeName($"ILambda<{inputType},{returnType}>")) };
+            this.inputType = inputType;
+            this.returnType = returnType;
+
+            inputParameterType = inputEncapsulationType != null
+                ? $"{inputEncapsulationType}<{inputType}>"
+                : inputType;
+
+            var interfaceName = context.LambdaInterfaceAttribute.InterfaceName;
+            typeConstraints = new[] { SimpleBaseType(ParseTypeName($"{interfaceName}<{inputType},{returnType}>")) };
+            context.Usings.Add(context.LambdaInterfaceAttribute.AssemblyName);
         }
 
         public ClassDeclarationSyntax Generate()
@@ -80,7 +87,13 @@ namespace Lambdajection.Generator
 
             var parameters = SeparatedList(new ParameterSyntax[]
             {
-                inputParameter!,
+                Parameter(
+                    attributeLists: List<AttributeListSyntax>(),
+                    modifiers: TokenList(),
+                    type: ParseTypeName(inputParameterType),
+                    identifier: ParseToken("input"),
+                    @default: null
+                ),
                 Parameter(
                     attributeLists: List<AttributeListSyntax>(),
                     modifiers: TokenList(),
@@ -124,9 +137,9 @@ namespace Lambdajection.Generator
             var configFactoryNamespace = context.ConfigFactoryType?.ContainingNamespace?.ToString() ?? "Lambdajection.Core";
             context.Usings.Add(configFactoryNamespace);
 
-            var inputParameterName = inputParameter!.Identifier.ValueText;
-            yield return ParseStatement($"await using var host = new DefaultLambdaHost<{className}, {inputType}, {returnType}, {context.StartupTypeName}, LambdajectionConfigurator, {configFactory}>();");
-            yield return ParseStatement($"return await host.Run({inputParameterName}, context);");
+            var hostClass = context.LambdaHostAttribute.ClassName;
+            yield return ParseStatement($"await using var host = new {hostClass}<{className}, {inputType}, {returnType}, {context.StartupTypeName}, LambdajectionConfigurator, {configFactory}>();");
+            yield return ParseStatement($"return await host.Run(input, context);");
         }
 
         public MemberDeclarationSyntax GenerateMainMethod()

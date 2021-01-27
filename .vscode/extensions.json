@@ -2,7 +2,6 @@
     "recommendations": [
         "ms-dotnettools.csharp",
         "editorconfig.editorconfig",
-        "k--kato.docomment",
         "redhat.vscode-xml",
         "tintoy.msbuild-project-tools",
         "yzhang.markdown-all-in-one"
