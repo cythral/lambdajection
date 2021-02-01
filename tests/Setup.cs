@@ -1,3 +1,5 @@
+using Microsoft.Build.Locator;
+
 using NUnit.Framework;
 
 using static System.Environment;
@@ -11,5 +13,11 @@ public class Setup
         SetEnvironmentVariable("AWS_REGION", "us-east-1");
         SetEnvironmentVariable("AWS_SECRET_ACCESS_KEY", "AWS_SECRET_ACCESS_KEY");
         SetEnvironmentVariable("AWS_ACCESS_KEY_ID", "AWS_ACCESS_KEY_ID");
+    }
+
+    [OneTimeSetUp]
+    public void RegisterMSBuildAssemblies()
+    {
+        MSBuildLocator.RegisterDefaults();
     }
 }

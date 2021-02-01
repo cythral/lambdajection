@@ -89,6 +89,9 @@ namespace Lambdajection.Tests.Compilation
             )
             .Which;
 
+            // Tests to make sure status is serialized to all caps
+            httpRequest.Body.Should().MatchRegex("\"Status\":[ ]?\"SUCCESS\"");
+
             var body = JsonSerializer.Deserialize<CustomResourceResponse<ResponseData>>(httpRequest.Body);
             body.Should().Match<CustomResourceResponse<ResponseData>>(response =>
                 response.PhysicalResourceId == name &&
@@ -131,6 +134,9 @@ namespace Lambdajection.Tests.Compilation
                 request.HttpMethod == "PUT"
             )
             .Which;
+
+            // Tests to make sure status is serialized to all caps
+            httpRequest.Body.Should().MatchRegex("\"Status\":[ ]?\"FAILED\"");
 
             var body = JsonSerializer.Deserialize<CustomResourceResponse<ResponseData>>(httpRequest.Body);
             body.Should().Match<CustomResourceResponse<ResponseData>>(response =>
