@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomConfiguration", "Cust
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomRuntime", "CustomRuntime\CustomRuntime.csproj", "{6B243FE4-FFD1-4EF3-BFE3-2B1006B5CCCD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomResource", "CustomResource\CustomResource.csproj", "{639363BC-338E-477F-853B-C2144C726DB2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -86,5 +88,17 @@ Global
 		{6B243FE4-FFD1-4EF3-BFE3-2B1006B5CCCD}.Release|x64.Build.0 = Release|Any CPU
 		{6B243FE4-FFD1-4EF3-BFE3-2B1006B5CCCD}.Release|x86.ActiveCfg = Release|Any CPU
 		{6B243FE4-FFD1-4EF3-BFE3-2B1006B5CCCD}.Release|x86.Build.0 = Release|Any CPU
+		{639363BC-338E-477F-853B-C2144C726DB2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{639363BC-338E-477F-853B-C2144C726DB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{639363BC-338E-477F-853B-C2144C726DB2}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{639363BC-338E-477F-853B-C2144C726DB2}.Debug|x64.Build.0 = Debug|Any CPU
+		{639363BC-338E-477F-853B-C2144C726DB2}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{639363BC-338E-477F-853B-C2144C726DB2}.Debug|x86.Build.0 = Debug|Any CPU
+		{639363BC-338E-477F-853B-C2144C726DB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{639363BC-338E-477F-853B-C2144C726DB2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{639363BC-338E-477F-853B-C2144C726DB2}.Release|x64.ActiveCfg = Release|Any CPU
+		{639363BC-338E-477F-853B-C2144C726DB2}.Release|x64.Build.0 = Release|Any CPU
+		{639363BC-338E-477F-853B-C2144C726DB2}.Release|x86.ActiveCfg = Release|Any CPU
+		{639363BC-338E-477F-853B-C2144C726DB2}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

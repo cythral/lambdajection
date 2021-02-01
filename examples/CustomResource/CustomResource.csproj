@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+        <TestType>ExamineStack</TestType>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Lambdajection" Version="$(LambdajectionVersion)" />
+        <PackageReference Include="Lambdajection.CustomResource" Version="$(LambdajectionVersion)" />
+    </ItemGroup>
+
+</Project>
