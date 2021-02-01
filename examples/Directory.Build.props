@@ -3,6 +3,7 @@
         <LangVersion>9.0</LangVersion>
         <Nullable>enable</Nullable>
         <LambdaName>lambdajection-$(MSBuildProjectName.ToLower())</LambdaName>
+        <TestType>InvokeLambda</TestType>
     </PropertyGroup>
 
     <PropertyGroup>

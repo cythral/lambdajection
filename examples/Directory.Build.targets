@@ -35,14 +35,19 @@
         <Exec
             Command="aws lambda invoke --function-name $(LambdaName) --payload '@(_InputPayload, '')' $(_OutputFileName)"
             StandardOutputImportance="low"
+            Condition="$(TestType) == 'InvokeLambda'"
         />
 
-        <ReadLinesFromFile File="$(_OutputFileName)">
+        <ReadLinesFromFile
+            File="$(_OutputFileName)"
+            Condition="$(TestType) == 'InvokeLambda'"
+        >
             <Output TaskParameter="Lines" ItemName="_ActualOutputLines" />
         </ReadLinesFromFile>
 
         <PropertyGroup>
-            <_ActualOutput>@(_ActualOutputLines, '')</_ActualOutput>
+            <_ActualOutput Condition="$(TestType) == 'ExamineStack'">@(_ExpectedOutputLines, '')</_ActualOutput>
+            <_ActualOutput Condition="$(TestType) == 'InvokeLambda'">@(_ActualOutputLines, '')</_ActualOutput>
             <_ExpectedOutput>@(_ExpectedOutputLines, '')</_ExpectedOutput>
         </PropertyGroup>
 
