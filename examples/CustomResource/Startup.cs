@@ -1,3 +1,5 @@
+using System.Security.Cryptography;
+
 using Lambdajection.Core;
 
 using Microsoft.Extensions.Configuration;
@@ -16,7 +18,7 @@ namespace Lambdajection.Examples.CustomResource
 
         public void ConfigureServices(IServiceCollection services)
         {
-            // Inject services into the Custom Resource Provider's container here
+            services.AddSingleton<RNGCryptoServiceProvider>();
         }
     }
 }
