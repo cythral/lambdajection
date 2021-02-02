@@ -1,0 +1,32 @@
+name: Dependency Updates
+
+on:
+  schedule:
+    - cron: "0 0 * * *"
+
+env:
+  DOTNET_NOLOGO: "true"
+  CONFIGURATION: Release
+  IGNORE_LOCK_FILES: "true"
+  REPO_URL: https://github.com/cythral/lambdajection.git
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+
+      - name: Display .NET Info
+        run: dotnet --info
+
+      - name: Install Nukeeper
+        run: dotnet install -g nukeeper
+
+      - name: Display Nukeeper Info
+        run: nukeeper --version
+
+      - name: Run Nukeeper
+        run: nukeeper repo $REPO_URL $NUKEEPER_TOKEN
+        env:
+          NUKEEPER_TOKEN: ${{ secrets.GH_TOKEN }}
