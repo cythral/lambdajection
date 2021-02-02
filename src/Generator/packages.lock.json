@@ -4,9 +4,9 @@
     ".NETStandard,Version=v2.1": {
       "AWSSDK.Core": {
         "type": "Direct",
-        "requested": "[3.5.1.57, )",
-        "resolved": "3.5.1.57",
-        "contentHash": "ejhDvIToxqfxaNAVGiSJUtXemmoDzNZ9mVa8e9ogtqhyWrGXVY+dAOmAYwPYqxDzsdQXsuPgVwA3Y8DmhkXufA==",
+        "requested": "[3.5.2.5, )",
+        "resolved": "3.5.2.5",
+        "contentHash": "mt/KXCxWOutWiOWyf/a/3LH9nsexqdIj55DSy4sePUUWUzDPm09QRFcHcDNDS5qVzr4kk2TBiqgQnWSVHUtCMA==",
         "dependencies": {
           "Microsoft.Bcl.AsyncInterfaces": "1.1.0"
         }
