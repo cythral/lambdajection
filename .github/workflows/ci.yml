@@ -106,7 +106,7 @@ jobs:
           path: obj/logs/
 
       - name: Upload Layer Template
-        if: matrix.os == 'ubuntu-latest'
+        if: matrix.os == 'ubuntu-latest' && secrets.AWS_ACCESS_KEY_ID != ''
         uses: actions/upload-artifact@v1
         with:
           name: layer-template
