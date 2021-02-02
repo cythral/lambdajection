@@ -94,23 +94,24 @@ jobs:
 
       - name: Upload Nugets
         if: matrix.os == 'ubuntu-latest'
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v2
         with:
           name: nugets
           path: bin/Packages/${{ env.CONFIGURATION }}
 
       - name: Upload Logs
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v2
         with:
           name: logs-${{ matrix.os }}
           path: obj/logs/
 
       - name: Upload Layer Template
-        if: matrix.os == 'ubuntu-latest' && secrets.AWS_ACCESS_KEY_ID != ''
-        uses: actions/upload-artifact@v1
+        if: matrix.os == 'ubuntu-latest'
+        uses: actions/upload-artifact@v2
         with:
           name: layer-template
           path: Layer.template.yml
+          if-no-files-found: ignore
 
       - name: Deploy to Github Packages
         if: matrix.os == 'ubuntu-latest'
