@@ -15,6 +15,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: Setup Git User
+        run: |
+          git config --global user.name "Cythral CI"
+          git config --global user.email "52382196+cythral-ci@users.noreply.github.com"
+
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v1
 
