@@ -114,7 +114,7 @@ jobs:
           if-no-files-found: ignore
 
       - name: Deploy to Github Packages
-        if: matrix.os == 'ubuntu-latest'
+        if: matrix.os == 'ubuntu-latest' && github.event_name == 'push'
         run: dotnet nuget push "bin/Packages/${CONFIGURATION}/*.nupkg" -k ${FEED_TOKEN} -s ${FEED_URL} --skip-duplicate --no-symbols 1
         env:
           FEED_TOKEN: ${{ secrets.GH_TOKEN }}
