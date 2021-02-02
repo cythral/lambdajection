@@ -9,9 +9,11 @@
         <OutputPath>$(_BasePath)bin/CompilationTestProjects/$(MSBuildProjectName)/$(Configuration)</OutputPath>
         <BaseIntermediateOutputPath>$(_BasePath)obj/CompilationTestProjects/$(MSBuildProjectName)</BaseIntermediateOutputPath>
         <CompilerGeneratedFilesOutputPath>$(_BasePath)obj/CompilationTestProjects/$(MSBuildProjectName)/$(Configuration)</CompilerGeneratedFilesOutputPath>
-        <RestoreAdditionalProjectSources>
-            $(_BasePath)bin/Packages/$(Configuration);
+        <RestoreLocation>$(_BasePath)bin/Packages/$(Configuration)</RestoreLocation>
+        <RestoreAdditionalProjectSources Condition="Exists($(RestoreLocation))">
+            $(RestoreLocation);
             $(RestoreAdditionalProjectSources)
         </RestoreAdditionalProjectSources>
     </PropertyGroup>
+
 </Project>
