@@ -4,11 +4,11 @@
     ".NETStandard,Version=v2.1": {
       "AWSSDK.KeyManagementService": {
         "type": "Direct",
-        "requested": "[3.5.1.6, )",
-        "resolved": "3.5.1.6",
-        "contentHash": "gvaIcHeuMa8ulHbHuaGAg+cUygwIIEVRUk5cGWfSQlZzbIzBTS578XXkIJxGUf5ZngwMG8sqxnPTOvkcC6ZzcQ==",
+        "requested": "[3.5.2.6, )",
+        "resolved": "3.5.2.6",
+        "contentHash": "RuKWEnCeR4KxUMj3ApIIHRFetHKwT8JBVhkwcEKo6HoEvalbRcVgnQhS1iltjpgB4QUnxAtUDjrjcULkb8A4VA==",
         "dependencies": {
-          "AWSSDK.Core": "[3.5.1.57, 3.6.0)"
+          "AWSSDK.Core": "[3.5.2.4, 3.6.0)"
         }
       },
       "Microsoft.CodeAnalysis.CSharp.CodeStyle": {
@@ -44,8 +44,8 @@
       },
       "AWSSDK.Core": {
         "type": "Transitive",
-        "resolved": "3.5.1.57",
-        "contentHash": "ejhDvIToxqfxaNAVGiSJUtXemmoDzNZ9mVa8e9ogtqhyWrGXVY+dAOmAYwPYqxDzsdQXsuPgVwA3Y8DmhkXufA==",
+        "resolved": "3.5.2.4",
+        "contentHash": "dm3hMqJieiySx1sVTtr+7r2BuAKQErySbU8t90uQ7tWpQCboHSigez8A5V4IuAEcAofkzMDXnKh3sIqV53iKzQ==",
         "dependencies": {
           "Microsoft.Bcl.AsyncInterfaces": "1.1.0"
         }
