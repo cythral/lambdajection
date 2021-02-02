@@ -8,7 +8,7 @@ on:
 env:
   DOTNET_NOLOGO: "true"
   CONFIGURATION: Release
-  IGNORE_LOCK_FILES: "true"
+  NUKEEPER: "true"
   REPO_URL: https://github.com/cythral/lambdajection.git
 
 jobs:

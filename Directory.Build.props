@@ -21,7 +21,7 @@
     <PropertyGroup>
         <SuppressNETCoreSdkPreviewMessage>true</SuppressNETCoreSdkPreviewMessage>
         <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
-        <RestoreLockedMode Condition="$(IGNORE_LOCK_FILES) != 'true'">true</RestoreLockedMode>
+        <RestoreLockedMode Condition="$(NUKEEPER) != 'true'">true</RestoreLockedMode>
         <DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
         <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
         <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
