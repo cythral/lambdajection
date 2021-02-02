@@ -67,9 +67,9 @@
       },
       "Microsoft.Build.Locator": {
         "type": "Direct",
-        "requested": "[1.3.2, )",
-        "resolved": "1.3.2",
-        "contentHash": "PaKm+D0ZZXmh5UGoDUpOkP3E3m40jCts+ZgqkTo76g+vBboPp/jq4/LVkm0rrSYFoYAq3oZODeAP6dhQ9lqelw=="
+        "requested": "[1.4.1, )",
+        "resolved": "1.4.1",
+        "contentHash": "UfyGaxNTjw/r3uWMX/Cv1CPKELo7TCrR5VIahaSKL0WyqmbDT6og9pyjwuhyyUkxC9gk2ElB7oOEySL1OzTZ1g=="
       },
       "Microsoft.CodeAnalysis": {
         "type": "Direct",
