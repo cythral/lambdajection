@@ -22,7 +22,7 @@ jobs:
         run: dotnet --info
 
       - name: Install Nukeeper
-        run: dotnet install -g nukeeper
+        run: dotnet tool install -g nukeeper
 
       - name: Display Nukeeper Info
         run: nukeeper --version
