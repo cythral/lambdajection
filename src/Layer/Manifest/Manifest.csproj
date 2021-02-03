@@ -7,13 +7,10 @@
         <RestorePackagesPath>$(MSBuildThisFileDirectory).nuget</RestorePackagesPath>
         <RestoreAdditionalProjectSources>$(PackageOutputPath);$(RestoreAdditionalProjectSources)</RestoreAdditionalProjectSources>
         <RestorePackagesWithLockFile>false</RestorePackagesWithLockFile>
-        <AWSSDKCoreVersion>3.5.2.4</AWSSDKCoreVersion>
-        <MicrosoftBclAsyncInterfacesVersion>1.1.0</MicrosoftBclAsyncInterfacesVersion>
     </PropertyGroup>
 
     <ItemGroup>
         <PackageReference Include="AWSSDK.Core" Version="$(AWSSDKCoreVersion)" />
-        <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="$(MicrosoftBclAsyncInterfacesVersion)" />
         <PackageReference Include="Lambdajection.Core" Version="$(LambdajectionVersion)" />
         <PackageReference Include="Lambdajection.Encryption" Version="$(LambdajectionVersion)" />
     </ItemGroup>
@@ -24,12 +21,8 @@
          into the directory where the lambdajection.core assembly is located. -->
     <Target Name="PrepareForReadyToRun" AfterTargets="Restore" Condition="$([MSBuild]::IsOsPlatform('linux'))">
         <Copy
-            SourceFiles="$(MSBuildThisFileDirectory).nuget/awssdk.core/$(AWSSDKCoreVersion)/lib/netstandard2.0/AWSSDK.Core.dll"
+            SourceFiles="$(MSBuildThisFileDirectory).nuget/awssdk.core/$(AWSSDKCoreVersion)/lib/netcoreapp3.1/AWSSDK.Core.dll"
             DestinationFiles="$(MSBuildThisFileDirectory).nuget/lambdajection.core/$(LambdajectionVersion)/lib/net5.0/AWSSDK.Core.dll"
-        />
-        <Copy
-            SourceFiles="$(MSBuildThisFileDirectory).nuget/microsoft.bcl.asyncinterfaces/$(MicrosoftBclAsyncInterfacesVersion)/lib/netstandard2.0/Microsoft.Bcl.AsyncInterfaces.dll"
-            DestinationFiles="$(MSBuildThisFileDirectory).nuget/lambdajection.core/$(LambdajectionVersion)/lib/net5.0/Microsoft.Bcl.AsyncInterfaces.dll"
         />
     </Target>
 </Project>

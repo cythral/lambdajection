@@ -20,10 +20,15 @@
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="../Encryption/Encryption.csproj" />
         <PackageReference Include="Cythral.CloudFormation.BuildTasks" Version="0.4.2" PrivateAssets="all" />
     </ItemGroup>
 
-    <Target Name="CreateStore" DependsOnTargets="GetBuildVersion">
+    <Target Name="CreateStore" DependsOnTargets="GetBuildVersion;ResolvePackageAssets">
+        <PropertyGroup>
+            <AWSSDKCoreVersion Condition="%(RuntimeCopyLocalItems.NuGetPackageId) == 'AWSSDK.Core'">%(RuntimeCopyLocalItems.NuGetPackageVersion)</AWSSDKCoreVersion>
+        </PropertyGroup>
+
         <ItemGroup>
             <StoreArgs Include="--manifest $(MSBuildThisFileDirectory)/Manifest/Manifest.csproj" />
             <StoreArgs Include="--runtime linux-x64" />
@@ -31,8 +36,10 @@
             <StoreArgs Include="--skip-optimization" Condition="!$([MSBuild]::IsOsPlatform('linux'))" />
             <StoreArgs Include="/p:Configuration=$(Configuration)" />
             <StoreArgs Include="/p:LambdajectionVersion=$(PackageVersion)" />
+            <StoreArgs Include="/p:AWSSDKCoreVersion=$(AWSSDKCoreVersion)" />
         </ItemGroup>
 
+        <Message Importance="High" Text="Version: @(TransitiveReferences)" />
         <MakeDir Directories="$(MSBuildThisFileDirectory)Manifest/.nuget" />
 
         <PropertyGroup>
