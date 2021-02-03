@@ -7,6 +7,7 @@
         <RestorePackagesPath>$(MSBuildThisFileDirectory).nuget</RestorePackagesPath>
         <RestoreAdditionalProjectSources>$(PackageOutputPath);$(RestoreAdditionalProjectSources)</RestoreAdditionalProjectSources>
         <RestorePackagesWithLockFile>false</RestorePackagesWithLockFile>
+        <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
     </PropertyGroup>
 
     <ItemGroup>
@@ -19,10 +20,12 @@
          its dependency graph is generated without it included.
          Therefore, for ReadyToRun to do its thing, we have to copy the aws sdk core assembly and its dependencies
          into the directory where the lambdajection.core assembly is located. -->
-    <Target Name="PrepareForReadyToRun" AfterTargets="ResolvePackageAssets">
+    <Target Name="PrepareForReadyToRun" AfterTargets="Restore">
         <ItemGroup>
-            <AWSSDKCoreReference Include="@(RuntimeCopyLocalItems)" Condition="%(NuGetPackageId) == 'AWSSDK.Core'" />
+            <AWSSDKCoreReference Include="$(MSBuildThisFileDirectory)/.nuget/awssdk.core/*/lib/netcoreapp3.1/AWSSDK.Core.dll" />
         </ItemGroup>
+
+        <WriteLinesToFile Lines="@(References)" File="/tmp/testref" />
 
         <Copy
             SourceFiles="@(AWSSDKCoreReference)"
