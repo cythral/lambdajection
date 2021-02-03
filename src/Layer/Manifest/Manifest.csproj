@@ -10,9 +10,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="AWSSDK.Core" Version="$(AWSSDKCoreVersion)" />
         <PackageReference Include="Lambdajection.Core" Version="$(LambdajectionVersion)" />
         <PackageReference Include="Lambdajection.Encryption" Version="$(LambdajectionVersion)" />
+        <PackageReference Include="Lambdajection.CustomResource" Version="$(LambdajectionVersion)" />
     </ItemGroup>
 
     <!-- Because AWSSDK.Core is marked as PrivateAssets="all" in Lambdajection.Core, 
@@ -20,6 +20,10 @@
          Therefore, for ReadyToRun to do its thing, we have to copy the aws sdk core assembly and its dependencies
          into the directory where the lambdajection.core assembly is located. -->
     <Target Name="PrepareForReadyToRun" AfterTargets="Restore" Condition="$([MSBuild]::IsOsPlatform('linux'))">
+        <PropertyGroup>
+            <AWSSDKCoreVersion Condition="%(RuntimeCopyLocalItems.NuGetPackageId) == 'AWSSDK.Core'">%(RuntimeCopyLocalItems.NuGetPackageVersion)</AWSSDKCoreVersion>
+        </PropertyGroup>
+
         <Copy
             SourceFiles="$(MSBuildThisFileDirectory).nuget/awssdk.core/$(AWSSDKCoreVersion)/lib/netcoreapp3.1/AWSSDK.Core.dll"
             DestinationFiles="$(MSBuildThisFileDirectory).nuget/lambdajection.core/$(LambdajectionVersion)/lib/net5.0/AWSSDK.Core.dll"
