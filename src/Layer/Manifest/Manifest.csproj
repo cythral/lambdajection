@@ -19,13 +19,13 @@
          its dependency graph is generated without it included.
          Therefore, for ReadyToRun to do its thing, we have to copy the aws sdk core assembly and its dependencies
          into the directory where the lambdajection.core assembly is located. -->
-    <Target Name="PrepareForReadyToRun" AfterTargets="Restore" Condition="$([MSBuild]::IsOsPlatform('linux'))">
-        <PropertyGroup>
-            <AWSSDKCoreVersion Condition="%(RuntimeCopyLocalItems.NuGetPackageId) == 'AWSSDK.Core'">%(RuntimeCopyLocalItems.NuGetPackageVersion)</AWSSDKCoreVersion>
-        </PropertyGroup>
+    <Target Name="PrepareForReadyToRun" AfterTargets="ResolvePackageAssets">
+        <ItemGroup>
+            <AWSSDKCoreReference Include="@(RuntimeCopyLocalItems)" Condition="%(NuGetPackageId) == 'AWSSDK.Core'" />
+        </ItemGroup>
 
         <Copy
-            SourceFiles="$(MSBuildThisFileDirectory).nuget/awssdk.core/$(AWSSDKCoreVersion)/lib/netcoreapp3.1/AWSSDK.Core.dll"
+            SourceFiles="@(AWSSDKCoreReference)"
             DestinationFiles="$(MSBuildThisFileDirectory).nuget/lambdajection.core/$(LambdajectionVersion)/lib/net5.0/AWSSDK.Core.dll"
         />
     </Target>

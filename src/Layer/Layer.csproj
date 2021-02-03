@@ -31,6 +31,7 @@
             <StoreArgs Include="--skip-optimization" Condition="!$([MSBuild]::IsOsPlatform('linux'))" />
             <StoreArgs Include="/p:Configuration=$(Configuration)" />
             <StoreArgs Include="/p:LambdajectionVersion=$(PackageVersion)" />
+            <StoreArgs Include="/v:diag" />
         </ItemGroup>
 
         <MakeDir Directories="$(MSBuildThisFileDirectory)Manifest/.nuget" />
@@ -40,7 +41,7 @@
         </PropertyGroup>
 
         <RemoveDir Directories="$(DirectoriesToRemove)" />
-        <Exec Command="dotnet store @(StoreArgs, ' ')" StandardOutputImportance="low" />
+        <Exec Command="dotnet store @(StoreArgs, ' ') > build.log" StandardOutputImportance="low" />
 
         <ItemGroup>
             <Content Include="$(OutputPath)layer/x64/net5.0/artifact.xml" />
