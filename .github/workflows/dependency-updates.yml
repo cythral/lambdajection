@@ -38,6 +38,6 @@ jobs:
         run: nukeeper --version
 
       - name: Run Nukeeper
-        run: nukeeper repo $REPO_URL $NUKEEPER_TOKEN -m 10 -a 0
+        run: nukeeper repo $REPO_URL $NUKEEPER_TOKEN -m 10 -a 0 -f PreferSingleRepository
         env:
           NUKEEPER_TOKEN: ${{ secrets.GH_TOKEN }}
