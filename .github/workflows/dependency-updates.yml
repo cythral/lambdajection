@@ -41,3 +41,18 @@ jobs:
         run: nukeeper repo $REPO_URL $NUKEEPER_TOKEN -m 10 -a 0 -f PreferSingleRepository
         env:
           NUKEEPER_TOKEN: ${{ secrets.GH_TOKEN }}
+
+      - name: Discord Failure Notification
+        uses: Ilshidur/action-discord@master
+        if: failure()
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+          DISCORD_EMBEDS: |
+            [
+              {
+                "title": "[${{ github.event.repository.name }}] Dependency Update Failure",
+                "url": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}",
+                "description": "Automatic dependency updates failed for ${{ github.event.repository.name }}.",
+                "color": 12720135
+              }
+            ]

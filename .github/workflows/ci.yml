@@ -120,6 +120,21 @@ jobs:
           FEED_TOKEN: ${{ secrets.GH_TOKEN }}
           FEED_URL: ${{ env.GITHUB_PACKAGES_FEED_URL }}
 
+      - name: Discord Failure Notification
+        uses: Ilshidur/action-discord@master
+        if: failure() && (github.event_name == 'push' || github.event_name == 'schedule')
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+          DISCORD_EMBEDS: |
+            [
+              {
+                "title": "[${{ github.event.repository.name }}] Build Failed",
+                "url": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}",
+                "description": "An error occurred while building ${{ github.event.repository.name }} ${{ env.VERSION }} on ${{ matrix.os }}",
+                "color": 12720135
+              }
+            ]
+
   release:
     needs: build
     runs-on: ubuntu-latest
@@ -177,3 +192,18 @@ jobs:
           commit: ${{ github.sha }}
           token: ${{ secrets.GH_TOKEN }}
           prerelease: ${{ contains(env.VERSION, '-') }}
+
+      - name: Discord Failure Notification
+        uses: Ilshidur/action-discord@master
+        if: failure()
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+          DISCORD_EMBEDS: |
+            [
+              {
+                "title": "[${{ github.event.repository.name }}] Release Failed",
+                "url": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}",
+                "description": "An error occurred while releasing ${{ github.event.repository.name }} ${{ env.VERSION }}",
+                "color": 12720135
+              }
+            ]
