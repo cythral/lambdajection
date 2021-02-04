@@ -16,7 +16,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - run: exit 1
       - name: Setup Git User
         run: |
           git config --global user.name "Brighid"
