@@ -18,8 +18,8 @@ jobs:
     steps:
       - name: Setup Git User
         run: |
-          git config --global user.name "Cythral CI"
-          git config --global user.email "52382196+cythral-ci@users.noreply.github.com"
+          git config --global user.name "Brighid"
+          git config --global user.email "52382196+brighid-bot@users.noreply.github.com"
 
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v1
