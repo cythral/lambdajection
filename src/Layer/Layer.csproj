@@ -23,7 +23,7 @@
         <PackageReference Include="Cythral.CloudFormation.BuildTasks" Version="0.4.2" PrivateAssets="all" />
     </ItemGroup>
 
-    <Target Name="CreateStore" DependsOnTargets="GetBuildVersion">
+    <Target Name="CreateStore" DependsOnTargets="GetBuildVersion;ResolvePackageAssets">
         <ItemGroup>
             <StoreArgs Include="--manifest $(MSBuildThisFileDirectory)/Manifest/Manifest.csproj" />
             <StoreArgs Include="--runtime linux-x64" />
