@@ -128,9 +128,9 @@ jobs:
           DISCORD_EMBEDS: |
             [
               {
-                "title": "[${{ github.event.repository.name }}] Build Failed",
+                "title": "[${{ github.repository }}] Build Failed",
                 "url": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}",
-                "description": "An error occurred while building ${{ github.event.repository.name }} ${{ env.VERSION }} on ${{ matrix.os }}",
+                "description": "An error occurred while building ${{ github.repository }} ${{ env.VERSION }} on ${{ matrix.os }}",
                 "color": 12720135
               }
             ]
@@ -201,9 +201,9 @@ jobs:
           DISCORD_EMBEDS: |
             [
               {
-                "title": "[${{ github.event.repository.name }}] Release Failed",
+                "title": "[${{ github.repository }}] Release Failed",
                 "url": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}",
-                "description": "An error occurred while releasing ${{ github.event.repository.name }} ${{ env.VERSION }}",
+                "description": "An error occurred while releasing ${{ github.repository }} ${{ env.VERSION }}",
                 "color": 12720135
               }
             ]
