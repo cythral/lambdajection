@@ -33,11 +33,11 @@
       },
       "AWSSDK.SecurityToken": {
         "type": "Direct",
-        "requested": "[3.5.1.45, )",
-        "resolved": "3.5.1.45",
-        "contentHash": "idIeyWNeB2sYgha8VpV0FxMU4NBheEu1WOGhNsylTFv19lUyuwKgBURQaMeIndxuQjBkCSa+UjkyMUlXjTU9uw==",
+        "requested": "[3.5.1.46, )",
+        "resolved": "3.5.1.46",
+        "contentHash": "z+P+1wX9qDDVWG/1CirRPXqc6qyKjDSbr7LBCA59GkUrxWMD96ep9+3igE0tELdPpycdXZaDvDQcP6B/lciWNQ==",
         "dependencies": {
-          "AWSSDK.Core": "[3.5.2.4, 3.6.0)"
+          "AWSSDK.Core": "[3.5.2.6, 3.6.0)"
         }
       },
       "coverlet.collector": {
@@ -222,8 +222,8 @@
       },
       "AWSSDK.Core": {
         "type": "Transitive",
-        "resolved": "3.5.2.5",
-        "contentHash": "mt/KXCxWOutWiOWyf/a/3LH9nsexqdIj55DSy4sePUUWUzDPm09QRFcHcDNDS5qVzr4kk2TBiqgQnWSVHUtCMA=="
+        "resolved": "3.5.2.6",
+        "contentHash": "aPhk/2nqLgaiB610zDVxR+ftZbxxLUvPEyNocPEQzseadWAqBKEPyjcRSaTduO36b8/+alL7ukTWOA2dq0mdQw=="
       },
       "AWSSDK.KeyManagementService": {
         "type": "Transitive",
