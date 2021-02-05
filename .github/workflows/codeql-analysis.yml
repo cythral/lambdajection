@@ -44,9 +44,9 @@ jobs:
           DISCORD_EMBEDS: |
             [
               {
-                "title": "[${{ github.event.repository.name }}] CodeQL Failed",
+                "title": "[${{ github.repository }}] CodeQL Failed",
                 "url": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}",
-                "description": "An error occurred while analyzing ${{ github.event.repository.name }}",
+                "description": "An error occurred while analyzing ${{ github.repository }}",
                 "color": 12720135
               }
             ]
