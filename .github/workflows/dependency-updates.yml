@@ -50,9 +50,9 @@ jobs:
           DISCORD_EMBEDS: |
             [
               {
-                "title": "[${{ github.event.repository.name }}] Dependency Update Failure",
+                "title": "[${{ github.repository }}] Dependency Update Failure",
                 "url": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}",
-                "description": "Automatic dependency updates failed for ${{ github.event.repository.name }}.",
+                "description": "Automatic dependency updates failed for ${{ github.repository }}.",
                 "color": 12720135
               }
             ]
