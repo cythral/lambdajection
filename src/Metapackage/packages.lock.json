@@ -48,10 +48,10 @@
       },
       "AWSSDK.KeyManagementService": {
         "type": "Transitive",
-        "resolved": "3.5.2.7",
-        "contentHash": "GBd/JXQorf/R/dlDO/pIshNE5DeiKCEBP0hRX0tVdQoPcg1d67GNRaY9hhq4EYBFwMgYC06Pn+4/YtoqMb/ACA==",
+        "resolved": "3.5.2.8",
+        "contentHash": "6BCLnaBaB2WTMmQlOotIC0vkS8YVVkGA/8uuHnIZfC1xllweDRgXsjxo3jehSmKBiEzZu72RaSzuT5yRHWO/dw==",
         "dependencies": {
-          "AWSSDK.Core": "[3.5.2.6, 3.6.0)"
+          "AWSSDK.Core": "[3.5.2.7, 3.6.0)"
         }
       },
       "Humanizer.Core": {
@@ -1352,7 +1352,7 @@
       "Lambdajection.Encryption": {
         "type": "Project",
         "dependencies": {
-          "AWSSDK.KeyManagementService": "3.5.2.7"
+          "AWSSDK.KeyManagementService": "3.5.2.8"
         }
       },
       "Lambdajection.Generator": {
