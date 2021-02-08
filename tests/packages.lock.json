@@ -1575,10 +1575,6 @@
       "Lambdajection.Generator": {
         "type": "Project",
         "dependencies": {
-          "AWSSDK.Core": "3.5.2.7",
-          "Lambdajection.Attributes": "1.0.0",
-          "Lambdajection.Core": "1.0.0",
-          "Lambdajection.Encryption": "1.0.0",
           "Microsoft.CodeAnalysis": "3.8.0",
           "Microsoft.CodeAnalysis.CSharp.Workspaces": "3.8.0"
         }

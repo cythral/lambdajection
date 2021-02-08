@@ -21,6 +21,7 @@
 
     <ItemGroup>
         <PackageReference Include="Cythral.CloudFormation.BuildTasks" Version="0.4.2" PrivateAssets="all" />
+        <ProjectReference Include="../Generator/Generator.csproj" ReferenceOutputAssembly="false" />
     </ItemGroup>
 
     <Target Name="CreateStore" DependsOnTargets="GetBuildVersion;ResolvePackageAssets">

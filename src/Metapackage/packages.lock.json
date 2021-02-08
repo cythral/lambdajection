@@ -38,22 +38,6 @@
         "resolved": "1.2.0",
         "contentHash": "goaq1LaH1UJB18BNG/Apxmn0P7dAlLWFbxU2nKxK+M4lH2KJaZDbtlP2gFEAJ+aENOMBHthaLPEtk3944J2OOg=="
       },
-      "AWSSDK.Core": {
-        "type": "Transitive",
-        "resolved": "3.5.2.7",
-        "contentHash": "B4ouBMXvfNmLHxFhI/L5u4SdqeISiGT3b6+rL7renDVC1YzMM1fl6Vlp2mqzTpJm2t+FuQB6gBFdlM64GnNSyg==",
-        "dependencies": {
-          "Microsoft.Bcl.AsyncInterfaces": "1.1.0"
-        }
-      },
-      "AWSSDK.KeyManagementService": {
-        "type": "Transitive",
-        "resolved": "3.5.2.8",
-        "contentHash": "6BCLnaBaB2WTMmQlOotIC0vkS8YVVkGA/8uuHnIZfC1xllweDRgXsjxo3jehSmKBiEzZu72RaSzuT5yRHWO/dw==",
-        "dependencies": {
-          "AWSSDK.Core": "[3.5.2.7, 3.6.0)"
-        }
-      },
       "Humanizer.Core": {
         "type": "Transitive",
         "resolved": "2.2.0",
@@ -1349,19 +1333,9 @@
           "Microsoft.Extensions.Logging.Console": "5.0.0"
         }
       },
-      "Lambdajection.Encryption": {
-        "type": "Project",
-        "dependencies": {
-          "AWSSDK.KeyManagementService": "3.5.2.8"
-        }
-      },
       "Lambdajection.Generator": {
         "type": "Project",
         "dependencies": {
-          "AWSSDK.Core": "3.5.2.7",
-          "Lambdajection.Attributes": "1.0.0",
-          "Lambdajection.Core": "1.0.0",
-          "Lambdajection.Encryption": "1.0.0",
           "Microsoft.CodeAnalysis": "3.8.0",
           "Microsoft.CodeAnalysis.CSharp.Workspaces": "3.8.0"
         }
