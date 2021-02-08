@@ -21,9 +21,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="../Core/Core.csproj" SetTargetFramework="TargetFramework=netstandard2.1" PrivateAssets="all" />
-    <ProjectReference Include="../Attributes/Attributes.csproj" PrivateAssets="all" />
-    <ProjectReference Include="../Encryption/Encryption.csproj" PrivateAssets="all" />
+    <ProjectReference Include="../Core/Core.csproj" SetTargetFramework="TargetFramework=netstandard2.1" />
+    <ProjectReference Include="../Attributes/Attributes.csproj" />
+    <ProjectReference Include="../Encryption/Encryption.csproj" />
   </ItemGroup>
 
   <ItemGroup>
