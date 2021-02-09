@@ -24,9 +24,6 @@ jobs:
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v1
 
-      - run: git checkout HEAD^2
-        if: ${{ github.event_name == 'pull_request' }}
-
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v1
 
