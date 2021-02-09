@@ -2,6 +2,7 @@ using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -10,7 +11,13 @@ namespace Lambdajection.Core
     /// <inheritdoc />
     public class DefaultHttpClient : IHttpClient, IDisposable
     {
+        private readonly JsonSerializerOptions options = new()
+        {
+            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+        };
+
         private HttpClient httpClient = new();
+
         private bool disposed;
 
         /// <inheritdoc />
@@ -21,7 +28,9 @@ namespace Lambdajection.Core
             CancellationToken cancellationToken = default
         )
         {
-            var jsonString = JsonSerializer.Serialize(payload);
+            cancellationToken.ThrowIfCancellationRequested();
+
+            var jsonString = JsonSerializer.Serialize(payload, options);
             var content = new StringContent(jsonString);
             content.Headers.Remove("Content-Type");
 
