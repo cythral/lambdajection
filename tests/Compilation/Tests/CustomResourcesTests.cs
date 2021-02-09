@@ -125,6 +125,7 @@ namespace Lambdajection.Tests.Compilation
             request.StackId = stackId;
             request.RequestId = requestId;
             request.LogicalResourceId = logicalResourceId;
+            request.PhysicalResourceId = null;
 
             await handler.Run(request, context);
 
@@ -137,6 +138,9 @@ namespace Lambdajection.Tests.Compilation
 
             // Tests to make sure status is serialized to all caps
             httpRequest.Body.Should().MatchRegex("\"Status\":[ ]?\"FAILED\"");
+
+            // LAMBJ-118 Null values cause 'Invalid PhysicalResourceId' error
+            httpRequest.Body.Should().NotMatchRegex("\"PhysicalResourceId\":[ ]?null");
 
             var body = JsonSerializer.Deserialize<CustomResourceResponse<ResponseData>>(httpRequest.Body);
             body.Should().Match<CustomResourceResponse<ResponseData>>(response =>
