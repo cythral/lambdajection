@@ -22,7 +22,7 @@
     <PackageReference Include="Microsoft.CodeAnalysis" Version="3.8.0" />
     <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.MSBuild" Version="3.8.0" />
     <PackageReference Include="NSubstitute" Version="4.2.2" />
-    <PackageReference Include="NuGet.ProjectModel" Version="5.9.0-rc.7097" />
+    <PackageReference Include="NuGet.ProjectModel" Version="5.10.0-preview.1.7112" />
     <PackageReference Include="nunit" Version="3.13.1" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.17.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.8.3" />
