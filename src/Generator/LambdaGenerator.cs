@@ -14,7 +14,8 @@ namespace Lambdajection.Generator
         private readonly GenerationContext context;
         private readonly string className;
         private readonly LambdaCompilationScanResult scanResults;
-        private readonly string inputType;
+        private readonly INamedTypeSymbol typeToValidate;
+        private readonly string inputTypeName;
         private readonly string inputParameterType;
         private readonly string returnType;
         private readonly BaseTypeSyntax[] typeConstraints;
@@ -22,8 +23,10 @@ namespace Lambdajection.Generator
         public LambdaGenerator(
             GenerationContext context,
             string className,
-            string inputType,
-            string? inputEncapsulationType,
+            INamedTypeSymbol inputType,
+            string inputTypeName,
+            INamedTypeSymbol inputEncapsulationType,
+            string? inputEncapsulationTypeName,
             string returnType,
             LambdaCompilationScanResult scanResults
         )
@@ -31,15 +34,19 @@ namespace Lambdajection.Generator
             this.context = context;
             this.className = className;
             this.scanResults = scanResults;
-            this.inputType = inputType;
+            this.inputTypeName = inputTypeName;
             this.returnType = returnType;
 
-            inputParameterType = inputEncapsulationType != null
-                ? $"{inputEncapsulationType}<{inputType}>"
+            typeToValidate = inputEncapsulationType != null
+                ? inputEncapsulationType.ConstructedFrom.Construct(inputType)
                 : inputType;
 
+            inputParameterType = inputEncapsulationTypeName != null
+                ? $"{inputEncapsulationTypeName}<{inputTypeName}>"
+                : inputTypeName;
+
             var interfaceName = context.LambdaInterfaceAttribute.InterfaceName;
-            typeConstraints = new[] { SimpleBaseType(ParseTypeName($"{interfaceName}<{inputType},{returnType}>")) };
+            typeConstraints = new[] { SimpleBaseType(ParseTypeName($"{interfaceName}<{inputTypeName},{returnType}>")) };
             context.Usings.Add(context.LambdaInterfaceAttribute.AssemblyName);
         }
 
@@ -47,12 +54,15 @@ namespace Lambdajection.Generator
         {
             var configuratorGenerator = new ConfiguratorGenerator(context, scanResults);
             var configurator = configuratorGenerator.Generate();
+            var validationGenerator = new ValidationsGenerator(typeToValidate, context);
+            var validationMethod = validationGenerator.GenerateValidationMethod();
             var result = ClassDeclaration(className)
                 .WithBaseList(BaseList(Token(ColonToken), SeparatedList(typeConstraints)))
                 .AddModifiers(Token(PartialKeyword))
                 .AddMembers(
                     GenerateRunnerMethod(),
-                    configurator);
+                    configurator,
+                    validationMethod);
 
             if (context.Settings.GenerateEntrypoint)
             {
@@ -138,7 +148,7 @@ namespace Lambdajection.Generator
             context.Usings.Add(configFactoryNamespace);
 
             var hostClass = context.LambdaHostAttribute.ClassName;
-            yield return ParseStatement($"await using var host = new {hostClass}<{className}, {inputType}, {returnType}, {context.StartupTypeName}, LambdajectionConfigurator, {configFactory}>();");
+            yield return ParseStatement($"await using var host = new {hostClass}<{className}, {inputTypeName}, {returnType}, {context.StartupTypeName}, LambdajectionConfigurator, {configFactory}>();");
             yield return ParseStatement($"return await host.Run(input, context);");
         }
 
@@ -150,7 +160,7 @@ namespace Lambdajection.Generator
             IEnumerable<StatementSyntax> GenerateBody()
             {
                 var runnerMethodName = context.RunnerMethodName;
-                yield return ParseStatement($"using var wrapper = HandlerWrapper.GetHandlerWrapper((Func<{inputType}, ILambdaContext, Task<{returnType}>>){runnerMethodName}, new DefaultLambdaJsonSerializer());");
+                yield return ParseStatement($"using var wrapper = HandlerWrapper.GetHandlerWrapper((Func<{inputTypeName}, ILambdaContext, Task<{returnType}>>){runnerMethodName}, new DefaultLambdaJsonSerializer());");
                 yield return ParseStatement($"using var bootstrap = new LambdaBootstrap(wrapper);");
                 yield return ParseStatement($"await bootstrap.RunAsync();");
             }

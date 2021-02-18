@@ -31,8 +31,12 @@ namespace Lambdajection.Core
         }
 
         /// <inheritdoc />
-        public override async Task<TLambdaOutput> InvokeLambda(TLambdaParameter parameter, CancellationToken cancellationToken = default)
+        public override async Task<TLambdaOutput> InvokeLambda(
+            TLambdaParameter parameter,
+            CancellationToken cancellationToken = default
+        )
         {
+            Lambda.Validate(parameter);
             return await Lambda.Handle(parameter, cancellationToken);
         }
     }

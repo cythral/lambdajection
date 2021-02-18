@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -41,5 +42,12 @@ namespace Lambdajection.CustomResource
         /// <param name="cancellationToken">Token used to cancel tasks.</param>
         /// <returns>Output data concerning the resource and/or related entities.</returns>
         Task<TResourceOutputData> Delete(CustomResourceRequest<TResourceProperties> request, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Runs validations on the custom resource request.
+        /// </summary>
+        /// <param name="request">The custom resource request.</param>
+        [CompilerGenerated]
+        void Validate(CustomResourceRequest<TResourceProperties> request);
     }
 }

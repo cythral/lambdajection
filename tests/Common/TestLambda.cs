@@ -15,5 +15,9 @@ namespace Lambdajection
 
             return Task.FromResult<object>(null!);
         }
+
+        public void Validate(object request)
+        {
+        }
     }
 }

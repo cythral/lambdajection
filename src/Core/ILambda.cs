@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -17,5 +18,12 @@ namespace Lambdajection.Core
         /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <returns>The lambda's return value.</returns>
         Task<TLambdaOutput> Handle(TLambdaParameter parameter, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Runs validations the lambda's input parameter.
+        /// </summary>
+        /// <param name="parameter">The lambda's input parameter.</param>
+        [CompilerGenerated]
+        void Validate(TLambdaParameter parameter);
     }
 }

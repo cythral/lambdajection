@@ -39,7 +39,10 @@ namespace Lambdajection.CustomResource
         }
 
         /// <inheritdoc />
-        public override async Task<TLambdaOutput> InvokeLambda(CustomResourceRequest<TLambdaParameter> parameter, CancellationToken cancellationToken = default)
+        public override async Task<TLambdaOutput> InvokeLambda(
+            CustomResourceRequest<TLambdaParameter> parameter,
+            CancellationToken cancellationToken = default
+        )
         {
             cancellationToken.ThrowIfCancellationRequested();
 
@@ -48,6 +51,7 @@ namespace Lambdajection.CustomResource
 
             try
             {
+                Lambda.Validate(parameter);
                 var data = await (parameter.RequestType switch
                 {
                     CustomResourceRequestType.Create => Lambda.Create(parameter, cancellationToken),

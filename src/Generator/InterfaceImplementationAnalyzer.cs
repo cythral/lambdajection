@@ -1,5 +1,6 @@
 using System.Collections.Immutable;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -11,8 +12,11 @@ namespace Lambdajection.Generator
     {
         private readonly ClassDeclarationSyntax classDeclaration;
         private readonly GenerationContext context;
-        private readonly string?[] typeMatches = new string?[2];
-        private readonly string?[] typeMatchEncapsulations = new string?[2];
+
+        private readonly INamedTypeSymbol?[] typeMatches = new INamedTypeSymbol?[2];
+        private readonly string?[] typeNameMatches = new string?[2];
+        private readonly INamedTypeSymbol?[] typeEncapsulationMatches = new INamedTypeSymbol?[2];
+        private readonly string?[] typeEncapsulationNameMatches = new string?[2];
 
         public InterfaceImplementationAnalyzer(
             ClassDeclarationSyntax classDeclaration,
@@ -46,8 +50,12 @@ namespace Lambdajection.Generator
 
             foreach (var interfaceMember in interfaceMembers)
             {
-                var found = false;
+                if (IsCompilerGenerated(interfaceMember))
+                {
+                    continue;
+                }
 
+                var found = false;
                 foreach (var classMember in classMembers)
                 {
                     if (classMember.Name != interfaceMember.Name ||
@@ -62,10 +70,10 @@ namespace Lambdajection.Generator
                     var interfaceMethodReturnType = interfaceMemberMethod.ReturnType;
                     var classMethodParameters = classMemberMethod.Parameters;
                     var interfaceMethodParameters = interfaceMemberMethod.Parameters;
-                    var parametersMatches = ParametersMatch(classMethodParameters, interfaceMethodParameters);
+                    var parametersMatch = ParametersMatch(classMethodParameters, interfaceMethodParameters);
                     var returnTypeMatches = TypesMatch(classMethodReturnType, interfaceMethodReturnType, 1);
 
-                    if (parametersMatches && returnTypeMatches)
+                    if (parametersMatch && returnTypeMatches)
                     {
                         found = true;
                     }
@@ -85,10 +93,21 @@ namespace Lambdajection.Generator
 
             return new Results
             {
-                InputTypeName = typeMatches[0],
-                InputEncapsulationTypeName = typeMatchEncapsulations[0],
-                OutputTypeName = typeMatches[1],
+                InputType = typeMatches[0],
+                InputTypeName = typeNameMatches[0],
+                InputEncapsulationType = typeEncapsulationMatches[0],
+                InputEncapsulationTypeName = typeEncapsulationNameMatches[0],
+                OutputTypeName = typeNameMatches[1],
             };
+        }
+
+        private bool IsCompilerGenerated(ISymbol member)
+        {
+            var query = from attribute in member.GetAttributes()
+                        where attribute.AttributeClass?.Name == nameof(CompilerGeneratedAttribute)
+                        select 1;
+
+            return query.Any();
         }
 
         private bool IsIncompatibleGeneric(
@@ -122,13 +141,15 @@ namespace Lambdajection.Generator
                 var type = position != -1 ? newInterfaceType.TypeArguments[position] : null;
                 var typeName = type?.ToDisplayString();
 
-                if (typeMatches[ordinal] != null && typeName != typeMatches[ordinal])
+                if (typeNameMatches[ordinal] != null && typeName != typeNameMatches[ordinal])
                 {
                     return true;
                 }
 
-                typeMatches[ordinal] ??= typeName;
-                typeMatchEncapsulations[ordinal] ??= namedInterfaceType.Name;
+                typeMatches[ordinal] ??= type as INamedTypeSymbol;
+                typeNameMatches[ordinal] ??= typeName;
+                typeEncapsulationMatches[ordinal] ??= namedInterfaceType;
+                typeEncapsulationNameMatches[ordinal] ??= namedInterfaceType?.Name;
             }
 
             return false;
@@ -184,8 +205,9 @@ namespace Lambdajection.Generator
             if (interfaceType is ITypeParameterSymbol interfaceTypeParameter
                 && interfaceTypeParameter.Ordinal == ordinal)
             {
-                typeMatches[ordinal] ??= classTypeName;
-                interfaceTypeName = typeMatches[ordinal];
+                typeMatches[ordinal] ??= classType as INamedTypeSymbol;
+                typeNameMatches[ordinal] ??= classTypeName;
+                interfaceTypeName = typeNameMatches[ordinal];
             }
 
             return classTypeName == interfaceTypeName;
@@ -193,7 +215,11 @@ namespace Lambdajection.Generator
 
         public class Results
         {
+            public INamedTypeSymbol? InputType { get; set; }
+
             public string? InputTypeName { get; set; }
+
+            public INamedTypeSymbol? InputEncapsulationType { get; set; }
 
             public string? InputEncapsulationTypeName { get; set; }
 
