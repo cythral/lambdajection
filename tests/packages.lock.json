@@ -33,18 +33,18 @@
       },
       "AWSSDK.SecurityToken": {
         "type": "Direct",
-        "requested": "[3.5.1.51, )",
-        "resolved": "3.5.1.51",
-        "contentHash": "x2frlD9489fmam2W6uDtpbeBucEr6NSEfGLnzxOQajh3cgJsMPk7jdlac9Ka2/oC4sJZxG5ZLHh7CkYgXNJguw==",
+        "requested": "[3.5.1.52, )",
+        "resolved": "3.5.1.52",
+        "contentHash": "YNLz/jL2JNTW0gHjzp8teBvUO7DKjl7x8UMk3qwPXGzXcNwgvvnLojDjT7qW//pp9xVbmCp2eEdXP2/Fs8MeyA==",
         "dependencies": {
-          "AWSSDK.Core": "[3.5.3, 3.6.0)"
+          "AWSSDK.Core": "[3.5.3.1, 3.6.0)"
         }
       },
       "coverlet.collector": {
         "type": "Direct",
-        "requested": "[3.0.2, )",
-        "resolved": "3.0.2",
-        "contentHash": "iBvPAIDaI7j/iMx/DzCGCJ3rdiOmel9VINEfaTiBv/NKIGHOP4X3hqc6Q1wgMtArEshlhXexQknP17SK4vXb1w=="
+        "requested": "[3.0.3, )",
+        "resolved": "3.0.3",
+        "contentHash": "PdyhdzG2LK7YUEtccObPql+3OuFODaFNeYayxdPoK1eHb2StZoeQf1WMb16QrKiIdi4fs5Kog8jxXtlZOgAEuA=="
       },
       "FluentAssertions": {
         "type": "Direct",
@@ -227,10 +227,10 @@
       },
       "AWSSDK.KeyManagementService": {
         "type": "Transitive",
-        "resolved": "3.5.2.11",
-        "contentHash": "1RsM5BPsicLzzmiuxvgvykw08L7sgtd2PSOiOrzVCFQmWxZMVK0JWVF5oUHkVgq5QUQadEeta+Dpz4euMzAIkA==",
+        "resolved": "3.5.2.12",
+        "contentHash": "Ym3FK0rUxjqJwV4SbmUpEle6j/HhHRmXPR4/XAbVkehQTjXSBBTmUuoE7XIqOVvKjirNLdkuKUTeViEPnVtD0w==",
         "dependencies": {
-          "AWSSDK.Core": "[3.5.2.10, 3.6.0)"
+          "AWSSDK.Core": "[3.5.3.1, 3.6.0)"
         }
       },
       "Castle.Core": {
@@ -1569,7 +1569,7 @@
       "Lambdajection.Encryption": {
         "type": "Project",
         "dependencies": {
-          "AWSSDK.KeyManagementService": "3.5.2.11"
+          "AWSSDK.KeyManagementService": "3.5.2.12"
         }
       },
       "Lambdajection.Generator": {
