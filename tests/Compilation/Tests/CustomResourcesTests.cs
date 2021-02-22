@@ -141,7 +141,7 @@ namespace Lambdajection.Tests.Compilation
                 response.RequestId == requestId &&
                 response.LogicalResourceId == logicalResourceId &&
                 response.Status == CustomResourceResponseStatus.Failed &&
-                response.Reason == "Expected Error Message."
+                response.Reason == "Expected Error Message"
             );
         }
     }

@@ -2,6 +2,8 @@ using System.Collections.Immutable;
 using System.Linq;
 using System.Runtime.CompilerServices;
 
+using Lambdajection.Generator.Utils;
+
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -17,6 +19,7 @@ namespace Lambdajection.Generator
         private readonly string?[] typeNameMatches = new string?[2];
         private readonly INamedTypeSymbol?[] typeEncapsulationMatches = new INamedTypeSymbol?[2];
         private readonly string?[] typeEncapsulationNameMatches = new string?[2];
+        private readonly TypeUtils typeUtils = new();
 
         public InterfaceImplementationAnalyzer(
             ClassDeclarationSyntax classDeclaration,
@@ -104,7 +107,8 @@ namespace Lambdajection.Generator
         private bool IsCompilerGenerated(ISymbol member)
         {
             var query = from attribute in member.GetAttributes()
-                        where attribute.AttributeClass?.Name == nameof(CompilerGeneratedAttribute)
+                        where attribute.AttributeClass != null
+                            && typeUtils.IsSymbolEqualToType(attribute.AttributeClass, typeof(CompilerGeneratedAttribute))
                         select 1;
 
             return query.Any();
