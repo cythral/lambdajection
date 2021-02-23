@@ -104,22 +104,21 @@ namespace Lambdajection.Tests.Compilation
         }
 
         [Test, Auto]
-        public async Task Run_SendsFailure(
-            string name,
+        public async Task Run_SendsFailure_IfNameIsLessThan3Chars(
             string requestId,
             string stackId,
             string logicalResourceId,
-            string errorMessage,
             CustomResourceRequestType requestType,
             [Substitute] ILambdaContext context
         )
         {
+            var name = "ab";
             using var generation = await project.GenerateAssembly();
             using var server = new InMemoryServer();
 
             var (assembly, _) = generation;
             var handler = new HandlerWrapper<object>(assembly, handlerTypeName);
-            var request = CreateRequest(assembly, name, true, errorMessage);
+            var request = CreateRequest(assembly, name);
             request.RequestType = requestType;
             request.ResponseURL = new Uri(server.Address);
             request.StackId = stackId;
@@ -136,19 +135,13 @@ namespace Lambdajection.Tests.Compilation
             )
             .Which;
 
-            // Tests to make sure status is serialized to all caps
-            httpRequest.Body.Should().MatchRegex("\"Status\":[ ]?\"FAILED\"");
-
-            // LAMBJ-118 Null values cause 'Invalid PhysicalResourceId' error
-            httpRequest.Body.Should().NotMatchRegex("\"PhysicalResourceId\":[ ]?null");
-
             var body = JsonSerializer.Deserialize<CustomResourceResponse<ResponseData>>(httpRequest.Body);
             body.Should().Match<CustomResourceResponse<ResponseData>>(response =>
                 response.StackId == stackId &&
                 response.RequestId == requestId &&
                 response.LogicalResourceId == logicalResourceId &&
                 response.Status == CustomResourceResponseStatus.Failed &&
-                response.Reason == errorMessage
+                response.Reason == "Expected Error Message"
             );
         }
     }

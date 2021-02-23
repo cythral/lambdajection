@@ -21,5 +21,9 @@ namespace Lambdajection
         {
             return Task.FromResult((TestCustomResourceOutputData)null!);
         }
+
+        public virtual void Validate(CustomResourceRequest<object> request)
+        {
+        }
     }
 }

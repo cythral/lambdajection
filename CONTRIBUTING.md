@@ -96,6 +96,7 @@ We try to use a roll-forward method of making changes, rather than going back an
 
 - To add a new dependency to a project, delete that project's lock file then run `dotnet add package PackageId`
 - The [Markdown All-In-One VSCode extension](https://marketplace.visualstudio.com/items?itemName=yzhang.markdown-all-in-one) can be used to update table of contents in the README and contributing guide.
+- To add an interface method to Lambdas that will be generated at compile-time, be sure to add the `CompilerGeneratedAttribute` to the interface declaration for it (its in the System.Runtime.CompilerServices namespace).
 
 ## 7. Licensing
 

@@ -89,7 +89,11 @@ namespace Lambdajection.Core
         /// <param name="context">The context object to pass to the lambda.</param>
         /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <returns>The return value of the lambda.</returns>
-        public async Task<TLambdaOutput> Run(TLambdaParameter parameter, ILambdaContext context, CancellationToken cancellationToken = default)
+        public async Task<TLambdaOutput> Run(
+            TLambdaParameter parameter,
+            ILambdaContext context,
+            CancellationToken cancellationToken = default
+        )
         {
             if (RunInitializationServices)
             {

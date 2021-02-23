@@ -8,6 +8,7 @@
     <ItemGroup>
         <PackageReference Include="Lambdajection" Version="$(LambdajectionVersion)" />
         <PackageReference Include="Lambdajection.CustomResource" Version="$(LambdajectionVersion)" />
+        <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
     </ItemGroup>
 
 </Project>

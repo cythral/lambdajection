@@ -510,6 +510,11 @@
           "System.Memory": "4.5.4"
         }
       },
+      "System.ComponentModel.Annotations": {
+        "type": "Transitive",
+        "resolved": "5.0.0",
+        "contentHash": "dMkqfy2el8A8/I76n2Hi1oBFEbG1SfxD2l5nhwXV3XjlnOmwxJlQbYpJH4W51odnU9sARCSAgv7S3CyAFMkpYg=="
+      },
       "System.Composition": {
         "type": "Transitive",
         "resolved": "1.0.31",
@@ -1362,7 +1367,8 @@
           "Lambdajection.Core": "1.0.0",
           "Lambdajection.Encryption": "1.0.0",
           "Microsoft.CodeAnalysis": "3.8.0",
-          "Microsoft.CodeAnalysis.CSharp.Workspaces": "3.8.0"
+          "Microsoft.CodeAnalysis.CSharp.Workspaces": "3.8.0",
+          "System.ComponentModel.Annotations": "5.0.0"
         }
       }
     }
