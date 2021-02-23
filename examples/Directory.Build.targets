@@ -33,7 +33,7 @@
         </Exec>
 
         <Exec
-            Command="aws lambda invoke --function-name $(LambdaName) --payload '@(_InputPayload, '')' $(_OutputFileName)"
+            Command="aws lambda invoke --function-name $(LambdaName) --cli-binary-format raw-in-base64-out --payload '@(_InputPayload, '')' $(_OutputFileName)"
             StandardOutputImportance="low"
             Condition="$(TestType) == 'InvokeLambda'"
         />
