@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Lambdajection.CompilationTests.CustomResources
@@ -8,6 +9,10 @@ namespace Lambdajection.CompilationTests.CustomResources
         public string Name { get; set; }
 
         public bool ShouldFail { get; set; } = false;
+
+        // This is a test - the validations generator should not recurse into collection types
+        // (it will cause a stack overflow if it does recurse, so simply running it will suffice)
+        public List<string> ValidationsGeneratorShouldNotRecurseIntoCollections { get; set; }
 
         public string ErrorMessage { get; set; } = string.Empty;
     }
