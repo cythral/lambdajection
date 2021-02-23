@@ -55,10 +55,13 @@ namespace Lambdajection.Generator
         {
             typeToValidate ??= this.typeToValidate;
 
-            var members = typeToValidate.GetMembers().OfType<IPropertySymbol>() ?? ImmutableArray<IPropertySymbol>.Empty;
-            foreach (var member in members)
+            var members = from member in typeToValidate.GetMembers().OfType<IPropertySymbol>()
+                          where member.DeclaredAccessibility == Accessibility.Public
+                          select member;
+
+            foreach (var member in members ?? ImmutableArray<IPropertySymbol>.Empty)
             {
-                if (member.Type is INamedTypeSymbol memberType && memberType.ContainingAssembly.Name != "System")
+                if (member.Type is INamedTypeSymbol memberType && !memberType.ContainingAssembly.Name.StartsWith("System"))
                 {
                     ExpressionSyntax newParentExpression = parentExpression == null
                         ? ConditionalAccessExpression(
