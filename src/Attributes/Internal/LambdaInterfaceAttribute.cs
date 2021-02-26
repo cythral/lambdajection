@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 
 namespace Lambdajection.Attributes
 {
@@ -6,6 +7,7 @@ namespace Lambdajection.Attributes
     /// Build-time only attribute to help determine what interface to apply to a Lambda.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
+    [Conditional("CodeGeneration")]
     internal class LambdaInterfaceAttribute : Attribute
     {
         /// <summary>

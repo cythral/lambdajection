@@ -1,6 +1,7 @@
 <Project>
     <PropertyGroup>
         <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
+        <DefineConstants>CodeGeneration;$(DefineConstants)</DefineConstants>
     </PropertyGroup>
 
     <ItemGroup>
