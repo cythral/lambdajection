@@ -20,7 +20,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Cythral.CloudFormation.BuildTasks" Version="0.4.2" PrivateAssets="all" />
+        <PackageReference Include="Cythral.CloudFormation.BuildTasks" Version="0.5.0" PrivateAssets="all" />
         <ProjectReference Include="../Generator/Generator.csproj" ReferenceOutputAssembly="false" />
     </ItemGroup>
 
@@ -56,18 +56,10 @@
         </PropertyGroup>
 
         <!-- Get the Layer Bucket Name -->
-        <Exec
-            Command="aws cloudformation list-exports --query Exports[?Name==\`$(BucketExportName)\`].Value --output text"
-            ConsoleToMsBuild="true"
-            StandardOutputImportance="low"
-        >
+        <Exec Command="aws cloudformation list-exports --query Exports[?Name==\`$(BucketExportName)\`].Value --output text" ConsoleToMsBuild="true" StandardOutputImportance="low">
             <Output TaskParameter="ConsoleOutput" PropertyName="LayerBucket" />
         </Exec>
 
-        <PackageTemplate
-            TemplateFile="$(TemplateFilePath)"
-            PackageBucket="$(LayerBucket)"
-            OutputTemplateFile="$(OutputLayerTemplateFilePath)"
-        />
+        <PackageTemplate TemplateFile="$(TemplateFilePath)" PackageBucket="$(LayerBucket)" OutputTemplateFile="$(OutputLayerTemplateFilePath)" />
     </Target>
 </Project>
