@@ -1,38 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project>
-    <PropertyGroup>
-        <LangVersion>9.0</LangVersion>
-        <Nullable>enable</Nullable>
-        <LambdaName>lambdajection-$(MSBuildProjectName.ToLower())</LambdaName>
-        <TestType>InvokeLambda</TestType>
-    </PropertyGroup>
-
-    <PropertyGroup>
-        <SuppressNETCoreSdkPreviewMessage>true</SuppressNETCoreSdkPreviewMessage>
-        <PublishReadyToRunShowWarnings>true</PublishReadyToRunShowWarnings>
-        <OutputPath>$(MSBuildThisFileDirectory)..\bin\Examples\$(MSBuildProjectName)\$(Configuration)</OutputPath>
-        <BaseIntermediateOutputPath>$(MSBuildThisFileDirectory)..\obj\Examples\$(MSBuildProjectName)</BaseIntermediateOutputPath>
-        <PackageOutputPath>$(MSBuildThisFileDirectory)..\bin\Packages\Examples\$(Configuration)</PackageOutputPath>
-        <RestorePackagesPath>$(MSBuildThisFileDirectory)..\.nuget\examples</RestorePackagesPath>
-        <_PackagesDebug>$(MSBuildThisFileDirectory)..\bin\Packages\Debug</_PackagesDebug>
-        <_PackagesRelease>$(MSBuildThisFileDirectory)..\bin\Packages\Release</_PackagesRelease>
-        <CompilerGeneratedFilesOutputPath>$(MSBuildThisFileDirectory)..\obj\Examples\$(MSBuildProjectName)\$(Configuration)</CompilerGeneratedFilesOutputPath>
-        <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
-        <RestoreAdditionalProjectSources>@(CustomLocalFeed);$(RestoreAdditionalProjectSources)</RestoreAdditionalProjectSources>
-    </PropertyGroup>
-
-    <ItemGroup>
-        <CustomLocalFeed Include="$(_PackagesDebug)" Condition="Exists($(_PackagesDebug))" />
-        <CustomLocalFeed Include="$(_PackagesRelease)" Condition="Exists($(_PackagesRelease))" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <AdditionalFiles Include="$(MSBuildThisFileDirectory)..\.editorconfig" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <PackageReference Include="Cythral.CloudFormation.BuildTasks" Version="0.4.2" PrivateAssets="all" />
-        <PackageReference Include="Microsoft.CodeAnalysis.CSharp.CodeStyle" Version="3.8.0-4.final" PrivateAssets="all" />
-    </ItemGroup>
-
-    <Target Name="EndToEndTestCleanup" />
+  <PropertyGroup>
+    <LangVersion>9.0</LangVersion>
+    <Nullable>enable</Nullable>
+    <LambdaName>lambdajection-$(MSBuildProjectName.ToLower())</LambdaName>
+    <TestType>InvokeLambda</TestType>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SuppressNETCoreSdkPreviewMessage>true</SuppressNETCoreSdkPreviewMessage>
+    <PublishReadyToRunShowWarnings>true</PublishReadyToRunShowWarnings>
+    <OutputPath>$(MSBuildThisFileDirectory)..\bin\Examples\$(MSBuildProjectName)\$(Configuration)</OutputPath>
+    <BaseIntermediateOutputPath>$(MSBuildThisFileDirectory)..\obj\Examples\$(MSBuildProjectName)</BaseIntermediateOutputPath>
+    <PackageOutputPath>$(MSBuildThisFileDirectory)..\bin\Packages\Examples\$(Configuration)</PackageOutputPath>
+    <RestorePackagesPath>$(MSBuildThisFileDirectory)..\.nuget\examples</RestorePackagesPath>
+    <_PackagesDebug>$(MSBuildThisFileDirectory)..\bin\Packages\Debug</_PackagesDebug>
+    <_PackagesRelease>$(MSBuildThisFileDirectory)..\bin\Packages\Release</_PackagesRelease>
+    <CompilerGeneratedFilesOutputPath>$(MSBuildThisFileDirectory)..\obj\Examples\$(MSBuildProjectName)\$(Configuration)</CompilerGeneratedFilesOutputPath>
+    <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
+    <RestoreAdditionalProjectSources>@(CustomLocalFeed);$(RestoreAdditionalProjectSources)</RestoreAdditionalProjectSources>
+  </PropertyGroup>
+  <ItemGroup>
+    <CustomLocalFeed Include="$(_PackagesDebug)" Condition="Exists($(_PackagesDebug))" />
+    <CustomLocalFeed Include="$(_PackagesRelease)" Condition="Exists($(_PackagesRelease))" />
+  </ItemGroup>
+  <ItemGroup>
+    <AdditionalFiles Include="$(MSBuildThisFileDirectory)..\.editorconfig" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Cythral.CloudFormation.BuildTasks" Version="0.5.0" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.CodeStyle" Version="3.8.0-4.final" PrivateAssets="all" />
+  </ItemGroup>
+  <Target Name="EndToEndTestCleanup" />
 </Project>
