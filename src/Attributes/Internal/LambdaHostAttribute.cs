@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics;
 
 namespace Lambdajection.Attributes
 {
@@ -8,7 +7,6 @@ namespace Lambdajection.Attributes
     /// for an attribute.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
-    [Conditional("CodeGeneration")]
     internal class LambdaHostAttribute : Attribute
     {
         /// <summary>

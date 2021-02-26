@@ -11,7 +11,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Lambdajection.Attributes" Version="$(LambdajectionVersion)" />
         <PackageReference Include="Lambdajection.Core" Version="$(LambdajectionVersion)" />
         <PackageReference Include="Lambdajection.Encryption" Version="$(LambdajectionVersion)" />
         <PackageReference Include="Lambdajection.CustomResource" Version="$(LambdajectionVersion)" />

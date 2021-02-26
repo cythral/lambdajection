@@ -22,9 +22,14 @@
     <ItemGroup>
         <PackageReference Include="Cythral.CloudFormation.BuildTasks" Version="0.5.0" PrivateAssets="all" />
         <ProjectReference Include="../Generator/Generator.csproj" ReferenceOutputAssembly="false" />
+        <ProjectReference Include="../Attributes/Attributes.csproj" />
     </ItemGroup>
 
     <Target Name="CreateStore" DependsOnTargets="GetBuildVersion;ResolvePackageAssets">
+        <PropertyGroup>
+            <ReferencePaths>@(ReferencePath, '%3B')</ReferencePaths>
+        </PropertyGroup>
+
         <ItemGroup>
             <StoreArgs Include="--manifest $(MSBuildThisFileDirectory)/Manifest/Manifest.csproj" />
             <StoreArgs Include="--runtime linux-x64" />
@@ -32,6 +37,7 @@
             <StoreArgs Include="--skip-optimization" Condition="!$([MSBuild]::IsOsPlatform('linux'))" />
             <StoreArgs Include="/p:Configuration=$(Configuration)" />
             <StoreArgs Include="/p:LambdajectionVersion=$(PackageVersion)" />
+            <StoreArgs Include="/p:ReferencePath=$(ReferencePaths)" />
         </ItemGroup>
 
         <MakeDir Directories="$(MSBuildThisFileDirectory)Manifest/.nuget" />
