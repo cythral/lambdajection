@@ -1,6 +1,7 @@
-using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
+
+using Lambdajection.Attributes;
 
 namespace Lambdajection.CustomResource
 {
@@ -47,7 +48,16 @@ namespace Lambdajection.CustomResource
         /// Runs validations on the custom resource request.
         /// </summary>
         /// <param name="request">The custom resource request.</param>
-        [CompilerGenerated]
+        [Generated("Lambdajection.Generator", "Lambdajection.Generator.ValidationsGenerator")]
         void Validate(CustomResourceRequest<TResourceProperties> request);
+
+        /*
+        /// <summary>
+        /// Determines whether or not the custom resource requires replacement.
+        /// </summary>
+        /// <param name="request">The custom resource request.</param>
+        /// <returns>True if a new resource should be created, or false if the existing resource can be updated.</returns>
+        [Generated]
+        bool RequiresReplacement(CustomResourceRequest<TResourceProperties> request);*/
     }
 }

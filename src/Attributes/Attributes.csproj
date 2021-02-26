@@ -22,6 +22,8 @@
 
   <ItemGroup>
     <InternalsVisibleTo Include="Lambdajection.Generator" />
+    <InternalsVisibleTo Include="Lambdajection.Core" />
+    <InternalsVisibleTo Include="Lambdajection.CustomResource" />
     <InternalsVisibleTo Include="Lambdajection.Tests" />
     <InternalsVisibleTo Include="Lambdajection.CompilationTests.MissingLambdaInterface" />
   </ItemGroup>

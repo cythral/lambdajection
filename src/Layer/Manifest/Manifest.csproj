@@ -16,6 +16,10 @@
         <PackageReference Include="Lambdajection.CustomResource" Version="$(LambdajectionVersion)" />
     </ItemGroup>
 
+    <!-- <Target Name="CleanOutdatedPackages" BeforeTargets="Restore">
+        <RemoveDir Directories="$(MSBuildthisFileDirectory)\.nuget\awssdk.core" Condition="Exists('$(MSBuildthisFileDirectory)\.nuget\awssdk.core')" />
+    </Target> -->
+
     <!-- Because AWSSDK.Core is marked as PrivateAssets="all" in Lambdajection.Core, 
          its dependency graph is generated without it included.
          Therefore, for ReadyToRun to do its thing, we have to copy the aws sdk core assembly and its dependencies

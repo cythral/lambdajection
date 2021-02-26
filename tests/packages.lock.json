@@ -1549,6 +1549,7 @@
       "Lambdajection.CustomResource": {
         "type": "Project",
         "dependencies": {
+          "Lambdajection.Attributes": "1.0.0",
           "Lambdajection.Core": "1.0.0"
         }
       },
