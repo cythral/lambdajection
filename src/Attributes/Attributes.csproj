@@ -21,6 +21,10 @@
   </Target>
 
   <ItemGroup>
+    <ProjectReference Include="../Framework/Framework.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <InternalsVisibleTo Include="Lambdajection.Generator" />
     <InternalsVisibleTo Include="Lambdajection.Core" />
     <InternalsVisibleTo Include="Lambdajection.CustomResource" />

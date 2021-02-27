@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 
-using Lambdajection.Attributes;
+using Lambdajection.Framework;
 using Lambdajection.Generator.Attributes;
 using Lambdajection.Generator.Models;
 using Lambdajection.Generator.Utils;

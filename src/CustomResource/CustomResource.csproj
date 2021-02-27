@@ -13,6 +13,7 @@
   <ItemGroup>
     <ProjectReference Include="../Core/Core.csproj" />
     <ProjectReference Include="../Attributes/Attributes.csproj" />
+    <ProjectReference Include="../Framework/Framework.csproj" />
   </ItemGroup>
 
   <ItemGroup>

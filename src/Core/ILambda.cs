@@ -1,7 +1,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-using Lambdajection.Attributes;
+using Lambdajection.Framework;
 
 namespace Lambdajection.Core
 {

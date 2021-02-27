@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.1</TargetFramework>
+        <PackageId>Lambdajection.Framework</PackageId>
+        <NoWarn>NU5128;NU5131</NoWarn>
+        <AssemblyName>$(PackageId)</AssemblyName>
+        <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
+        <PackageDescription>Includes attributes that provide a framework for generating Lambdas with Lambdajection.</PackageDescription>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <InternalsVisibleTo Include="Lambdajection.Attributes" />
+        <InternalsVisibleTo Include="Lambdajection.Generator" />
+        <InternalsVisibleTo Include="Lambdajection.Core" />
+        <InternalsVisibleTo Include="Lambdajection.CustomResource" />
+        <InternalsVisibleTo Include="Lambdajection.Tests" />
+        <InternalsVisibleTo Include="Lambdajection.CompilationTests.MissingLambdaInterface" />
+    </ItemGroup>
+</Project>

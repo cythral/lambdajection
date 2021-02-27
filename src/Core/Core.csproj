@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Attributes\Attributes.csproj" />
+    <ProjectReference Include="..\Framework\Framework.csproj" />
   </ItemGroup>
 
   <ItemGroup Condition="$(TargetFramework) == 'netcoreapp3.1' or $(TargetFramework) == 'net5.0'">

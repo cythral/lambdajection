@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Threading;
 
-using Lambdajection.Attributes;
+using Lambdajection.Framework;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;

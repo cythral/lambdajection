@@ -27,7 +27,7 @@
 
     <Target Name="CreateStore" DependsOnTargets="GetBuildVersion;ResolvePackageAssets">
         <PropertyGroup>
-            <ReferencePaths>@(ReferencePath, '%3B')</ReferencePaths>
+            <ReferencePaths>@(ReferencePath, '%253B')</ReferencePaths>
         </PropertyGroup>
 
         <ItemGroup>
@@ -37,7 +37,6 @@
             <StoreArgs Include="--skip-optimization" Condition="!$([MSBuild]::IsOsPlatform('linux'))" />
             <StoreArgs Include="/p:Configuration=$(Configuration)" />
             <StoreArgs Include="/p:LambdajectionVersion=$(PackageVersion)" />
-            <StoreArgs Include="/p:ReferencePath=$(ReferencePaths)" />
         </ItemGroup>
 
         <MakeDir Directories="$(MSBuildThisFileDirectory)Manifest/.nuget" />

@@ -1,7 +1,7 @@
 using System;
 using System.Reflection;
 
-using Lambdajection.Attributes;
+using Lambdajection.Framework;
 
 using Microsoft.CodeAnalysis;
 

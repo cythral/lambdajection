@@ -8,7 +8,9 @@ using System.Threading;
 
 using Lambdajection.Attributes;
 using Lambdajection.Core;
+using Lambdajection.Framework;
 using Lambdajection.Generator.Attributes;
+using Lambdajection.Generator.Utils;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -24,6 +26,7 @@ namespace Lambdajection.Generator
     public class UnitGenerator : ISourceGenerator
     {
         private readonly UsingsGenerator usingsGenerator = new();
+        private readonly TypeUtils typeUtils = new();
 
         public void Initialize(GeneratorInitializationContext context)
         {
@@ -94,17 +97,23 @@ namespace Lambdajection.Generator
             }
         }
 
-        public static TAttribute GetMetadataAttribute<TAttribute>(ImmutableArray<AttributeData> attributes)
+        public TAttribute GetMetadataAttribute<TAttribute>(ImmutableArray<AttributeData> attributes)
         {
             foreach (var attr in attributes)
             {
-                if (attr.AttributeClass?.Name == typeof(TAttribute).Name)
+                if (attr.AttributeClass != null && typeUtils.IsSymbolEqualToType(attr.AttributeClass, typeof(TAttribute)))
                 {
                     return AttributeFactory.Create<TAttribute>(attr);
                 }
             }
 
-            throw new Exception();
+            throw new GenerationFailureException
+            {
+                Id = "LJ0005",
+                Title = "Unable to get Framework Metadata",
+                Description = $"An error occurred while attempting to fetch metadata from {typeof(TAttribute).Name}",
+                Location = Location.None,
+            };
         }
 
         public static T? GetAttributeArgument<T>(AttributeData attributeData, string argName)
