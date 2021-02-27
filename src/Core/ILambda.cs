@@ -1,6 +1,7 @@
-using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
+
+using Lambdajection.Framework;
 
 namespace Lambdajection.Core
 {
@@ -23,7 +24,7 @@ namespace Lambdajection.Core
         /// Runs validations the lambda's input parameter.
         /// </summary>
         /// <param name="parameter">The lambda's input parameter.</param>
-        [CompilerGenerated]
+        [Generated("Lambdajection.Generator", "Lambdajection.Generator.ValidationsGenerator")]
         void Validate(TLambdaParameter parameter);
     }
 }

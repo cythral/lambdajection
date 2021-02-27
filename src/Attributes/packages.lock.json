@@ -47,6 +47,9 @@
         "type": "Transitive",
         "resolved": "1.2.0.321",
         "contentHash": "CLL1cwvzGyXsCDzHQuAV3STrkIfTXqlS/vnxJTlSiRmmFjnTnoNVIZWwv738/hWxoh8MjPyHlp7eLossZIB5kg=="
+      },
+      "Lambdajection.Framework": {
+        "type": "Project"
       }
     }
   }

@@ -247,19 +247,26 @@
         }
       },
       "Lambdajection.Attributes": {
-        "type": "Project"
+        "type": "Project",
+        "dependencies": {
+          "Lambdajection.Framework": "1.0.0"
+        }
       },
       "Lambdajection.Core": {
         "type": "Project",
         "dependencies": {
           "Amazon.Lambda.Core": "1.2.0",
           "Lambdajection.Attributes": "1.0.0",
+          "Lambdajection.Framework": "1.0.0",
           "Microsoft.Extensions.Configuration": "5.0.0",
           "Microsoft.Extensions.Configuration.EnvironmentVariables": "5.0.0",
           "Microsoft.Extensions.DependencyInjection": "5.0.1",
           "Microsoft.Extensions.Logging": "5.0.0",
           "Microsoft.Extensions.Logging.Console": "5.0.0"
         }
+      },
+      "Lambdajection.Framework": {
+        "type": "Project"
       }
     }
   }

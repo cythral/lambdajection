@@ -205,6 +205,12 @@
         "contentHash": "+luxMQNZ2WqeffBU7Ml6njIvxc8169NW2oU+ygNudXQGZiarjE7DOtN7bILiQjTZjkmwwRZGTtLzmdrSI/Ustw=="
       },
       "Lambdajection.Attributes": {
+        "type": "Project",
+        "dependencies": {
+          "Lambdajection.Framework": "1.0.0"
+        }
+      },
+      "Lambdajection.Framework": {
         "type": "Project"
       }
     },
@@ -469,6 +475,12 @@
         }
       },
       "Lambdajection.Attributes": {
+        "type": "Project",
+        "dependencies": {
+          "Lambdajection.Framework": "1.0.0"
+        }
+      },
+      "Lambdajection.Framework": {
         "type": "Project"
       }
     },
@@ -664,6 +676,12 @@
         "contentHash": "CLL1cwvzGyXsCDzHQuAV3STrkIfTXqlS/vnxJTlSiRmmFjnTnoNVIZWwv738/hWxoh8MjPyHlp7eLossZIB5kg=="
       },
       "Lambdajection.Attributes": {
+        "type": "Project",
+        "dependencies": {
+          "Lambdajection.Framework": "1.0.0"
+        }
+      },
+      "Lambdajection.Framework": {
         "type": "Project"
       }
     }

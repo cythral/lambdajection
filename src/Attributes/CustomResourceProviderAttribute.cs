@@ -1,6 +1,8 @@
 using System;
 using System.Diagnostics;
 
+using Lambdajection.Framework;
+
 namespace Lambdajection.Attributes
 {
     /// <summary>

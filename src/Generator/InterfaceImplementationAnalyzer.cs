@@ -1,7 +1,10 @@
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
-using System.Runtime.CompilerServices;
 
+using Lambdajection.Framework;
+using Lambdajection.Generator.Attributes;
+using Lambdajection.Generator.Models;
 using Lambdajection.Generator.Utils;
 
 using Microsoft.CodeAnalysis;
@@ -10,7 +13,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace Lambdajection.Generator
 {
-    public class InterfaceImplementationAnalyzer
+    internal class InterfaceImplementationAnalyzer
     {
         private readonly ClassDeclarationSyntax classDeclaration;
         private readonly GenerationContext context;
@@ -21,7 +24,9 @@ namespace Lambdajection.Generator
         private readonly string?[] typeEncapsulationNameMatches = new string?[2];
         private readonly TypeUtils typeUtils = new();
 
-        public InterfaceImplementationAnalyzer(
+        private readonly List<GeneratedMethodInfo> generatedMethods = new();
+
+        internal InterfaceImplementationAnalyzer(
             ClassDeclarationSyntax classDeclaration,
             GenerationContext context
         )
@@ -30,7 +35,7 @@ namespace Lambdajection.Generator
             this.context = context;
         }
 
-        public Results Analyze()
+        internal Results Analyze()
         {
             var classType = context.SemanticModel.GetDeclaredSymbol(classDeclaration) as ITypeSymbol;
             var attr = context.LambdaInterfaceAttribute;
@@ -53,8 +58,16 @@ namespace Lambdajection.Generator
 
             foreach (var interfaceMember in interfaceMembers)
             {
-                if (IsCompilerGenerated(interfaceMember))
+                if (IsCompilerGenerated(interfaceMember, out var generatedAttribute)
+                    && interfaceMember is IMethodSymbol interfaceMethodSymbol)
                 {
+                    generatedMethods.Add(new GeneratedMethodInfo
+                    {
+                        GeneratedAttribute = generatedAttribute!,
+                        GeneratedMethod = interfaceMethodSymbol,
+                        Location = classDeclaration.GetLocation(),
+                    });
+
                     continue;
                 }
 
@@ -101,17 +114,18 @@ namespace Lambdajection.Generator
                 InputEncapsulationType = typeEncapsulationMatches[0],
                 InputEncapsulationTypeName = typeEncapsulationNameMatches[0],
                 OutputTypeName = typeNameMatches[1],
+                GeneratedMethods = generatedMethods,
             };
         }
 
-        private bool IsCompilerGenerated(ISymbol member)
+        private bool IsCompilerGenerated(ISymbol member, out GeneratedAttribute? generatedAttribute)
         {
             var query = from attribute in member.GetAttributes()
                         where attribute.AttributeClass != null
-                            && typeUtils.IsSymbolEqualToType(attribute.AttributeClass, typeof(CompilerGeneratedAttribute))
-                        select 1;
-
-            return query.Any();
+                            && typeUtils.IsSymbolEqualToType(attribute.AttributeClass, typeof(GeneratedAttribute))
+                        select AttributeFactory.Create<GeneratedAttribute>(attribute);
+            generatedAttribute = query.FirstOrDefault();
+            return generatedAttribute != null;
         }
 
         private bool IsIncompatibleGeneric(
@@ -217,17 +231,23 @@ namespace Lambdajection.Generator
             return classTypeName == interfaceTypeName;
         }
 
-        public class Results
+        internal class Results
         {
-            public INamedTypeSymbol? InputType { get; set; }
+            internal INamedTypeSymbol? InputType { get; set; }
 
-            public string? InputTypeName { get; set; }
+            internal string? InputTypeName { get; set; }
 
-            public INamedTypeSymbol? InputEncapsulationType { get; set; }
+            internal INamedTypeSymbol? InputEncapsulationType { get; set; }
 
-            public string? InputEncapsulationTypeName { get; set; }
+            internal string? InputEncapsulationTypeName { get; set; }
 
-            public string? OutputTypeName { get; set; }
+            internal string? OutputTypeName { get; set; }
+
+            internal IEnumerable<GeneratedMethodInfo> GeneratedMethods { get; set; }
+
+            internal INamedTypeSymbol? FlattenedInputType => InputEncapsulationType != null && InputType != null
+                ? InputEncapsulationType.ConstructedFrom.Construct(InputType)
+                : InputType;
         }
     }
 }

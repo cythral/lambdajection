@@ -9,40 +9,33 @@ using static Microsoft.CodeAnalysis.CSharp.SyntaxKind;
 #pragma warning disable SA1204, SA1009
 namespace Lambdajection.Generator
 {
-    public class LambdaGenerator
+    internal class LambdaGenerator
     {
+        private readonly InterfaceImplementationAnalyzer.Results interfaceAnalyzerResults;
         private readonly GenerationContext context;
         private readonly string className;
         private readonly LambdaCompilationScanResult scanResults;
-        private readonly INamedTypeSymbol typeToValidate;
         private readonly string inputTypeName;
         private readonly string inputParameterType;
         private readonly string returnType;
         private readonly BaseTypeSyntax[] typeConstraints;
 
         public LambdaGenerator(
+            InterfaceImplementationAnalyzer.Results interfaceAnalyzerResults,
             GenerationContext context,
             string className,
-            INamedTypeSymbol inputType,
-            string inputTypeName,
-            INamedTypeSymbol inputEncapsulationType,
-            string? inputEncapsulationTypeName,
-            string returnType,
             LambdaCompilationScanResult scanResults
         )
         {
+            this.interfaceAnalyzerResults = interfaceAnalyzerResults;
             this.context = context;
             this.className = className;
             this.scanResults = scanResults;
-            this.inputTypeName = inputTypeName;
-            this.returnType = returnType;
+            inputTypeName = interfaceAnalyzerResults.InputTypeName!;
+            returnType = interfaceAnalyzerResults.OutputTypeName!;
 
-            typeToValidate = inputEncapsulationType != null
-                ? inputEncapsulationType.ConstructedFrom.Construct(inputType)
-                : inputType;
-
-            inputParameterType = inputEncapsulationTypeName != null
-                ? $"{inputEncapsulationTypeName}<{inputTypeName}>"
+            inputParameterType = interfaceAnalyzerResults.InputEncapsulationTypeName != null
+                ? $"{interfaceAnalyzerResults.InputEncapsulationTypeName}<{inputTypeName}>"
                 : inputTypeName;
 
             var interfaceName = context.LambdaInterfaceAttribute.InterfaceName;
@@ -54,15 +47,18 @@ namespace Lambdajection.Generator
         {
             var configuratorGenerator = new ConfiguratorGenerator(context, scanResults);
             var configurator = configuratorGenerator.Generate();
-            var validationGenerator = new ValidationsGenerator(typeToValidate, context);
-            var validationMethod = validationGenerator.GenerateValidationMethod();
+
             var result = ClassDeclaration(className)
                 .WithBaseList(BaseList(Token(ColonToken), SeparatedList(typeConstraints)))
                 .AddModifiers(Token(PartialKeyword))
                 .AddMembers(
                     GenerateRunnerMethod(),
-                    configurator,
-                    validationMethod);
+                    configurator);
+
+            foreach (var member in GenerateMembers())
+            {
+                result = result.AddMembers(member);
+            }
 
             if (context.Settings.GenerateEntrypoint)
             {
@@ -70,6 +66,15 @@ namespace Lambdajection.Generator
             }
 
             return result;
+        }
+
+        public IEnumerable<MemberDeclarationSyntax> GenerateMembers()
+        {
+            foreach (var generatedMethodInfo in interfaceAnalyzerResults.GeneratedMethods)
+            {
+                var generator = generatedMethodInfo.GetGenerator(interfaceAnalyzerResults, context);
+                yield return generator.GenerateMember();
+            }
         }
 
         public string? GetSerializerName()

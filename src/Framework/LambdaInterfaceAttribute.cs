@@ -1,6 +1,6 @@
 using System;
 
-namespace Lambdajection.Attributes
+namespace Lambdajection.Framework
 {
     /// <summary>
     /// Build-time only attribute to help determine what interface to apply to a Lambda.

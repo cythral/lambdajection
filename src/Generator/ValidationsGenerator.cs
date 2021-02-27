@@ -11,22 +11,22 @@ using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
 namespace Lambdajection.Generator
 {
-    public class ValidationsGenerator
+    internal class ValidationsGenerator : IMemberGenerator
     {
         private const string argumentName = "input";
         private readonly INamedTypeSymbol typeToValidate;
         private readonly GenerationContext context;
 
         public ValidationsGenerator(
-            INamedTypeSymbol typeToValidate,
+            InterfaceImplementationAnalyzer.Results interfaceAnalyzerResults,
             GenerationContext context
         )
         {
-            this.typeToValidate = typeToValidate;
+            typeToValidate = interfaceAnalyzerResults.FlattenedInputType!;
             this.context = context;
         }
 
-        public MemberDeclarationSyntax GenerateValidationMethod()
+        public MemberDeclarationSyntax GenerateMember()
         {
             var validations = GenerateValidations();
 

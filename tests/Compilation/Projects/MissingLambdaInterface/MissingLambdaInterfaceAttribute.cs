@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 
 using Lambdajection.Attributes;
+using Lambdajection.Framework;
 
 namespace Lambdajection.CompilationTests.MissingLambdaInterface
 {

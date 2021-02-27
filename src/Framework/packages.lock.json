@@ -1,13 +1,7 @@
 {
   "version": 1,
   "dependencies": {
-    ".NETCoreApp,Version=v5.0": {
-      "Cythral.CloudFormation.BuildTasks": {
-        "type": "Direct",
-        "requested": "[0.5.0, )",
-        "resolved": "0.5.0",
-        "contentHash": "NQtZGf8tpfDsaOKUZFIX56vLtt5dl5FUkkGIZQpDF1esF95K52cfHtZzN025F0nlGyMInT76F/ctIoIYUovU7Q=="
-      },
+    ".NETStandard,Version=v2.1": {
       "Microsoft.CodeAnalysis.CSharp.CodeStyle": {
         "type": "Direct",
         "requested": "[3.8.0, )",
@@ -53,15 +47,6 @@
         "type": "Transitive",
         "resolved": "1.2.0.321",
         "contentHash": "CLL1cwvzGyXsCDzHQuAV3STrkIfTXqlS/vnxJTlSiRmmFjnTnoNVIZWwv738/hWxoh8MjPyHlp7eLossZIB5kg=="
-      },
-      "Lambdajection.Attributes": {
-        "type": "Project",
-        "dependencies": {
-          "Lambdajection.Framework": "1.0.0"
-        }
-      },
-      "Lambdajection.Framework": {
-        "type": "Project"
       }
     }
   }
