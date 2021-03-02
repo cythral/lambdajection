@@ -6,7 +6,7 @@ namespace Lambdajection.Examples.CustomResource
 {
     public class Request
     {
-        [MinLength(3)]
+        [Range(3, 12)]
         [UpdateRequiresReplacement]
         public uint? Length { get; set; } = null;
     }
