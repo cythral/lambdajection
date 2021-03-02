@@ -1,22 +1,22 @@
 using System;
 using System.Reflection;
 
-using Lambdajection.Framework;
-
 using Microsoft.CodeAnalysis;
 
-namespace Lambdajection.Generator.Models
+#pragma warning disable CA1032, SA1600, CS8618, CS1591
+
+namespace Lambdajection.Framework
 {
     internal class GeneratedMethodInfo
     {
-        internal GeneratedAttribute GeneratedAttribute { get; set; }
+        public GeneratedAttribute GeneratedAttribute { get; set; }
 
-        internal IMethodSymbol GeneratedMethod { get; set; }
+        public IMethodSymbol GeneratedMethod { get; set; }
 
-        internal Location Location { get; set; }
+        public Location Location { get; set; }
 
 #pragma warning disable IDE0046
-        internal IMemberGenerator GetGenerator(InterfaceImplementationAnalyzer.Results analyzerResults, GenerationContext context)
+        public IMemberGenerator GetGenerator(AnalyzerResults analyzerResults, GenerationContext context)
         {
             var assembly = Assembly.Load(GeneratedAttribute.AssemblyName);
             var type = assembly?.GetType(GeneratedAttribute.TypeName);

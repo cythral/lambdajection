@@ -51,13 +51,12 @@ namespace Lambdajection.CustomResource
         [Generated("Lambdajection.Generator", "Lambdajection.Generator.ValidationsGenerator")]
         void Validate(CustomResourceRequest<TResourceProperties> request);
 
-        /*
         /// <summary>
         /// Determines whether or not the custom resource requires replacement.
         /// </summary>
         /// <param name="request">The custom resource request.</param>
         /// <returns>True if a new resource should be created, or false if the existing resource can be updated.</returns>
-        [Generated]
-        bool RequiresReplacement(CustomResourceRequest<TResourceProperties> request);*/
+        [Generated("Lambdajection.CustomResource.BuildTime", "Lambdajection.CustomResource.RequiresReplacementGenerator")]
+        bool RequiresReplacement(CustomResourceRequest<TResourceProperties> request);
     }
 }

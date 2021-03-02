@@ -20,13 +20,13 @@ namespace Lambdajection.Framework
         }
 
         /// <summary>
-        /// Gets or sets the name of the assembly where to find the generator for generating the attributed method.
+        /// Gets the name of the assembly where to find the generator for generating the attributed method.
         /// </summary>
-        public string AssemblyName { get; set; }
+        public string AssemblyName { get; }
 
         /// <summary>
-        /// Gets or sets the name of the type of generator to use for generating the attributed method.
+        /// Gets the name of the type of generator to use for generating the attributed method.
         /// </summary>
-        public string TypeName { get; set; }
+        public string TypeName { get; }
     }
 }

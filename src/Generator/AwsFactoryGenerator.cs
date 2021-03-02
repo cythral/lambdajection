@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 
+using Lambdajection.Framework;
+
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
@@ -8,7 +10,7 @@ using static Microsoft.CodeAnalysis.CSharp.SyntaxKind;
 #pragma warning disable SA1204, SA1009
 namespace Lambdajection.Generator
 {
-    public class AwsFactoryGenerator
+    internal class AwsFactoryGenerator
     {
         private readonly GenerationContext context;
         private readonly string interfaceName;

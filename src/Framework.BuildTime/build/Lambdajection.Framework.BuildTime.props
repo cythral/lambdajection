@@ -1,0 +1,5 @@
+<Project>
+    <PropertyGroup>
+        <LambdajectionBuildTimeAssemblies>$(MSBuildThisFileDirectory)..\tools\any\Lambdajection.Framework.BuildTime.dll,$(LambdajectionBuildTimeAssemblies)</LambdajectionBuildTimeAssemblies>
+    </PropertyGroup>
+</Project>

@@ -3,6 +3,8 @@ using System.Collections.Immutable;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
+using Lambdajection.Framework;
+
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -18,7 +20,7 @@ namespace Lambdajection.Generator
         private readonly GenerationContext context;
 
         public ValidationsGenerator(
-            InterfaceImplementationAnalyzer.Results interfaceAnalyzerResults,
+            AnalyzerResults interfaceAnalyzerResults,
             GenerationContext context
         )
         {

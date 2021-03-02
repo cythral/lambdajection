@@ -2,6 +2,8 @@ using AutoFixture.AutoNSubstitute;
 
 using FluentAssertions;
 
+using Lambdajection.Framework;
+
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
