@@ -1,0 +1,5 @@
+<Project>
+    <PropertyGroup>
+        <LambdajectionBuildTimeAssemblies>$(MSBuildThisFileDirectory)..\lib\netstandard2.1\Lambdajection.Encryption.dll,$(LambdajectionBuildTimeAssemblies)</LambdajectionBuildTimeAssemblies>
+    </PropertyGroup>
+</Project>

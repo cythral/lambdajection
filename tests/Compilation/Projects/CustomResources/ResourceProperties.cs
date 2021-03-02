@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
+using Lambdajection.Attributes;
+
 namespace Lambdajection.CompilationTests.CustomResources
 {
     public class ResourceProperties
@@ -15,5 +17,10 @@ namespace Lambdajection.CompilationTests.CustomResources
         public List<string> ValidationsGeneratorShouldNotRecurseIntoCollections { get; set; }
 
         public string ErrorMessage { get; set; } = string.Empty;
+
+        [UpdateRequiresReplacement]
+        public ulong Serial { get; set; } = 0UL;
+
+        public Metadata Metadata { get; set; } = new Metadata();
     }
 }

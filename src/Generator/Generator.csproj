@@ -19,13 +19,15 @@
     <PackageReference Include="Microsoft.CodeAnalysis" Version="3.8.0" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="3.8.0" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
+    <PackageReference Include="System.Runtime.Loader" Version="4.3.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="../Core/Core.csproj" SetTargetFramework="TargetFramework=netstandard2.1" />
-    <ProjectReference Include="../Attributes/Attributes.csproj" />
-    <ProjectReference Include="../Encryption/Encryption.csproj" />
-    <ProjectReference Include="../Framework/Framework.csproj" />
+    <ProjectReference Include="../Core/Core.csproj" SetTargetFramework="TargetFramework=netstandard2.1" PrivateAssets="none" />
+    <ProjectReference Include="../Attributes/Attributes.csproj" PrivateAssets="none" />
+    <ProjectReference Include="../Encryption/Encryption.csproj" PrivateAssets="none" />
+    <ProjectReference Include="../Framework/Framework.csproj" PrivateAssets="none" />
+    <ProjectReference Include="../Framework.BuildTime/Framework.BuildTime.csproj" PrivateAssets="none" />
   </ItemGroup>
 
   <ItemGroup>
@@ -36,7 +38,8 @@
     <ItemGroup>
       <None Include="build/**" Pack="true" PackagePath="build/" />
       <None Include="$(RestorePackagesPath)/awssdk.core/*/lib/netstandard2.0/AWSSDK.Core.dll" Pack="true" PackagePath="analyzers/dotnet/cs/AWSSDK.Core.dll" Visible="false" />
-      <None Include="$(OutputPath)/**" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+      <None Include="$(OutputPath)/Lambdajection.Generator.*" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+      <None Include="$(OutputPath)/Lambdajection.Attributes.*" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
     </ItemGroup>
   </Target>
 

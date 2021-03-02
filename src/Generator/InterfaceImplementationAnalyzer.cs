@@ -3,9 +3,8 @@ using System.Collections.Immutable;
 using System.Linq;
 
 using Lambdajection.Framework;
+using Lambdajection.Framework.Utils;
 using Lambdajection.Generator.Attributes;
-using Lambdajection.Generator.Models;
-using Lambdajection.Generator.Utils;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -35,7 +34,7 @@ namespace Lambdajection.Generator
             this.context = context;
         }
 
-        internal Results Analyze()
+        internal AnalyzerResults Analyze()
         {
             var classType = context.SemanticModel.GetDeclaredSymbol(classDeclaration) as ITypeSymbol;
             var attr = context.LambdaInterfaceAttribute;
@@ -107,7 +106,7 @@ namespace Lambdajection.Generator
                 }
             }
 
-            return new Results
+            return new AnalyzerResults
             {
                 InputType = typeMatches[0],
                 InputTypeName = typeNameMatches[0],
@@ -229,25 +228,6 @@ namespace Lambdajection.Generator
             }
 
             return classTypeName == interfaceTypeName;
-        }
-
-        internal class Results
-        {
-            internal INamedTypeSymbol? InputType { get; set; }
-
-            internal string? InputTypeName { get; set; }
-
-            internal INamedTypeSymbol? InputEncapsulationType { get; set; }
-
-            internal string? InputEncapsulationTypeName { get; set; }
-
-            internal string? OutputTypeName { get; set; }
-
-            internal IEnumerable<GeneratedMethodInfo> GeneratedMethods { get; set; }
-
-            internal INamedTypeSymbol? FlattenedInputType => InputEncapsulationType != null && InputType != null
-                ? InputEncapsulationType.ConstructedFrom.Construct(InputType)
-                : InputType;
         }
     }
 }

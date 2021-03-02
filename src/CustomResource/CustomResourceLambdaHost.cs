@@ -52,7 +52,12 @@ namespace Lambdajection.CustomResource
             try
             {
                 Lambda.Validate(parameter);
-                var data = await (parameter.RequestType switch
+
+                var requestType = Lambda.RequiresReplacement(parameter)
+                    ? CustomResourceRequestType.Create
+                    : parameter.RequestType;
+
+                var data = await (requestType switch
                 {
                     CustomResourceRequestType.Create => Lambda.Create(parameter, cancellationToken),
                     CustomResourceRequestType.Update => Lambda.Update(parameter, cancellationToken),

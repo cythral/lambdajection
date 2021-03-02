@@ -21,7 +21,11 @@
   </Target>
 
   <ItemGroup>
-    <ProjectReference Include="../Framework/Framework.csproj" />
+    <ProjectReference Include="../Framework/Framework.csproj" PrivateAssets="none" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="build/**" Pack="true" PackagePath="build/" />
   </ItemGroup>
 
   <ItemGroup>

@@ -25,5 +25,10 @@ namespace Lambdajection
         public virtual void Validate(CustomResourceRequest<object> request)
         {
         }
+
+        public virtual bool RequiresReplacement(CustomResourceRequest<object> request)
+        {
+            return false;
+        }
     }
 }

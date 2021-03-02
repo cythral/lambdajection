@@ -1555,7 +1555,20 @@
         "dependencies": {
           "Lambdajection.Attributes": "1.0.0",
           "Lambdajection.Core": "1.0.0",
+          "Lambdajection.CustomResource.BuildTime": "1.0.0",
           "Lambdajection.Framework": "1.0.0"
+        }
+      },
+      "Lambdajection.CustomResource.BuildTime": {
+        "type": "Project",
+        "dependencies": {
+          "Lambdajection.Attributes": "1.0.0",
+          "Lambdajection.Core": "1.0.0",
+          "Lambdajection.Framework": "1.0.0",
+          "Lambdajection.Framework.BuildTime": "1.0.0",
+          "Microsoft.CodeAnalysis": "3.8.0",
+          "Microsoft.CodeAnalysis.CSharp.Workspaces": "3.8.0",
+          "System.ComponentModel.Annotations": "5.0.0"
         }
       },
       "Lambdajection.Encryption": {
@@ -1567,6 +1580,13 @@
       "Lambdajection.Framework": {
         "type": "Project"
       },
+      "Lambdajection.Framework.BuildTime": {
+        "type": "Project",
+        "dependencies": {
+          "Lambdajection.Framework": "1.0.0",
+          "Microsoft.CodeAnalysis": "3.8.0"
+        }
+      },
       "Lambdajection.Generator": {
         "type": "Project",
         "dependencies": {
@@ -1574,9 +1594,11 @@
           "Lambdajection.Core": "1.0.0",
           "Lambdajection.Encryption": "1.0.0",
           "Lambdajection.Framework": "1.0.0",
+          "Lambdajection.Framework.BuildTime": "1.0.0",
           "Microsoft.CodeAnalysis": "3.8.0",
           "Microsoft.CodeAnalysis.CSharp.Workspaces": "3.8.0",
-          "System.ComponentModel.Annotations": "5.0.0"
+          "System.ComponentModel.Annotations": "5.0.0",
+          "System.Runtime.Loader": "4.3.0"
         }
       },
       "Lambdajection.Runtime": {

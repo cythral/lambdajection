@@ -3,9 +3,11 @@ using System.Linq;
 
 using Microsoft.CodeAnalysis;
 
-namespace Lambdajection.Generator
+#pragma warning disable SA1600, CS8618
+
+namespace Lambdajection.Framework
 {
-    public class GenerationSettings
+    internal class GenerationSettings
     {
         public bool Nullable { get; init; }
 
@@ -14,6 +16,8 @@ namespace Lambdajection.Generator
         public bool IncludeAmazonFactories { get; init; }
 
         public bool IncludeDefaultSerializer { get; init; }
+
+        public string[] BuildTimeAssemblies { get; init; }
 
         public static GenerationSettings FromContext(GeneratorExecutionContext context)
         {
@@ -24,6 +28,7 @@ namespace Lambdajection.Generator
             var options = context.AnalyzerConfigOptions.GlobalOptions;
             options.TryGetValue("build_property.GenerateLambdajectionEntrypoint", out var generateLambdajectionEntrypoint);
             options.TryGetValue("build_property.Nullable", out var nullable);
+            options.TryGetValue("build_property.LambdajectionBuildTimeAssemblies", out var buildTimeAssemblies);
 
             generateLambdajectionEntrypoint ??= "false";
             nullable ??= "disable";
@@ -34,6 +39,7 @@ namespace Lambdajection.Generator
                 GenerateEntrypoint = generateLambdajectionEntrypoint.Equals("true", StringComparison.OrdinalIgnoreCase),
                 IncludeAmazonFactories = includeAmazonFactories,
                 IncludeDefaultSerializer = includeDefaultSerializer,
+                BuildTimeAssemblies = buildTimeAssemblies?.Split(";") ?? Array.Empty<string>(),
             };
         }
     }

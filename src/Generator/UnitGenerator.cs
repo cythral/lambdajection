@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
@@ -9,8 +9,8 @@ using System.Threading;
 using Lambdajection.Attributes;
 using Lambdajection.Core;
 using Lambdajection.Framework;
+using Lambdajection.Framework.Utils;
 using Lambdajection.Generator.Attributes;
-using Lambdajection.Generator.Utils;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -22,17 +22,16 @@ using static Microsoft.CodeAnalysis.CSharp.SyntaxKind;
 #pragma warning disable SA1204, SA1009
 namespace Lambdajection.Generator
 {
-    [Generator]
-    public class UnitGenerator : ISourceGenerator
+    public class UnitGenerator
     {
-        private readonly UsingsGenerator usingsGenerator = new();
-        private readonly TypeUtils typeUtils = new();
+        private readonly GeneratorExecutionContext context;
 
-        public void Initialize(GeneratorInitializationContext context)
+        public UnitGenerator(GeneratorExecutionContext context)
         {
+            this.context = context;
         }
 
-        public void Execute(GeneratorExecutionContext context)
+        public void Generate()
         {
             try
             {
@@ -99,6 +98,7 @@ namespace Lambdajection.Generator
 
         public TAttribute GetMetadataAttribute<TAttribute>(ImmutableArray<AttributeData> attributes)
         {
+            var typeUtils = new TypeUtils();
             foreach (var attr in attributes)
             {
                 if (attr.AttributeClass != null && typeUtils.IsSymbolEqualToType(attr.AttributeClass, typeof(TAttribute)))
@@ -147,13 +147,13 @@ namespace Lambdajection.Generator
             return false;
         }
 
-        public CompilationUnitSyntax GenerateUnit(GenerationContext context)
+        private CompilationUnitSyntax GenerateUnit(GenerationContext context)
         {
             var namespaceNode = (NamespaceDeclarationSyntax?)context.Declaration.Parent;
             var unitRoot = context.SyntaxTree.GetCompilationUnitRoot();
             var existingUsings = unitRoot.Usings.Select(x => x.WithoutTrivia().Name.ToString());
             var members = GenerateMembers(context);
-            var usings = usingsGenerator.Generate(context);
+            var usings = new UsingsGenerator().Generate(context);
 
             if (namespaceNode != null)
             {
@@ -167,7 +167,7 @@ namespace Lambdajection.Generator
                 .WithLeadingTrivia(TriviaList(ignoreWarningsTrivia));
         }
 
-        public static SyntaxList<MemberDeclarationSyntax> GenerateMembers(GenerationContext context)
+        private static SyntaxList<MemberDeclarationSyntax> GenerateMembers(GenerationContext context)
         {
             var declaration = context.Declaration;
             var namespaceName = declaration.Ancestors().OfType<NamespaceDeclarationSyntax>().ElementAt(0).Name;
