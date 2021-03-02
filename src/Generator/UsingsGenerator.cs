@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 
+using Lambdajection.Framework;
+
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -8,7 +10,7 @@ using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
 namespace Lambdajection.Generator
 {
-    public class UsingsGenerator
+    internal class UsingsGenerator
     {
         private static readonly string[] DefaultUsings = new string[]
         {

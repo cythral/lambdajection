@@ -1,14 +1,14 @@
 using System.Collections.Generic;
 using System.Threading;
 
-using Lambdajection.Framework;
-
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace Lambdajection.Generator
+#pragma warning disable SA1600, CS8618
+
+namespace Lambdajection.Framework
 {
-    public class GenerationContext
+    internal class GenerationContext
     {
         public ClassDeclarationSyntax Declaration { get; init; }
 

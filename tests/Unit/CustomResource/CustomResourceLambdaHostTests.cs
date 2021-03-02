@@ -95,6 +95,34 @@ namespace Lambdajection.CustomResource.Tests
             }
 
             [Test, Auto]
+            public async Task ShouldCallCreate_IfRequestTypeIsUpdate_ButLambdaRequiresReplacement(
+                ServiceCollection serviceCollection,
+                CustomResourceRequest<object> request,
+                [Substitute] TestCustomResourceLambda lambda,
+                [Substitute] IHttpClient httpClient
+            )
+            {
+                serviceCollection.AddSingleton(httpClient);
+
+                var serviceProvider = serviceCollection.BuildServiceProvider();
+                var cancellationToken = new CancellationToken(false);
+                var host = new TestCustomResourceLambdaHost(lambdaHost =>
+                {
+                    lambdaHost.Lambda = lambda;
+                    lambdaHost.Scope = serviceProvider.CreateScope();
+                });
+
+                request.RequestType = CustomResourceRequestType.Update;
+                lambda.RequiresReplacement(Any<CustomResourceRequest<object>>()).Returns(true);
+
+                await host.InvokeLambda(request, cancellationToken);
+
+                await lambda.DidNotReceiveWithAnyArgs().Delete(default!, default);
+                await lambda.DidNotReceiveWithAnyArgs().Update(default!, default);
+                await lambda.Received().Create(Is(request), Is(cancellationToken));
+            }
+
+            [Test, Auto]
             public async Task ShouldCallDelete_IfRequestTypeIsDelete(
                 ServiceCollection serviceCollection,
                 CustomResourceRequest<object> request,

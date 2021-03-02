@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Lambdajection.Encryption;
+using Lambdajection.Framework;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -12,7 +13,7 @@ using static Microsoft.CodeAnalysis.CSharp.SyntaxKind;
 #pragma warning disable SA1204, SA1009
 namespace Lambdajection.Generator
 {
-    public class ConfiguratorGenerator
+    internal class ConfiguratorGenerator
     {
         private static readonly SyntaxToken[] PublicModifiersList =
             new SyntaxToken[] { Token(PublicKeyword) };

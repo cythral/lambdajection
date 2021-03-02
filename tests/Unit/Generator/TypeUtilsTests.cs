@@ -7,7 +7,7 @@ using AutoFixture;
 // using AutoFixture.AutoNSubstitute;
 using FluentAssertions;
 
-using Lambdajection.Generator.Utils;
+using Lambdajection.Framework.Utils;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;

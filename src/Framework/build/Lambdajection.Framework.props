@@ -1,0 +1,6 @@
+<Project>
+    <PropertyGroup Condition="$(LambdajectionFrameworkLoaded) != 'true'">
+        <LambdajectionFrameworkLoaded>true</LambdajectionFrameworkLoaded>
+        <LambdajectionBuildTimeAssemblies>$(MSBuildThisFileDirectory)..\lib\netstandard2.1\Lambdajection.Framework.dll,$(LambdajectionBuildTimeAssemblies)</LambdajectionBuildTimeAssemblies>
+    </PropertyGroup>
+</Project>

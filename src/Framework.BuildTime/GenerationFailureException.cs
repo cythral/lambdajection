@@ -2,10 +2,11 @@ using System;
 
 using Microsoft.CodeAnalysis;
 
-namespace Lambdajection.Generator
+#pragma warning disable CA1032, SA1600, CS8618, CS1591
+
+namespace Lambdajection.Framework
 {
-#pragma warning disable CA1032
-    public class GenerationFailureException : Exception
+    internal class GenerationFailureException : Exception
     {
         public string Id { get; init; }
 

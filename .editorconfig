@@ -55,7 +55,7 @@ dotnet_analyzer_diagnostic.category-Style.severity = error
 dotnet_diagnostic.IDE0058.severity = none
 dotnet_diagnostic.IDE0008.severity = none
 
-[{tests,obj,src/Generator}/**.{cs,csx}]
+[{tests,obj,src/Generator,src/CustomResource.BuildTime,src/Framework.BuildTime}/**.{cs,csx}]
 # Unused parameters
 dotnet_diagnostic.CA1801.severity = none
 dotnet_diagnostic.IDE0060.severity = none

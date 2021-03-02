@@ -4,7 +4,7 @@ using System.Linq;
 
 using Microsoft.CodeAnalysis;
 
-namespace Lambdajection.Generator.Utils
+namespace Lambdajection.Framework.Utils
 {
     public class TypeUtils
     {

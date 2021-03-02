@@ -61,6 +61,17 @@
         "resolved": "5.0.0",
         "contentHash": "dMkqfy2el8A8/I76n2Hi1oBFEbG1SfxD2l5nhwXV3XjlnOmwxJlQbYpJH4W51odnU9sARCSAgv7S3CyAFMkpYg=="
       },
+      "System.Runtime.Loader": {
+        "type": "Direct",
+        "requested": "[4.3.0, )",
+        "resolved": "4.3.0",
+        "contentHash": "DHMaRn8D8YCK2GG2pw+UzNxn/OHVfaWx7OTLBD/hPegHZZgcZh3H6seWegrC4BYwsfuGrywIuT+MQs+rPqRLTQ==",
+        "dependencies": {
+          "System.IO": "4.3.0",
+          "System.Reflection": "4.3.0",
+          "System.Runtime": "4.3.0"
+        }
+      },
       "Amazon.Lambda.Core": {
         "type": "Transitive",
         "resolved": "1.2.0",
@@ -1369,6 +1380,13 @@
       },
       "Lambdajection.Framework": {
         "type": "Project"
+      },
+      "Lambdajection.Framework.BuildTime": {
+        "type": "Project",
+        "dependencies": {
+          "Lambdajection.Framework": "1.0.0",
+          "Microsoft.CodeAnalysis": "3.8.0"
+        }
       }
     }
   }

@@ -2,19 +2,28 @@
 
     <PropertyGroup>
         <TargetFramework>netstandard2.1</TargetFramework>
-        <PackageId>Lambdajection.Framework</PackageId>
+        <PackageId>Lambdajection.Framework.BuildTime</PackageId>
         <NoWarn>NU5128;NU5131</NoWarn>
         <AssemblyName>$(PackageId)</AssemblyName>
         <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
-        <PackageDescription>Includes attributes that provide a framework for generating Lambdas with Lambdajection.</PackageDescription>
+        <IncludeBuildOutput>false</IncludeBuildOutput>
+        <PackageDescription>Includes build-time only framework assets for generating Lambdas with Lambdajection.</PackageDescription>
+        <BeforePack>IncludeExtraPackItems;$(BeforePack)</BeforePack>
     </PropertyGroup>
 
     <ItemGroup>
-        <None Include="build/**" Pack="true" PackagePath="build/" />
+        <PackageReference Include="Microsoft.CodeAnalysis" Version="3.8.0" />
+        <ProjectReference Include="../Framework/Framework.csproj" PrivateAssets="none" />
     </ItemGroup>
 
+    <Target Name="IncludeExtraPackItems">
+        <ItemGroup>
+            <None Include="build/**" Pack="true" PackagePath="build/" />
+            <None Include="$(OutputPath)/Lambdajection.Framework.BuildTime.*" Pack="true" PackagePath="tools/any/" Visible="false" />
+        </ItemGroup>
+    </Target>
+
     <ItemGroup>
-        <InternalsVisibleTo Include="Lambdajection.Framework.BuildTime" />
         <InternalsVisibleTo Include="Lambdajection.Attributes" />
         <InternalsVisibleTo Include="Lambdajection.Generator" />
         <InternalsVisibleTo Include="Lambdajection.Core" />

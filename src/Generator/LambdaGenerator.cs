@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 
+using Lambdajection.Framework;
+
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -11,7 +13,7 @@ namespace Lambdajection.Generator
 {
     internal class LambdaGenerator
     {
-        private readonly InterfaceImplementationAnalyzer.Results interfaceAnalyzerResults;
+        private readonly AnalyzerResults interfaceAnalyzerResults;
         private readonly GenerationContext context;
         private readonly string className;
         private readonly LambdaCompilationScanResult scanResults;
@@ -21,7 +23,7 @@ namespace Lambdajection.Generator
         private readonly BaseTypeSyntax[] typeConstraints;
 
         public LambdaGenerator(
-            InterfaceImplementationAnalyzer.Results interfaceAnalyzerResults,
+            AnalyzerResults interfaceAnalyzerResults,
             GenerationContext context,
             string className,
             LambdaCompilationScanResult scanResults
