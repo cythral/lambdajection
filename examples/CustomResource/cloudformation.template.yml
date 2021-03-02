@@ -19,6 +19,7 @@ Resources:
     Type: Custom::Password
     Properties:
       ServiceToken: !GetAtt CustomResource.Arn
+      Length: 5
 
 Outputs:
   InputPayload:

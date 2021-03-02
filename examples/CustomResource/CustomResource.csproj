@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <TargetFramework>netcoreapp3.1</TargetFramework>
-        <TestType>ExamineStack</TestType>
+        <TestType>ExamineStack</TestType> <!-- This is for our E2E Tests, you do not need to include it. -->
     </PropertyGroup>
 
     <ItemGroup>
