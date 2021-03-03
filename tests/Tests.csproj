@@ -1,4 +1,3 @@
-
 <Project Sdk="Microsoft.NET.Sdk">
   <Import Project="..\src\Metapackage\build\Lambdajection.props" />
 
@@ -19,8 +18,8 @@
     <PackageReference Include="coverlet.collector" Version="3.0.3" PrivateAssets="all" />
     <PackageReference Include="FluentAssertions" Version="5.10.3" />
     <PackageReference Include="Microsoft.Build.Locator" Version="1.4.1" />
-    <PackageReference Include="Microsoft.CodeAnalysis" Version="3.8.0" />
-    <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.MSBuild" Version="3.8.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis" Version="3.9.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.MSBuild" Version="3.9.0" />
     <PackageReference Include="NSubstitute" Version="4.2.2" />
     <PackageReference Include="NuGet.ProjectModel" Version="5.10.0-preview.1.7148" />
     <PackageReference Include="nunit" Version="3.13.1" />

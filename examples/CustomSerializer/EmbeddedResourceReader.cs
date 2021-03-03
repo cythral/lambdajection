@@ -9,7 +9,7 @@ namespace Lambdajection.Examples.CustomSerializer
 {
     public class EmbeddedResourceReader
     {
-        private readonly List<ResourceContext> openContexts = new List<ResourceContext>();
+        private readonly List<ResourceContext> openContexts = new();
 
         public virtual async Task<string?> ReadAsString(string file)
         {

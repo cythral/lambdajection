@@ -13,9 +13,9 @@
       },
       "Microsoft.CodeAnalysis.CSharp.CodeStyle": {
         "type": "Direct",
-        "requested": "[3.8.0, )",
-        "resolved": "3.8.0",
-        "contentHash": "utN0fgby7YvyLhLYq1ThYZpJmcxc3mKT6nWi5EIIKzWz5IF+S/N/uNM/1g+1Ga0PMshIwutCdmzPhxrXt3iATg=="
+        "requested": "[3.9.0, )",
+        "resolved": "3.9.0",
+        "contentHash": "g6W0Qsdt28XGWRvxlb91//Jk0+9XsndLh+A8c0wpFUOXxJ+tTy0PPX9NcjJN1H/n3nFlv5nCK6j7bykElbNcJg=="
       },
       "Microsoft.SourceLink.GitHub": {
         "type": "Direct",
