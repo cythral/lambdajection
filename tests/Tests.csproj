@@ -11,7 +11,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AWSSDK.SecurityToken" Version="3.5.1.55" />
+    <PackageReference Include="AWSSDK.SecurityToken" Version="3.5.1.56" />
     <PackageReference Include="AWSSDK.S3" Version="3.5.9.2" />
     <PackageReference Include="AutoFixture.AutoNSubstitute" Version="4.15.0" />
     <PackageReference Include="AutoFixture.NUnit3" Version="4.15.0" />
