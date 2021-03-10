@@ -27,14 +27,17 @@ namespace Lambdajection.Examples.AwsClientFactories
 
         public async Task<string> Handle(Request request, CancellationToken cancellationToken = default)
         {
-            s3Client = await s3Factory.Create(request.RoleArn);
+            s3Client = await s3Factory.Create(request.RoleArn, cancellationToken);
 
-            await s3Client.PutObjectAsync(new PutObjectRequest
-            {
-                BucketName = request.BucketName,
-                Key = request.FileName,
-                ContentBody = request.Contents,
-            });
+            await s3Client.PutObjectAsync(
+                new PutObjectRequest
+                {
+                    BucketName = request.BucketName,
+                    Key = request.FileName,
+                    ContentBody = request.Contents,
+                },
+                cancellationToken
+            );
 
             return $"Successfully written to file {request.FileName} in bucket {request.BucketName}";
         }

@@ -1,3 +1,4 @@
+using System.Threading;
 using System.Threading.Tasks;
 
 using Amazon.Runtime;
@@ -16,7 +17,8 @@ namespace Lambdajection.Core
         /// Creates an Amazon Service Client of type TAmazonService.
         /// </summary>
         /// <param name="roleArn">ARN of the role to assume for obtaining security credentials.</param>
+        /// <param name="cancellationToken">Token used to cancel the task.</param>
         /// <returns>An Amazon Service Client with credentials that were the result of assuming the given role arn.</returns>
-        Task<TAmazonService> Create(string? roleArn = null);
+        Task<TAmazonService> Create(string? roleArn = null, CancellationToken cancellationToken = default);
     }
 }

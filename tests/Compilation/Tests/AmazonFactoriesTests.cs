@@ -1,5 +1,6 @@
 using System;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 
 using Amazon.Runtime;
@@ -91,6 +92,23 @@ namespace Lambdajection.Tests.Compilation
             var result = await factory.Create();
 
             result.Should().NotBeNull();
+            await stsClient.DidNotReceive().AssumeRoleAsync(Any<AssumeRoleRequest>());
+        }
+
+        [Test, Auto]
+        public async Task EmittedFactories_ThrowsIfCancellationRequested(
+            IAmazonSecurityTokenService stsClient
+        )
+        {
+            using var generation = await project.GenerateAssembly();
+            var (assembly, _) = generation;
+            var factoryType = assembly.GetType("Lambdajection.CompilationTests.AmazonFactories.Handler+LambdajectionConfigurator+S3Factory");
+            var factory = (IAwsFactory<IAmazonS3>)Activator.CreateInstance(factoryType!, new object[] { stsClient })!;
+
+            var cancellationToken = new CancellationToken(true);
+            Func<Task> func = async () => await factory.Create(cancellationToken: cancellationToken);
+
+            await func.Should().ThrowAsync<OperationCanceledException>();
             await stsClient.DidNotReceive().AssumeRoleAsync(Any<AssumeRoleRequest>());
         }
 
