@@ -60,18 +60,21 @@ namespace Lambdajection.Generator
         {
             var roleArnTypeName = context.Settings.Nullable ? "string?" : "string";
             var roleArnDefaultValue = ParseExpression("null");
+            var cancellationTokenDefaultValue = ParseExpression("default");
             var parameters = SeparatedList(new ParameterSyntax[]
             {
                     Parameter(List<AttributeListSyntax>(), TokenList(), ParseTypeName(roleArnTypeName), Identifier("roleArn"), EqualsValueClause(roleArnDefaultValue)),
+                    Parameter(List<AttributeListSyntax>(), TokenList(), ParseTypeName("CancellationToken"), Identifier("cancellationToken"), EqualsValueClause(cancellationTokenDefaultValue)),
             });
 
             IEnumerable<StatementSyntax> GenerateBody()
             {
+                yield return ParseStatement("cancellationToken.ThrowIfCancellationRequested();");
                 yield return IfStatement(
                     ParseExpression("roleArn != null"),
                     Block(
                         ParseStatement("var request = new AssumeRoleRequest { RoleArn = roleArn, RoleSessionName = \"lambdajection-assume-role\" };"),
-                        ParseStatement("var response = await stsClient.AssumeRoleAsync(request);"),
+                        ParseStatement("var response = await stsClient.AssumeRoleAsync(request, cancellationToken);"),
                         ParseStatement("var credentials = response.Credentials;"),
                         ParseStatement($"return new {implementationName}(credentials);")
                     )
