@@ -1,61 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project>
-    <PropertyGroup>
-        <Authors>Talen Fisher</Authors>
-        <Company>Cythral LLC</Company>
-        <Copyright>© Copyright 2020 Cythral LLC</Copyright>
-        <PackageProjectUrl>https://github.com/cythral/lambdajection</PackageProjectUrl>
-        <RepositoryUrl>https://github.com/cythral/lambdajection</RepositoryUrl>
-        <RepositoryType>git</RepositoryType>
-        <PublishRepositoryUrl>true</PublishRepositoryUrl>
-        <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
-        <PackageTags>AWS Amazon Cloud Lambda Lambdajection DependencyInjection IoC</PackageTags>
-    </PropertyGroup>
-
-    <PropertyGroup>
-        <Configuration Condition="$(Configuration) == ''">Debug</Configuration>
-        <Nullable>enable</Nullable>
-        <LangVersion>9.0</LangVersion>
-        <MinClientVersion>2.5</MinClientVersion>
-    </PropertyGroup>
-
-    <PropertyGroup>
-        <SuppressNETCoreSdkPreviewMessage>true</SuppressNETCoreSdkPreviewMessage>
-        <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
-        <RestoreLockedMode Condition="$(NUKEEPER) != 'true'">true</RestoreLockedMode>
-        <DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
-        <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
-        <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
-        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-        <SkipDefaultEditorConfigAsAdditionalFile>true</SkipDefaultEditorConfigAsAdditionalFile>
-        <GenerateDocumentationFile>true</GenerateDocumentationFile>
-        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    </PropertyGroup>
-
-    <PropertyGroup>
-        <BinaryLogger>$(MSBuildThisFileDirectory)obj\logs\$(OS).binlog</BinaryLogger>
-        <OutputPath>$(MSBuildThisFileDirectory)bin\$(MSBuildProjectName)\$(Configuration)</OutputPath>
-        <BaseIntermediateOutputPath>$(MSBuildThisFileDirectory)obj\$(MSBuildProjectName)</BaseIntermediateOutputPath>
-        <PackageOutputPath>$(MSBuildThisFileDirectory)bin\Packages\$(Configuration)</PackageOutputPath>
-        <RestorePackagesPath>$(MSBuildThisFileDirectory).nuget\main</RestorePackagesPath>
-        <CompilerGeneratedFilesOutputPath>$(MSBuildThisFileDirectory)obj\$(MSBuildProjectName)\$(Configuration)</CompilerGeneratedFilesOutputPath>
-    </PropertyGroup>
-
-    <ItemGroup>
-        <None Include="$(MSBuildThisFileDirectory)LICENSE.txt" Pack="true" PackagePath="LICENSE.txt" />
-    </ItemGroup>
-
-    <ItemGroup Condition="Exists('$(MSBuildThisFileDirectory).editorconfig')">
-        <AdditionalFiles Include="$(MSBuildThisFileDirectory).editorconfig" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <PackageReference Include="Nerdbank.GitVersioning" Version="3.3.37" PrivateAssets="all" />
-        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="all" />
-        <PackageReference Include="Microsoft.CodeAnalysis.CSharp.CodeStyle" Version="3.9.0" PrivateAssets="all" />
-        <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.321" PrivateAssets="all" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <AdditionalFiles Include="$(MSBuildThisFileDirectory)stylecop.json" Visible="false" />
-    </ItemGroup>
+  <PropertyGroup>
+    <Authors>Talen Fisher</Authors>
+    <Company>Cythral LLC</Company>
+    <Copyright>© Copyright 2020 Cythral LLC</Copyright>
+    <PackageProjectUrl>https://github.com/cythral/lambdajection</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/cythral/lambdajection</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+    <PackageTags>AWS Amazon Cloud Lambda Lambdajection DependencyInjection IoC</PackageTags>
+  </PropertyGroup>
+  <PropertyGroup>
+    <Configuration Condition="$(Configuration) == ''">Debug</Configuration>
+    <Nullable>enable</Nullable>
+    <LangVersion>9.0</LangVersion>
+    <MinClientVersion>2.5</MinClientVersion>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SuppressNETCoreSdkPreviewMessage>true</SuppressNETCoreSdkPreviewMessage>
+    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+    <RestoreLockedMode Condition="$(NUKEEPER) != 'true'">true</RestoreLockedMode>
+    <DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
+    <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
+    <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <SkipDefaultEditorConfigAsAdditionalFile>true</SkipDefaultEditorConfigAsAdditionalFile>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+  </PropertyGroup>
+  <PropertyGroup>
+    <BinaryLogger>$(MSBuildThisFileDirectory)obj\logs\$(OS).binlog</BinaryLogger>
+    <OutputPath>$(MSBuildThisFileDirectory)bin\$(MSBuildProjectName)\$(Configuration)</OutputPath>
+    <BaseIntermediateOutputPath>$(MSBuildThisFileDirectory)obj\$(MSBuildProjectName)</BaseIntermediateOutputPath>
+    <PackageOutputPath>$(MSBuildThisFileDirectory)bin\Packages\$(Configuration)</PackageOutputPath>
+    <RestorePackagesPath>$(MSBuildThisFileDirectory).nuget\main</RestorePackagesPath>
+    <CompilerGeneratedFilesOutputPath>$(MSBuildThisFileDirectory)obj\$(MSBuildProjectName)\$(Configuration)</CompilerGeneratedFilesOutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)LICENSE.txt" Pack="true" PackagePath="LICENSE.txt" />
+  </ItemGroup>
+  <ItemGroup Condition="Exists('$(MSBuildThisFileDirectory).editorconfig')">
+    <AdditionalFiles Include="$(MSBuildThisFileDirectory).editorconfig" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Nerdbank.GitVersioning" Version="3.3.37" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.CodeStyle" Version="3.9.0" PrivateAssets="all" />
+    <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.333" PrivateAssets="all" />
+  </ItemGroup>
+  <ItemGroup>
+    <AdditionalFiles Include="$(MSBuildThisFileDirectory)stylecop.json" Visible="false" />
+  </ItemGroup>
 </Project>
