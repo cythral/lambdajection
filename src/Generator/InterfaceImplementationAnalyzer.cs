@@ -14,27 +14,20 @@ namespace Lambdajection.Generator
 {
     internal class InterfaceImplementationAnalyzer
     {
-        private readonly ClassDeclarationSyntax classDeclaration;
-        private readonly GenerationContext context;
-
         private readonly INamedTypeSymbol?[] typeMatches = new INamedTypeSymbol?[2];
         private readonly string?[] typeNameMatches = new string?[2];
         private readonly INamedTypeSymbol?[] typeEncapsulationMatches = new INamedTypeSymbol?[2];
         private readonly string?[] typeEncapsulationNameMatches = new string?[2];
-        private readonly TypeUtils typeUtils = new();
+        private readonly TypeUtils typeUtils;
 
         private readonly List<GeneratedMethodInfo> generatedMethods = new();
 
-        internal InterfaceImplementationAnalyzer(
-            ClassDeclarationSyntax classDeclaration,
-            GenerationContext context
-        )
+        public InterfaceImplementationAnalyzer(TypeUtils typeUtils)
         {
-            this.classDeclaration = classDeclaration;
-            this.context = context;
+            this.typeUtils = typeUtils;
         }
 
-        internal AnalyzerResults Analyze()
+        internal AnalyzerResults Analyze(ClassDeclarationSyntax classDeclaration, GenerationContext context)
         {
             var classType = context.SemanticModel.GetDeclaredSymbol(classDeclaration) as ITypeSymbol;
             var attr = context.LambdaInterfaceAttribute;

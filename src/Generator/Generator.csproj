@@ -1,4 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
     <PackageId>Lambdajection.Generator</PackageId>
     <AssemblyName>$(PackageId)</AssemblyName>
@@ -20,9 +21,14 @@
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="3.9.0" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
     <PackageReference Include="System.Runtime.Loader" Version="4.3.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0" />
   </ItemGroup>
 
-  <ItemGroup>
+  <ItemGroup Condition="$(RunningGeneratorSpecificRestore) == 'true'">
+    <PackageReference Include="AWSSDK.Core" Version="3.5.0" />
+  </ItemGroup>
+
+  <ItemGroup Condition="$(RunningGeneratorSpecificRestore) != 'true'">
     <ProjectReference Include="../Core/Core.csproj" SetTargetFramework="TargetFramework=netstandard2.1" PrivateAssets="none" />
     <ProjectReference Include="../Attributes/Attributes.csproj" PrivateAssets="none" />
     <ProjectReference Include="../Encryption/Encryption.csproj" PrivateAssets="none" />
@@ -37,7 +43,7 @@
   <Target Name="IncludeExtraPackItems">
     <ItemGroup>
       <None Include="build/**" Pack="true" PackagePath="build/" />
-      <None Include="$(RestorePackagesPath)/awssdk.core/*/lib/netstandard2.0/AWSSDK.Core.dll" Pack="true" PackagePath="analyzers/dotnet/cs/AWSSDK.Core.dll" Visible="false" />
+      <None Include="$(MSBuildThisFile)" Pack="true" PackagePath="build/" />
       <None Include="$(OutputPath)/Lambdajection.Generator.*" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
       <None Include="$(OutputPath)/Lambdajection.Attributes.*" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
     </ItemGroup>

@@ -1,0 +1,26 @@
+<Project>
+    <PropertyGroup>
+        <LambdajectionGenerator_OutputPath>$(MSBuildThisFileDirectory)obj/</LambdajectionGenerator_OutputPath>
+    </PropertyGroup>
+
+    <Target Name="RestoreGeneratorDependencies" BeforeTargets="BeforeBuild">
+        <ItemGroup>
+            <LambdajectionGenerator_BuildProperties Include="RestorePackagesPath=$(RestorePackagesPath)" />
+            <LambdajectionGenerator_BuildProperties Include="RunningGeneratorSpecificRestore=true" />
+            <LambdajectionGenerator_BuildProperties Include="MSBuildProjectExtensionsPath=$(LambdajectionGenerator_OutputPath)" />
+            <LambdajectionGenerator_BuildProperties Include="CopyLocalLockFileAssemblies=true" />
+            <LambdajectionGenerator_BuildProperties Include="GeneratePackageOnBuild=false" />
+        </ItemGroup>
+
+        <MSBuild
+            Projects="$(MSBuildThisFileDirectory)Generator.csproj"
+            Targets="Restore"
+            Properties="@(LambdajectionGenerator_BuildProperties)"
+            Condition="!Exists($(LambdajectionGenerator_OutputPath))"
+        />
+
+        <PropertyGroup>
+            <LambdajectionAdditionalProbingPath>$(RestorePackagesPath)</LambdajectionAdditionalProbingPath>
+        </PropertyGroup>
+    </Target>
+</Project>

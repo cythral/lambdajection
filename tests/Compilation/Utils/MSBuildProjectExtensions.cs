@@ -23,11 +23,11 @@ namespace Microsoft.CodeAnalysis.MSBuild
         public static async Task<ImmutableArray<Diagnostic>> GetGeneratorDiagnostics(this Project project)
         {
             var compilation = (await project.GetCompilationAsync())!;
-            var generator = new GenerationDriver();
+            var generator = new Program();
             var driver = CSharpGeneratorDriver.Create(new[] { generator });
-            driver.RunGeneratorsAndUpdateCompilation(compilation, out var _, out var diagnotics);
+            driver.RunGeneratorsAndUpdateCompilation(compilation, out var _, out var diagnostics);
 
-            return diagnotics;
+            return diagnostics;
         }
 
         public static async Task<GenerateAssemblyResult> GenerateAssembly(this Project project)

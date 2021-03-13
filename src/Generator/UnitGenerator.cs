@@ -22,13 +22,21 @@ using static Microsoft.CodeAnalysis.CSharp.SyntaxKind;
 #pragma warning disable SA1204, SA1009
 namespace Lambdajection.Generator
 {
-    public class UnitGenerator
+    internal class UnitGenerator
     {
         private readonly GeneratorExecutionContext context;
+        private readonly UsingsGenerator usingsGenerator;
+        private readonly TypeUtils typeUtils;
 
-        public UnitGenerator(GeneratorExecutionContext context)
+        public UnitGenerator(
+            ProgramContext context,
+            UsingsGenerator usingsGenerator,
+            TypeUtils typeUtils
+        )
         {
-            this.context = context;
+            this.context = context.GeneratorExecutionContext;
+            this.usingsGenerator = usingsGenerator;
+            this.typeUtils = typeUtils;
         }
 
         public void Generate()
@@ -98,7 +106,6 @@ namespace Lambdajection.Generator
 
         public TAttribute GetMetadataAttribute<TAttribute>(ImmutableArray<AttributeData> attributes)
         {
-            var typeUtils = new TypeUtils();
             foreach (var attr in attributes)
             {
                 if (attr.AttributeClass != null && typeUtils.IsSymbolEqualToType(attr.AttributeClass, typeof(TAttribute)))
@@ -153,7 +160,7 @@ namespace Lambdajection.Generator
             var unitRoot = context.SyntaxTree.GetCompilationUnitRoot();
             var existingUsings = unitRoot.Usings.Select(x => x.WithoutTrivia().Name.ToString());
             var members = GenerateMembers(context);
-            var usings = new UsingsGenerator().Generate(context);
+            var usings = usingsGenerator.Generate(context);
 
             if (namespaceNode != null)
             {
@@ -167,14 +174,12 @@ namespace Lambdajection.Generator
                 .WithLeadingTrivia(TriviaList(ignoreWarningsTrivia));
         }
 
-        private static SyntaxList<MemberDeclarationSyntax> GenerateMembers(GenerationContext context)
+        private SyntaxList<MemberDeclarationSyntax> GenerateMembers(GenerationContext context)
         {
             var declaration = context.Declaration;
             var namespaceName = declaration.Ancestors().OfType<NamespaceDeclarationSyntax>().ElementAt(0).Name;
             var className = declaration.Identifier.ValueText;
-
-            var interfaceAnalyzer = new InterfaceImplementationAnalyzer(declaration, context);
-            var results = interfaceAnalyzer.Analyze();
+            var results = new InterfaceImplementationAnalyzer(typeUtils).Analyze(declaration, context);
 
             var constructorArgs = from tree in context.SourceGeneratorContext.Compilation.SyntaxTrees
                                   from constructor in tree.GetRoot().DescendantNodes().OfType<ConstructorDeclarationSyntax>()
