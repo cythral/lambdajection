@@ -16,12 +16,12 @@ namespace Lambdajection.Tests.Compilation
         {
             Directory.SetCurrentDirectory(TestMetadata.TestDirectory);
 
-            using var process = Process.Start("dotnet", $"restore Compilation/Projects/compilation-projects.sln -p:LambdajectionVersion={TestMetadata.PackageVersion}");
-            process.WaitForExit();
+            using var restoreProcess = Process.Start("dotnet", $"restore Compilation/Projects/compilation-projects.sln -p:LambdajectionVersion={TestMetadata.PackageVersion} -t:Restore,RestoreGeneratorDependencies");
+            restoreProcess.WaitForExit();
 
-            if (process.ExitCode != 0)
+            if (restoreProcess.ExitCode != 0)
             {
-                Exit(process.ExitCode);
+                Exit(restoreProcess.ExitCode);
             }
         }
     }
