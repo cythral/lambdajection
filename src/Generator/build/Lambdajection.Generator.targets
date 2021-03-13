@@ -27,7 +27,7 @@
 
             <LambdajectionGenerator_BuildAssemblies
                 Remove="@(LambdajectionGenerator_BuildAssemblies)"
-                Condition="%(FileName) == 'System.Diagnostics.EventLog' and !$([MSBuild]::IsOSPlatform('Windows'))"
+                Condition="%(FileName) == 'System.Diagnostics.EventLog' and $([MSBuild]::IsOSPlatform('Windows'))"
             />
         </ItemGroup>
 
