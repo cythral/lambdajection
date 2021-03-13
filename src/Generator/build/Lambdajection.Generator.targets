@@ -21,9 +21,10 @@
         />
 
         <ItemGroup>
+            <!-- EventLog is not xplat, so we exclude it -->
             <LambdajectionGenerator_BuildAssemblies
                 Include="$(LambdajectionGenerator_OutputPath)*.dll"
-                Exclude="$(LambdajectionGenerator_OutputPath)*EventLog.dll"
+                Exclude="$(LambdajectionGenerator_OutputPath)System.Diagnostics.EventLog.dll"
             />
         </ItemGroup>
 
