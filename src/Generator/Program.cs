@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.Loader;
 
 using Microsoft.CodeAnalysis;
@@ -30,6 +32,25 @@ namespace Lambdajection.Generator
                 {
                 }
             }
+
+            AssemblyLoadContext.Default.Resolving += (_, name) =>
+            {
+                var options = context.AnalyzerConfigOptions.GlobalOptions;
+                options.TryGetValue("build_property.LambdajectionAdditionalProbingPath", out var additionalProbingPath);
+
+                try
+                {
+                    var matchingFiles = Directory.GetFiles(additionalProbingPath, $"{name.Name}.dll", SearchOption.AllDirectories);
+                    var matchingFile = (from file in matchingFiles where file.Contains("netstandard") select file).FirstOrDefault();
+
+                    return matchingFile == null ? null : Assembly.LoadFile(matchingFile);
+                }
+                catch (Exception)
+                {
+                }
+
+                return null;
+            };
 
             Run(context);
         }
