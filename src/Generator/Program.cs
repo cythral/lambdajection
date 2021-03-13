@@ -8,6 +8,7 @@ using System.Runtime.Loader;
 using Microsoft.CodeAnalysis;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 #pragma warning disable SA1204, SA1009
 namespace Lambdajection.Generator
@@ -75,6 +76,12 @@ namespace Lambdajection.Generator
                     services.AddSingleton(new ProgramContext { GeneratorExecutionContext = context });
                     services.AddSingleton<IHost, GeneratorHost>();
                     new Startup().ConfigureServices(services);
+
+                    services.AddLogging(options =>
+                    {
+                        options.ClearProviders();
+                        options.AddConsole();
+                    });
                 })
                 .Build()
                 .RunAsync(context.CancellationToken)
