@@ -20,7 +20,6 @@ namespace Lambdajection.Generator
         public void Execute(GeneratorExecutionContext context)
         {
             var buildTimeAssemblies = GetBuildTimeAssemblies(context);
-            File.WriteAllText("/tmp/test", string.Join('\n', buildTimeAssemblies));
             foreach (var buildTimeAssembly in buildTimeAssemblies)
             {
                 try
