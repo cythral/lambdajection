@@ -21,7 +21,10 @@
         />
 
         <ItemGroup>
-            <LambdajectionGenerator_BuildAssemblies Include="$(LambdajectionGenerator_OutputPath)*.dll" />
+            <LambdajectionGenerator_BuildAssemblies
+                Include="$(LambdajectionGenerator_OutputPath)*.dll"
+                Exclude="$(LambdajectionGenerator_OutputPath)*EventLog.dll"
+            />
         </ItemGroup>
 
         <PropertyGroup>
