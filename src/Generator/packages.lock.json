@@ -108,18 +108,18 @@
       },
       "AWSSDK.Core": {
         "type": "Transitive",
-        "resolved": "3.5.3.7",
-        "contentHash": "KTlPskLG+9jYYbXXiS08v/mCCDXBRfOl18p7Z02PVclB2tmBsoMJMmdnjXFPRFCj9O5ceOK9mAZrasM/zSk+CQ==",
+        "resolved": "3.5.3.8",
+        "contentHash": "qF5cq1RuE2GD6EQu0Bef1I06yzVTwSlW0FBxMXT1bGd+dF0Rcoa0grH7P6KbRp9HyIzWPOEdlMIx0yX1puTFCA==",
         "dependencies": {
           "Microsoft.Bcl.AsyncInterfaces": "1.1.0"
         }
       },
       "AWSSDK.KeyManagementService": {
         "type": "Transitive",
-        "resolved": "3.5.2.18",
-        "contentHash": "xoWaZ5Ueo9PDY2QWxYxzEFDq1kgpkQcVV7mOwaN207dYikLEb5vp66AiCvTeHiNpYjJOHTcr/YJNu+yRKq8qPQ==",
+        "resolved": "3.5.2.19",
+        "contentHash": "0gYLv6JGBhvSsQDGEOi1Bkyg4JAfQVnsBYcO4kyA+0wjRG9d5OVHG8gXsD5RcYYqTCcTMEaduB0xOuA3f6boHA==",
         "dependencies": {
-          "AWSSDK.Core": "[3.5.3.7, 3.6.0)"
+          "AWSSDK.Core": "[3.5.3.8, 3.6.0)"
         }
       },
       "Humanizer.Core": {
@@ -1542,7 +1542,7 @@
       "Lambdajection.Encryption": {
         "type": "Project",
         "dependencies": {
-          "AWSSDK.KeyManagementService": "3.5.2.18"
+          "AWSSDK.KeyManagementService": "3.5.2.19"
         }
       },
       "Lambdajection.Framework": {
