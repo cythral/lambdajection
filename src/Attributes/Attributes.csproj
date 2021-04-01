@@ -10,7 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="../Framework/Framework.csproj" PrivateAssets="runtime" />
+    <ProjectReference Include="../Framework/Framework.csproj" PrivateAssets="none" />
   </ItemGroup>
 
   <ItemGroup>
