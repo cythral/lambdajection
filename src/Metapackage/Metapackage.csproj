@@ -13,10 +13,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Attributes\Attributes.csproj" PrivateAssets="none" />
+    <ProjectReference Include="..\Attributes\Attributes.csproj" PrivateAssets="runtime" />
     <ProjectReference Include="..\Core\Core.csproj" PrivateAssets="none" />
     <ProjectReference Include="..\Generator\Generator.csproj" PrivateAssets="none" />
-    <ProjectReference Include="..\Framework\Framework.csproj" PrivateAssets="none" />
+    <ProjectReference Include="..\Framework\Framework.csproj" PrivateAssets="runtime" />
     <ProjectReference Include="..\Framework.BuildTime\Framework.BuildTime.csproj" PrivateAssets="none" />
   </ItemGroup>
 </Project>

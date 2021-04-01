@@ -9,27 +9,27 @@
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <NoWarn>NU5118;CS8618;NU5128;CS1591;CA1062</NoWarn>
-    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <BuildOutputTargetFolder>analyzers/dotnet/cs</BuildOutputTargetFolder>
     <DevelopmentDependency>true</DevelopmentDependency>
     <PackageDescription>Includes the compile-time generator used to generate code needed for Dependency Injection-enabled AWS Lambdas.</PackageDescription>
     <BeforePack>IncludeExtraPackItems</BeforePack>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AWSSDK.Core" Version="3.7.0.6" PrivateAssets="all" />
-    <PackageReference Include="Microsoft.CodeAnalysis" Version="3.9.0" PrivateAssets="all" />
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="3.9.0" PrivateAssets="all" />
-    <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" PrivateAssets="all" />
-    <PackageReference Include="System.Runtime.Loader" Version="4.3.0" PrivateAssets="all" />
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0" PrivateAssets="all" />
+    <PackageReference Include="AWSSDK.Core" Version="3.7.0.6" PrivateAssets="runtime;analyzers;contentfiles;build" />
+    <PackageReference Include="Microsoft.CodeAnalysis" Version="3.9.0" PrivateAssets="runtime;analyzers;contentfiles;build" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="3.9.0" PrivateAssets="runtime;analyzers;contentfiles;build" />
+    <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" PrivateAssets="runtime;analyzers;contentfiles;build" />
+    <PackageReference Include="System.Runtime.Loader" Version="4.3.0" PrivateAssets="runtime;analyzers;contentfiles;build" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0" PrivateAssets="runtime;analyzers;contentfiles;build" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="../Core/Core.csproj" PrivateAssets="all" />
-    <ProjectReference Include="../Attributes/Attributes.csproj" PrivateAssets="all" />
-    <ProjectReference Include="../Encryption/Encryption.csproj" PrivateAssets="all" />
-    <ProjectReference Include="../Framework/Framework.csproj" PrivateAssets="all" />
-    <ProjectReference Include="../Framework.BuildTime/Framework.BuildTime.csproj" PrivateAssets="all" />
+    <ProjectReference Include="../Core/Core.csproj" PrivateAssets="runtime;analyzers;contentfiles" />
+    <ProjectReference Include="../Attributes/Attributes.csproj" PrivateAssets="runtime;analyzers;contentfiles" />
+    <ProjectReference Include="../Encryption/Encryption.csproj" PrivateAssets="runtime;analyzers;contentfiles" />
+    <ProjectReference Include="../Framework/Framework.csproj" PrivateAssets="runtime;analyzers;contentfiles" />
+    <ProjectReference Include="../Framework.BuildTime/Framework.BuildTime.csproj" PrivateAssets="runtime;analyzers;contentfiles" />
   </ItemGroup>
 
   <ItemGroup>
@@ -39,8 +39,6 @@
   <Target Name="IncludeExtraPackItems">
     <ItemGroup>
       <None Include="build/" Pack="true" PackagePath="build/" />
-      <None Include="$(OutputPath)/Lambdajection.Generator.*" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
-      <None Include="$(OutputPath)/Lambdajection.Attributes.*" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
     </ItemGroup>
   </Target>
 

@@ -16,7 +16,7 @@ namespace Lambdajection.Tests.Compilation
         {
             Directory.SetCurrentDirectory(TestMetadata.TestDirectory);
 
-            using var restoreProcess = Process.Start("dotnet", $"restore Compilation/Projects/compilation-projects.sln -p:LambdajectionVersion={TestMetadata.PackageVersion} -t:Restore,RestoreGeneratorDependencies");
+            using var restoreProcess = Process.Start("dotnet", $"restore Compilation/Projects/compilation-projects.sln -p:LambdajectionVersion={TestMetadata.PackageVersion} -t:Restore");
             restoreProcess.WaitForExit();
 
             if (restoreProcess.ExitCode != 0)

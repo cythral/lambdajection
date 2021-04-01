@@ -21,9 +21,9 @@
 
     <ItemGroup>
         <ProjectReference Include="../Core/Core.csproj" SetTargetFramework="TargetFramework=netstandard2.1" PrivateAssets="none" />
-        <ProjectReference Include="../Attributes/Attributes.csproj" PrivateAssets="none" />
-        <ProjectReference Include="../Framework/Framework.csproj" PrivateAssets="none" />
-        <ProjectReference Include="../Framework.BuildTime/Framework.BuildTime.csproj" PrivateAssets="none" />
+        <ProjectReference Include="../Attributes/Attributes.csproj" PrivateAssets="runtime" />
+        <ProjectReference Include="../Framework/Framework.csproj" PrivateAssets="runtime" />
+        <ProjectReference Include="../Framework.BuildTime/Framework.BuildTime.csproj" PrivateAssets="runtime" />
     </ItemGroup>
 
     <ItemGroup>

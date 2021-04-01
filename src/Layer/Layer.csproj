@@ -6,6 +6,7 @@
         <NoWarn>NU5128</NoWarn>
         <PackageDescription>Runtime package store layer for Lambdajection.</PackageDescription>
         <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
+        <IncludeBuildOutput>false</IncludeBuildOutput>
         <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
         <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
         <BeforePack>CreateStore;$(BeforePack)</BeforePack>
@@ -22,7 +23,7 @@
     <ItemGroup>
         <PackageReference Include="Cythral.CloudFormation.BuildTasks" Version="0.5.0" PrivateAssets="all" />
         <ProjectReference Include="../Generator/Generator.csproj" ReferenceOutputAssembly="false" />
-        <ProjectReference Include="../Attributes/Attributes.csproj" />
+        <ProjectReference Include="../Attributes/Attributes.csproj" PrivateAssets="runtime" />
     </ItemGroup>
 
     <Target Name="CreateStore" DependsOnTargets="GetBuildVersion;ResolvePackageAssets">
