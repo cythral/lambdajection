@@ -1,0 +1,5 @@
+<Project>
+    <PropertyGroup>
+        <LambdajectionAdditionalProbingPath>$(RestorePackagesPath)</LambdajectionAdditionalProbingPath>
+    </PropertyGroup>
+</Project>

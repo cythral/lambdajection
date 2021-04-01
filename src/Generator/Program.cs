@@ -34,20 +34,24 @@ namespace Lambdajection.Generator
                 }
             }
 
+            var options = context.AnalyzerConfigOptions.GlobalOptions;
+            options.TryGetValue("build_property.LambdajectionAdditionalProbingPath", out var additionalProbingPath);
+
             AssemblyLoadContext.Default.Resolving += (_, name) =>
             {
-                var options = context.AnalyzerConfigOptions.GlobalOptions;
-                options.TryGetValue("build_property.LambdajectionAdditionalProbingPath", out var additionalProbingPath);
+                var matchingFiles = from file in Directory.GetFiles(additionalProbingPath, $"{name.Name}.dll", SearchOption.AllDirectories)
+                                    where file.Contains("netstandard") || file.Contains("net5.0")
+                                    select file;
 
-                try
+                foreach (var matchingFile in matchingFiles)
                 {
-                    var matchingFiles = Directory.GetFiles(additionalProbingPath, $"{name.Name}.dll", SearchOption.AllDirectories);
-                    var matchingFile = (from file in matchingFiles where file.Contains("netstandard") select file).FirstOrDefault();
-
-                    return matchingFile == null ? null : Assembly.LoadFile(matchingFile);
-                }
-                catch (Exception)
-                {
+                    try
+                    {
+                        return Assembly.LoadFile(matchingFile);
+                    }
+                    catch (Exception)
+                    {
+                    }
                 }
 
                 return null;
