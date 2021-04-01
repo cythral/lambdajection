@@ -6,19 +6,8 @@
     <NoWarn>NU5128;NU5131</NoWarn>
     <AssemblyName>$(PackageId)</AssemblyName>
     <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
-    <IncludeBuildOutput>false</IncludeBuildOutput>
-    <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
-    <PreserveCompilationContext>true</PreserveCompilationContext>
     <PackageDescription>Includes attributes needed for writing AWS Lambdas using Dependency Injection.</PackageDescription>
   </PropertyGroup>
-
-  <Target Name="_GetReferenceAssemblies" AfterTargets="Build" BeforeTargets="Pack">
-    <ItemGroup>
-      <ReferenceAssembliesOutput Include="@(IntermediateRefAssembly->'%(FullPath)')" TargetFramework="$(TargetFramework)" />
-      <ReferenceAssembliesOutput Include="@(DocumentationProjectOutputGroupOutput->'%(FullPath)')" TargetFramework="$(TargetFramework)" />
-      <None Include="@(ReferenceAssembliesOutput)" PackagePath="ref/%(ReferenceAssembliesOutput.TargetFramework)" Pack="true" />
-    </ItemGroup>
-  </Target>
 
   <ItemGroup>
     <ProjectReference Include="../Framework/Framework.csproj" PrivateAssets="none" />

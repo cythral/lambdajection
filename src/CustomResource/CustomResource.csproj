@@ -12,7 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="../Core/Core.csproj" PrivateAssets="none" />
-    <ProjectReference Include="../Attributes/Attributes.csproj" PrivateAssets="none" />
+    <ProjectReference Include="../Attributes/Attributes.csproj" PrivateAssets="runtime" />
     <ProjectReference Include="../Framework/Framework.csproj" PrivateAssets="none" />
     <ProjectReference Include="../CustomResource.BuildTime/CustomResource.BuildTime.csproj" PrivateAssets="none" />
   </ItemGroup>
