@@ -14,11 +14,11 @@
       },
       "AutoFixture.NUnit3": {
         "type": "Direct",
-        "requested": "[4.15.0, )",
-        "resolved": "4.15.0",
-        "contentHash": "55i2i+wb5PFo0JDlJt99ZaFfuNA9YXVLpT1WNOhx3cN+8K4GBA+0/LHFTUAUYiE+bRC5FYSJkaHa8ceS0ypZtA==",
+        "requested": "[4.16.0, )",
+        "resolved": "4.16.0",
+        "contentHash": "RfIyrgyreMVfFJEr2M/4qTvXSrRkjJkIeGTg25zZLnUpmfh5CXmFOS/7+QWfpSSH2wRqxrGy9UDL0zDUPtc4qg==",
         "dependencies": {
-          "AutoFixture": "4.15.0",
+          "AutoFixture": "4.16.0",
           "NUnit": "[3.7.0, 4.0.0)"
         }
       },
@@ -213,8 +213,8 @@
       },
       "AutoFixture": {
         "type": "Transitive",
-        "resolved": "4.15.0",
-        "contentHash": "TZTWBoxqCHKYob3//v5MaWuGj6rF6rLsD1V0ta20gQpzulnjT4oTnMIy05/Y5VKtyZ1D3VqcokOKMq27lWEpuQ==",
+        "resolved": "4.16.0",
+        "contentHash": "tjcVRKCaoNr+KQudX6xVph4ulxdtyB4kXQyZi/EjMEwp+xLAHJlZdmtVHdRmogLAupEK1UHbR7YIRAyPoPUMjA==",
         "dependencies": {
           "Fare": "[2.1.1, 3.0.0)",
           "System.ComponentModel.Annotations": "4.3.0"
