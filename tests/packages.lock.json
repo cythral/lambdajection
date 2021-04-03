@@ -4,11 +4,11 @@
     ".NETCoreApp,Version=v5.0": {
       "AutoFixture.AutoNSubstitute": {
         "type": "Direct",
-        "requested": "[4.15.0, )",
-        "resolved": "4.15.0",
-        "contentHash": "fOcvdvDi6wCvp495wc7Rq7fAEnYCx6oRI1NCJoj5xbMQOMnF0+pqByrby7Rzr0Js+qd1sGNsF1QkDjir+zrMPA==",
+        "requested": "[4.16.0, )",
+        "resolved": "4.16.0",
+        "contentHash": "YwSKoMTvrnynHH6PC/taN4ybMJID5eMOB6mi6FEA3vD4vcoi4dMJHPXc37gqFgmKe7yCgYmh1Oz0f12IiwsflA==",
         "dependencies": {
-          "AutoFixture": "4.15.0",
+          "AutoFixture": "4.16.0",
           "NSubstitute": "[2.0.3, 5.0.0)"
         }
       },
