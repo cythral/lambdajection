@@ -12,8 +12,8 @@
 
   <ItemGroup>
     <PackageReference Include="AutoFixture.AutoNSubstitute" Version="4.16.0" />
-    <PackageReference Include="AWSSDK.S3" Version="3.7.0.7" />
     <PackageReference Include="AWSSDK.SecurityToken" Version="3.7.0.8" />
+    <PackageReference Include="AWSSDK.S3" Version="3.7.0.9" />
     <PackageReference Include="AutoFixture.NUnit3" Version="4.16.0" />
     <PackageReference Include="coverlet.collector" Version="3.0.3" PrivateAssets="all" />
     <PackageReference Include="FluentAssertions" Version="5.10.3" />
