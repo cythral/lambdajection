@@ -40,8 +40,8 @@
       },
       "AWSSDK.Core": {
         "type": "Transitive",
-        "resolved": "3.7.0.9",
-        "contentHash": "0ebQ1gTAzMfYp6IYur3gtVYv7iBYYhvwbI/6tiggm/1CKROMYzRcKlCwSEJ9Of1uNfMwhtrzUohfmycL4J/LPQ==",
+        "resolved": "3.7.0.10",
+        "contentHash": "XIg3tsHLQwN1k/H2M/dUZa2hc+cUDoDJBZpppxX5XJ1vhvI/MhQR9PTBDM8rNenxTNmfLflruU51vamvzrBXeQ==",
         "dependencies": {
           "Microsoft.Bcl.AsyncInterfaces": "1.1.0"
         }
@@ -1553,7 +1553,7 @@
       "Lambdajection.Generator": {
         "type": "Project",
         "dependencies": {
-          "AWSSDK.Core": "3.7.0.9",
+          "AWSSDK.Core": "3.7.0.10",
           "Lambdajection.Attributes": "1.0.0",
           "Lambdajection.Core": "1.0.0",
           "Lambdajection.Encryption": "1.0.0",
