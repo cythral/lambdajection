@@ -13,7 +13,7 @@
   <ItemGroup>
     <PackageReference Include="AutoFixture.AutoNSubstitute" Version="4.16.0" />
     <PackageReference Include="AWSSDK.S3" Version="3.7.0.12" />
-    <PackageReference Include="AWSSDK.SecurityToken" Version="3.7.0.10" />
+    <PackageReference Include="AWSSDK.SecurityToken" Version="3.7.1.1" />
     <PackageReference Include="AutoFixture.NUnit3" Version="4.16.0" />
     <PackageReference Include="coverlet.collector" Version="3.0.3" PrivateAssets="all" />
     <PackageReference Include="FluentAssertions" Version="5.10.3" />
@@ -21,7 +21,7 @@
     <PackageReference Include="Microsoft.CodeAnalysis" Version="3.9.0" />
     <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.MSBuild" Version="3.9.0" />
     <PackageReference Include="NSubstitute" Version="4.2.2" />
-    <PackageReference Include="NuGet.ProjectModel" Version="5.10.0-preview.2.7190" />
+    <PackageReference Include="NuGet.ProjectModel" Version="5.10.0-preview.2.7203" />
     <PackageReference Include="nunit" Version="3.13.1" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.17.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.4" />
