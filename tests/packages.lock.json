@@ -33,11 +33,11 @@
       },
       "AWSSDK.SecurityToken": {
         "type": "Direct",
-        "requested": "[3.7.1.2, )",
-        "resolved": "3.7.1.2",
-        "contentHash": "1jo2Mm7yNn6u6H0AKr8hMcYA03jzhf8TJ9+YzzDdXYDbRdZ3305IA7ILJWm/BdedDHOH//umAjeykpF4wCq2AQ==",
+        "requested": "[3.7.1.3, )",
+        "resolved": "3.7.1.3",
+        "contentHash": "F1vb4l39V/+CLC/7JkeXdfaSrrYIK1TbI8eJB5Mp5sDMvvgQNXYKKpyWnR5dGmdFYmiXllYKFuf9osVnclPucA==",
         "dependencies": {
-          "AWSSDK.Core": "[3.7.0.14, 3.8.0)"
+          "AWSSDK.Core": "[3.7.0.15, 3.8.0)"
         }
       },
       "coverlet.collector": {
@@ -1739,7 +1739,7 @@
       "Lambdajection.Generator": {
         "type": "Project",
         "dependencies": {
-          "AWSSDK.Core": "3.7.0.14",
+          "AWSSDK.Core": "3.7.0.15",
           "Lambdajection.Attributes": "1.0.0",
           "Lambdajection.Core": "1.0.0",
           "Lambdajection.Encryption": "1.0.0",
