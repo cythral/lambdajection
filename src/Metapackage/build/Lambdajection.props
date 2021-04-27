@@ -8,5 +8,6 @@
         <CompilerVisibleProperty Include="Nullable" />
         <CompilerVisibleProperty Include="LambdajectionBuildTimeAssemblies" />
         <CompilerVisibleProperty Include="LambdajectionAdditionalProbingPath" />
+        <CompilerVisibleProperty Include="LambdajectionIamPermissionsOutputPath" />
     </ItemGroup>
 </Project>

@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 
-using Lambdajection.Encryption;
 using Lambdajection.Framework;
 
 using Microsoft.CodeAnalysis;
@@ -23,11 +22,17 @@ namespace Lambdajection.Generator
 
         private readonly GenerationContext context;
         private readonly LambdaCompilationScanResult scanResults;
+        private readonly ProgramContext programContext;
 
-        public ConfiguratorGenerator(GenerationContext context, LambdaCompilationScanResult scanResults)
+        public ConfiguratorGenerator(
+            GenerationContext context,
+            LambdaCompilationScanResult scanResults,
+            ProgramContext programContext
+        )
         {
             this.context = context;
             this.scanResults = scanResults;
+            this.programContext = programContext;
         }
 
         public ClassDeclarationSyntax Generate()
@@ -68,6 +73,7 @@ namespace Lambdajection.Generator
 
                 foreach (var optionClass in scanResults.OptionClasses)
                 {
+                    programContext.ExtraIamPermissionsRequired.Add("kms:Decrypt");
                     var decryptorGenerator = new OptionsDecryptorGenerator(optionClass);
                     var decryptorClass = decryptorGenerator.Generate();
                     classDeclaration = classDeclaration.AddMembers(decryptorClass);
@@ -84,7 +90,7 @@ namespace Lambdajection.Generator
                 context.Usings.Add("Amazon.KeyManagementService");
 
                 yield return ParseStatement($"services.TryAddSingleton(typeof(IAmazonKeyManagementService), typeof(AmazonKeyManagementServiceClient));");
-                yield return ParseStatement($"services.TryAddSingleton(typeof({nameof(IDecryptionService)}), typeof({nameof(DefaultDecryptionService)}));\n\n");
+                yield return ParseStatement($"services.TryAddSingleton(typeof(IDecryptionService), typeof(DefaultDecryptionService));\n\n");
             }
 
             foreach (var optionClass in scanResults.OptionClasses)

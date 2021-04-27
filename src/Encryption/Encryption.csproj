@@ -15,6 +15,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="../Framework/Framework.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="build/**" Pack="true" PackagePath="build/" />
   </ItemGroup>
 </Project>

@@ -38,7 +38,7 @@ namespace Lambdajection.Generator
                     Parameter(
                         attributeLists: List<AttributeListSyntax>(),
                         modifiers: TokenList(),
-                        type: ParseTypeName(typeToValidate.ToString()),
+                        type: ParseTypeName(typeToValidate.ToString() ?? string.Empty),
                         identifier: Identifier(argumentName),
                         @default: null
                     ),

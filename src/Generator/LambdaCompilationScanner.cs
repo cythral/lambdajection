@@ -3,7 +3,6 @@ using System.Collections.Immutable;
 using System.Linq;
 
 using Lambdajection.Attributes;
-using Lambdajection.Encryption;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -71,7 +70,7 @@ namespace Lambdajection.Generator
                 {
                     var encryptedProperties = from prop in classNode.DescendantNodes().OfType<PropertyDeclarationSyntax>()
                                               from attr in semanticModel.GetDeclaredSymbol(prop)?.GetAttributes() ?? ImmutableArray.Create<AttributeData>()
-                                              where attr.AttributeClass?.Name == nameof(EncryptedAttribute)
+                                              where attr.AttributeClass?.Name == "EncryptedAttribute"
                                               select prop.Identifier.ValueText;
 
                     optionClasses.Add(new OptionClass(configSectionName, classNode, encryptedProperties));
