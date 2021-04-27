@@ -23,6 +23,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MissingLambdaInterface", "M
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomResources", "CustomResources\CustomResources.csproj", "{722CA08A-57EC-49FA-B36E-7E78EBBBC6BC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IamPermissions", "IamPermissions\IamPermissions.csproj", "{931A04BB-E210-42C0-A8C0-829BB2B8103A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -156,5 +158,17 @@ Global
 		{722CA08A-57EC-49FA-B36E-7E78EBBBC6BC}.Release|x64.Build.0 = Release|Any CPU
 		{722CA08A-57EC-49FA-B36E-7E78EBBBC6BC}.Release|x86.ActiveCfg = Release|Any CPU
 		{722CA08A-57EC-49FA-B36E-7E78EBBBC6BC}.Release|x86.Build.0 = Release|Any CPU
+		{931A04BB-E210-42C0-A8C0-829BB2B8103A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{931A04BB-E210-42C0-A8C0-829BB2B8103A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{931A04BB-E210-42C0-A8C0-829BB2B8103A}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{931A04BB-E210-42C0-A8C0-829BB2B8103A}.Debug|x64.Build.0 = Debug|Any CPU
+		{931A04BB-E210-42C0-A8C0-829BB2B8103A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{931A04BB-E210-42C0-A8C0-829BB2B8103A}.Debug|x86.Build.0 = Debug|Any CPU
+		{931A04BB-E210-42C0-A8C0-829BB2B8103A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{931A04BB-E210-42C0-A8C0-829BB2B8103A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{931A04BB-E210-42C0-A8C0-829BB2B8103A}.Release|x64.ActiveCfg = Release|Any CPU
+		{931A04BB-E210-42C0-A8C0-829BB2B8103A}.Release|x64.Build.0 = Release|Any CPU
+		{931A04BB-E210-42C0-A8C0-829BB2B8103A}.Release|x86.ActiveCfg = Release|Any CPU
+		{931A04BB-E210-42C0-A8C0-829BB2B8103A}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

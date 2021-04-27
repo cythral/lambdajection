@@ -57,7 +57,8 @@ namespace Lambdajection.Generator
                 return;
             }
 
-            await File.WriteAllTextAsync(iamPermissionsPath, string.Join('\n', collector.Permissions));
+            var permissionsFileContent = string.Join('\n', collector.Permissions);
+            await File.WriteAllTextAsync(iamPermissionsPath, permissionsFileContent);
         }
 
         public class TreeWalker : CSharpSyntaxWalker
