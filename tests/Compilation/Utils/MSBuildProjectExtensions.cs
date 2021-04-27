@@ -16,7 +16,6 @@ namespace Microsoft.CodeAnalysis.MSBuild
         {
             using var workspace = MSBuildWorkspace.Create();
             workspace.LoadMetadataForReferencedProjects = true;
-
             return await workspace.OpenProjectAsync(pathToProject);
         }
 
@@ -26,7 +25,6 @@ namespace Microsoft.CodeAnalysis.MSBuild
             var generator = new Program();
             var driver = CSharpGeneratorDriver.Create(new[] { generator });
             driver.RunGeneratorsAndUpdateCompilation(compilation, out var _, out var diagnostics);
-
             return diagnostics;
         }
 
