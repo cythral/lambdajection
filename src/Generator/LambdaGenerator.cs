@@ -21,18 +21,21 @@ namespace Lambdajection.Generator
         private readonly string inputParameterType;
         private readonly string returnType;
         private readonly BaseTypeSyntax[] typeConstraints;
+        private readonly ProgramContext programContext;
 
         public LambdaGenerator(
             AnalyzerResults interfaceAnalyzerResults,
             GenerationContext context,
             string className,
-            LambdaCompilationScanResult scanResults
+            LambdaCompilationScanResult scanResults,
+            ProgramContext programContext
         )
         {
             this.interfaceAnalyzerResults = interfaceAnalyzerResults;
             this.context = context;
             this.className = className;
             this.scanResults = scanResults;
+            this.programContext = programContext;
             inputTypeName = interfaceAnalyzerResults.InputTypeName!;
             returnType = interfaceAnalyzerResults.OutputTypeName!;
 
@@ -47,7 +50,7 @@ namespace Lambdajection.Generator
 
         public ClassDeclarationSyntax Generate()
         {
-            var configuratorGenerator = new ConfiguratorGenerator(context, scanResults);
+            var configuratorGenerator = new ConfiguratorGenerator(context, scanResults, programContext);
             var configurator = configuratorGenerator.Generate();
 
             var result = ClassDeclaration(className)

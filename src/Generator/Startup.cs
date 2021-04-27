@@ -11,6 +11,7 @@ namespace Lambdajection.Generator
             services.AddSingleton<UsingsGenerator>();
             services.AddSingleton<TypeUtils>();
             services.AddSingleton<UnitGenerator>();
+            services.AddSingleton<IamAccessAnalyzer>();
         }
     }
 }

@@ -16,7 +16,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AWSSDK.Core" Version="3.7.0.15" PrivateAssets="runtime;analyzers;contentfiles;build" />
     <PackageReference Include="Microsoft.CodeAnalysis" Version="3.9.0" PrivateAssets="runtime;analyzers;contentfiles;build" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="3.9.0" PrivateAssets="runtime;analyzers;contentfiles;build" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" PrivateAssets="runtime;analyzers;contentfiles;build" />
@@ -27,7 +26,6 @@
   <ItemGroup>
     <ProjectReference Include="../Core/Core.csproj" PrivateAssets="runtime;analyzers;contentfiles" />
     <ProjectReference Include="../Attributes/Attributes.csproj" PrivateAssets="runtime;analyzers;contentfiles" />
-    <ProjectReference Include="../Encryption/Encryption.csproj" PrivateAssets="runtime;analyzers;contentfiles" />
     <ProjectReference Include="../Framework/Framework.csproj" PrivateAssets="runtime;analyzers;contentfiles" />
     <ProjectReference Include="../Framework.BuildTime/Framework.BuildTime.csproj" PrivateAssets="runtime;analyzers;contentfiles" />
   </ItemGroup>

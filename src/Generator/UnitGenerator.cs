@@ -24,17 +24,17 @@ namespace Lambdajection.Generator
 {
     internal class UnitGenerator
     {
-        private readonly GeneratorExecutionContext context;
+        private readonly ProgramContext programContext;
         private readonly UsingsGenerator usingsGenerator;
         private readonly TypeUtils typeUtils;
 
         public UnitGenerator(
-            ProgramContext context,
+            ProgramContext programContext,
             UsingsGenerator usingsGenerator,
             TypeUtils typeUtils
         )
         {
-            this.context = context.GeneratorExecutionContext;
+            this.programContext = programContext;
             this.usingsGenerator = usingsGenerator;
             this.typeUtils = typeUtils;
         }
@@ -43,10 +43,10 @@ namespace Lambdajection.Generator
         {
             try
             {
-                var settings = GenerationSettings.FromContext(context);
-                var syntaxTrees = context.Compilation.SyntaxTrees;
+                var settings = GenerationSettings.FromContext(programContext.GeneratorExecutionContext);
+                var syntaxTrees = programContext.GeneratorExecutionContext.Compilation.SyntaxTrees;
                 var generations = from tree in syntaxTrees.AsParallel()
-                                  let semanticModel = context.Compilation.GetSemanticModel(tree)
+                                  let semanticModel = programContext.GeneratorExecutionContext.Compilation.GetSemanticModel(tree)
 
                                   from node in tree.GetRoot().DescendantNodesAndSelf().OfType<ClassDeclarationSyntax>()
                                   from attr in semanticModel.GetDeclaredSymbol(node)?.GetAttributes() ?? ImmutableArray.Create<AttributeData>()
@@ -56,15 +56,15 @@ namespace Lambdajection.Generator
                                   let startupType = GetAttributeArgument<INamedTypeSymbol>(attr, "Startup")!
                                   let generationContext = new GenerationContext
                                   {
-                                      SourceGeneratorContext = context,
+                                      SourceGeneratorContext = programContext.GeneratorExecutionContext,
                                       Declaration = node,
                                       SyntaxTree = tree,
-                                      Compilation = context.Compilation,
+                                      Compilation = programContext.GeneratorExecutionContext.Compilation,
                                       SemanticModel = semanticModel,
                                       AttributeData = attr,
                                       LambdaHostAttribute = GetMetadataAttribute<LambdaHostAttribute>(metadataAttributes),
                                       LambdaInterfaceAttribute = GetMetadataAttribute<LambdaInterfaceAttribute>(metadataAttributes),
-                                      CancellationToken = context.CancellationToken,
+                                      CancellationToken = programContext.GeneratorExecutionContext.CancellationToken,
                                       StartupType = startupType,
                                       SerializerType = GetAttributeArgument<INamedTypeSymbol>(attr, "Serializer"),
                                       ConfigFactoryType = GetAttributeArgument<INamedTypeSymbol>(attr, "ConfigFactory"),
@@ -81,7 +81,7 @@ namespace Lambdajection.Generator
 
                 foreach (var (name, document) in generations)
                 {
-                    context.AddSource(name, document);
+                    programContext.GeneratorExecutionContext.AddSource(name, document);
                 }
             }
             catch (AggregateException e)
@@ -91,10 +91,10 @@ namespace Lambdajection.Generator
 
                 foreach (var failure in failureExceptions)
                 {
-                    context.ReportDiagnostic(failure.Diagnostic);
+                    programContext.GeneratorExecutionContext.ReportDiagnostic(failure.Diagnostic);
                 }
 
-                using var source = CancellationTokenSource.CreateLinkedTokenSource(context.CancellationToken);
+                using var source = CancellationTokenSource.CreateLinkedTokenSource(programContext.GeneratorExecutionContext.CancellationToken);
                 source.Cancel();
 
                 if (nonFailureExceptions.Any())
@@ -174,19 +174,19 @@ namespace Lambdajection.Generator
                 .WithLeadingTrivia(TriviaList(ignoreWarningsTrivia));
         }
 
-        private SyntaxList<MemberDeclarationSyntax> GenerateMembers(GenerationContext context)
+        private SyntaxList<MemberDeclarationSyntax> GenerateMembers(GenerationContext generationContext)
         {
-            var declaration = context.Declaration;
+            var declaration = generationContext.Declaration;
             var namespaceName = declaration.Ancestors().OfType<NamespaceDeclarationSyntax>().ElementAt(0).Name;
             var className = declaration.Identifier.ValueText;
-            var results = new InterfaceImplementationAnalyzer(typeUtils).Analyze(declaration, context);
+            var results = new InterfaceImplementationAnalyzer(typeUtils).Analyze(declaration, generationContext);
 
-            var constructorArgs = from tree in context.SourceGeneratorContext.Compilation.SyntaxTrees
+            var constructorArgs = from tree in generationContext.SourceGeneratorContext.Compilation.SyntaxTrees
                                   from constructor in tree.GetRoot().DescendantNodes().OfType<ConstructorDeclarationSyntax>()
                                   from parameter in constructor.ParameterList.Parameters
                                   select parameter;
 
-            if (!context.Settings.IncludeAmazonFactories && constructorArgs.Any())
+            if (!generationContext.Settings.IncludeAmazonFactories && constructorArgs.Any())
             {
                 foreach (var arg in constructorArgs)
                 {
@@ -195,7 +195,7 @@ namespace Lambdajection.Generator
                         continue;
                     }
 
-                    var semanticModel = context.SourceGeneratorContext.Compilation.GetSemanticModel(arg.SyntaxTree);
+                    var semanticModel = generationContext.SourceGeneratorContext.Compilation.GetSemanticModel(arg.SyntaxTree);
                     var typeDefinition = semanticModel.GetTypeInfo(arg.Type).Type?.OriginalDefinition;
                     var qualifiedName = typeDefinition?.ContainingNamespace + "." + typeDefinition?.MetadataName + ", " + typeDefinition?.ContainingAssembly;
 
@@ -214,12 +214,12 @@ namespace Lambdajection.Generator
                 }
             }
 
-            var scanner = new LambdaCompilationScanner(context.SourceGeneratorContext.Compilation, context.SourceGeneratorContext.Compilation.SyntaxTrees, $"{namespaceName}.{className}", context.StartupTypeDisplayName);
+            var scanner = new LambdaCompilationScanner(generationContext.SourceGeneratorContext.Compilation, generationContext.SourceGeneratorContext.Compilation.SyntaxTrees, $"{namespaceName}.{className}", generationContext.StartupTypeDisplayName);
             var scanResults = scanner.Scan();
 
             IEnumerable<MemberDeclarationSyntax> GenerateMembers()
             {
-                var generator = new LambdaGenerator(results, context, className!, scanResults);
+                var generator = new LambdaGenerator(results, generationContext, className!, scanResults, programContext);
                 yield return generator.Generate();
             }
 

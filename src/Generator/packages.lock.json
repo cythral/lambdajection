@@ -2,15 +2,6 @@
   "version": 1,
   "dependencies": {
     ".NETStandard,Version=v2.1": {
-      "AWSSDK.Core": {
-        "type": "Direct",
-        "requested": "[3.7.0.15, )",
-        "resolved": "3.7.0.15",
-        "contentHash": "8slVElCpnQQ+RhNjfZnZ3pdb90hQLcMhY37+yXEmn2F+fdLCFCK0EajM6jzv/3EZ7u8/+DoUQMF+OAjh+Qenjg==",
-        "dependencies": {
-          "Microsoft.Bcl.AsyncInterfaces": "1.1.0"
-        }
-      },
       "Microsoft.CodeAnalysis": {
         "type": "Direct",
         "requested": "[3.9.0, )",
@@ -114,14 +105,6 @@
         "type": "Transitive",
         "resolved": "2.0.0",
         "contentHash": "V4fw3pYuP1LyUJThpbrbLwy2b4TH3CPYh5oId/CgJvGkX7lSAVyOEmkdGvDhpjegxnS4rgw6tP7faftVBO9jwQ=="
-      },
-      "AWSSDK.KeyManagementService": {
-        "type": "Transitive",
-        "resolved": "3.7.0.14",
-        "contentHash": "paEBq6ONbhQrXFmnsdcLMOA8gKeFAgsznI72Az6UYWmGRJw16GRZ6y6/HHGXiXydMAwfra3heVjEGooNpdjYmg==",
-        "dependencies": {
-          "AWSSDK.Core": "[3.7.0.15, 3.8.0)"
-        }
       },
       "Humanizer.Core": {
         "type": "Transitive",
@@ -1538,12 +1521,6 @@
           "Microsoft.Extensions.DependencyInjection": "5.0.1",
           "Microsoft.Extensions.Logging": "5.0.0",
           "Microsoft.Extensions.Logging.Console": "5.0.0"
-        }
-      },
-      "Lambdajection.Encryption": {
-        "type": "Project",
-        "dependencies": {
-          "AWSSDK.KeyManagementService": "3.7.0.14"
         }
       },
       "Lambdajection.Framework": {

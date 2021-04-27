@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Amazon.KeyManagementService;
 using Amazon.KeyManagementService.Model;
 
+using Lambdajection.Framework;
+
 namespace Lambdajection.Encryption
 {
     /// <summary>
@@ -25,6 +27,7 @@ namespace Lambdajection.Encryption
         }
 
         /// <inheritdoc />
+        [RequiresIamPermission("kms:Decrypt")]
         public virtual async Task<string> Decrypt(string ciphertext, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();

@@ -1,10 +1,16 @@
 <Project>
     <PropertyGroup>
         <MinimumNETCoreSdkVersion>5.0.100</MinimumNETCoreSdkVersion>
+        <BeforeBuild>Lambdajection_AddAdditionalFiles;$(BeforeBuild)</BeforeBuild>
         <CoreCompileDependsOn>Lambdajection_MinimumSdkRequirement;$(CoreCompileDependsOn)</CoreCompileDependsOn>
+        <LambdajectionIamPermissionsOutputPath Condition="'$(LambdajectionIamPermissionsOutputPath)' == ''">$(IntermediateOutputPath)IamPermissions.txt</LambdajectionIamPermissionsOutputPath>
     </PropertyGroup>
 
     <Target Name="Lambdajection_MinimumSdkRequirement" Condition="$([MSBuild]::VersionLessThan('$(NETCoreSdkVersion)', '$(MinimumNETCoreSdkVersion)'))">
         <Error Text="Please upgrade your .NET SDK to at least $(MinimumNETCoreSdkVersion) in order to use Lambdajection" File="$(MSBuildThisFile)" />
     </Target>
+
+    <ItemGroup>
+        <AdditionalFiles Include="$(LambdajectionIamPermissionsOutputPath)" />
+    </ItemGroup>
 </Project>

@@ -16,15 +16,16 @@ namespace Lambdajection.Generator
 
         public IServiceProvider Services { get; }
 
-        public Task StartAsync(CancellationToken cancellationToken = default)
+        public async Task StartAsync(CancellationToken cancellationToken = default)
         {
             var unitGenerator = Services.GetRequiredService<UnitGenerator>();
             unitGenerator.Generate();
 
+            var iamAccessAnalyzer = Services.GetRequiredService<IamAccessAnalyzer>();
+            await iamAccessAnalyzer.Analyze();
+
             var lifetime = Services.GetRequiredService<IHostApplicationLifetime>();
             lifetime.StopApplication();
-
-            return Task.CompletedTask;
         }
 
         public Task StopAsync(CancellationToken cancellationToken = default)

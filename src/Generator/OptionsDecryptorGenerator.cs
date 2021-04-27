@@ -1,8 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 
-using Lambdajection.Encryption;
-
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
@@ -36,7 +34,7 @@ namespace Lambdajection.Generator
             return ClassDeclaration(optionClass.ConfigSectionName + "Decryptor")
                 .WithBaseList(BaseList(Token(ColonToken), SeparatedList(TypeConstraints)))
                 .AddMembers(
-                    GeneratePrivateField(nameof(IDecryptionService), "decryptionService"),
+                    GeneratePrivateField("IDecryptionService", "decryptionService"),
                     GeneratePrivateField($"{optionClassName}", "options"),
                     GenerateConstructor(),
                     GenerateInitializeMethod()
@@ -48,7 +46,7 @@ namespace Lambdajection.Generator
         {
             var parameters = SeparatedList(new ParameterSyntax[]
             {
-                    Parameter(List<AttributeListSyntax>(), TokenList(), ParseTypeName(nameof(IDecryptionService)), Identifier("decryptionService"), null),
+                    Parameter(List<AttributeListSyntax>(), TokenList(), ParseTypeName("IDecryptionService"), Identifier("decryptionService"), null),
                     Parameter(List<AttributeListSyntax>(), TokenList(), ParseTypeName($"IOptions<{optionClassName}>"), Identifier("options"), null),
             });
 

@@ -37,25 +37,28 @@ namespace Lambdajection.Generator
             var options = context.AnalyzerConfigOptions.GlobalOptions;
             options.TryGetValue("build_property.LambdajectionAdditionalProbingPath", out var additionalProbingPath);
 
-            AssemblyLoadContext.Default.Resolving += (_, name) =>
+            if (additionalProbingPath != null)
             {
-                var matchingFiles = from file in Directory.GetFiles(additionalProbingPath, $"{name.Name}.dll", SearchOption.AllDirectories)
-                                    where file.Contains("netstandard") || file.Contains("net5.0")
-                                    select file;
-
-                foreach (var matchingFile in matchingFiles)
+                AssemblyLoadContext.Default.Resolving += (_, name) =>
                 {
-                    try
-                    {
-                        return Assembly.LoadFile(matchingFile);
-                    }
-                    catch (Exception)
-                    {
-                    }
-                }
+                    var matchingFiles = from file in Directory.GetFiles(additionalProbingPath, $"{name.Name}.dll", SearchOption.AllDirectories)
+                                        where file.Contains("netstandard") || file.Contains("net5.0")
+                                        select file;
 
-                return null;
-            };
+                    foreach (var matchingFile in matchingFiles)
+                    {
+                        try
+                        {
+                            return Assembly.LoadFile(matchingFile);
+                        }
+                        catch (Exception)
+                        {
+                        }
+                    }
+
+                    return null;
+                };
+            }
 
             Run(context);
         }

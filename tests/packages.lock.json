@@ -1723,7 +1723,8 @@
       "Lambdajection.Encryption": {
         "type": "Project",
         "dependencies": {
-          "AWSSDK.KeyManagementService": "3.7.0.14"
+          "AWSSDK.KeyManagementService": "3.7.0.14",
+          "Lambdajection.Framework": "1.0.0"
         }
       },
       "Lambdajection.Framework": {
@@ -1739,10 +1740,8 @@
       "Lambdajection.Generator": {
         "type": "Project",
         "dependencies": {
-          "AWSSDK.Core": "3.7.0.15",
           "Lambdajection.Attributes": "1.0.0",
           "Lambdajection.Core": "1.0.0",
-          "Lambdajection.Encryption": "1.0.0",
           "Lambdajection.Framework": "1.0.0",
           "Lambdajection.Framework.BuildTime": "1.0.0",
           "Microsoft.CodeAnalysis": "3.9.0",
