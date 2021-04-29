@@ -22,6 +22,15 @@
           "NUnit": "[3.7.0, 4.0.0)"
         }
       },
+      "AWSSDK.S3": {
+        "type": "Direct",
+        "requested": "[3.7.0.17, )",
+        "resolved": "3.7.0.17",
+        "contentHash": "pwaYCUbr2R2z7pB8OD+GFHYICYMJZcUHxnig0gbAYltuJqAasmf11Y/EeO/7OceIb+XCbhWuI0Tx//y5d/cezQ==",
+        "dependencies": {
+          "AWSSDK.Core": "[3.7.0.16, 3.8.0)"
+        }
+      },
       "AWSSDK.SecurityToken": {
         "type": "Direct",
         "requested": "[3.7.1.4, )",
