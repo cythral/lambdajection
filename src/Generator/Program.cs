@@ -6,9 +6,6 @@ using System.Reflection;
 using System.Runtime.Loader;
 
 using Microsoft.CodeAnalysis;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 
 #pragma warning disable SA1204, SA1009
 namespace Lambdajection.Generator
@@ -60,7 +57,8 @@ namespace Lambdajection.Generator
                 };
             }
 
-            Run(context);
+            var host = new ProgramHost();
+            host.Run(context);
         }
 
         private IEnumerable<string> GetBuildTimeAssemblies(GeneratorExecutionContext context)
@@ -73,27 +71,6 @@ namespace Lambdajection.Generator
             return from assemblyName in buildTimeAssembliesString.Split(',')
                    where assemblyName != string.Empty
                    select assemblyName;
-        }
-
-        private void Run(GeneratorExecutionContext context)
-        {
-            Host.CreateDefaultBuilder()
-                .ConfigureServices((builderContext, services) =>
-                {
-                    services.AddSingleton(new ProgramContext { GeneratorExecutionContext = context });
-                    services.AddSingleton<IHost, GeneratorHost>();
-                    new Startup().ConfigureServices(services);
-
-                    services.AddLogging(options =>
-                    {
-                        options.ClearProviders();
-                        options.AddConsole();
-                    });
-                })
-                .Build()
-                .RunAsync(context.CancellationToken)
-                .GetAwaiter()
-                .GetResult();
         }
     }
 }
