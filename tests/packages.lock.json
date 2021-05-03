@@ -33,11 +33,11 @@
       },
       "AWSSDK.SecurityToken": {
         "type": "Direct",
-        "requested": "[3.7.1.4, )",
-        "resolved": "3.7.1.4",
-        "contentHash": "SuvAUzgFmhhrSJrfiOzYzEvThC2fT0S8bstRZbzwHPO3ZTIoYAbdsGffKkiwa0llfbF4peOxBUYtM7ptZt6HSw==",
+        "requested": "[3.7.1.5, )",
+        "resolved": "3.7.1.5",
+        "contentHash": "k92hRtuj3SbTDlG1TXJAFD/oHIiVRQRq878wh6KpwhtXx/U6XpuR0JR/9NoD0pXe+NvAe/jYevD8CPTmZW6vDw==",
         "dependencies": {
-          "AWSSDK.Core": "[3.7.0.16, 3.8.0)"
+          "AWSSDK.Core": "[3.7.0.17, 4.0.0)"
         }
       },
       "coverlet.collector": {
