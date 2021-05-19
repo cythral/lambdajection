@@ -19,9 +19,9 @@
       },
       "AWSSDK.Core": {
         "type": "Direct",
-        "requested": "[3.7.0.18, )",
-        "resolved": "3.7.0.18",
-        "contentHash": "5nzrJ9UvHCMEIFxsbwjW7tJklm1wNVgGXoo1wVYD+54ikY+tDK5hputUkS2kmgrwkqJbtWJEsyo+B6jE+O7IEg=="
+        "requested": "[3.7.0.23, )",
+        "resolved": "3.7.0.23",
+        "contentHash": "RFbszK1tb3JnfRWj2jYLA121NvOmeCjzVbWVLnvQDmI9JHA76lJai9Qv96WkZwtq7Cc9lIwsZ+R8ErbwyjkkXw=="
       },
       "Microsoft.CodeAnalysis.CSharp.CodeStyle": {
         "type": "Direct",
@@ -223,9 +223,9 @@
       },
       "AWSSDK.Core": {
         "type": "Direct",
-        "requested": "[3.7.0.18, )",
-        "resolved": "3.7.0.18",
-        "contentHash": "5nzrJ9UvHCMEIFxsbwjW7tJklm1wNVgGXoo1wVYD+54ikY+tDK5hputUkS2kmgrwkqJbtWJEsyo+B6jE+O7IEg==",
+        "requested": "[3.7.0.23, )",
+        "resolved": "3.7.0.23",
+        "contentHash": "RFbszK1tb3JnfRWj2jYLA121NvOmeCjzVbWVLnvQDmI9JHA76lJai9Qv96WkZwtq7Cc9lIwsZ+R8ErbwyjkkXw==",
         "dependencies": {
           "Microsoft.Bcl.AsyncInterfaces": "1.1.0"
         }
@@ -502,9 +502,9 @@
       },
       "AWSSDK.Core": {
         "type": "Direct",
-        "requested": "[3.7.0.18, )",
-        "resolved": "3.7.0.18",
-        "contentHash": "5nzrJ9UvHCMEIFxsbwjW7tJklm1wNVgGXoo1wVYD+54ikY+tDK5hputUkS2kmgrwkqJbtWJEsyo+B6jE+O7IEg=="
+        "requested": "[3.7.0.23, )",
+        "resolved": "3.7.0.23",
+        "contentHash": "RFbszK1tb3JnfRWj2jYLA121NvOmeCjzVbWVLnvQDmI9JHA76lJai9Qv96WkZwtq7Cc9lIwsZ+R8ErbwyjkkXw=="
       },
       "Microsoft.CodeAnalysis.CSharp.CodeStyle": {
         "type": "Direct",
