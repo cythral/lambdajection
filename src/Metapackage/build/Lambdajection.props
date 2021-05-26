@@ -1,6 +1,7 @@
 <Project>
     <PropertyGroup>
         <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
+        <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     </PropertyGroup>
 
     <ItemGroup>
@@ -9,5 +10,8 @@
         <CompilerVisibleProperty Include="LambdajectionBuildTimeAssemblies" />
         <CompilerVisibleProperty Include="LambdajectionAdditionalProbingPath" />
         <CompilerVisibleProperty Include="LambdajectionIamPermissionsOutputPath" />
+        <CompilerVisibleProperty Include="AssemblyName" />
+        <CompilerVisibleProperty Include="OutDir" />
+        <CompilerVisibleProperty Include="TargetFrameworkVersion" />
     </ItemGroup>
 </Project>

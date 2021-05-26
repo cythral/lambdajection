@@ -36,7 +36,7 @@ namespace Lambdajection.Tests.Compilation
         )
         {
             using var generation = await project.GenerateAssembly();
-            var iamDoc = (from doc in project.AdditionalDocuments where doc.FilePath?.Contains("IamPermissions") == true select doc).First();
+            var iamDoc = (from doc in project.AdditionalDocuments where doc.FilePath?.Contains(".iam.txt") == true select doc).First();
             var iamDocText = await iamDoc.GetTextAsync();
             var permissions = iamDocText.ToString().Split('\n');
             permissions.Should().Contain("ec2:ArbitraryOperation1");
@@ -51,7 +51,7 @@ namespace Lambdajection.Tests.Compilation
         )
         {
             using var generation = await project.GenerateAssembly();
-            var iamDoc = (from doc in project.AdditionalDocuments where doc.FilePath?.Contains("IamPermissions") == true select doc).First();
+            var iamDoc = (from doc in project.AdditionalDocuments where doc.FilePath?.Contains(".iam.txt") == true select doc).First();
             var iamDocText = await iamDoc.GetTextAsync();
             var permissions = iamDocText.ToString().Split('\n');
             permissions.Should().Contain("ec2:ArbitraryOperation2");
@@ -66,7 +66,7 @@ namespace Lambdajection.Tests.Compilation
         )
         {
             using var generation = await project.GenerateAssembly();
-            var iamDoc = (from doc in project.AdditionalDocuments where doc.FilePath?.Contains("IamPermissions") == true select doc).First();
+            var iamDoc = (from doc in project.AdditionalDocuments where doc.FilePath?.Contains(".iam.txt") == true select doc).First();
             var iamDocText = await iamDoc.GetTextAsync();
             var permissions = iamDocText.ToString().Split('\n');
             permissions.Should().Contain("s3:GetObject");

@@ -40,6 +40,8 @@ namespace Lambdajection.Framework
 
         public GenerationSettings Settings { get; init; }
 
+        public HashSet<string> ExtraIamPermissionsRequired { get; init; } = new HashSet<string>();
+
         internal LambdaInterfaceAttribute LambdaInterfaceAttribute { get; init; }
 
         internal LambdaHostAttribute LambdaHostAttribute { get; init; }

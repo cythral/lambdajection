@@ -123,7 +123,7 @@
 
         <MSBuild
             Projects="%(ChildSolution.Identity)"
-            Targets="Restore;Build;Publish"
+            Targets="Restore;Build"
             Properties="@(ChildSolutionProp)"
         />
     </Target>

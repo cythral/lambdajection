@@ -18,11 +18,10 @@ namespace Lambdajection.Generator
 
         public async Task StartAsync(CancellationToken cancellationToken = default)
         {
+            await Task.CompletedTask;
+
             var unitGenerator = Services.GetRequiredService<UnitGenerator>();
             unitGenerator.Generate();
-
-            var iamAccessAnalyzer = Services.GetRequiredService<IamAccessAnalyzer>();
-            await iamAccessAnalyzer.Analyze();
 
             var lifetime = Services.GetRequiredService<IHostApplicationLifetime>();
             lifetime.StopApplication();

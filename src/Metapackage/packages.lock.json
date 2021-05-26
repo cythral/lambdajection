@@ -1499,6 +1499,11 @@
           "System.Xml.ReaderWriter": "4.3.0"
         }
       },
+      "YamlDotNet": {
+        "type": "Transitive",
+        "resolved": "11.1.1",
+        "contentHash": "FWSee6b+CnrimzZijOF+Bcym9Hf9qWQ/dyhk1f0KGeZ4Eh++6kymVZGWKOYIqcaEh5/IUx7b2lnq+JeeSn7E3Q=="
+      },
       "Lambdajection.Attributes": {
         "type": "Project",
         "dependencies": {
@@ -1539,7 +1544,8 @@
           "Microsoft.CodeAnalysis.CSharp.Workspaces": "3.9.0",
           "Microsoft.Extensions.Hosting": "5.0.0",
           "System.ComponentModel.Annotations": "5.0.0",
-          "System.Runtime.Loader": "4.3.0"
+          "System.Runtime.Loader": "4.3.0",
+          "YamlDotNet": "11.1.1"
         }
       }
     }

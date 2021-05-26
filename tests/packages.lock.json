@@ -188,6 +188,12 @@
           "System.Security.Permissions": "5.0.0"
         }
       },
+      "YamlDotNet": {
+        "type": "Direct",
+        "requested": "[11.1.1, )",
+        "resolved": "11.1.1",
+        "contentHash": "FWSee6b+CnrimzZijOF+Bcym9Hf9qWQ/dyhk1f0KGeZ4Eh++6kymVZGWKOYIqcaEh5/IUx7b2lnq+JeeSn7E3Q=="
+      },
       "Amazon.Lambda.Core": {
         "type": "Transitive",
         "resolved": "2.0.0",
@@ -1748,7 +1754,8 @@
           "Microsoft.CodeAnalysis.CSharp.Workspaces": "3.9.0",
           "Microsoft.Extensions.Hosting": "5.0.0",
           "System.ComponentModel.Annotations": "5.0.0",
-          "System.Runtime.Loader": "4.3.0"
+          "System.Runtime.Loader": "4.3.0",
+          "YamlDotNet": "11.1.1"
         }
       },
       "Lambdajection.Runtime": {

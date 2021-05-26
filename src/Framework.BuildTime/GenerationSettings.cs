@@ -19,6 +19,12 @@ namespace Lambdajection.Framework
 
         public string[] BuildTimeAssemblies { get; init; }
 
+        public string AssemblyName { get; init; }
+
+        public string OutDir { get; init; }
+
+        public string TargetFrameworkVersion { get; init; }
+
         public static GenerationSettings FromContext(GeneratorExecutionContext context)
         {
             var referencedAssemblies = context.Compilation.ReferencedAssemblyNames;
@@ -29,6 +35,10 @@ namespace Lambdajection.Framework
             options.TryGetValue("build_property.GenerateLambdajectionEntrypoint", out var generateLambdajectionEntrypoint);
             options.TryGetValue("build_property.Nullable", out var nullable);
             options.TryGetValue("build_property.LambdajectionBuildTimeAssemblies", out var buildTimeAssemblies);
+            options.TryGetValue("build_property.AssemblyName", out var assemblyName);
+            options.TryGetValue("build_property.OutDir", out var outDir);
+            options.TryGetValue("build_property.TargetFrameworkVersion", out var targetFrameworkVersion);
+            options.TryGetValue("build_property.StackDescription", out var stackDescription);
 
             generateLambdajectionEntrypoint ??= "false";
             nullable ??= "disable";
@@ -40,6 +50,9 @@ namespace Lambdajection.Framework
                 IncludeAmazonFactories = includeAmazonFactories,
                 IncludeDefaultSerializer = includeDefaultSerializer,
                 BuildTimeAssemblies = buildTimeAssemblies?.Split(";") ?? Array.Empty<string>(),
+                AssemblyName = assemblyName ?? "Unknown",
+                OutDir = outDir?.TrimEnd('/') ?? "Unknown",
+                TargetFrameworkVersion = targetFrameworkVersion?.Replace("v", string.Empty) ?? "Unknown",
             };
         }
     }

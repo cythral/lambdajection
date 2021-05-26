@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -18,47 +19,47 @@ namespace Lambdajection.Generator
 {
     internal class IamAccessAnalyzer
     {
-        private readonly ProgramContext context;
+        private readonly string lambdaName;
+        private readonly GenerationContext context;
         private readonly TypeUtils typeUtils;
 
         public IamAccessAnalyzer(
-            ProgramContext context,
+            string lambdaName,
+            GenerationContext context,
             TypeUtils typeUtils
         )
         {
+            this.lambdaName = lambdaName;
             this.context = context;
             this.typeUtils = typeUtils;
         }
 
-        public async Task Analyze()
+        public async Task<HashSet<string>> Analyze()
         {
             var collector = new TreeWalker(
-                (CSharpCompilation)context.GeneratorExecutionContext.Compilation,
+                (CSharpCompilation)context.Compilation,
                 typeUtils
             );
 
-            foreach (var tree in context.GeneratorExecutionContext.Compilation.SyntaxTrees)
+            try
             {
-                try
-                {
-                    var root = tree.GetRoot();
-                    collector.Visit(root);
-                }
-                catch (Exception)
-                {
-                }
+                var root = context.SyntaxTree.GetRoot();
+                collector.Visit(root);
+            }
+            catch (Exception)
+            {
             }
 
             collector.Permissions.UnionWith(context.ExtraIamPermissionsRequired);
 
-            var options = context.GeneratorExecutionContext.AnalyzerConfigOptions.GlobalOptions;
-            if (!options.TryGetValue("build_property.LambdajectionIamPermissionsOutputPath", out var iamPermissionsPath))
+            var options = context.SourceGeneratorContext.AnalyzerConfigOptions.GlobalOptions;
+            if (options.TryGetValue("build_property.LambdajectionIamPermissionsOutputPath", out var iamPermissionsPath))
             {
-                return;
+                var permissionsFileContent = string.Join('\n', collector.Permissions);
+                await File.WriteAllTextAsync(iamPermissionsPath + lambdaName + ".iam.txt", permissionsFileContent);
             }
 
-            var permissionsFileContent = string.Join('\n', collector.Permissions);
-            await File.WriteAllTextAsync(iamPermissionsPath, permissionsFileContent);
+            return collector.Permissions;
         }
 
         public class TreeWalker : CSharpSyntaxWalker
@@ -79,14 +80,11 @@ namespace Lambdajection.Generator
                 try
                 {
                     AddPermissionsFromAttributes(node);
+
                     var type = GetClientType(node);
                     if (type == null || !IsAmazonResponseType(type))
                     {
-                        foreach (var child in node.ChildNodes())
-                        {
-                            Visit(child);
-                        }
-
+                        VisitChildren(node);
                         return;
                     }
 
@@ -99,10 +97,7 @@ namespace Lambdajection.Generator
                 }
                 catch (Exception)
                 {
-                    foreach (var child in node.ChildNodes())
-                    {
-                        Visit(child);
-                    }
+                    VisitChildren(node);
                 }
             }
 
@@ -132,6 +127,25 @@ namespace Lambdajection.Generator
                 foreach (var permissionFromAttr in permissionsFromAttrs)
                 {
                     Permissions.Add(permissionFromAttr);
+                }
+            }
+
+            private void VisitChildren(SyntaxNode node)
+            {
+                foreach (var child in node.ChildNodes())
+                {
+                    Visit(child);
+                }
+
+                var declaredSymbol = compilation
+                .GetSemanticModel(node.SyntaxTree)
+                .GetSymbolInfo(node)
+                .Symbol;
+
+                foreach (var syntaxReference in declaredSymbol?.DeclaringSyntaxReferences ?? ImmutableArray.Create<SyntaxReference>())
+                {
+                    var declaration = syntaxReference.GetSyntax();
+                    Visit(declaration);
                 }
             }
 

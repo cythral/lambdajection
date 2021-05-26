@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
@@ -11,6 +12,7 @@ using Amazon.SecurityToken.Model;
 using FluentAssertions;
 
 using Lambdajection.Core;
+using Lambdajection.Utils;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.MSBuild;
@@ -18,6 +20,8 @@ using Microsoft.CodeAnalysis.MSBuild;
 using NSubstitute;
 
 using NUnit.Framework;
+
+using YamlDotNet.Serialization;
 
 using static NSubstitute.Arg;
 
@@ -123,6 +127,46 @@ namespace Lambdajection.Tests.Compilation
             var result = await (Task<IAwsFactory<IAmazonS3>>)runMethod.Invoke(null, new[] { "foo", null })!;
 
             result.Should().NotBeNull();
+        }
+
+        [Test, Auto]
+        public async Task GeneratedTemplate_ShouldHaveHandlerLambda(
+            string roleArn,
+            AssumeRoleResponse response,
+            Credentials credentials,
+            IAmazonSecurityTokenService stsClient
+        )
+        {
+            var deserializer = new DeserializerBuilder()
+            .WithNodeDeserializer(new IntrinsicNodeDeserializer())
+            .WithNodeTypeResolver(new IntrinsicNodeTypeResolver())
+            .Build();
+
+            using var generation = await project.GenerateAssembly();
+            var templateFile = (from doc in project.AdditionalDocuments where doc.FilePath?.Contains(".template.yml") == true select doc).First();
+            var templateText = await templateFile.GetTextAsync();
+            var template = deserializer.Deserialize<dynamic>(templateText.ToString());
+            ((string)template["Resources"]["HandlerLambda"]["Type"]).Should().Be("AWS::Lambda::Function");
+        }
+
+        [Test, Auto]
+        public async Task GeneratedTemplate_ShouldHaveHandlerRole(
+            string roleArn,
+            AssumeRoleResponse response,
+            Credentials credentials,
+            IAmazonSecurityTokenService stsClient
+        )
+        {
+            var deserializer = new DeserializerBuilder()
+            .WithNodeDeserializer(new IntrinsicNodeDeserializer())
+            .WithNodeTypeResolver(new IntrinsicNodeTypeResolver())
+            .Build();
+
+            using var generation = await project.GenerateAssembly();
+            var templateFile = (from doc in project.AdditionalDocuments where doc.FilePath?.Contains(".template.yml") == true select doc).First();
+            var templateText = await templateFile.GetTextAsync();
+            var template = deserializer.Deserialize<dynamic>(templateText.ToString());
+            ((string)template["Resources"]["HandlerRole"]["Type"]).Should().Be("AWS::IAM::Role");
         }
     }
 }
