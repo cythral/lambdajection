@@ -12,7 +12,7 @@
 
   <ItemGroup>
     <PackageReference Include="AutoFixture.AutoNSubstitute" Version="4.17.0" />
-    <PackageReference Include="AWSSDK.SecurityToken" Version="3.7.1.10" />
+    <PackageReference Include="AWSSDK.SecurityToken" Version="3.7.1.15" />
     <PackageReference Include="AWSSDK.S3" Version="3.7.0.28" />
     <PackageReference Include="AutoFixture.NUnit3" Version="4.17.0" />
     <PackageReference Include="coverlet.collector" Version="3.0.3" PrivateAssets="all" />
@@ -24,7 +24,7 @@
     <PackageReference Include="NuGet.ProjectModel" Version="5.11.0-preview.1.2" />
     <PackageReference Include="nunit" Version="3.13.2" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.17.0" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.4" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.10.0" />
     <PackageReference Include="McMaster.NETCore.Plugins" Version="1.3.1" />
 
     <!-- Added to resolve a version conflict, this isn't used directly -->
