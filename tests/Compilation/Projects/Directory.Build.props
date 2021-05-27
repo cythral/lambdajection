@@ -1,6 +1,7 @@
 <Project>
     <PropertyGroup>
         <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
+        <Configuration>Debug</Configuration>
     </PropertyGroup>
 
     <PropertyGroup>

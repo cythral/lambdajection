@@ -32,7 +32,7 @@ namespace Lambdajection.Tests.Compilation
     public class AmazonFactoriesTests
     {
         private const string ProjectPath = "Compilation/Projects/AmazonFactories/AmazonFactories.csproj";
-        private static readonly string TemplatePath = $"{TestMetadata.BaseOutputPath}/CompilationTestProjects/AmazonFactories/{TestMetadata.TargetFramework}/Handler.template.yml";
+        private static readonly string TemplatePath = $"{TestMetadata.BaseOutputPath}/CompilationTestProjects/AmazonFactories/Debug/{TestMetadata.TargetFramework}/Handler.template.yml";
 
         private static Project project = null!;
 
