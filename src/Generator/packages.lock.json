@@ -101,6 +101,12 @@
           "System.Runtime": "4.3.0"
         }
       },
+      "YamlDotNet": {
+        "type": "Direct",
+        "requested": "[11.1.1, )",
+        "resolved": "11.1.1",
+        "contentHash": "FWSee6b+CnrimzZijOF+Bcym9Hf9qWQ/dyhk1f0KGeZ4Eh++6kymVZGWKOYIqcaEh5/IUx7b2lnq+JeeSn7E3Q=="
+      },
       "Amazon.Lambda.Core": {
         "type": "Transitive",
         "resolved": "2.0.0",

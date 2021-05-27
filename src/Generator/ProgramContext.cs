@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 
+using Lambdajection.Generator.TemplateGeneration;
+
 using Microsoft.CodeAnalysis;
 
 namespace Lambdajection.Generator
@@ -8,6 +10,6 @@ namespace Lambdajection.Generator
     {
         public GeneratorExecutionContext GeneratorExecutionContext { get; set; }
 
-        public HashSet<string> ExtraIamPermissionsRequired { get; set; } = new HashSet<string>();
+        public List<LambdaInfo> LambdaInfos { get; set; } = new List<LambdaInfo>();
     }
 }

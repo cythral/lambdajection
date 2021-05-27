@@ -2,7 +2,6 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using Amazon.Lambda.Core;
-using Amazon.S3;
 
 using Lambdajection.Attributes;
 using Lambdajection.Core;
@@ -16,18 +15,16 @@ namespace Lambdajection.CompilationTests.IamPermissions
     public partial class Handler
     {
         private readonly Utility utility;
-        private readonly IAmazonS3 s3Client;
 
-        public Handler(Utility utility, IAmazonS3 s3Client)
+        public Handler(Utility utility)
         {
             this.utility = utility;
-            this.s3Client = s3Client;
         }
 
         public async Task<string> Handle(string request, CancellationToken cancellationToken = default)
         {
-            utility.AbitraryOperation();
-            await s3Client.GetObjectAsync("test", "test");
+            utility.ArbitraryOperation();
+            await utility.GetObject();
             return (string)null!;
         }
     }

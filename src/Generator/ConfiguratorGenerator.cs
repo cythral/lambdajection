@@ -56,6 +56,7 @@ namespace Lambdajection.Generator
                 {
                     context.Usings.Add("Amazon.SecurityToken");
                     context.Usings.Add("Amazon.SecurityToken.Model");
+                    context.ExtraIamPermissionsRequired.Add("sts:AssumeRole");
                 }
 
                 foreach (var service in services)
@@ -73,7 +74,7 @@ namespace Lambdajection.Generator
 
                 foreach (var optionClass in scanResults.OptionClasses)
                 {
-                    programContext.ExtraIamPermissionsRequired.Add("kms:Decrypt");
+                    context.ExtraIamPermissionsRequired.Add("kms:Decrypt");
                     var decryptorGenerator = new OptionsDecryptorGenerator(optionClass);
                     var decryptorClass = decryptorGenerator.Generate();
                     classDeclaration = classDeclaration.AddMembers(decryptorClass);

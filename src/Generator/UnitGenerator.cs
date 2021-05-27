@@ -5,12 +5,14 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 
 using Lambdajection.Attributes;
 using Lambdajection.Core;
 using Lambdajection.Framework;
 using Lambdajection.Framework.Utils;
 using Lambdajection.Generator.Attributes;
+using Lambdajection.Generator.TemplateGeneration;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -77,12 +79,24 @@ namespace Lambdajection.Generator
                                   let unit = GenerateUnit(generationContext)
                                   let document = unit.NormalizeWhitespace().GetText(Encoding.UTF8)
                                   let name = node.Identifier.Text
-                                  select (name, document);
+                                  let lambdaInfo = GenerateLambdaInfo(generationContext).GetAwaiter().GetResult()
+                                  select (name, document, lambdaInfo);
 
-                foreach (var (name, document) in generations)
+                foreach (var (name, document, lambdaInfo) in generations)
                 {
                     programContext.GeneratorExecutionContext.AddSource(name, document);
+                    programContext.LambdaInfos.Add(lambdaInfo);
                 }
+
+                var templateGenerator = new TemplateGenerator(
+                    settings.OutputPath,
+                    settings.AssemblyName,
+                    settings.OutputPath,
+                    settings.TargetFrameworkVersion,
+                    programContext.LambdaInfos
+                );
+
+                templateGenerator.GenerateTemplates();
             }
             catch (AggregateException e)
             {
@@ -152,6 +166,20 @@ namespace Lambdajection.Generator
             }
 
             return false;
+        }
+
+        private async Task<LambdaInfo> GenerateLambdaInfo(GenerationContext context)
+        {
+            var lambdaName = context.Declaration.Identifier.Text;
+            var namespaceNode = (NamespaceDeclarationSyntax?)context.Declaration.Parent;
+            var namespaceName = namespaceNode?.Name.ToFullString().Trim() ?? string.Empty;
+
+            return new LambdaInfo
+            {
+                ClassName = lambdaName,
+                FullyQualifiedClassName = $"{namespaceName}.{lambdaName}",
+                Permissions = await new IamAccessAnalyzer(lambdaName, context, typeUtils).Analyze(),
+            };
         }
 
         private CompilationUnitSyntax GenerateUnit(GenerationContext context)

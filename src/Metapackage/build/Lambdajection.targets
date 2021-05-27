@@ -3,7 +3,7 @@
         <MinimumNETCoreSdkVersion>5.0.100</MinimumNETCoreSdkVersion>
         <BeforeBuild>Lambdajection_AddAdditionalFiles;$(BeforeBuild)</BeforeBuild>
         <CoreCompileDependsOn>Lambdajection_MinimumSdkRequirement;$(CoreCompileDependsOn)</CoreCompileDependsOn>
-        <LambdajectionIamPermissionsOutputPath Condition="'$(LambdajectionIamPermissionsOutputPath)' == ''">$(IntermediateOutputPath)IamPermissions.txt</LambdajectionIamPermissionsOutputPath>
+        <LambdajectionIamPermissionsOutputPath Condition="'$(LambdajectionIamPermissionsOutputPath)' == ''">$(IntermediateOutputPath)</LambdajectionIamPermissionsOutputPath>
     </PropertyGroup>
 
     <Target Name="Lambdajection_MinimumSdkRequirement" Condition="$([MSBuild]::VersionLessThan('$(NETCoreSdkVersion)', '$(MinimumNETCoreSdkVersion)'))">
@@ -11,6 +11,7 @@
     </Target>
 
     <ItemGroup>
-        <AdditionalFiles Include="$(LambdajectionIamPermissionsOutputPath)" />
+        <AdditionalFiles Include="$(LambdajectionIamPermissionsOutputPath)/*.iam.txt" />
+        <AdditionalFiles Include="$(OutDir)/*.template.yml" />
     </ItemGroup>
 </Project>
