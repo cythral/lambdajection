@@ -4,9 +4,9 @@ internal class TestMetadata
 
     public static string PackageVersion => "__PackageVersion__";
 
-    public static string BaseOutputPath => "__BaseOutputPath__";
+    public static string BaseOutputPath => @"__BaseOutputPath__";
 
-    public static string BaseIntermediateOutputPath => "__BaseIntermediateOutputPath__";
+    public static string BaseIntermediateOutputPath => @"__BaseIntermediateOutputPath__";
 
     public static string TargetFramework => "__TargetFramework__";
 
