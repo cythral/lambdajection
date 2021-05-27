@@ -19,7 +19,7 @@ namespace Lambdajection.Tests.Compilation
     {
         private const string ProjectPath = "Compilation/Projects/IamPermissions/IamPermissions.csproj";
 
-        private static readonly string IamDocPath = $"{TestMetadata.BaseIntermediateOutputPath}/CompilationTestProjects/IamPermissions/{TestMetadata.Configuration}/{TestMetadata.TargetFramework}/Handler.iam.txt";
+        private static readonly string IamDocPath = $"{TestMetadata.BaseIntermediateOutputPath}/CompilationTestProjects/IamPermissions/Debug/{TestMetadata.TargetFramework}/Handler.iam.txt";
 
         private static Project project = null!;
 
