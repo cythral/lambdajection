@@ -89,9 +89,9 @@ namespace Lambdajection.Generator
                 }
 
                 var templateGenerator = new TemplateGenerator(
-                    settings.OutDir,
+                    settings.OutputPath,
                     settings.AssemblyName,
-                    settings.OutDir,
+                    settings.OutputPath,
                     settings.TargetFrameworkVersion,
                     programContext.LambdaInfos
                 );

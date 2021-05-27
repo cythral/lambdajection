@@ -21,7 +21,7 @@ namespace Lambdajection.Framework
 
         public string AssemblyName { get; init; }
 
-        public string OutDir { get; init; }
+        public string OutputPath { get; init; }
 
         public string TargetFrameworkVersion { get; init; }
 
@@ -36,7 +36,7 @@ namespace Lambdajection.Framework
             options.TryGetValue("build_property.Nullable", out var nullable);
             options.TryGetValue("build_property.LambdajectionBuildTimeAssemblies", out var buildTimeAssemblies);
             options.TryGetValue("build_property.AssemblyName", out var assemblyName);
-            options.TryGetValue("build_property.OutDir", out var outDir);
+            options.TryGetValue("build_property.OutputPath", out var outputPath);
             options.TryGetValue("build_property.TargetFrameworkVersion", out var targetFrameworkVersion);
             options.TryGetValue("build_property.StackDescription", out var stackDescription);
 
@@ -51,7 +51,7 @@ namespace Lambdajection.Framework
                 IncludeDefaultSerializer = includeDefaultSerializer,
                 BuildTimeAssemblies = buildTimeAssemblies?.Split(";") ?? Array.Empty<string>(),
                 AssemblyName = assemblyName ?? "Unknown",
-                OutDir = outDir?.TrimEnd('/') ?? "Unknown",
+                OutputPath = outputPath?.TrimEnd('/') ?? "Unknown",
                 TargetFrameworkVersion = targetFrameworkVersion?.Replace("v", string.Empty) ?? "Unknown",
             };
         }

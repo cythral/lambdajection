@@ -11,7 +11,7 @@
         <CompilerVisibleProperty Include="LambdajectionAdditionalProbingPath" />
         <CompilerVisibleProperty Include="LambdajectionIamPermissionsOutputPath" />
         <CompilerVisibleProperty Include="AssemblyName" />
-        <CompilerVisibleProperty Include="OutDir" />
+        <CompilerVisibleProperty Include="OutputPath" />
         <CompilerVisibleProperty Include="TargetFrameworkVersion" />
     </ItemGroup>
 </Project>
