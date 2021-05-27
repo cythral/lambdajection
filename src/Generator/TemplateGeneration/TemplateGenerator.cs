@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -40,7 +41,9 @@ namespace Lambdajection.Generator.TemplateGeneration
 
             foreach (var lambdaInfo in lambdaInfos)
             {
-                File.WriteAllText(templateFilePath + "/" + lambdaInfo.ClassName + ".template.yml", serializer.Serialize(new
+                var templateLocation = templateFilePath + "/" + lambdaInfo.ClassName + ".template.yml";
+                Console.WriteLine("Writing template to " + templateLocation);
+                File.WriteAllText(templateLocation, serializer.Serialize(new
                 {
                     Resources = GetResourcesForLambda(lambdaInfo),
                     Outputs = GetOutputsForLambda(lambdaInfo),
