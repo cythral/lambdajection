@@ -1,5 +1,5 @@
 using System;
-using System.Linq;
+using System.IO;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
@@ -31,14 +31,15 @@ namespace Lambdajection.Tests.Compilation
     [Category("Integration")]
     public class AmazonFactoriesTests
     {
-        private const string projectPath = "Compilation/Projects/AmazonFactories/AmazonFactories.csproj";
+        private const string ProjectPath = "Compilation/Projects/AmazonFactories/AmazonFactories.csproj";
+        private static readonly string TemplatePath = $"{TestMetadata.BaseOutputPath}/CompilationTestProjects/AmazonFactories/{TestMetadata.TargetFramework}/Handler.template.yml";
 
         private static Project project = null!;
 
         [OneTimeSetUp]
         public async Task Setup()
         {
-            project = await MSBuildProjectExtensions.LoadProject(projectPath);
+            project = await MSBuildProjectExtensions.LoadProject(ProjectPath);
         }
 
         [Test]
@@ -143,8 +144,7 @@ namespace Lambdajection.Tests.Compilation
             .Build();
 
             using var generation = await project.GenerateAssembly();
-            var templateFile = (from doc in project.AdditionalDocuments where doc.FilePath?.Contains(".template.yml") == true select doc).First();
-            var templateText = await templateFile.GetTextAsync();
+            var templateText = await File.ReadAllTextAsync(TemplatePath);
             var template = deserializer.Deserialize<dynamic>(templateText.ToString());
             ((string)template["Resources"]["HandlerLambda"]["Type"]).Should().Be("AWS::Lambda::Function");
         }
@@ -163,8 +163,7 @@ namespace Lambdajection.Tests.Compilation
             .Build();
 
             using var generation = await project.GenerateAssembly();
-            var templateFile = (from doc in project.AdditionalDocuments where doc.FilePath?.Contains(".template.yml") == true select doc).First();
-            var templateText = await templateFile.GetTextAsync();
+            var templateText = await File.ReadAllTextAsync(TemplatePath);
             var template = deserializer.Deserialize<dynamic>(templateText.ToString());
             ((string)template["Resources"]["HandlerRole"]["Type"]).Should().Be("AWS::IAM::Role");
         }

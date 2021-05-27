@@ -45,6 +45,10 @@
         $([System.IO.File]::ReadAllText('TestMetadata.txt')
             .Replace('__TestDirectory__','$(MSBuildThisFileDirectory)')
             .Replace('__PackageVersion__', '$(PackageVersion)')
+            .Replace('__BaseOutputPath__', '$(MSBuildThisFileDirectory)../bin')
+            .Replace('__BaseIntermediateOutputPath__', '$(MSBuildThisFileDirectory)../obj')
+            .Replace('__TargetFramework__', '$(TargetFramework)')
+            .Replace('__Configuration__', '$(Configuration)')
         )
       </FileContents>
     </PropertyGroup>

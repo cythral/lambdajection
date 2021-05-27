@@ -1,4 +1,4 @@
-using System.Linq;
+using System.IO;
 using System.Threading.Tasks;
 
 using Amazon.SecurityToken;
@@ -17,14 +17,16 @@ namespace Lambdajection.Tests.Compilation
     [Category("Integration")]
     public class IamPermissionsTests
     {
-        private const string projectPath = "Compilation/Projects/IamPermissions/IamPermissions.csproj";
+        private const string ProjectPath = "Compilation/Projects/IamPermissions/IamPermissions.csproj";
+
+        private static readonly string IamDocPath = $"{TestMetadata.BaseIntermediateOutputPath}/CompilationTestProjects/IamPermissions/{TestMetadata.Configuration}/{TestMetadata.TargetFramework}/Handler.iam.txt";
 
         private static Project project = null!;
 
         [OneTimeSetUp]
         public async Task Setup()
         {
-            project = await MSBuildProjectExtensions.LoadProject(projectPath);
+            project = await MSBuildProjectExtensions.LoadProject(ProjectPath);
         }
 
         [Test, Auto]
@@ -36,8 +38,7 @@ namespace Lambdajection.Tests.Compilation
         )
         {
             using var generation = await project.GenerateAssembly();
-            var iamDoc = (from doc in project.AdditionalDocuments where doc.FilePath?.Contains(".iam.txt") == true select doc).First();
-            var iamDocText = await iamDoc.GetTextAsync();
+            var iamDocText = await File.ReadAllTextAsync(IamDocPath);
             var permissions = iamDocText.ToString().Split('\n');
             permissions.Should().Contain("ec2:ArbitraryOperation1");
         }
@@ -51,8 +52,7 @@ namespace Lambdajection.Tests.Compilation
         )
         {
             using var generation = await project.GenerateAssembly();
-            var iamDoc = (from doc in project.AdditionalDocuments where doc.FilePath?.Contains(".iam.txt") == true select doc).First();
-            var iamDocText = await iamDoc.GetTextAsync();
+            var iamDocText = await File.ReadAllTextAsync(IamDocPath);
             var permissions = iamDocText.ToString().Split('\n');
             permissions.Should().Contain("ec2:ArbitraryOperation2");
         }
@@ -66,8 +66,7 @@ namespace Lambdajection.Tests.Compilation
         )
         {
             using var generation = await project.GenerateAssembly();
-            var iamDoc = (from doc in project.AdditionalDocuments where doc.FilePath?.Contains(".iam.txt") == true select doc).First();
-            var iamDocText = await iamDoc.GetTextAsync();
+            var iamDocText = await File.ReadAllTextAsync(IamDocPath);
             var permissions = iamDocText.ToString().Split('\n');
             permissions.Should().Contain("s3:GetObject");
         }
