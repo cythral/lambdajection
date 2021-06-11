@@ -24,7 +24,7 @@
     <PackageReference Include="NSubstitute" Version="4.2.2" />
     <PackageReference Include="NuGet.ProjectModel" Version="6.0.0-preview.1.107" />
     <PackageReference Include="nunit" Version="3.13.2" />
-    <PackageReference Include="NUnit3TestAdapter" Version="3.17.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="4.0.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.10.0" />
     <PackageReference Include="McMaster.NETCore.Plugins" Version="1.4.0" />
     <PackageReference Include="YamlDotNet" Version="11.1.1" />
