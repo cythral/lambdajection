@@ -45,7 +45,7 @@ namespace Lambdajection.Generator
             // Dependencies other than the ones provided explicitly as build time assemblies,
             // the generator may use other dependencies in the restore packages path.
             // If we cannot access those, there is no point attempting generation.
-            if (additionalProbingPath != null)
+            if (string.IsNullOrEmpty(additionalProbingPath))
             {
                 return;
             }
