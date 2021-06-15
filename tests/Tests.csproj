@@ -47,6 +47,8 @@
             .Replace('__PackageVersion__', '$(PackageVersion)')
             .Replace('__BaseOutputPath__', '$(MSBuildThisFileDirectory)../bin')
             .Replace('__BaseIntermediateOutputPath__', '$(MSBuildThisFileDirectory)../obj')
+            .Replace('__OutputPath__', '$(OutputPath)')
+            .Replace('__RestorePackagesPath__', '$(RestorePackagesPath)')
             .Replace('__TargetFramework__', '$(TargetFramework)')
             .Replace('__Configuration__', '$(Configuration)')
         )
