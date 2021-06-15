@@ -20,6 +20,14 @@ namespace Lambdajection.Generator
         public void Execute(GeneratorExecutionContext context)
         {
             var buildTimeAssemblies = GetBuildTimeAssemblies(context);
+
+            // Generation will be impossible without the build time assemblies,
+            // aka generator dependencies.
+            if (!buildTimeAssemblies.Any())
+            {
+                return;
+            }
+
             foreach (var buildTimeAssembly in buildTimeAssemblies)
             {
                 try
@@ -34,28 +42,33 @@ namespace Lambdajection.Generator
             var options = context.AnalyzerConfigOptions.GlobalOptions;
             options.TryGetValue("build_property.LambdajectionAdditionalProbingPath", out var additionalProbingPath);
 
+            // Dependencies other than the ones provided explicitly as build time assemblies,
+            // the generator may use other dependencies in the restore packages path.
+            // If we cannot access those, there is no point attempting generation.
             if (additionalProbingPath != null)
             {
-                AssemblyLoadContext.Default.Resolving += (_, name) =>
-                {
-                    var matchingFiles = from file in Directory.GetFiles(additionalProbingPath, $"{name.Name}.dll", SearchOption.AllDirectories)
-                                        where file.Contains("netstandard") || file.Contains("net5.0")
-                                        select file;
-
-                    foreach (var matchingFile in matchingFiles)
-                    {
-                        try
-                        {
-                            return Assembly.LoadFile(matchingFile);
-                        }
-                        catch (Exception)
-                        {
-                        }
-                    }
-
-                    return null;
-                };
+                return;
             }
+
+            AssemblyLoadContext.Default.Resolving += (_, name) =>
+            {
+                var matchingFiles = from file in Directory.GetFiles(additionalProbingPath, $"{name.Name}.dll", SearchOption.AllDirectories)
+                                    where file.Contains("netstandard") || file.Contains("net5.0")
+                                    select file;
+
+                foreach (var matchingFile in matchingFiles)
+                {
+                    try
+                    {
+                        return Assembly.LoadFile(matchingFile);
+                    }
+                    catch (Exception)
+                    {
+                    }
+                }
+
+                return null;
+            };
 
             var host = new ProgramHost();
             host.Run(context);
