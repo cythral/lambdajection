@@ -8,6 +8,10 @@ internal class TestMetadata
 
     public static string BaseIntermediateOutputPath => @"__BaseIntermediateOutputPath__";
 
+    public static string OutputPath => @"__OutputPath__";
+
+    public static string RestorePackagesPath => @"__BaseIntermediateOutputPath__";
+
     public static string TargetFramework => "__TargetFramework__";
 
     public static string Configuration => "__Configuration__";
