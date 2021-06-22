@@ -61,7 +61,7 @@ namespace Lambdajection.Generator.TemplateGeneration
                 Type = "AWS::Lambda::Function",
                 Properties = new
                 {
-                    Handler = $"{assemblyName}::{lambdaInfo.FullyQualifiedClassName}::Handle",
+                    Handler = $"{assemblyName}::{lambdaInfo.FullyQualifiedClassName}::Run",
                     Role = new GetAttTag() { Name = $"{lambdaInfo.ClassName}Role", Attribute = "Arn" },
                     Code = codeDirectory,
                     Runtime = $"dotnetcore{targetFrameworkVersion}",
