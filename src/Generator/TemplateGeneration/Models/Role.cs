@@ -11,7 +11,9 @@ namespace Lambdajection.Generator.TemplateGeneration
 
         public Role AddPolicy(Policy policy)
         {
-            ((PropertiesDefinition)Properties).Policies.Add(policy);
+            var props = (PropertiesDefinition)Properties;
+            props.Policies ??= new List<Policy>();
+            props.Policies.Add(policy);
             return this;
         }
 
@@ -75,7 +77,7 @@ namespace Lambdajection.Generator.TemplateGeneration
         {
             public List<string> ManagedPolicyArns { get; set; } = new List<string>();
 
-            public List<Policy> Policies { get; set; } = new List<Policy>();
+            public List<Policy>? Policies { get; set; } = null;
 
             public PolicyDocument AssumeRolePolicyDocument { get; set; }
         }

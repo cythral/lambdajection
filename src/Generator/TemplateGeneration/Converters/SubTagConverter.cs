@@ -15,7 +15,8 @@ namespace Lambdajection.Generator.TemplateGeneration
 
         public object ReadYaml(IParser parser, Type type)
         {
-            throw new NotSupportedException();
+            parser.MoveNext();
+            return new SubTag();
         }
 
         public void WriteYaml(IEmitter emitter, object? value, Type type)
