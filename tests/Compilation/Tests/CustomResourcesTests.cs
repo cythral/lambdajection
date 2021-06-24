@@ -248,5 +248,49 @@ namespace Lambdajection.Tests.Compilation
                 response.Reason == "Expected Error Message"
             );
         }
+
+        [Test(Description = "[LAMBJ-129] Old Resource Properties will not be present if the RequestType = Create, therefore they should not be validated.")]
+        [Auto]
+        public async Task Run_ShouldNotSendFailure_IfOldNameIsLessThan3Chars(
+            string requestId,
+            string stackId,
+            string logicalResourceId,
+            CustomResourceRequestType requestType,
+            [Substitute] ILambdaContext context
+        )
+        {
+            var name = "abcde";
+            var oldName = "a";
+            using var generation = await project.GenerateAssembly();
+            using var server = new InMemoryServer();
+
+            var (assembly, _) = generation;
+            var handler = new HandlerWrapper<object>(assembly, handlerTypeName);
+            var request = CreateRequest(assembly, name);
+            request.RequestType = requestType;
+            request.ResponseURL = new Uri(server.Address);
+            request.StackId = stackId;
+            request.RequestId = requestId;
+            request.LogicalResourceId = logicalResourceId;
+            request.PhysicalResourceId = null;
+            request.OldResourceProperties.Name = oldName;
+
+            await handler.Run(request, context);
+
+            var httpRequest = server.Requests
+            .Should()
+            .Contain(request =>
+                request.HttpMethod == "PUT"
+            )
+            .Which;
+
+            var body = JsonSerializer.Deserialize<CustomResourceResponse<ResponseData>>(httpRequest.Body);
+            body.Should().Match<CustomResourceResponse<ResponseData>>(response =>
+                response.StackId == stackId &&
+                response.RequestId == requestId &&
+                response.LogicalResourceId == logicalResourceId &&
+                response.Status == CustomResourceResponseStatus.Success
+            );
+        }
     }
 }

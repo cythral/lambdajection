@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
 using Lambdajection.Framework;
+using Lambdajection.Framework.Utils;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -18,6 +19,7 @@ namespace Lambdajection.Generator
         private const string argumentName = "input";
         private readonly INamedTypeSymbol typeToValidate;
         private readonly GenerationContext context;
+        private readonly TypeUtils typeUtils = new();
 
         public ValidationsGenerator(
             AnalyzerResults interfaceAnalyzerResults,
@@ -63,6 +65,14 @@ namespace Lambdajection.Generator
 
             foreach (var member in members ?? ImmutableArray<IPropertySymbol>.Empty)
             {
+                if (member.GetAttributes().Any(attr =>
+                    attr.AttributeClass != null &&
+                    typeUtils.IsSymbolEqualToType(attr.AttributeClass, typeof(NotValidatedAttribute))
+                ))
+                {
+                    continue;
+                }
+
                 if (member.Type is INamedTypeSymbol memberType && !memberType.ContainingAssembly.Name.StartsWith("System"))
                 {
                     ExpressionSyntax newParentExpression = parentExpression == null
