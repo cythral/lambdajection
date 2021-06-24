@@ -1600,7 +1600,6 @@
         "type": "Project",
         "dependencies": {
           "Lambdajection.Attributes": "1.0.0",
-          "Lambdajection.Core": "1.0.0",
           "Lambdajection.Framework": "1.0.0",
           "Lambdajection.Framework.BuildTime": "1.0.0",
           "Microsoft.CodeAnalysis": "3.9.0",
