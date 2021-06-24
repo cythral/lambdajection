@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 using YamlDotNet.Serialization;
 
@@ -78,9 +79,13 @@ namespace Lambdajection.Generator.TemplateGeneration
             .AddTrustedServiceEntity("lambda.amazonaws.com")
             .AddManagedPolicy("arn:aws:iam::aws:policy/AWSLambdaExecute");
 
-            var policy = new Policy($"{lambdaInfo.ClassName}PrimaryPolicy");
-            policy.AddStatement(action: lambdaInfo.Permissions);
-            role.AddPolicy(policy);
+            if (lambdaInfo.Permissions.Any())
+            {
+                var policy = new Policy($"{lambdaInfo.ClassName}PrimaryPolicy");
+                policy.AddStatement(action: lambdaInfo.Permissions);
+                role.AddPolicy(policy);
+            }
+
             return role;
         }
 

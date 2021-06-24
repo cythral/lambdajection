@@ -25,6 +25,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomResources", "CustomRe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IamPermissions", "IamPermissions\IamPermissions.csproj", "{931A04BB-E210-42C0-A8C0-829BB2B8103A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Permissionless", "Permissionless\Permissionless.csproj", "{6B319CA9-14D7-4357-936B-12AFCE401706}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -170,5 +172,17 @@ Global
 		{931A04BB-E210-42C0-A8C0-829BB2B8103A}.Release|x64.Build.0 = Release|Any CPU
 		{931A04BB-E210-42C0-A8C0-829BB2B8103A}.Release|x86.ActiveCfg = Release|Any CPU
 		{931A04BB-E210-42C0-A8C0-829BB2B8103A}.Release|x86.Build.0 = Release|Any CPU
+		{6B319CA9-14D7-4357-936B-12AFCE401706}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6B319CA9-14D7-4357-936B-12AFCE401706}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6B319CA9-14D7-4357-936B-12AFCE401706}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{6B319CA9-14D7-4357-936B-12AFCE401706}.Debug|x64.Build.0 = Debug|Any CPU
+		{6B319CA9-14D7-4357-936B-12AFCE401706}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{6B319CA9-14D7-4357-936B-12AFCE401706}.Debug|x86.Build.0 = Debug|Any CPU
+		{6B319CA9-14D7-4357-936B-12AFCE401706}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6B319CA9-14D7-4357-936B-12AFCE401706}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6B319CA9-14D7-4357-936B-12AFCE401706}.Release|x64.ActiveCfg = Release|Any CPU
+		{6B319CA9-14D7-4357-936B-12AFCE401706}.Release|x64.Build.0 = Release|Any CPU
+		{6B319CA9-14D7-4357-936B-12AFCE401706}.Release|x86.ActiveCfg = Release|Any CPU
+		{6B319CA9-14D7-4357-936B-12AFCE401706}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
