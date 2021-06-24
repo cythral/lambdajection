@@ -8,7 +8,6 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using Lambdajection.Attributes;
-using Lambdajection.Core;
 using Lambdajection.Framework;
 using Lambdajection.Framework.Utils;
 using Lambdajection.Generator.Attributes;
@@ -228,9 +227,9 @@ namespace Lambdajection.Generator
 
                     var semanticModel = generationContext.SourceGeneratorContext.Compilation.GetSemanticModel(arg.SyntaxTree);
                     var typeDefinition = semanticModel.GetTypeInfo(arg.Type).Type?.OriginalDefinition;
-                    var qualifiedName = typeDefinition?.ContainingNamespace + "." + typeDefinition?.MetadataName + ", " + typeDefinition?.ContainingAssembly;
+                    var qualifiedName = typeDefinition?.ContainingNamespace + "." + typeDefinition?.MetadataName + ", " + typeDefinition?.ContainingAssembly.Name;
 
-                    if (qualifiedName != typeof(IAwsFactory<>).AssemblyQualifiedName)
+                    if (qualifiedName != "Lambdajection.Core.IAwsFactory`1, Lambdajection.Core")
                     {
                         continue;
                     }

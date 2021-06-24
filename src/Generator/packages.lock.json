@@ -107,11 +107,6 @@
         "resolved": "11.1.1",
         "contentHash": "FWSee6b+CnrimzZijOF+Bcym9Hf9qWQ/dyhk1f0KGeZ4Eh++6kymVZGWKOYIqcaEh5/IUx7b2lnq+JeeSn7E3Q=="
       },
-      "Amazon.Lambda.Core": {
-        "type": "Transitive",
-        "resolved": "2.0.0",
-        "contentHash": "V4fw3pYuP1LyUJThpbrbLwy2b4TH3CPYh5oId/CgJvGkX7lSAVyOEmkdGvDhpjegxnS4rgw6tP7faftVBO9jwQ=="
-      },
       "Humanizer.Core": {
         "type": "Transitive",
         "resolved": "2.2.0",
@@ -267,8 +262,8 @@
       },
       "Microsoft.Extensions.DependencyInjection": {
         "type": "Transitive",
-        "resolved": "5.0.1",
-        "contentHash": "//mDNrYeiJ0eh/awFhDFJQzkRVra/njU5Y4fyK7X29g5HScrzbUkKOKlyTtygthcGFt4zNC8G5CFCjb/oizomA==",
+        "resolved": "5.0.0",
+        "contentHash": "Rc2kb/p3Ze6cP6rhFC3PJRdWGbLvSHZc0ev7YlyeU6FmHciDMLrhoVoTUEzKPhN5ZjFgKF1Cf5fOz8mCMIkvpA==",
         "dependencies": {
           "Microsoft.Extensions.DependencyInjection.Abstractions": "5.0.0"
         }
@@ -1514,19 +1509,6 @@
         "type": "Project",
         "dependencies": {
           "Lambdajection.Framework": "1.0.0"
-        }
-      },
-      "Lambdajection.Core": {
-        "type": "Project",
-        "dependencies": {
-          "Amazon.Lambda.Core": "2.0.0",
-          "Lambdajection.Attributes": "1.0.0",
-          "Lambdajection.Framework": "1.0.0",
-          "Microsoft.Extensions.Configuration": "5.0.0",
-          "Microsoft.Extensions.Configuration.EnvironmentVariables": "5.0.0",
-          "Microsoft.Extensions.DependencyInjection": "5.0.1",
-          "Microsoft.Extensions.Logging": "5.0.0",
-          "Microsoft.Extensions.Logging.Console": "5.0.0"
         }
       },
       "Lambdajection.Framework": {
