@@ -1,5 +1,7 @@
 using System;
 
+using Lambdajection.Framework;
+
 namespace Lambdajection.CustomResource
 {
     /// <summary>
@@ -71,6 +73,7 @@ namespace Lambdajection.CustomResource
         /// This will only be present for update requests.
         /// </summary>
         /// <value>The old resource properties for the requested custom resource.</value>
+        [NotValidated]
         public virtual TResourceProperties? OldResourceProperties { get; set; }
     }
 }
