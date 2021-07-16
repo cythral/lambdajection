@@ -170,7 +170,7 @@ namespace Lambdajection.Generator
             IEnumerable<StatementSyntax> GenerateBody()
             {
                 var runnerMethodName = context.RunnerMethodName;
-                yield return ParseStatement($"using var wrapper = HandlerWrapper.GetHandlerWrapper((Func<{inputTypeName}, ILambdaContext, Task<{returnType}>>){runnerMethodName}, new DefaultLambdaJsonSerializer());");
+                yield return ParseStatement($"using var wrapper = HandlerWrapper.GetHandlerWrapper((Func<{inputParameterType}, ILambdaContext, Task<{returnType}>>){runnerMethodName}, new DefaultLambdaJsonSerializer());");
                 yield return ParseStatement($"using var bootstrap = new LambdaBootstrap(wrapper);");
                 yield return ParseStatement($"await bootstrap.RunAsync();");
             }
