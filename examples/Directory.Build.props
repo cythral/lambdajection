@@ -28,8 +28,6 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Cythral.CloudFormation.BuildTasks" Version="0.5.1" PrivateAssets="all" />
-    <PackageReference Include="Microsoft.CodeAnalysis" Version="3.9.0" PrivateAssets="all" ExcludeAssets="runtime" />
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.CodeStyle" Version="3.9.0" PrivateAssets="all" />
   </ItemGroup>
   <Target Name="EndToEndTestCleanup" />
 </Project>
