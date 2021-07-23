@@ -164,9 +164,9 @@
       },
       "YamlDotNet": {
         "type": "Direct",
-        "requested": "[11.1.1, )",
-        "resolved": "11.1.1",
-        "contentHash": "FWSee6b+CnrimzZijOF+Bcym9Hf9qWQ/dyhk1f0KGeZ4Eh++6kymVZGWKOYIqcaEh5/IUx7b2lnq+JeeSn7E3Q=="
+        "requested": "[11.2.1, )",
+        "resolved": "11.2.1",
+        "contentHash": "tBt8K+korVfrjH9wyDEhiLKxbs8qoLCLIFwvYgkSUuMC9//w3z0cFQ8LQAI/5MCKq+BMil0cfRTRvPeE7eXhQw=="
       },
       "Amazon.Lambda.Core": {
         "type": "Transitive",
@@ -1599,7 +1599,7 @@
           "Microsoft.Extensions.Hosting": "5.0.0",
           "System.ComponentModel.Annotations": "5.0.0",
           "System.Runtime.Loader": "4.3.0",
-          "YamlDotNet": "11.1.1"
+          "YamlDotNet": "11.2.1"
         }
       },
       "Lambdajection.Runtime": {
