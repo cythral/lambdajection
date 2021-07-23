@@ -1607,7 +1607,7 @@
           "Microsoft.Extensions.Hosting": "5.0.0",
           "System.ComponentModel.Annotations": "5.0.0",
           "System.Runtime.Loader": "4.3.0",
-          "YamlDotNet": "11.1.1"
+          "YamlDotNet": "11.2.1"
         }
       },
       "Lambdajection.Runtime": {
