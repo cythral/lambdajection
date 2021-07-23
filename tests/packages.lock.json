@@ -71,6 +71,18 @@
         "resolved": "1.4.1",
         "contentHash": "UfyGaxNTjw/r3uWMX/Cv1CPKELo7TCrR5VIahaSKL0WyqmbDT6og9pyjwuhyyUkxC9gk2ElB7oOEySL1OzTZ1g=="
       },
+      "Microsoft.CodeAnalysis.Workspaces.MSBuild": {
+        "type": "Direct",
+        "requested": "[3.10.0, )",
+        "resolved": "3.10.0",
+        "contentHash": "gqymEbDiMB19BY/CEOsDflb6AvbC4WlVIrlHicqz161ts/9m8DWE+/n1RW/qNf/Q4cLFz+VfWUxco8JJ2C8New==",
+        "dependencies": {
+          "Microsoft.Build.Framework": "16.5.0",
+          "Microsoft.CodeAnalysis.Common": "[3.10.0]",
+          "Microsoft.CodeAnalysis.Workspaces.Common": "[3.10.0]",
+          "System.Text.Json": "4.7.0"
+        }
+      },
       "Microsoft.NET.Test.Sdk": {
         "type": "Direct",
         "requested": "[16.10.0, )",
@@ -238,6 +250,15 @@
         "type": "Transitive",
         "resolved": "5.0.0",
         "contentHash": "W8DPQjkMScOMTtJbPwmPyj9c3zYSFGawDW3jwlBOOsnY+EzZFLgNQ/UMkK35JmkNOVPdCyPr2Tw7Vv9N+KA3ZQ=="
+      },
+      "Microsoft.Build.Framework": {
+        "type": "Transitive",
+        "resolved": "16.5.0",
+        "contentHash": "K0hfdWy+0p8DJXxzpNc4T5zHm4hf9QONAvyzvw3utKExmxRBShtV/+uHVYTblZWk+rIHNEHeglyXMmqfSshdFA==",
+        "dependencies": {
+          "System.Runtime.Serialization.Primitives": "4.1.1",
+          "System.Threading.Thread": "4.0.0"
+        }
       },
       "Microsoft.Build.Tasks.Git": {
         "type": "Transitive",
@@ -1398,6 +1419,11 @@
           "System.Text.Encoding": "4.3.0"
         }
       },
+      "System.Text.Json": {
+        "type": "Transitive",
+        "resolved": "4.7.0",
+        "contentHash": "IPq/x/d5nAcnD3vIyM3AbPOaTgcqrh0AqPSx7U53UFu3M6k1TH1u/eXc9/h4jm/3mpP1WRUpevlPY4PACd7AWw=="
+      },
       "System.Text.RegularExpressions": {
         "type": "Transitive",
         "resolved": "4.3.0",
@@ -1429,6 +1455,14 @@
         "type": "Transitive",
         "resolved": "4.5.4",
         "contentHash": "zteT+G8xuGu6mS+mzDzYXbzS7rd3K6Fjb9RiZlYlJPam2/hU7JCBZBVEcywNuR+oZ1ncTvc/cq0faRr3P01OVg=="
+      },
+      "System.Threading.Thread": {
+        "type": "Transitive",
+        "resolved": "4.0.0",
+        "contentHash": "gIdJqDXlOr5W9zeqFErLw3dsOsiShSCYtF9SEHitACycmvNvY8odf9kiKvp6V7aibc8C4HzzNBkWXjyfn7plbQ==",
+        "dependencies": {
+          "System.Runtime": "4.1.0"
+        }
       },
       "System.Windows.Extensions": {
         "type": "Transitive",
