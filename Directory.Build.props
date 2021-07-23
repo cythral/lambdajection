@@ -28,6 +28,7 @@
     <SkipDefaultEditorConfigAsAdditionalFile>true</SkipDefaultEditorConfigAsAdditionalFile>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
   </PropertyGroup>
   <PropertyGroup>
     <BinaryLogger>$(MSBuildThisFileDirectory)obj\logs\$(OS).binlog</BinaryLogger>
