@@ -8,12 +8,6 @@
         "resolved": "0.5.1",
         "contentHash": "4UChDU1gbvLh2r5JqSGLLZ5au1oCXbtxUY01GRZuDpJari1ABN/z7MlSJw/FVd6hIch2nDCX1N9RqN4rMkRjIQ=="
       },
-      "Microsoft.CodeAnalysis.CSharp.CodeStyle": {
-        "type": "Direct",
-        "requested": "[3.9.0, )",
-        "resolved": "3.9.0",
-        "contentHash": "g6W0Qsdt28XGWRvxlb91//Jk0+9XsndLh+A8c0wpFUOXxJ+tTy0PPX9NcjJN1H/n3nFlv5nCK6j7bykElbNcJg=="
-      },
       "Microsoft.SourceLink.GitHub": {
         "type": "Direct",
         "requested": "[1.0.0, )",

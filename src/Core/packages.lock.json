@@ -23,12 +23,6 @@
         "resolved": "3.7.0.31",
         "contentHash": "C2vzPag+Rzb1hBiMUwRW+HQzIrsPxxKBk7EMX0AUxkApg36DOGXI1Aha4xpC0w5sWqRuQAJ3YW0Ihk1nPlBzKA=="
       },
-      "Microsoft.CodeAnalysis.CSharp.CodeStyle": {
-        "type": "Direct",
-        "requested": "[3.9.0, )",
-        "resolved": "3.9.0",
-        "contentHash": "g6W0Qsdt28XGWRvxlb91//Jk0+9XsndLh+A8c0wpFUOXxJ+tTy0PPX9NcjJN1H/n3nFlv5nCK6j7bykElbNcJg=="
-      },
       "Microsoft.Extensions.Configuration": {
         "type": "Direct",
         "requested": "[5.0.0, )",
@@ -229,12 +223,6 @@
         "dependencies": {
           "Microsoft.Bcl.AsyncInterfaces": "1.1.0"
         }
-      },
-      "Microsoft.CodeAnalysis.CSharp.CodeStyle": {
-        "type": "Direct",
-        "requested": "[3.9.0, )",
-        "resolved": "3.9.0",
-        "contentHash": "g6W0Qsdt28XGWRvxlb91//Jk0+9XsndLh+A8c0wpFUOXxJ+tTy0PPX9NcjJN1H/n3nFlv5nCK6j7bykElbNcJg=="
       },
       "Microsoft.Extensions.Configuration": {
         "type": "Direct",
@@ -505,12 +493,6 @@
         "requested": "[3.7.0.31, )",
         "resolved": "3.7.0.31",
         "contentHash": "C2vzPag+Rzb1hBiMUwRW+HQzIrsPxxKBk7EMX0AUxkApg36DOGXI1Aha4xpC0w5sWqRuQAJ3YW0Ihk1nPlBzKA=="
-      },
-      "Microsoft.CodeAnalysis.CSharp.CodeStyle": {
-        "type": "Direct",
-        "requested": "[3.9.0, )",
-        "resolved": "3.9.0",
-        "contentHash": "g6W0Qsdt28XGWRvxlb91//Jk0+9XsndLh+A8c0wpFUOXxJ+tTy0PPX9NcjJN1H/n3nFlv5nCK6j7bykElbNcJg=="
       },
       "Microsoft.Extensions.Configuration": {
         "type": "Direct",
