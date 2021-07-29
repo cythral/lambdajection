@@ -19,9 +19,9 @@
       },
       "AWSSDK.Core": {
         "type": "Direct",
-        "requested": "[3.7.1.1, )",
-        "resolved": "3.7.1.1",
-        "contentHash": "Ao+vo0M3Oy1A0g7Q3PUSVDYrXD+uIKb1dDuJdC7U5PKOF2TwPdcxIEguHebxfQN4qYDWlXn4NsLk+VZFprhx/Q=="
+        "requested": "[3.7.1.2, )",
+        "resolved": "3.7.1.2",
+        "contentHash": "trgGZHfpVpdhKLMIvyfjKarMnuOe1qxmA8qZh6PIGmJqyNxMBE1pXUZgbHFfggl25sEFQTBV+fUMhLt9pJcrrg=="
       },
       "Microsoft.Extensions.Configuration": {
         "type": "Direct",
@@ -217,9 +217,9 @@
       },
       "AWSSDK.Core": {
         "type": "Direct",
-        "requested": "[3.7.1.1, )",
-        "resolved": "3.7.1.1",
-        "contentHash": "Ao+vo0M3Oy1A0g7Q3PUSVDYrXD+uIKb1dDuJdC7U5PKOF2TwPdcxIEguHebxfQN4qYDWlXn4NsLk+VZFprhx/Q==",
+        "requested": "[3.7.1.2, )",
+        "resolved": "3.7.1.2",
+        "contentHash": "trgGZHfpVpdhKLMIvyfjKarMnuOe1qxmA8qZh6PIGmJqyNxMBE1pXUZgbHFfggl25sEFQTBV+fUMhLt9pJcrrg==",
         "dependencies": {
           "Microsoft.Bcl.AsyncInterfaces": "1.1.0"
         }
@@ -490,9 +490,9 @@
       },
       "AWSSDK.Core": {
         "type": "Direct",
-        "requested": "[3.7.1.1, )",
-        "resolved": "3.7.1.1",
-        "contentHash": "Ao+vo0M3Oy1A0g7Q3PUSVDYrXD+uIKb1dDuJdC7U5PKOF2TwPdcxIEguHebxfQN4qYDWlXn4NsLk+VZFprhx/Q=="
+        "requested": "[3.7.1.2, )",
+        "resolved": "3.7.1.2",
+        "contentHash": "trgGZHfpVpdhKLMIvyfjKarMnuOe1qxmA8qZh6PIGmJqyNxMBE1pXUZgbHFfggl25sEFQTBV+fUMhLt9pJcrrg=="
       },
       "Microsoft.Extensions.Configuration": {
         "type": "Direct",
