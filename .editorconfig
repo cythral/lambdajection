@@ -3,6 +3,9 @@ root = true
 [*.{cs,csx}]
 insert_final_newline = true
 
+# Namespace match folder structure
+dotnet_diagnostic.IDE0130.severity = none
+
 # Prefix local calls with this
 dotnet_diagnostic.SA1101.severity = none
 
