@@ -4,9 +4,9 @@
     ".NETCoreApp,Version=v5.0": {
       "Cythral.CloudFormation.BuildTasks": {
         "type": "Direct",
-        "requested": "[0.5.1, )",
-        "resolved": "0.5.1",
-        "contentHash": "4UChDU1gbvLh2r5JqSGLLZ5au1oCXbtxUY01GRZuDpJari1ABN/z7MlSJw/FVd6hIch2nDCX1N9RqN4rMkRjIQ=="
+        "requested": "[0.5.2, )",
+        "resolved": "0.5.2",
+        "contentHash": "XgwEwpltoXeoiOQHVbSQCRNU0v80zMV3RMPlyE3ERlCzkVvgZUBCyrs3QpCOarozvwbruGf1Hc6gbVFIVL/hWQ=="
       },
       "Microsoft.SourceLink.GitHub": {
         "type": "Direct",
