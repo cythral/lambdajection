@@ -11,7 +11,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AWSSDK.KeyManagementService" Version="3.7.1.23" />
+    <PackageReference Include="AWSSDK.KeyManagementService" Version="3.7.1.24" />
   </ItemGroup>
 
   <ItemGroup>
