@@ -4,9 +4,9 @@
     ".NETStandard,Version=v2.1": {
       "AWSSDK.KeyManagementService": {
         "type": "Direct",
-        "requested": "[3.7.1.25, )",
-        "resolved": "3.7.1.25",
-        "contentHash": "91Uzagn3ahCNeem2ztQ0TqCLjpJTnA7frc9cZQ1uYt1MCHHfQP99ndL3jFVQwmTzD8EqD+oiDT/fPjOKRTAPow==",
+        "requested": "[3.7.2, )",
+        "resolved": "3.7.2",
+        "contentHash": "pUuyD+0b2HHJujxr5Ur/Fc4eD3Z8LfmVLyOkJkzasRs396YUo7c5mwXiROe250PeMqZNhkF7IiaZpwP39Hgawg==",
         "dependencies": {
           "AWSSDK.Core": "[3.7.2.8, 4.0.0)"
         }
