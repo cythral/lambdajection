@@ -1,4 +1,7 @@
 using System;
+using System.Collections.Generic;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 using Lambdajection.Framework;
 
@@ -8,11 +11,7 @@ namespace Lambdajection.CustomResource
     /// Describes a request from CloudFormation to create,
     /// update or delete a Custom Resource.
     /// </summary>
-    /// <typeparam name="TResourceProperties">
-    /// The type of resource properties that belong to custom resources provided
-    /// by this custom resource provider.
-    /// </typeparam>
-    public class CustomResourceRequest<TResourceProperties>
+    public class CustomResourceRequest
     {
         /// <summary>
         /// Gets or sets the type of Custom Resource request.
@@ -62,18 +61,10 @@ namespace Lambdajection.CustomResource
         public virtual string PhysicalResourceId { get; set; } = string.Empty;
 
         /// <summary>
-        /// Gets or sets the resource properties for the requested
-        /// custom resource.
+        /// Gets or sets the extra properties that appear when deserializing a request to this type.
         /// </summary>
-        /// <value>The resource properties for the requested custom resource.</value>
-        public virtual TResourceProperties? ResourceProperties { get; set; }
-
-        /// <summary>
-        /// Gets or sets the old resource properties for the requested custom resource.
-        /// This will only be present for update requests.
-        /// </summary>
-        /// <value>The old resource properties for the requested custom resource.</value>
+        [JsonExtensionData]
         [NotValidated]
-        public virtual TResourceProperties? OldResourceProperties { get; set; }
+        public virtual IDictionary<string, JsonElement> ExtraProperties { get; set; } = default!;
     }
 }

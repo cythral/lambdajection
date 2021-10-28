@@ -28,7 +28,7 @@
 
         <Copy
             SourceFiles="@(AWSSDKCoreReference)"
-            DestinationFiles="$(MSBuildThisFileDirectory).nuget/lambdajection.core/$(LambdajectionVersion)/lib/net5.0/AWSSDK.Core.dll"
+            DestinationFiles="$(MSBuildThisFileDirectory).nuget/lambdajection.core/$(LambdajectionVersion)/lib/netstandard2.1/AWSSDK.Core.dll"
         />
     </Target>
 </Project>

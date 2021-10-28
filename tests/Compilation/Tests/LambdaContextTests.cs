@@ -1,3 +1,5 @@
+using System.IO;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 using Amazon.Lambda.Core;
@@ -6,8 +8,6 @@ using FluentAssertions;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.MSBuild;
-
-using NSubstitute;
 
 using NUnit.Framework;
 
@@ -27,17 +27,21 @@ namespace Lambdajection.Tests.Compilation
             project = await MSBuildProjectExtensions.LoadProject(projectPath);
         }
 
-        [Test]
-        public async Task Run_ReturnsContext()
+        [Test, Auto]
+        public async Task Run_ReturnsContext(
+            ILambdaContext context
+        )
         {
             using var generation = await project.GenerateAssembly();
             var (assembly, _) = generation;
             var handlerType = assembly.GetType("Lambdajection.CompilationTests.LambdaContext.Handler")!;
             var runMethod = handlerType.GetMethod("Run")!;
 
-            var context = Substitute.For<ILambdaContext>();
-            var result = await (Task<ILambdaContext>)runMethod.Invoke(null, new object[] { string.Empty, context })!;
-            result.Should().BeSameAs(context);
+            using var inputStream = await StreamUtils.CreateJsonStream(string.Empty);
+            var resultStream = await (Task<Stream>)runMethod.Invoke(null, new object[] { inputStream, context })!;
+            var result = await JsonSerializer.DeserializeAsync<string>(resultStream);
+
+            result.Should().Be(context.AwsRequestId);
         }
     }
 }

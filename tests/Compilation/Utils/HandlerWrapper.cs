@@ -1,4 +1,6 @@
+using System.IO;
 using System.Reflection;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Lambdajection
@@ -14,15 +16,13 @@ namespace Lambdajection
             this.typeName = typeName;
         }
 
-        public async Task<T> Run(params object[] args)
+        public async Task<T?> Run(params object[] args)
         {
             var type = assembly.GetType(typeName)!;
             var runMethod = type.GetMethod("Run")!;
 
-            var task = (Task)runMethod.Invoke(null, args)!;
-            await task;
-
-            return (T)((dynamic)task).Result;
+            var resultStream = await (Task<Stream>)runMethod.Invoke(null, args)!;
+            return await JsonSerializer.DeserializeAsync<T>(resultStream);
         }
     }
 }

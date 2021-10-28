@@ -1,5 +1,8 @@
 using System;
-
+using System.IO;
+using System.Runtime.CompilerServices;
+using System.Runtime.Serialization;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -40,7 +43,7 @@ namespace Lambdajection.CustomResource
 
         /// <inheritdoc />
         public override async Task<TLambdaOutput> InvokeLambda(
-            CustomResourceRequest<TLambdaParameter> parameter,
+            Stream inputStream,
             CancellationToken cancellationToken = default
         )
         {
@@ -48,29 +51,31 @@ namespace Lambdajection.CustomResource
 
             CustomResourceResponse<TLambdaOutput> response;
             var httpClient = Scope.ServiceProvider.GetRequiredService<IHttpClient>();
+            var input = await DeserializeInput(inputStream, cancellationToken);
 
             try
             {
-                Lambda.Validate(parameter);
+                var request = GetFullRequest(input);
+                Lambda.Validate(request);
 
-                var requestType = Lambda.RequiresReplacement(parameter)
+                var requestType = Lambda.RequiresReplacement(request)
                     ? CustomResourceRequestType.Create
-                    : parameter.RequestType;
+                    : input!.RequestType;
 
                 var data = await (requestType switch
                 {
-                    CustomResourceRequestType.Create => Lambda.Create(parameter, cancellationToken),
-                    CustomResourceRequestType.Update => Lambda.Update(parameter, cancellationToken),
-                    CustomResourceRequestType.Delete => Lambda.Delete(parameter, cancellationToken),
-                    _ => throw new Exception($"Unknown RequestType '{parameter.RequestType}'"),
+                    CustomResourceRequestType.Create => Lambda.Create(request, cancellationToken),
+                    CustomResourceRequestType.Update => Lambda.Update(request, cancellationToken),
+                    CustomResourceRequestType.Delete => Lambda.Delete(request, cancellationToken),
+                    _ => throw new Exception($"Unknown RequestType '{input!.RequestType}'"),
                 });
 
                 response = new CustomResourceResponse<TLambdaOutput>
                 {
                     Status = CustomResourceResponseStatus.Success,
-                    RequestId = parameter.RequestId,
-                    StackId = parameter.StackId,
-                    LogicalResourceId = parameter.LogicalResourceId,
+                    RequestId = request.RequestId,
+                    StackId = request.StackId,
+                    LogicalResourceId = request.LogicalResourceId,
                     PhysicalResourceId = data.Id,
                     Data = data,
                 };
@@ -80,22 +85,59 @@ namespace Lambdajection.CustomResource
                 response = new CustomResourceResponse<TLambdaOutput>
                 {
                     Status = CustomResourceResponseStatus.Failed,
-                    RequestId = parameter.RequestId,
-                    StackId = parameter.StackId,
-                    LogicalResourceId = parameter.LogicalResourceId,
-                    PhysicalResourceId = parameter.PhysicalResourceId,
+                    RequestId = input.RequestId,
+                    StackId = input.StackId,
+                    LogicalResourceId = input.LogicalResourceId,
+                    PhysicalResourceId = input.PhysicalResourceId,
                     Reason = e.Message,
                 };
             }
 
             await httpClient.PutJson(
-                requestUri: parameter.ResponseURL,
+                requestUri: input.ResponseURL,
                 payload: response,
                 contentType: null,
                 cancellationToken: cancellationToken
             );
 
             return response.Data!;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private async Task<CustomResourceRequest> DeserializeInput(Stream stream, CancellationToken cancellationToken)
+        {
+            var input = await JsonSerializer.DeserializeAsync<CustomResourceRequest>(stream, cancellationToken: cancellationToken);
+            return input ?? throw new SerializationException("Request unexpectedly deserialized to null.");
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private CustomResourceRequest<TLambdaParameter> GetFullRequest(CustomResourceRequest request)
+        {
+            return new CustomResourceRequest<TLambdaParameter>
+            {
+                RequestType = request.RequestType,
+                ResponseURL = request.ResponseURL,
+                StackId = request.StackId,
+                RequestId = request.RequestId,
+                ResourceType = request.ResourceType,
+                LogicalResourceId = request.LogicalResourceId,
+                PhysicalResourceId = request.PhysicalResourceId,
+                ResourceProperties = GetExtraPropertyAsParameter(request, "ResourceProperties"),
+                OldResourceProperties = GetExtraPropertyAsParameter(request, "OldResourceProperties"),
+            };
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private TLambdaParameter? GetExtraPropertyAsParameter(CustomResourceRequest request, string propertyName)
+        {
+            if (request.ExtraProperties.TryGetValue(propertyName, out var element))
+            {
+                var text = element.GetRawText();
+                var parameter = JsonSerializer.Deserialize<TLambdaParameter>(text);
+                return parameter;
+            }
+
+            return null;
         }
     }
 }

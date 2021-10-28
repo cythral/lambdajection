@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.Reflection;
+using System.Text.Json;
 
 using AutoFixture;
 using AutoFixture.AutoNSubstitute;
@@ -17,6 +19,7 @@ internal class AutoAttribute : AutoDataAttribute
         var fixture = new Fixture();
         fixture.Customize(new AutoNSubstituteCustomization());
         fixture.Customizations.Insert(-1, new TargetRelay());
+        fixture.Customizations.Add(new TypeOmitter<IDictionary<string, JsonElement>>());
         customize(fixture);
         return fixture;
     }

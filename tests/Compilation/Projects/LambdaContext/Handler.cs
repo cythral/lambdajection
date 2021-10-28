@@ -21,9 +21,9 @@ namespace Lambdajection.CompilationTests.LambdaContext
             this.context = context;
         }
 
-        public Task<ILambdaContext> Handle(string request, CancellationToken cancellationToken = default)
+        public Task<string> Handle(string request, CancellationToken cancellationToken = default)
         {
-            return Task.FromResult(context);
+            return Task.FromResult(context.AwsRequestId);
         }
     }
 }

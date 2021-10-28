@@ -1,5 +1,7 @@
 using System;
+using System.IO;
 using System.Linq;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -85,12 +87,12 @@ namespace Lambdajection.Core
         /// - Runs initialization services.
         /// - Invokes the lambda.
         /// </summary>
-        /// <param name="parameter">The input parameter to pass to the lambda.</param>
+        /// <param name="inputStream">Stream containing the input data to pass to the lambda.</param>
         /// <param name="context">The context object to pass to the lambda.</param>
         /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <returns>The return value of the lambda.</returns>
-        public async Task<TLambdaOutput> Run(
-            TLambdaParameter parameter,
+        public async Task<Stream> Run(
+            Stream inputStream,
             ILambdaContext context,
             CancellationToken cancellationToken = default
         )
@@ -108,16 +110,22 @@ namespace Lambdajection.Core
             scopeContext.LambdaContext = context;
 
             Lambda = provider.GetRequiredService<TLambda>();
-            return await InvokeLambda(parameter, cancellationToken);
+
+            var result = await InvokeLambda(inputStream, cancellationToken);
+            var resultStream = new MemoryStream();
+            await JsonSerializer.SerializeAsync(resultStream, result, cancellationToken: cancellationToken);
+            resultStream.Position = 0;
+
+            return resultStream;
         }
 
         /// <summary>
         /// Invokes the Lambda.
         /// </summary>
-        /// <param name="parameter">The parameter to pass to the lambda to invoke it with.</param>
+        /// <param name="inputStream">Stream containing the input data to pass to the lambda.</param>
         /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <returns>The return value of the lambda.</returns>
-        public abstract Task<TLambdaOutput> InvokeLambda(TLambdaParameter parameter, CancellationToken cancellationToken = default);
+        public abstract Task<TLambdaOutput> InvokeLambda(Stream inputStream, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Disposes the Lambda Host and its subresources asynchronously.

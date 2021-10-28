@@ -183,14 +183,6 @@
           "System.Runtime.Loader": "4.3.0"
         }
       },
-      "Amazon.Lambda.Serialization.SystemTextJson": {
-        "type": "Transitive",
-        "resolved": "2.1.0",
-        "contentHash": "q2R4I77NrrAHDpcaWby9VA/XhE1tjG/2kpredwucRq7k4dTPCqqB7OFmbiFdlfuErrp2/9+X1l62c4unwVicpw==",
-        "dependencies": {
-          "Amazon.Lambda.Core": "1.2.0"
-        }
-      },
       "AutoFixture": {
         "type": "Transitive",
         "resolved": "4.17.0",
@@ -1540,7 +1532,6 @@
         "type": "Project",
         "dependencies": {
           "Amazon.Lambda.Core": "2.0.0",
-          "Amazon.Lambda.Serialization.SystemTextJson": "2.1.0",
           "Lambdajection.Attributes": "1.0.0",
           "Lambdajection.Framework": "1.0.0",
           "Microsoft.Extensions.Configuration": "5.0.0",
