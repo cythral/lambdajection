@@ -1,6 +1,5 @@
 using System;
 using System.IO;
-using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -10,6 +9,8 @@ using AutoFixture.AutoNSubstitute;
 
 using FluentAssertions;
 
+using Lambdajection.Core.Serialization;
+
 using Microsoft.Extensions.DependencyInjection;
 
 using NSubstitute;
@@ -18,6 +19,8 @@ using NUnit.Framework;
 
 using static NSubstitute.Arg;
 
+using JsonSerializer = Lambdajection.Core.Serialization.JsonSerializer;
+using SystemTextJsonSerializer = System.Text.Json.JsonSerializer;
 using TestLambdaHost = Lambdajection.Core.DefaultLambdaHost<
     Lambdajection.TestLambda,
     Lambdajection.TestLambdaMessage,
@@ -38,7 +41,7 @@ namespace Lambdajection.Core.Tests
         public static async Task<Stream> CreateStreamForRequest(TestLambdaMessage request)
         {
             var stream = new MemoryStream();
-            await JsonSerializer.SerializeAsync(stream, request);
+            await SystemTextJsonSerializer.SerializeAsync(stream, request);
             stream.Position = 0;
             return stream;
         }
@@ -48,12 +51,14 @@ namespace Lambdajection.Core.Tests
             TestLambdaMessage expectedResponse,
             TestLambdaMessage request,
             ServiceCollection collection,
+            JsonSerializer serializer,
             [Substitute] TestLambda lambda,
             [Substitute] LambdaScope scope,
             [Substitute] ILambdaContext context
         )
         {
             lambda.Handle(Any<TestLambdaMessage>(), Any<CancellationToken>()).Returns(expectedResponse);
+            collection.AddSingleton<ISerializer>(serializer);
             collection.AddSingleton(lambda);
             collection.AddSingleton(scope);
 
@@ -66,7 +71,7 @@ namespace Lambdajection.Core.Tests
 
             var cancellationToken = new CancellationToken(false);
             var responseStream = await host.Run(inputStream, context, cancellationToken);
-            var response = await JsonSerializer.DeserializeAsync<TestLambdaMessage>(responseStream);
+            var response = await SystemTextJsonSerializer.DeserializeAsync<TestLambdaMessage>(responseStream);
 
             response.Should().NotBeNull();
             response!.Id.Should().Be(expectedResponse.Id);
@@ -78,6 +83,7 @@ namespace Lambdajection.Core.Tests
             TestLambdaMessage expectedResponse,
             TestLambdaMessage request,
             ServiceCollection collection,
+            JsonSerializer serializer,
             [Substitute] ILambdaInitializationService initializationService,
             [Substitute] TestLambda lambda,
             [Substitute] LambdaScope scope,
@@ -86,6 +92,7 @@ namespace Lambdajection.Core.Tests
         {
             lambda.Handle(Any<TestLambdaMessage>(), Any<CancellationToken>()).Returns(expectedResponse);
 
+            collection.AddSingleton<ISerializer>(serializer);
             collection.AddSingleton(initializationService);
             collection.AddSingleton(lambda);
             collection.AddSingleton(scope);
@@ -109,6 +116,7 @@ namespace Lambdajection.Core.Tests
             TestLambdaMessage expectedResponse,
             TestLambdaMessage request,
             ServiceCollection collection,
+            ISerializer serializer,
             [Substitute] ILambdaInitializationService initializationService,
             [Substitute] TestLambda lambda,
             [Substitute] LambdaScope scope,
@@ -117,6 +125,7 @@ namespace Lambdajection.Core.Tests
         {
             lambda.Handle(Any<TestLambdaMessage>()).Returns(expectedResponse);
 
+            collection.AddSingleton(serializer);
             collection.AddSingleton(initializationService);
             collection.AddSingleton(lambda);
             collection.AddSingleton(scope);
@@ -139,6 +148,7 @@ namespace Lambdajection.Core.Tests
             TestLambdaMessage expectedResponse,
             TestLambdaMessage request,
             ServiceCollection collection,
+            ISerializer serializer,
             [Substitute] TestLambda lambda,
             [Substitute] LambdaScope scope,
             [Substitute] ILambdaContext context
@@ -147,6 +157,7 @@ namespace Lambdajection.Core.Tests
             var initializationService = Substitute.For<ILambdaInitializationService, IDisposable>();
 
             lambda.Handle(Any<TestLambdaMessage>()).Returns(expectedResponse);
+            collection.AddSingleton(serializer);
             collection.AddSingleton(initializationService);
             collection.AddSingleton(lambda);
             collection.AddSingleton(scope);
@@ -169,6 +180,7 @@ namespace Lambdajection.Core.Tests
             TestLambdaMessage expectedResponse,
             TestLambdaMessage request,
             ServiceCollection collection,
+            ISerializer serializer,
             [Substitute] TestLambda lambda,
             [Substitute] LambdaScope scope,
             [Substitute] ILambdaContext context
@@ -176,6 +188,7 @@ namespace Lambdajection.Core.Tests
         {
             var initializationService = Substitute.For<ILambdaInitializationService, IAsyncDisposable>();
             lambda.Handle(Any<TestLambdaMessage>()).Returns(expectedResponse);
+            collection.AddSingleton(serializer);
             collection.AddSingleton(initializationService);
             collection.AddSingleton(lambda);
             collection.AddSingleton(scope);
@@ -198,6 +211,7 @@ namespace Lambdajection.Core.Tests
             TestLambdaMessage expectedResponse,
             TestLambdaMessage request,
             ServiceCollection collection,
+            ISerializer serializer,
             [Substitute] ILambdaInitializationService initializationService,
             [Substitute] TestLambda lambda,
             [Substitute] LambdaScope scope,
@@ -205,6 +219,7 @@ namespace Lambdajection.Core.Tests
         )
         {
             lambda.Handle(Any<TestLambdaMessage>(), Any<CancellationToken>()).Returns(expectedResponse);
+            collection.AddSingleton(serializer);
             collection.AddSingleton(initializationService);
             collection.AddSingleton(lambda);
             collection.AddSingleton(scope);
@@ -228,12 +243,14 @@ namespace Lambdajection.Core.Tests
             string expectedResponse,
             TestLambdaMessage request,
             ServiceCollection collection,
+            ISerializer serializer,
             [Substitute] ILambdaInitializationService initializationService,
             [Substitute] AsyncDisposableLambda lambda,
             [Substitute] LambdaScope scope,
             [Substitute] ILambdaContext context
         )
         {
+            collection.AddSingleton(serializer);
             collection.AddSingleton(initializationService);
             collection.AddSingleton<TestLambda>(lambda);
             collection.AddSingleton(scope);
@@ -257,6 +274,7 @@ namespace Lambdajection.Core.Tests
             string expectedResponse,
             TestLambdaMessage request,
             ServiceCollection collection,
+            ISerializer serializer,
             [Substitute] Action<object> suppressor,
             [Substitute] ILambdaInitializationService initializationService,
             [Substitute] DisposableLambda lambda,
@@ -264,6 +282,7 @@ namespace Lambdajection.Core.Tests
             [Substitute] ILambdaContext context
         )
         {
+            collection.AddSingleton(serializer);
             collection.AddSingleton(initializationService);
             collection.AddSingleton<TestLambda>(lambda);
             collection.AddSingleton(scope);
@@ -288,12 +307,14 @@ namespace Lambdajection.Core.Tests
             string expectedResponse,
             TestLambdaMessage request,
             ServiceCollection collection,
+            ISerializer serializer,
             [Substitute] ILambdaInitializationService initializationService,
             [Substitute] MultiDisposableLambda lambda,
             [Substitute] LambdaScope scope,
             [Substitute] ILambdaContext context
         )
         {
+            collection.AddSingleton(serializer);
             collection.AddSingleton(initializationService);
             collection.AddSingleton<TestLambda>(lambda);
             collection.AddSingleton(scope);
@@ -318,6 +339,7 @@ namespace Lambdajection.Core.Tests
             string expectedResponse,
             TestLambdaMessage request,
             ServiceCollection collection,
+            ISerializer serializer,
             [Substitute] Action<object> suppressor,
             [Substitute] ILambdaInitializationService initializationService,
             [Substitute] MultiDisposableLambda lambda,
@@ -325,6 +347,7 @@ namespace Lambdajection.Core.Tests
             [Substitute] ILambdaContext context
         )
         {
+            collection.AddSingleton(serializer);
             collection.AddSingleton(initializationService);
             collection.AddSingleton<TestLambda>(lambda);
             collection.AddSingleton(scope);

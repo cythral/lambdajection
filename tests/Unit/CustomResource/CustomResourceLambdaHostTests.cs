@@ -10,6 +10,7 @@ using AutoFixture.AutoNSubstitute;
 using FluentAssertions;
 
 using Lambdajection.Core;
+using Lambdajection.Core.Serialization;
 
 using Microsoft.Extensions.DependencyInjection;
 
@@ -49,10 +50,12 @@ namespace Lambdajection.CustomResource.Tests
             public async Task ShouldCallCreate_IfRequestTypeIsCreate(
                 ServiceCollection serviceCollection,
                 CustomResourceRequest<object> request,
+                JsonSerializer serializer,
                 [Substitute] TestCustomResourceLambda lambda,
                 [Substitute] IHttpClient httpClient
             )
             {
+                serviceCollection.AddSingleton<ISerializer>(serializer);
                 serviceCollection.AddSingleton(httpClient);
 
                 var serviceProvider = serviceCollection.BuildServiceProvider();
@@ -61,6 +64,7 @@ namespace Lambdajection.CustomResource.Tests
                 {
                     lambdaHost.Lambda = lambda;
                     lambdaHost.Scope = serviceProvider.CreateScope();
+                    lambdaHost.Serializer = serializer;
                 });
 
                 request.RequestType = CustomResourceRequestType.Create;
@@ -77,6 +81,7 @@ namespace Lambdajection.CustomResource.Tests
             public async Task ShouldCallUpdate_IfRequestTypeIsUpdate(
                 ServiceCollection serviceCollection,
                 CustomResourceRequest<object> request,
+                JsonSerializer serializer,
                 [Substitute] TestCustomResourceLambda lambda,
                 [Substitute] IHttpClient httpClient
             )
@@ -89,6 +94,7 @@ namespace Lambdajection.CustomResource.Tests
                 {
                     lambdaHost.Lambda = lambda;
                     lambdaHost.Scope = serviceProvider.CreateScope();
+                    lambdaHost.Serializer = serializer;
                 });
 
                 request.RequestType = CustomResourceRequestType.Update;
@@ -104,6 +110,7 @@ namespace Lambdajection.CustomResource.Tests
             [Test, Auto]
             public async Task ShouldCallCreate_IfRequestTypeIsUpdate_ButLambdaRequiresReplacement(
                 ServiceCollection serviceCollection,
+                JsonSerializer serializer,
                 CustomResourceRequest<object> request,
                 [Substitute] TestCustomResourceLambda lambda,
                 [Substitute] IHttpClient httpClient
@@ -117,6 +124,7 @@ namespace Lambdajection.CustomResource.Tests
                 {
                     lambdaHost.Lambda = lambda;
                     lambdaHost.Scope = serviceProvider.CreateScope();
+                    lambdaHost.Serializer = serializer;
                 });
 
                 request.RequestType = CustomResourceRequestType.Update;
@@ -134,6 +142,7 @@ namespace Lambdajection.CustomResource.Tests
             public async Task ShouldCallDelete_IfRequestTypeIsDelete(
                 ServiceCollection serviceCollection,
                 CustomResourceRequest<object> request,
+                JsonSerializer serializer,
                 [Substitute] TestCustomResourceLambda lambda,
                 [Substitute] IHttpClient httpClient
             )
@@ -146,6 +155,7 @@ namespace Lambdajection.CustomResource.Tests
                 {
                     lambdaHost.Lambda = lambda;
                     lambdaHost.Scope = serviceProvider.CreateScope();
+                    lambdaHost.Serializer = serializer;
                 });
 
                 request.RequestType = CustomResourceRequestType.Delete;
@@ -163,6 +173,7 @@ namespace Lambdajection.CustomResource.Tests
                 ServiceCollection serviceCollection,
                 TestCustomResourceOutputData data,
                 CustomResourceRequest<object> request,
+                JsonSerializer serializer,
                 [Substitute] TestCustomResourceLambda lambda,
                 [Substitute] IHttpClient httpClient
             )
@@ -176,6 +187,7 @@ namespace Lambdajection.CustomResource.Tests
                 {
                     lambdaHost.Lambda = lambda;
                     lambdaHost.Scope = serviceProvider.CreateScope();
+                    lambdaHost.Serializer = serializer;
                 });
 
                 request.RequestType = CustomResourceRequestType.Create;
@@ -198,6 +210,7 @@ namespace Lambdajection.CustomResource.Tests
             public async Task ShouldRespondSuccessWithStackId(
                 ServiceCollection serviceCollection,
                 string stackId,
+                JsonSerializer serializer,
                 CustomResourceRequest<object> request,
                 [Substitute] TestCustomResourceLambda lambda,
                 [Substitute] IHttpClient httpClient
@@ -211,6 +224,7 @@ namespace Lambdajection.CustomResource.Tests
                 {
                     lambdaHost.Lambda = lambda;
                     lambdaHost.Scope = serviceProvider.CreateScope();
+                    lambdaHost.Serializer = serializer;
                 });
 
                 request.RequestType = CustomResourceRequestType.Create;
@@ -234,6 +248,7 @@ namespace Lambdajection.CustomResource.Tests
             public async Task ShouldRespondSuccessWithRequestId(
                 ServiceCollection serviceCollection,
                 string requestId,
+                JsonSerializer serializer,
                 CustomResourceRequest<object> request,
                 [Substitute] TestCustomResourceLambda lambda,
                 [Substitute] IHttpClient httpClient
@@ -247,6 +262,7 @@ namespace Lambdajection.CustomResource.Tests
                 {
                     lambdaHost.Lambda = lambda;
                     lambdaHost.Scope = serviceProvider.CreateScope();
+                    lambdaHost.Serializer = serializer;
                 });
 
                 request.RequestType = CustomResourceRequestType.Create;
@@ -270,6 +286,7 @@ namespace Lambdajection.CustomResource.Tests
             public async Task ShouldRespondSuccessWithLogicalResourceId(
                 ServiceCollection serviceCollection,
                 string logicalResourceId,
+                JsonSerializer serializer,
                 CustomResourceRequest<object> request,
                 [Substitute] TestCustomResourceLambda lambda,
                 [Substitute] IHttpClient httpClient
@@ -283,6 +300,7 @@ namespace Lambdajection.CustomResource.Tests
                 {
                     lambdaHost.Lambda = lambda;
                     lambdaHost.Scope = serviceProvider.CreateScope();
+                    lambdaHost.Serializer = serializer;
                 });
 
                 request.RequestType = CustomResourceRequestType.Create;
@@ -306,6 +324,7 @@ namespace Lambdajection.CustomResource.Tests
             public async Task ShouldRespondSuccessWithPhysicalResourceId(
                 ServiceCollection serviceCollection,
                 string physicalResourceId,
+                JsonSerializer serializer,
                 TestCustomResourceOutputData data,
                 CustomResourceRequest<object> request,
                 [Substitute] TestCustomResourceLambda lambda,
@@ -322,6 +341,7 @@ namespace Lambdajection.CustomResource.Tests
                 {
                     lambdaHost.Lambda = lambda;
                     lambdaHost.Scope = serviceProvider.CreateScope();
+                    lambdaHost.Serializer = serializer;
                 });
 
                 request.RequestType = CustomResourceRequestType.Create;
@@ -344,12 +364,14 @@ namespace Lambdajection.CustomResource.Tests
             public async Task ShouldRespondFailureWithReason(
                 string reason,
                 ServiceCollection serviceCollection,
+                JsonSerializer serializer,
                 TestCustomResourceOutputData data,
                 CustomResourceRequest<object> request,
                 [Substitute] TestCustomResourceLambda lambda,
                 [Substitute] IHttpClient httpClient
             )
             {
+                serviceCollection.AddSingleton<ISerializer>(serializer);
                 serviceCollection.AddSingleton(httpClient);
                 lambda.Create(Any<CustomResourceRequest<TestLambdaMessage>>(), Any<CancellationToken>()).Returns<TestCustomResourceOutputData>(x =>
                 {
@@ -362,6 +384,7 @@ namespace Lambdajection.CustomResource.Tests
                 {
                     lambdaHost.Lambda = lambda;
                     lambdaHost.Scope = serviceProvider.CreateScope();
+                    lambdaHost.Serializer = serializer;
                 });
 
                 request.RequestType = CustomResourceRequestType.Create;
@@ -385,6 +408,7 @@ namespace Lambdajection.CustomResource.Tests
                 string requestId,
                 Uri responseURL,
                 TestCustomResourceOutputData data,
+                JsonSerializer serializer,
                 ServiceCollection serviceCollection,
                 [Substitute] TestCustomResourceLambda lambda,
                 [Substitute] IHttpClient httpClient
@@ -399,6 +423,7 @@ namespace Lambdajection.CustomResource.Tests
                 {
                     lambdaHost.Lambda = lambda;
                     lambdaHost.Scope = serviceProvider.CreateScope();
+                    lambdaHost.Serializer = serializer;
                 });
 
                 var input = $@"{{ ""RequestId"": ""{requestId}"", ""ResponseURL"": ""{responseURL}"", ""RequestType"": ""Create"", ""ResourceProperties"": {{ ""Id"": 1 }} }}";
@@ -421,6 +446,7 @@ namespace Lambdajection.CustomResource.Tests
             public async Task ShouldThrowIfRequestDeserializesToNull(
                 string requestId,
                 Uri responseURL,
+                JsonSerializer serializer,
                 TestCustomResourceOutputData data,
                 ServiceCollection serviceCollection,
                 [Substitute] TestCustomResourceLambda lambda,
@@ -436,6 +462,7 @@ namespace Lambdajection.CustomResource.Tests
                 {
                     lambdaHost.Lambda = lambda;
                     lambdaHost.Scope = serviceProvider.CreateScope();
+                    lambdaHost.Serializer = serializer;
                 });
 
                 var input = $@"null";
@@ -450,6 +477,7 @@ namespace Lambdajection.CustomResource.Tests
             public async Task ShouldRespondFailureWithRequestId(
                 string requestId,
                 ServiceCollection serviceCollection,
+                JsonSerializer serializer,
                 TestCustomResourceOutputData data,
                 CustomResourceRequest<object> request,
                 [Substitute] TestCustomResourceLambda lambda,
@@ -468,6 +496,7 @@ namespace Lambdajection.CustomResource.Tests
                 {
                     lambdaHost.Lambda = lambda;
                     lambdaHost.Scope = serviceProvider.CreateScope();
+                    lambdaHost.Serializer = serializer;
                 });
 
                 request.RequestType = CustomResourceRequestType.Create;
@@ -491,6 +520,7 @@ namespace Lambdajection.CustomResource.Tests
             public async Task ShouldRespondFailureWithStackId(
                 string stackId,
                 ServiceCollection serviceCollection,
+                JsonSerializer serializer,
                 TestCustomResourceOutputData data,
                 CustomResourceRequest<object> request,
                 [Substitute] TestCustomResourceLambda lambda,
@@ -509,6 +539,7 @@ namespace Lambdajection.CustomResource.Tests
                 {
                     lambdaHost.Lambda = lambda;
                     lambdaHost.Scope = serviceProvider.CreateScope();
+                    lambdaHost.Serializer = serializer;
                 });
 
                 request.RequestType = CustomResourceRequestType.Create;
@@ -533,6 +564,7 @@ namespace Lambdajection.CustomResource.Tests
                 string logicalResourceId,
                 ServiceCollection serviceCollection,
                 TestCustomResourceOutputData data,
+                JsonSerializer serializer,
                 CustomResourceRequest<object> request,
                 [Substitute] TestCustomResourceLambda lambda,
                 [Substitute] IHttpClient httpClient
@@ -550,6 +582,7 @@ namespace Lambdajection.CustomResource.Tests
                 {
                     lambdaHost.Lambda = lambda;
                     lambdaHost.Scope = serviceProvider.CreateScope();
+                    lambdaHost.Serializer = serializer;
                 });
 
                 request.RequestType = CustomResourceRequestType.Create;
@@ -574,6 +607,7 @@ namespace Lambdajection.CustomResource.Tests
                 string physicalResourceId,
                 ServiceCollection serviceCollection,
                 TestCustomResourceOutputData data,
+                JsonSerializer serializer,
                 CustomResourceRequest<object> request,
                 [Substitute] TestCustomResourceLambda lambda,
                 [Substitute] IHttpClient httpClient
@@ -591,6 +625,7 @@ namespace Lambdajection.CustomResource.Tests
                 {
                     lambdaHost.Lambda = lambda;
                     lambdaHost.Scope = serviceProvider.CreateScope();
+                    lambdaHost.Serializer = serializer;
                 });
 
                 request.RequestType = CustomResourceRequestType.Create;

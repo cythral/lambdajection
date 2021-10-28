@@ -5,6 +5,8 @@ using AutoFixture.AutoNSubstitute;
 
 using FluentAssertions;
 
+using Lambdajection.Core.Serialization;
+
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -116,6 +118,15 @@ namespace Lambdajection.Core.Tests
 
             var configuration = provider.GetService<TestLambda>();
             configuration.Should().NotBeNull();
+        }
+
+        [Test]
+        public void BuildServiceProviderReturnsServiceProviderWithSerializer()
+        {
+            var provider = TestLambdaHostBuilder.BuildServiceProvider();
+
+            var serializer = provider.GetService<ISerializer>();
+            serializer.Should().NotBeNull();
         }
 
         [Test, Auto]

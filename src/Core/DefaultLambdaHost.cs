@@ -1,6 +1,5 @@
 using System;
 using System.IO;
-using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -37,7 +36,7 @@ namespace Lambdajection.Core
             CancellationToken cancellationToken = default
         )
         {
-            var parameter = await JsonSerializer.DeserializeAsync<TLambdaParameter>(inputStream, cancellationToken: cancellationToken);
+            var parameter = await Serializer.Deserialize<TLambdaParameter>(inputStream, cancellationToken);
             Lambda.Validate(parameter!);
             return await Lambda.Handle(parameter!, cancellationToken);
         }

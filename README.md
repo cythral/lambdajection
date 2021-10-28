@@ -25,16 +25,15 @@ Community contribution/pull requests are welcome and encouraged! See the [contri
 - [4. Usage](#4-usage)
   - [4.1. Lambda Handler](#41-lambda-handler)
   - [4.2. Request Validation Attributes](#42-request-validation-attributes)
-  - [4.3. Serialization](#43-serialization)
-  - [4.4. Startup Class](#44-startup-class)
-  - [4.5. Customizing Configuration](#45-customizing-configuration)
-  - [4.6. Adding Options](#46-adding-options)
-  - [4.7. Initialization Services](#47-initialization-services)
-  - [4.8. Disposers](#48-disposers)
-  - [4.9. Handler Scheme](#49-handler-scheme)
-  - [4.10. Lambda-Backed Custom Resource Providers](#410-lambda-backed-custom-resource-providers)
-  - [4.11. Custom Runtimes](#411-custom-runtimes)
-  - [4.12. Lambda Layer](#412-lambda-layer)
+  - [4.3. Startup Class](#43-startup-class)
+  - [4.4. Customizing Configuration](#44-customizing-configuration)
+  - [4.5. Adding Options](#45-adding-options)
+  - [4.6. Initialization Services](#46-initialization-services)
+  - [4.7. Disposers](#47-disposers)
+  - [4.8. Handler Scheme](#48-handler-scheme)
+  - [4.9. Lambda-Backed Custom Resource Providers](#49-lambda-backed-custom-resource-providers)
+  - [4.10. Custom Runtimes](#410-custom-runtimes)
+  - [4.11. Lambda Layer](#411-lambda-layer)
 - [5. Examples](#5-examples)
 - [6. Acknowledgments](#6-acknowledgments)
 - [7. Donations](#7-donations)
@@ -172,21 +171,8 @@ class Request
 }
 ```
 
-### 4.3. Serialization
 
-If your Lambda targets the `netcoreapp3.1` or `net5.0` frameworks, then by default, the serializer is set to  `DefaultLambdaJsonSerializer` from the `Amazon.Lambda.Serialization.SystemTextJson` package.  With any TFM, you may specify the serializer you want to use by setting the Lambda attribute's `Serializer` argument:
-
-```cs
-[Lambda(typeof(Startup), Serializer = typeof(Serializer))]
-public partial class Lambda
-{
-    ...
-```
-
-See a [full example of serializer customization](./examples/CustomSerializer/README.md). 
-
-
-### 4.4. Startup Class
+### 4.3. Startup Class
 
 The startup class configures services that are injected into the Lambda's IoC container / service collection.
 
@@ -232,7 +218,7 @@ namespace Your.Namespace
 }
 ```
 
-### 4.5. Customizing Configuration
+### 4.4. Customizing Configuration
 
 By default, configuration is environment variables-based. If you would like to use a file-based or other configuration scheme, you may supply a custom configuration factory to the Lambda attribute:
 
@@ -268,7 +254,7 @@ namespace Your.Namespace
 
 See the [full example here](./examples/CustomConfiguration/README.md).
 
-### 4.6. Adding Options
+### 4.5. Adding Options
 
 You can add an options section by defining a class for that section, and annotating it with the [LambdaOptions attribute](src/Attributes/LambdaOptionsAttribute.cs). If any options are in encrypted form, add the [Encrypted attribute](src/Encryption/EncryptedAttribute.cs) to that property. When the options are requested, the [IDecryptionService](src/Encryption/IDecryptionService.cs) singleton in the container will be used to decrypt those properties. The [default decryption service](src/Encryption/DefaultDecryptionService.cs) uses KMS to decrypt values.
 
@@ -293,15 +279,15 @@ namespace Your.Namespace
 }
 ```
 
-### 4.7. Initialization Services
+### 4.6. Initialization Services
 
 Initialization services can be used to initialize data or perform some task before the lambda is run.  Initialization services should implement [ILambdaInitializationService](src/Core/ILambdaInitializationService.cs) and be injected into the container as singletons at startup.
 
-### 4.8. Disposers
+### 4.7. Disposers
 
 Disposers can be used to cleanup unmanaged resources, such as open file-handles and network connections. Lambdajection supports Lambdas that implement either [IDisposable](https://docs.microsoft.com/en-us/dotnet/api/system.idisposable), [IAsyncDisposable](https://docs.microsoft.com/en-us/dotnet/api/system.iasyncdisposable) or both.  If you implement both, DisposeAsync will be preferred.
 
-### 4.9. Handler Scheme
+### 4.8. Handler Scheme
 
 When configuring your lambda on AWS, the method name you'll want to use will be `Run` (NOT `Handle`). For context, `Run` is a static method generated on your class during compilation.  It takes care of setting up the IoC container, if it hasn't been setup already.
 
@@ -314,7 +300,7 @@ Your.Assembly.Name::Your.Namespace.YourLambda::Run
 You can customize the name of the "Run" method via the
 RunnerMethod property of `LambdaAttribute`.
 
-### 4.10. Lambda-Backed Custom Resource Providers
+### 4.9. Lambda-Backed Custom Resource Providers
 Lambdajection also allows you to write lambda-backed custom resource providers.  Just write create, update and delete methods and Lambdajection will take care of deciding which one gets called + respond to CloudFormation.
 
 Just use the [Custom Resource Provider Attribute](./src/Attributes/CustomResourceProviderAttribute.cs):
@@ -366,7 +352,7 @@ namespace Your.Namespace
 
 See also the [custom resource example](./examples/CustomResource).
 
-### 4.11. Custom Runtimes
+### 4.10. Custom Runtimes
 
 Lambdajection can be used with custom runtimes starting in v0.5.0-beta2, that way you can use a newer version of .NET as soon as it comes out, even if it is not an LTS release.  
 
@@ -392,7 +378,7 @@ You may also optionally set the `SelfContained` property:
 
 See an example of a [non-self contained lambda using a custom runtime here](./examples/CustomRuntime). (Example documentation coming soon).  Note that the example is using [a Lambda Layer we deployed with a custom bootstrap file.](https://github.com/cythral/dotnet-lambda-layer)
 
-### 4.12. Lambda Layer
+### 4.11. Lambda Layer
 
 You can use a Lambda Layer containing Lambdajection and all of its dependencies to cut down on package sizes. The layer will be available on the serverless application repository.  Once deployed, you can use it on functions that use the Lambdajection.Runtime package on custom runtimes containing .NET 5.
 
