@@ -16,16 +16,16 @@ using NUnit.Framework;
 
 using TestLambdaHost = Lambdajection.Core.DefaultLambdaHost<
     Lambdajection.TestLambda,
-    object,
-    object,
+    Lambdajection.TestLambdaMessage,
+    Lambdajection.TestLambdaMessage,
     Lambdajection.TestStartup,
     Lambdajection.TestConfigurator,
     Lambdajection.TestConfigFactory
 >;
 using TestLambdaHostBuilder = Lambdajection.Core.LambdaHostBuilder<
     Lambdajection.TestLambda,
-    object,
-    object,
+    Lambdajection.TestLambdaMessage,
+    Lambdajection.TestLambdaMessage,
     Lambdajection.TestStartup,
     Lambdajection.TestConfigurator,
     Lambdajection.TestConfigFactory

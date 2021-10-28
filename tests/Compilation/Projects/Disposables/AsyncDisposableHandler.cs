@@ -16,11 +16,11 @@ namespace Lambdajection.CompilationTests.Disposables
     [Lambda(typeof(Startup))]
     public partial class AsyncDisposableHandler : IAsyncDisposable
     {
-        public bool DisposeAsyncWasCalled = false;
+        public static bool DisposeAsyncWasCalled { get; set; } = false;
 
-        public Task<AsyncDisposableHandler> Handle(string request, CancellationToken cancellationToken = default)
+        public Task<string> Handle(string request, CancellationToken cancellationToken = default)
         {
-            return Task.FromResult(this);
+            return Task.FromResult("ok");
         }
 
         public ValueTask DisposeAsync()

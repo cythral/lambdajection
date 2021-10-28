@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Reflection;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -125,9 +126,11 @@ namespace Lambdajection.Tests.Compilation
             var handlerType = assembly.GetType("Lambdajection.CompilationTests.AmazonFactories.Handler")!;
             var runMethod = handlerType.GetMethod("Run")!;
 
-            var result = await (Task<IAwsFactory<IAmazonS3>>)runMethod.Invoke(null, new[] { "foo", null })!;
+            using var inputStream = await StreamUtils.CreateJsonStream("foo");
+            var resultStream = await (Task<Stream>)runMethod.Invoke(null, new[] { inputStream, null })!;
+            var result = await JsonSerializer.DeserializeAsync<string>(resultStream);
 
-            result.Should().NotBeNull();
+            result.Should().Be("ok");
         }
 
         [Test, Auto]
