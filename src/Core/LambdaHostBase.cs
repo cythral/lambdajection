@@ -1,11 +1,12 @@
 using System;
 using System.IO;
 using System.Linq;
-using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 
 using Amazon.Lambda.Core;
+
+using Lambdajection.Core.Serialization;
 
 using Microsoft.Extensions.DependencyInjection;
 
@@ -71,6 +72,12 @@ namespace Lambdajection.Core
         public ILambdaContext Context { get; private set; } = null!;
 
         /// <summary>
+        /// Gets the serializer used to serialize/deserialize objects between formats.
+        /// </summary>
+        /// <value>Serializer object.</value>
+        protected internal ISerializer Serializer { get; internal set; } = null!;
+
+        /// <summary>
         /// Gets the lambda to be invoked.
         /// </summary>
         /// <value>The lambda to be invoked.</value>
@@ -109,12 +116,12 @@ namespace Lambdajection.Core
             var scopeContext = provider.GetRequiredService<LambdaScope>();
             scopeContext.LambdaContext = context;
 
+            Serializer = provider.GetRequiredService<ISerializer>();
             Lambda = provider.GetRequiredService<TLambda>();
 
             var result = await InvokeLambda(inputStream, cancellationToken);
             var resultStream = new MemoryStream();
-            await JsonSerializer.SerializeAsync(resultStream, result, cancellationToken: cancellationToken);
-            resultStream.Position = 0;
+            await Serializer.Serialize(resultStream, result, cancellationToken);
 
             return resultStream;
         }

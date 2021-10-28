@@ -25,6 +25,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IamPermissions", "IamPermis
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Permissionless", "Permissionless\Permissionless.csproj", "{6B319CA9-14D7-4357-936B-12AFCE401706}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Serialization", "Serialization\Serialization.csproj", "{1E161549-8486-496C-9C6E-60532EAF4194}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -170,5 +172,17 @@ Global
 		{6B319CA9-14D7-4357-936B-12AFCE401706}.Release|x64.Build.0 = Release|Any CPU
 		{6B319CA9-14D7-4357-936B-12AFCE401706}.Release|x86.ActiveCfg = Release|Any CPU
 		{6B319CA9-14D7-4357-936B-12AFCE401706}.Release|x86.Build.0 = Release|Any CPU
+		{1E161549-8486-496C-9C6E-60532EAF4194}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E161549-8486-496C-9C6E-60532EAF4194}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1E161549-8486-496C-9C6E-60532EAF4194}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{1E161549-8486-496C-9C6E-60532EAF4194}.Debug|x64.Build.0 = Debug|Any CPU
+		{1E161549-8486-496C-9C6E-60532EAF4194}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{1E161549-8486-496C-9C6E-60532EAF4194}.Debug|x86.Build.0 = Debug|Any CPU
+		{1E161549-8486-496C-9C6E-60532EAF4194}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E161549-8486-496C-9C6E-60532EAF4194}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1E161549-8486-496C-9C6E-60532EAF4194}.Release|x64.ActiveCfg = Release|Any CPU
+		{1E161549-8486-496C-9C6E-60532EAF4194}.Release|x64.Build.0 = Release|Any CPU
+		{1E161549-8486-496C-9C6E-60532EAF4194}.Release|x86.ActiveCfg = Release|Any CPU
+		{1E161549-8486-496C-9C6E-60532EAF4194}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

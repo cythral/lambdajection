@@ -2,7 +2,6 @@ using System;
 using System.IO;
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
-using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -106,7 +105,7 @@ namespace Lambdajection.CustomResource
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private async Task<CustomResourceRequest> DeserializeInput(Stream stream, CancellationToken cancellationToken)
         {
-            var input = await JsonSerializer.DeserializeAsync<CustomResourceRequest>(stream, cancellationToken: cancellationToken);
+            var input = await Serializer.Deserialize<CustomResourceRequest>(stream, cancellationToken);
             return input ?? throw new SerializationException("Request unexpectedly deserialized to null.");
         }
 
@@ -133,7 +132,7 @@ namespace Lambdajection.CustomResource
             if (request.ExtraProperties.TryGetValue(propertyName, out var element))
             {
                 var text = element.GetRawText();
-                var parameter = JsonSerializer.Deserialize<TLambdaParameter>(text);
+                var parameter = Serializer.Deserialize<TLambdaParameter>(text);
                 return parameter;
             }
 
