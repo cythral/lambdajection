@@ -27,6 +27,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Permissionless", "Permissio
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Serialization", "Serialization\Serialization.csproj", "{1E161549-8486-496C-9C6E-60532EAF4194}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tracing", "Tracing\Tracing.csproj", "{AF35145C-7D80-4F76-9A6E-747F01116BB8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -184,5 +186,17 @@ Global
 		{1E161549-8486-496C-9C6E-60532EAF4194}.Release|x64.Build.0 = Release|Any CPU
 		{1E161549-8486-496C-9C6E-60532EAF4194}.Release|x86.ActiveCfg = Release|Any CPU
 		{1E161549-8486-496C-9C6E-60532EAF4194}.Release|x86.Build.0 = Release|Any CPU
+		{AF35145C-7D80-4F76-9A6E-747F01116BB8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF35145C-7D80-4F76-9A6E-747F01116BB8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF35145C-7D80-4F76-9A6E-747F01116BB8}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{AF35145C-7D80-4F76-9A6E-747F01116BB8}.Debug|x64.Build.0 = Debug|Any CPU
+		{AF35145C-7D80-4F76-9A6E-747F01116BB8}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{AF35145C-7D80-4F76-9A6E-747F01116BB8}.Debug|x86.Build.0 = Debug|Any CPU
+		{AF35145C-7D80-4F76-9A6E-747F01116BB8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF35145C-7D80-4F76-9A6E-747F01116BB8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AF35145C-7D80-4F76-9A6E-747F01116BB8}.Release|x64.ActiveCfg = Release|Any CPU
+		{AF35145C-7D80-4F76-9A6E-747F01116BB8}.Release|x64.Build.0 = Release|Any CPU
+		{AF35145C-7D80-4F76-9A6E-747F01116BB8}.Release|x86.ActiveCfg = Release|Any CPU
+		{AF35145C-7D80-4F76-9A6E-747F01116BB8}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -86,6 +86,12 @@ namespace Lambdajection.Generator
 
         public IEnumerable<StatementSyntax> GenerateConfigureMethodBody()
         {
+            if (context.Settings.EnableTracing)
+            {
+                yield return ParseStatement("Amazon.XRay.Recorder.Handlers.AwsSdk.AWSSDKHandler.RegisterXRayForAllServices();");
+                yield return ParseStatement("services.TryAddSingleton(typeof(Amazon.XRay.Recorder.Core.IAWSXRayRecorder), typeof(Amazon.XRay.Recorder.Core.AWSXRayRecorder));");
+            }
+
             if (scanResults.IncludeDecryptionFacade)
             {
                 context.Usings.Add("Amazon.KeyManagementService");

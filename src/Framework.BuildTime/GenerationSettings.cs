@@ -25,6 +25,8 @@ namespace Lambdajection.Framework
 
         public string TargetFrameworkVersion { get; init; }
 
+        public bool EnableTracing { get; init; }
+
         public static GenerationSettings FromContext(GeneratorExecutionContext context)
         {
             var referencedAssemblies = context.Compilation.ReferencedAssemblyNames;
@@ -39,9 +41,11 @@ namespace Lambdajection.Framework
             options.TryGetValue("build_property.OutputPath", out var outputPath);
             options.TryGetValue("build_property.TargetFrameworkVersion", out var targetFrameworkVersion);
             options.TryGetValue("build_property.StackDescription", out var stackDescription);
+            options.TryGetValue("build_property.EnableLambdajectionTracing", out var enableTracing);
 
             generateLambdajectionEntrypoint ??= "false";
             nullable ??= "disable";
+            enableTracing ??= "false";
 
             return new GenerationSettings
             {
@@ -53,6 +57,7 @@ namespace Lambdajection.Framework
                 AssemblyName = assemblyName ?? "Unknown",
                 OutputPath = outputPath?.TrimEnd('/') ?? "Unknown",
                 TargetFrameworkVersion = targetFrameworkVersion?.Replace("v", string.Empty) ?? "Unknown",
+                EnableTracing = enableTracing.Equals("true", StringComparison.OrdinalIgnoreCase),
             };
         }
     }
