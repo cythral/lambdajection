@@ -109,6 +109,7 @@
             <PackagesToRemove Include="$(MSBuildThisFileDirectory).nuget\%(ChildSolution.Key)\lambdajection.framework.buildtime/" />
             <PackagesToRemove Include="$(MSBuildThisFileDirectory).nuget\%(ChildSolution.Key)\lambdajection.customresource/" />
             <PackagesToRemove Include="$(MSBuildThisFileDirectory).nuget\%(ChildSolution.Key)\lambdajection.customresource.buildtime/" />
+            <PackagesToRemove Include="$(MSBuildThisFileDirectory).nuget\%(ChildSolution.Key)\lambdajection.tracing/" />
         </ItemGroup>
 
         <Message Importance="High" Text="%0A%0ABuilding Examples, Templates and Layer%0A---------------------------------%0A" />

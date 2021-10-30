@@ -9,5 +9,7 @@ namespace Lambdajection.Generator.TemplateGeneration
         public string FullyQualifiedClassName { get; set; }
 
         public HashSet<string> Permissions { get; set; }
+
+        public bool EnableTracing { get; set; }
     }
 }

@@ -82,6 +82,7 @@
     <ProjectReference Include="..\src\Runtime\Runtime.csproj" />
     <ProjectReference Include="..\src\Encryption\Encryption.csproj" />
     <ProjectReference Include="..\src\Generator\Generator.csproj" />
+    <ProjectReference Include="..\src\Tracing\Tracing.csproj" />
     <ProjectReference Include="..\src\Metapackage\Metapackage.csproj" PrivateAssets="all" ReferenceOutputAssembly="false" />
   </ItemGroup>
 </Project>

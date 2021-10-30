@@ -178,6 +178,7 @@ namespace Lambdajection.Generator
                 ClassName = lambdaName,
                 FullyQualifiedClassName = $"{namespaceName}.{lambdaName}",
                 Permissions = await new IamAccessAnalyzer(lambdaName, context, typeUtils).Analyze(),
+                EnableTracing = context.Settings.EnableTracing,
             };
         }
 
