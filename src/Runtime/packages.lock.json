@@ -4,11 +4,11 @@
     ".NETStandard,Version=v2.1": {
       "Amazon.Lambda.RuntimeSupport": {
         "type": "Direct",
-        "requested": "[1.3.0, )",
-        "resolved": "1.3.0",
-        "contentHash": "fDsgOBTW5BRfu9d6XMuiVjti9iBTx5N1FIH1Lb3HSXMD0PV/tYUIRX1j63I0yBKzguxScqMzvusr5VvZcWWinw==",
+        "requested": "[1.4.0, )",
+        "resolved": "1.4.0",
+        "contentHash": "xmpJ+iQWEL/vDRoBIxsGoLAX9k7al7uS6Xd3xcj3IWB4mPAUx4/J4RQO5jZ7vKnD8SjnYvRe8i6dyh788r2BVA==",
         "dependencies": {
-          "Amazon.Lambda.Core": "1.2.0",
+          "Amazon.Lambda.Core": "2.1.0",
           "NSwag.MSBuild": "12.0.4",
           "System.Runtime.Loader": "4.3.0"
         }
@@ -40,8 +40,8 @@
       },
       "Amazon.Lambda.Core": {
         "type": "Transitive",
-        "resolved": "1.2.0",
-        "contentHash": "goaq1LaH1UJB18BNG/Apxmn0P7dAlLWFbxU2nKxK+M4lH2KJaZDbtlP2gFEAJ+aENOMBHthaLPEtk3944J2OOg=="
+        "resolved": "2.1.0",
+        "contentHash": "ok06UhfBZw6j6+PhiJR9C0EOMuJvnq8rMCHVkaFmPFrlI/q447ukwGZQKaAKqodV+MNTfpb/iPxjgUPVbSlVVw=="
       },
       "Microsoft.Build.Tasks.Git": {
         "type": "Transitive",
