@@ -2,8 +2,6 @@
 
     <PropertyGroup>
         <TargetFramework>net6.0</TargetFramework>
-        <RuntimeIdentifier>linux-x64</RuntimeIdentifier>
-        <SelfContained>false</SelfContained>
     </PropertyGroup>
 
     <ItemGroup>
