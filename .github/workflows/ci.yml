@@ -78,7 +78,7 @@ jobs:
         if: matrix.os == 'ubuntu-latest'
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          file: ./obj/Tests/Release/net5.0/coverage.xml
+          file: ./obj/Tests/Release/net6.0/coverage.xml
           fail_ci_if_error: true
 
       - name: Run End to End Tests
