@@ -12,7 +12,7 @@ Resources:
       Description: Lambda Layer for Lambdajection
       CompatibleRuntimes:
         - provided.al2
-      ContentUri: ../../bin/Layer/Release/net5.0/layer
+      ContentUri: ../../bin/Layer/Release/net6.0/layer
 
   CustomRuntime:
     Type: AWS::Serverless::Function
@@ -21,7 +21,7 @@ Resources:
       Runtime: provided.al2
       FunctionName: lambdajection-customruntime
       Timeout: 300
-      CodeUri: ../../bin/Examples/CustomRuntime/Release/net5.0/linux-x64/publish/
+      CodeUri: ../../bin/Examples/CustomRuntime/Release/net6.0/linux-x64/publish/
       MemorySize: 512
       Layers:
         # https://github.com/cythral/dotnet-lambda-layer

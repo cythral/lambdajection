@@ -1,13 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <TargetFramework>net5.0</TargetFramework>
-        <RuntimeIdentifiers>linux-x64</RuntimeIdentifiers>
+        <TargetFramework>net6.0</TargetFramework>
         <RuntimeIdentifier>linux-x64</RuntimeIdentifier>
         <RestoreLockedMode>false</RestoreLockedMode>
         <RestorePackagesPath>$(MSBuildThisFileDirectory).nuget</RestorePackagesPath>
         <RestoreAdditionalProjectSources>$(PackageOutputPath);$(RestoreAdditionalProjectSources)</RestoreAdditionalProjectSources>
         <RestorePackagesWithLockFile>false</RestorePackagesWithLockFile>
-        <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
     </PropertyGroup>
 
     <ItemGroup>

@@ -20,6 +20,7 @@ namespace Microsoft.CodeAnalysis.MSBuild
         public static async Task<Project> LoadProject(string pathToProject)
         {
             using var workspace = MSBuildWorkspace.Create();
+            workspace.WorkspaceFailed += (o, e) => Console.WriteLine(e.Diagnostic.Message);
             workspace.LoadMetadataForReferencedProjects = true;
             return await workspace.OpenProjectAsync(pathToProject);
         }
