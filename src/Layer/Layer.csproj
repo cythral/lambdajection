@@ -34,7 +34,9 @@
         <ItemGroup>
             <StoreArgs Include="--manifest $(MSBuildThisFileDirectory)/Manifest/Manifest.csproj" />
             <StoreArgs Include="--output $(OutputPath)/layer" />
-            <StoreArgs Include="--skip-optimization" Condition="!$([MSBuild]::IsOsPlatform('linux'))" />
+            <StoreArgs Include="--runtime linux-x64" />
+            <!-- Optimized runtime package stores does not work on .NET 6 -->
+            <!-- <StoreArgs Include="- -skip-optimization" Condition="!$([MSBuild]::IsOsPlatform('linux'))" /> -->
             <StoreArgs Include="/p:Configuration=$(Configuration)" />
             <StoreArgs Include="/p:LambdajectionVersion=$(PackageVersion)" />
             <StoreArgs Include="-nodereuse:false" />
@@ -44,10 +46,11 @@
 
         <PropertyGroup>
             <DirectoriesToRemove>$([System.IO.Directory]::GetDirectories('$(MSBuildThisFileDirectory)Manifest/.nuget', 'lambdajection*'))</DirectoriesToRemove>
+            <DirectoriesToRemove>$([System.IO.Directory]::GetDirectories('$(MSBuildThisFileDirectory)Manifest/.nuget', 'microsoft.aspnetcore.app.runtime.linux-x64'))</DirectoriesToRemove>
         </PropertyGroup>
 
         <RemoveDir Directories="$(DirectoriesToRemove)" />
-        <Exec Command="dotnet store @(StoreArgs, ' ') --framework net6.0" StandardOutputImportance="low" />
+        <Exec Command="dotnet store @(StoreArgs, ' ')" StandardOutputImportance="low" />
 
         <ItemGroup>
             <Content Include="$(OutputPath)layer/x64/net6.0/artifact.xml" />

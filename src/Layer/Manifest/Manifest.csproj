@@ -6,7 +6,6 @@
         <RestorePackagesPath>$(MSBuildThisFileDirectory).nuget</RestorePackagesPath>
         <RestoreAdditionalProjectSources>$(PackageOutputPath);$(RestoreAdditionalProjectSources)</RestoreAdditionalProjectSources>
         <RestorePackagesWithLockFile>false</RestorePackagesWithLockFile>
-        <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
     </PropertyGroup>
 
     <ItemGroup>
