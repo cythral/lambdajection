@@ -36,7 +36,7 @@
             <StoreArgs Include="--output $(OutputPath)/layer" />
             <StoreArgs Include="--runtime linux-x64" />
             <!-- Optimized runtime package stores does not work on .NET 6 -->
-            <!-- <StoreArgs Include="- -skip-optimization" Condition="!$([MSBuild]::IsOsPlatform('linux'))" /> -->
+            <StoreArgs Include="--skip-optimization" />
             <StoreArgs Include="/p:Configuration=$(Configuration)" />
             <StoreArgs Include="/p:LambdajectionVersion=$(PackageVersion)" />
             <StoreArgs Include="-nodereuse:false" />
