@@ -47,7 +47,7 @@
         </PropertyGroup>
 
         <RemoveDir Directories="$(DirectoriesToRemove)" />
-        <Exec Command="dotnet store @(StoreArgs, ' ')" StandardOutputImportance="low" />
+        <Exec Command="dotnet store @(StoreArgs, ' ') --framework net6.0" StandardOutputImportance="low" />
 
         <ItemGroup>
             <Content Include="$(OutputPath)layer/x64/net6.0/artifact.xml" />
