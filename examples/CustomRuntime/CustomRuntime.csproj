@@ -4,7 +4,7 @@
         <OutputType>Exe</OutputType>
         <TargetFramework>net6.0</TargetFramework>
         <RuntimeIdentifier>linux-x64</RuntimeIdentifier>
-        <SelfContained>true</SelfContained>
+        <SelfContained>false</SelfContained>
         <PublishReadyToRun>true</PublishReadyToRun>
     </PropertyGroup>
 
