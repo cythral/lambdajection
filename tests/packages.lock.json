@@ -1883,6 +1883,13 @@
           "Amazon.Lambda.RuntimeSupport": "1.4.0"
         }
       },
+      "Lambdajection.Sns": {
+        "type": "Project",
+        "dependencies": {
+          "Lambdajection.Core": "1.0.0",
+          "Lambdajection.Framework": "1.0.0"
+        }
+      },
       "Lambdajection.Tracing": {
         "type": "Project",
         "dependencies": {

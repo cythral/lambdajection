@@ -29,6 +29,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Serialization", "Serializat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tracing", "Tracing\Tracing.csproj", "{AF35145C-7D80-4F76-9A6E-747F01116BB8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sns", "Sns\Sns.csproj", "{B11F93EF-3971-442D-B343-A7535D244B98}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -198,5 +200,17 @@ Global
 		{AF35145C-7D80-4F76-9A6E-747F01116BB8}.Release|x64.Build.0 = Release|Any CPU
 		{AF35145C-7D80-4F76-9A6E-747F01116BB8}.Release|x86.ActiveCfg = Release|Any CPU
 		{AF35145C-7D80-4F76-9A6E-747F01116BB8}.Release|x86.Build.0 = Release|Any CPU
+		{B11F93EF-3971-442D-B343-A7535D244B98}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B11F93EF-3971-442D-B343-A7535D244B98}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B11F93EF-3971-442D-B343-A7535D244B98}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{B11F93EF-3971-442D-B343-A7535D244B98}.Debug|x64.Build.0 = Debug|Any CPU
+		{B11F93EF-3971-442D-B343-A7535D244B98}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{B11F93EF-3971-442D-B343-A7535D244B98}.Debug|x86.Build.0 = Debug|Any CPU
+		{B11F93EF-3971-442D-B343-A7535D244B98}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B11F93EF-3971-442D-B343-A7535D244B98}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B11F93EF-3971-442D-B343-A7535D244B98}.Release|x64.ActiveCfg = Release|Any CPU
+		{B11F93EF-3971-442D-B343-A7535D244B98}.Release|x64.Build.0 = Release|Any CPU
+		{B11F93EF-3971-442D-B343-A7535D244B98}.Release|x86.ActiveCfg = Release|Any CPU
+		{B11F93EF-3971-442D-B343-A7535D244B98}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

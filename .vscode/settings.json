@@ -7,6 +7,8 @@
   "prettier.enable": false,
   "xml.format.preserveAttributeLineBreaks": true,
   "markdown.extension.toc.levels": "2..6",
+  "editor.semanticHighlighting.enabled": true,
+  "csharp.semanticHighlighting.enabled": true,
   "yaml.customTags": [
     "!And",
     "!And sequence",

@@ -16,7 +16,7 @@ namespace Lambdajection
             return Task.FromResult<TestLambdaMessage>(null!);
         }
 
-        public void Validate(TestLambdaMessage request)
+        public virtual void Validate(TestLambdaMessage request)
         {
         }
     }

@@ -20,6 +20,7 @@
         <InternalsVisibleTo Include="Lambdajection.Core" />
         <InternalsVisibleTo Include="Lambdajection.CustomResource" />
         <InternalsVisibleTo Include="Lambdajection.CustomResource.BuildTime" />
+        <InternalsVisibleTo Include="Lambdajection.Sns" />
         <InternalsVisibleTo Include="Lambdajection.Tests" />
         <InternalsVisibleTo Include="Lambdajection.CompilationTests.MissingLambdaInterface" />
     </ItemGroup>
