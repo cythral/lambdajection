@@ -74,6 +74,7 @@
   <ItemGroup>
     <ProjectReference Include="..\src\Attributes\Attributes.csproj" />
     <ProjectReference Include="..\src\Core\Core.csproj" />
+    <ProjectReference Include="..\src\Sns\Sns.csproj" />
     <ProjectReference Include="..\src\CustomResource\CustomResource.csproj" />
     <ProjectReference Include="..\src\Runtime\Runtime.csproj" />
     <ProjectReference Include="..\src\Encryption\Encryption.csproj" />
