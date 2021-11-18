@@ -19,6 +19,11 @@ namespace Lambdajection.Sns
             foreach (var line in lines)
             {
                 var delimiterIndex = line.IndexOf('=');
+                if (delimiterIndex == -1)
+                {
+                    continue;
+                }
+
                 var key = line[0..delimiterIndex].Trim();
                 var value = line[(delimiterIndex + 1)..].Trim('\'');
 
@@ -112,7 +117,22 @@ namespace Lambdajection.Sns
         /// <inheritdoc />
         public override void Write(Utf8JsonWriter writer, CloudFormationStackEvent value, JsonSerializerOptions options)
         {
-            throw new NotSupportedException();
+            var lines = string.Empty;
+            lines += $"SourceTopic='{value.SourceTopic}'\n";
+            lines += $"StackId='{value.StackId}'\n";
+            lines += $"Timestamp='{value.Timestamp}'\n";
+            lines += $"EventId='{value.EventId}'\n";
+            lines += $"LogicalResourceId='{value.LogicalResourceId}'\n";
+            lines += $"PhysicalResourceId='{value.PhysicalResourceId}'\n";
+            lines += $"Namespace='{value.Namespace}'\n";
+            lines += $"PrincipalId='{value.PrincipalId}'\n";
+            lines += $"ResourceProperties='{JsonSerializer.Serialize(value.ResourceProperties)}'\n";
+            lines += $"ResourceStatus='{value.ResourceStatus}'\n";
+            lines += $"ResourceType='{value.ResourceType}'\n";
+            lines += $"StackName='{value.StackName}'\n";
+            lines += $"ClientRequestToken='{value.ClientRequestToken}'\n";
+
+            writer.WriteStringValue(lines);
         }
     }
 }

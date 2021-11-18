@@ -35,7 +35,17 @@ namespace Lambdajection.Core.Serialization
         public override object? Read(ref Utf8JsonReader reader, Type _, JsonSerializerOptions options)
         {
             var stringValue = reader.GetString();
-            return SystemTextJsonSerializer.Deserialize(stringValue!, typeToConvert, options);
+            if (stringValue == null)
+            {
+                return null;
+            }
+
+            var isJsonLike = stringValue.StartsWith('{') || stringValue.StartsWith('[');
+            var deserializable = isJsonLike
+                ? stringValue
+                : $@"""{reader.GetString()?.Replace(@"""", @"\""")}""";
+
+            return SystemTextJsonSerializer.Deserialize(deserializable, typeToConvert, options);
         }
 
         /// <inheritdoc />

@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 using FluentAssertions;
@@ -33,32 +31,23 @@ namespace Lambdajection.Tests.Compilation
             string id2
         )
         {
-            using var generation = await project.GenerateAssembly();
-            var (assembly, _) = generation;
-            var requestType = assembly.GetType("Lambdajection.CompilationTests.Sns.Request")!;
-            var handler = new HandlerWrapper<string[]>(assembly, "Lambdajection.CompilationTests.Sns.Handler");
-            var recordType = typeof(SnsRecord<>).MakeGenericType(requestType)!;
-            var messageType = typeof(SnsMessage<>).MakeGenericType(requestType)!;
-            var recordArrayType = recordType.MakeArrayType();
-
-            dynamic CreateRecord(string id)
+            static SnsRecord<CloudFormationStackEvent> CreateRecord(string id)
             {
-                var request = (dynamic)Activator.CreateInstance(requestType!)!;
-                var message = (dynamic)Activator.CreateInstance(messageType, request, default(Dictionary<string, SnsMessageAttribute>), string.Empty, string.Empty, string.Empty, default(Uri), string.Empty, default(DateTime), string.Empty, string.Empty, default(Uri))!;
-                var record = (dynamic)Activator.CreateInstance(recordType, string.Empty, string.Empty, string.Empty, message)!;
-                request.Id = id;
+                var request = new CloudFormationStackEvent { StackId = id };
+                var message = new SnsMessage<CloudFormationStackEvent>(request, default!, string.Empty, string.Empty, string.Empty, default!, string.Empty, default, string.Empty, string.Empty, default!)!;
+                var record = new SnsRecord<CloudFormationStackEvent>(string.Empty, string.Empty, string.Empty, message)!;
                 return record;
             }
 
-            var snsEventType = typeof(SnsEvent<>).MakeGenericType(requestType);
-            var recordArray = (dynamic)Activator.CreateInstance(recordArrayType, 2)!;
-            recordArray[0] = CreateRecord(id1);
-            recordArray[1] = CreateRecord(id2);
+            using var generation = await project.GenerateAssembly();
+            var (assembly, _) = generation;
+            var handler = new HandlerWrapper<string[]>(assembly, "Lambdajection.CompilationTests.Sns.Handler");
 
-            var snsEvent = (dynamic)Activator.CreateInstance(snsEventType, args: new[] { recordArray })!;
+            var recordArray = new[] { CreateRecord(id1), CreateRecord(id2) };
+            var snsEvent = new SnsEvent<CloudFormationStackEvent>(recordArray);
 
             using var inputStream = await StreamUtils.CreateJsonStream(snsEvent);
-            string[] result = await handler.Run(inputStream, null);
+            string[] result = (await handler.Run(inputStream, null!))!;
 
             result.Should().BeEquivalentTo(new[] { id1, id2 });
         }
