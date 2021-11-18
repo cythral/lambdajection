@@ -1,5 +1,6 @@
 using System;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 
 using FluentAssertions;
 
@@ -168,6 +169,154 @@ namespace Lambdajection.Sns
                 var result = JsonSerializer.Deserialize<SnsMessage<CloudFormationStackEvent>>(source);
 
                 result!.Message.ClientRequestToken.Should().Be(clientRequestToken);
+            }
+        }
+
+        [TestFixture]
+        [Category("Unit")]
+        public class Serialization
+        {
+            [Test, Auto]
+            public void SourceTopicShouldSerialize(
+                CloudFormationStackEvent stackEvent
+            )
+            {
+                var result = JsonSerializer.Serialize(stackEvent).Trim('"');
+                var lines = Regex.Unescape(result).Split('\n');
+
+                lines.Should().Contain($"SourceTopic='{stackEvent.SourceTopic}'");
+            }
+
+            [Test, Auto]
+            public void StackIdShouldSerialize(
+                CloudFormationStackEvent stackEvent
+            )
+            {
+                var result = JsonSerializer.Serialize(stackEvent).Trim('"');
+                var lines = Regex.Unescape(result).Split('\n');
+
+                lines.Should().Contain($"StackId='{stackEvent.StackId}'");
+            }
+
+            [Test, Auto]
+            public void TimestampShouldSerialize(
+                CloudFormationStackEvent stackEvent
+            )
+            {
+                var result = JsonSerializer.Serialize(stackEvent).Trim('"');
+                var lines = Regex.Unescape(result).Split('\n');
+
+                lines.Should().Contain($"Timestamp='{stackEvent.Timestamp}'");
+            }
+
+            [Test, Auto]
+            public void EventIdShouldSerialize(
+                CloudFormationStackEvent stackEvent
+            )
+            {
+                var result = JsonSerializer.Serialize(stackEvent).Trim('"');
+                var lines = Regex.Unescape(result).Split('\n');
+
+                lines.Should().Contain($"EventId='{stackEvent.EventId}'");
+            }
+
+            [Test, Auto]
+            public void LogicalResourceIdShouldSerialize(
+                CloudFormationStackEvent stackEvent
+            )
+            {
+                var result = JsonSerializer.Serialize(stackEvent).Trim('"');
+                var lines = Regex.Unescape(result).Split('\n');
+
+                lines.Should().Contain($"LogicalResourceId='{stackEvent.LogicalResourceId}'");
+            }
+
+            [Test, Auto]
+            public void PhysicalResourceIdShouldSerialize(
+                CloudFormationStackEvent stackEvent
+            )
+            {
+                var result = JsonSerializer.Serialize(stackEvent).Trim('"');
+                var lines = Regex.Unescape(result).Split('\n');
+
+                lines.Should().Contain($"PhysicalResourceId='{stackEvent.PhysicalResourceId}'");
+            }
+
+            [Test, Auto]
+            public void NamespaceShouldSerialize(
+                CloudFormationStackEvent stackEvent
+            )
+            {
+                var result = JsonSerializer.Serialize(stackEvent).Trim('"');
+                var lines = Regex.Unescape(result).Split('\n');
+
+                lines.Should().Contain($"Namespace='{stackEvent.Namespace}'");
+            }
+
+            [Test, Auto]
+            public void PrincipalIdShouldSerialize(
+                CloudFormationStackEvent stackEvent
+            )
+            {
+                var result = JsonSerializer.Serialize(stackEvent).Trim('"');
+                var lines = Regex.Unescape(result).Split('\n');
+
+                lines.Should().Contain($"PrincipalId='{stackEvent.PrincipalId}'");
+            }
+
+            [Test, Auto]
+            public void ResourcePropertiesShouldSerialize(
+                CloudFormationStackEvent stackEvent
+            )
+            {
+                var result = JsonSerializer.Serialize(stackEvent).Trim('"');
+                var lines = Regex.Unescape(result).Split('\n');
+
+                lines.Should().Contain($"ResourceProperties='{JsonSerializer.Serialize(stackEvent.ResourceProperties)}'");
+            }
+
+            [Test, Auto]
+            public void ResourceStatusShouldSerialize(
+                CloudFormationStackEvent stackEvent
+            )
+            {
+                var result = JsonSerializer.Serialize(stackEvent).Trim('"');
+                var lines = Regex.Unescape(result).Split('\n');
+
+                lines.Should().Contain($"ResourceStatus='{stackEvent.ResourceStatus}'");
+            }
+
+            [Test, Auto]
+            public void ResourceTypeShouldSerialize(
+                CloudFormationStackEvent stackEvent
+            )
+            {
+                var result = JsonSerializer.Serialize(stackEvent).Trim('"');
+                var lines = Regex.Unescape(result).Split('\n');
+
+                lines.Should().Contain($"ResourceType='{stackEvent.ResourceType}'");
+            }
+
+            [Test, Auto]
+            public void StackNameShouldSerialize(
+                CloudFormationStackEvent stackEvent
+            )
+            {
+                var result = JsonSerializer.Serialize(stackEvent).Trim('"');
+                var lines = Regex.Unescape(result).Split('\n');
+
+                lines.Should().Contain($"StackName='{stackEvent.StackName}'");
+            }
+
+            [Test, Auto]
+            public void ClientRequestTokenShouldSerialize(
+                CloudFormationStackEvent stackEvent
+            )
+            {
+                var result = JsonSerializer.Serialize(stackEvent).Trim('"');
+                var lines = Regex.Unescape(result).Split('\n');
+
+                lines.Should().Contain($"ClientRequestToken='{stackEvent.ClientRequestToken}'");
             }
         }
     }

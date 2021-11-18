@@ -34,8 +34,18 @@ namespace Lambdajection.Core.Serialization
         /// <remarks>Cannot use the given typeToConvert because it will always be System.Object.</remarks>
         public override object? Read(ref Utf8JsonReader reader, Type _, JsonSerializerOptions options)
         {
-            var stringValue = $@"""{reader.GetString()?.Replace(@"""", @"\""")}""";
-            return SystemTextJsonSerializer.Deserialize(stringValue!, typeToConvert, options);
+            var stringValue = reader.GetString();
+            if (stringValue == null)
+            {
+                return null;
+            }
+
+            var isJsonLike = stringValue.StartsWith('{') || stringValue.StartsWith('[');
+            var deserializable = isJsonLike
+                ? stringValue
+                : $@"""{reader.GetString()?.Replace(@"""", @"\""")}""";
+
+            return SystemTextJsonSerializer.Deserialize(deserializable, typeToConvert, options);
         }
 
         /// <inheritdoc />

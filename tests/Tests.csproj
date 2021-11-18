@@ -31,7 +31,7 @@
   <ItemGroup>
     <!-- Don't compile the NoFactoryCompilationTestProject, a test will do that at runtime. -->
     <Compile Remove="Compilation\Projects\**" />
-    <Compile Include="$(IntermediateOutputPath)\TestMetadata.cs" />
+    <Compile Include="$(IntermediateOutputPath)\TestMetadata.cs" Watch="false" />
   </ItemGroup>
 
   <Target Name="GenerateTestMetadata" DependsOnTargets="GetBuildVersion">
