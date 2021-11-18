@@ -151,12 +151,23 @@ namespace Lambdajection.Sns
             [Test, Auto]
             public void ClientRequestTokenShouldDeserialize(
                string clientRequestToken
-           )
+            )
             {
                 var source = $@"""ClientRequestToken={clientRequestToken}""";
                 var result = JsonSerializer.Deserialize<CloudFormationStackEvent>(source);
 
                 result!.ClientRequestToken.Should().Be(clientRequestToken);
+            }
+
+            [Test, Auto]
+            public void ShouldDeserializeInsideSnsMessage(
+                string clientRequestToken
+            )
+            {
+                var source = $@"{{""Message"":""ClientRequestToken={clientRequestToken}""}}";
+                var result = JsonSerializer.Deserialize<SnsMessage<CloudFormationStackEvent>>(source);
+
+                result!.Message.ClientRequestToken.Should().Be(clientRequestToken);
             }
         }
     }
