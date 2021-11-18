@@ -15,9 +15,9 @@ namespace Lambdajection.CompilationTests.Sns
     [SnsEventHandler(typeof(Startup))]
     public partial class Handler
     {
-        public Task<string> Handle(SnsMessage<Request> request, CancellationToken cancellationToken = default)
+        public Task<string> Handle(SnsMessage<CloudFormationStackEvent> request, CancellationToken cancellationToken = default)
         {
-            return Task.FromResult(request.Message.Id);
+            return Task.FromResult(request.Message.StackId);
         }
     }
 }

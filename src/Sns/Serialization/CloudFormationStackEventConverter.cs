@@ -19,6 +19,11 @@ namespace Lambdajection.Sns
             foreach (var line in lines)
             {
                 var delimiterIndex = line.IndexOf('=');
+                if (delimiterIndex == -1)
+                {
+                    continue;
+                }
+
                 var key = line[0..delimiterIndex].Trim();
                 var value = line[(delimiterIndex + 1)..].Trim('\'');
 
