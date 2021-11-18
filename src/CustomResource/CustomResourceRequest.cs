@@ -24,7 +24,7 @@ namespace Lambdajection.CustomResource
         /// has been created/updated/deleted.
         /// </summary>
         /// <value>The response URL.</value>
-        public virtual Uri ResponseURL { get; set; } = new Uri("http://localhost");
+        public virtual Uri? ResponseURL { get; set; }
 
         /// <summary>
         /// Gets or sets the Id of the CloudFormation stack that the

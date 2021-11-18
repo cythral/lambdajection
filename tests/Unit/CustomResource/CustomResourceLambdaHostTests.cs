@@ -196,7 +196,7 @@ namespace Lambdajection.CustomResource.Tests
                 await host.InvokeLambda(inputStream, cancellationToken);
 
                 await httpClient.Received().PutJson(
-                    Is(request.ResponseURL),
+                    Is(request.ResponseURL!),
                     Is<CustomResourceResponse<TestCustomResourceOutputData>>(response =>
                         response.Status == CustomResourceResponseStatus.Success &&
                         response.Data == data
@@ -234,7 +234,7 @@ namespace Lambdajection.CustomResource.Tests
                 await host.InvokeLambda(inputStream, cancellationToken);
 
                 await httpClient.Received().PutJson(
-                    Is(request.ResponseURL),
+                    Is(request.ResponseURL!),
                     Is<CustomResourceResponse<TestCustomResourceOutputData>>(response =>
                         response.Status == CustomResourceResponseStatus.Success &&
                         response.StackId == stackId
@@ -272,7 +272,7 @@ namespace Lambdajection.CustomResource.Tests
                 await host.InvokeLambda(inputStream, cancellationToken);
 
                 await httpClient.Received().PutJson(
-                    Is(request.ResponseURL),
+                    Is(request.ResponseURL!),
                     Is<CustomResourceResponse<TestCustomResourceOutputData>>(response =>
                         response.Status == CustomResourceResponseStatus.Success &&
                         response.RequestId == requestId
@@ -310,7 +310,7 @@ namespace Lambdajection.CustomResource.Tests
                 await host.InvokeLambda(inputStream, cancellationToken);
 
                 await httpClient.Received().PutJson(
-                    Is(request.ResponseURL),
+                    Is(request.ResponseURL!),
                     Is<CustomResourceResponse<TestCustomResourceOutputData>>(response =>
                         response.Status == CustomResourceResponseStatus.Success &&
                         response.LogicalResourceId == logicalResourceId
@@ -350,13 +350,49 @@ namespace Lambdajection.CustomResource.Tests
                 await host.InvokeLambda(inputStream, cancellationToken);
 
                 await httpClient.Received().PutJson(
-                    Is(request.ResponseURL),
+                    Is(request.ResponseURL!),
                     Is<CustomResourceResponse<TestCustomResourceOutputData>>(response =>
                         response.Status == CustomResourceResponseStatus.Success &&
                         response.PhysicalResourceId == physicalResourceId
                     ),
                     Is((string)null!),
                     Is(cancellationToken)
+                );
+            }
+
+            [Test, Auto]
+            public async Task ShouldNotRespondSuccessIfResponseURLIsNull(
+                ServiceCollection serviceCollection,
+                string stackId,
+                JsonSerializer serializer,
+                CustomResourceRequest<object> request,
+                [Substitute] TestCustomResourceLambda lambda,
+                [Substitute] IHttpClient httpClient
+            )
+            {
+                serviceCollection.AddSingleton(httpClient);
+                request.ResponseURL = null;
+
+                var serviceProvider = serviceCollection.BuildServiceProvider();
+                var cancellationToken = new CancellationToken(false);
+                var host = new TestCustomResourceLambdaHost(lambdaHost =>
+                {
+                    lambdaHost.Lambda = lambda;
+                    lambdaHost.Scope = serviceProvider.CreateScope();
+                    lambdaHost.Serializer = serializer;
+                });
+
+                request.RequestType = CustomResourceRequestType.Create;
+                request.StackId = stackId;
+
+                using var inputStream = await StreamUtils.CreateJsonStream(request);
+                await host.InvokeLambda(inputStream, cancellationToken);
+
+                await httpClient.DidNotReceiveWithAnyArgs().PutJson(
+                    default!,
+                    default(CustomResourceResponse<TestCustomResourceOutputData>)!,
+                    default!,
+                    default!
                 );
             }
 
@@ -393,7 +429,7 @@ namespace Lambdajection.CustomResource.Tests
                 await host.InvokeLambda(inputStream, cancellationToken);
 
                 await httpClient.Received().PutJson(
-                    Is(request.ResponseURL),
+                    Is(request.ResponseURL!),
                     Is<CustomResourceResponse<TestCustomResourceOutputData>>(response =>
                         response.Status == CustomResourceResponseStatus.Failed &&
                         response.Reason == reason
@@ -506,7 +542,7 @@ namespace Lambdajection.CustomResource.Tests
                 await host.InvokeLambda(inputStream, cancellationToken);
 
                 await httpClient.Received().PutJson(
-                    Is(request.ResponseURL),
+                    Is(request.ResponseURL!),
                     Is<CustomResourceResponse<TestCustomResourceOutputData>>(response =>
                         response.Status == CustomResourceResponseStatus.Failed &&
                         response.RequestId == requestId
@@ -549,7 +585,7 @@ namespace Lambdajection.CustomResource.Tests
                 await host.InvokeLambda(inputStream, cancellationToken);
 
                 await httpClient.Received().PutJson(
-                    Is(request.ResponseURL),
+                    Is(request.ResponseURL!),
                     Is<CustomResourceResponse<TestCustomResourceOutputData>>(response =>
                         response.Status == CustomResourceResponseStatus.Failed &&
                         response.StackId == stackId
@@ -592,7 +628,7 @@ namespace Lambdajection.CustomResource.Tests
                 await host.InvokeLambda(inputStream, cancellationToken);
 
                 await httpClient.Received().PutJson(
-                    Is(request.ResponseURL),
+                    Is(request.ResponseURL!),
                     Is<CustomResourceResponse<TestCustomResourceOutputData>>(response =>
                         response.Status == CustomResourceResponseStatus.Failed &&
                         response.LogicalResourceId == logicalResourceId
@@ -635,7 +671,7 @@ namespace Lambdajection.CustomResource.Tests
                 await host.InvokeLambda(inputStream, cancellationToken);
 
                 await httpClient.Received().PutJson(
-                    Is(request.ResponseURL),
+                    Is(request.ResponseURL!),
                     Is<CustomResourceResponse<TestCustomResourceOutputData>>(response =>
                         response.Status == CustomResourceResponseStatus.Failed &&
                         response.PhysicalResourceId == physicalResourceId

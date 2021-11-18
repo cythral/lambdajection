@@ -15,7 +15,7 @@ namespace Lambdajection.CustomResource
 {
     /// <inheritdoc />
     public sealed class CustomResourceLambdaHost<TLambda, TLambdaParameter, TLambdaOutput, TLambdaStartup, TLambdaConfigurator, TLambdaConfigFactory>
-        : LambdaHostBase<TLambda, CustomResourceRequest<TLambdaParameter>, TLambdaOutput, TLambdaStartup, TLambdaConfigurator, TLambdaConfigFactory>
+        : LambdaHostBase<TLambda, CustomResourceRequest<TLambdaParameter>, CustomResourceResponse<TLambdaOutput>, TLambdaStartup, TLambdaConfigurator, TLambdaConfigFactory>
         where TLambda : class, ICustomResourceProvider<TLambdaParameter, TLambdaOutput>
         where TLambdaParameter : class
         where TLambdaOutput : class, ICustomResourceOutputData
@@ -35,13 +35,13 @@ namespace Lambdajection.CustomResource
         /// Initializes a new instance of the <see cref="CustomResourceLambdaHost{TLambda, TLambdaParameter, TLambdaOutput, TLambdaStartup, TLambdaConfigurator, TLambdaConfigFactory}" /> class.
         /// </summary>
         /// <param name="build">The builder action to run on the lambda.</param>
-        internal CustomResourceLambdaHost(Action<LambdaHostBase<TLambda, CustomResourceRequest<TLambdaParameter>, TLambdaOutput, TLambdaStartup, TLambdaConfigurator, TLambdaConfigFactory>> build)
+        internal CustomResourceLambdaHost(Action<LambdaHostBase<TLambda, CustomResourceRequest<TLambdaParameter>, CustomResourceResponse<TLambdaOutput>, TLambdaStartup, TLambdaConfigurator, TLambdaConfigFactory>> build)
             : base(build)
         {
         }
 
         /// <inheritdoc />
-        public override async Task<TLambdaOutput> InvokeLambda(
+        public override async Task<CustomResourceResponse<TLambdaOutput>> InvokeLambda(
             Stream inputStream,
             CancellationToken cancellationToken = default
         )
@@ -92,14 +92,17 @@ namespace Lambdajection.CustomResource
                 };
             }
 
-            await httpClient.PutJson(
-                requestUri: input.ResponseURL,
-                payload: response,
-                contentType: null,
-                cancellationToken: cancellationToken
-            );
+            if (input.ResponseURL != null)
+            {
+                await httpClient.PutJson(
+                    requestUri: input.ResponseURL,
+                    payload: response,
+                    contentType: null,
+                    cancellationToken: cancellationToken
+                );
+            }
 
-            return response.Data!;
+            return response;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
