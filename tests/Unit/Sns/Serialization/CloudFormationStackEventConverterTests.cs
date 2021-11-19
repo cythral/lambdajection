@@ -320,6 +320,19 @@ namespace Lambdajection.Sns
 
                 lines.Should().Contain($"ClientRequestToken='{stackEvent.ClientRequestToken}'");
             }
+
+            [Test, Auto]
+            public void ShouldSerializeInsideSnsMessage(
+                string stackId,
+                string clientRequestToken,
+                SnsMessage<CloudFormationStackEvent> message
+            )
+            {
+                var serialized = JsonSerializer.Serialize(message);
+                var deserialized = JsonSerializer.Deserialize<SnsMessage<CloudFormationStackEvent>>(serialized);
+
+                deserialized!.Message.StackId.Should().Be(message.Message.StackId);
+            }
         }
     }
 }
