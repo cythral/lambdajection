@@ -1,6 +1,7 @@
 using System;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Text.RegularExpressions;
 
 using SystemTextJsonSerializer = System.Text.Json.JsonSerializer;
 
@@ -43,7 +44,7 @@ namespace Lambdajection.Core.Serialization
             var isJsonLike = stringValue.StartsWith('{') || stringValue.StartsWith('[');
             var deserializable = isJsonLike
                 ? stringValue
-                : $@"""{reader.GetString()?.Replace(@"""", @"\""")}""";
+                : $@"""{JsonEncodedText.Encode(stringValue)}""";
 
             return SystemTextJsonSerializer.Deserialize(deserializable, typeToConvert, options);
         }
@@ -52,7 +53,7 @@ namespace Lambdajection.Core.Serialization
         public override void Write(Utf8JsonWriter writer, object? value, JsonSerializerOptions options)
         {
             var stringValue = SystemTextJsonSerializer.Serialize(value!, typeToConvert, options);
-            writer.WriteStringValue(stringValue);
+            writer.WriteStringValue(Regex.Unescape(stringValue));
         }
     }
 }
