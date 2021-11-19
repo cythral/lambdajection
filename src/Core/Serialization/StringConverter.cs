@@ -43,7 +43,7 @@ namespace Lambdajection.Core.Serialization
             var isJsonLike = stringValue.StartsWith('{') || stringValue.StartsWith('[');
             var deserializable = isJsonLike
                 ? stringValue
-                : $@"""{reader.GetString()?.Replace(@"""", @"\""")}""";
+                : $@"""{JsonEncodedText.Encode(stringValue)}""";
 
             return SystemTextJsonSerializer.Deserialize(deserializable, typeToConvert, options);
         }

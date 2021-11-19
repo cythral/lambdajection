@@ -162,13 +162,15 @@ namespace Lambdajection.Sns
 
             [Test, Auto]
             public void ShouldDeserializeInsideSnsMessage(
+                string stackId,
                 string clientRequestToken
             )
             {
-                var source = $@"{{""Message"":""ClientRequestToken={clientRequestToken}""}}";
+                var source = $@"{{""Message"":""ClientRequestToken='{clientRequestToken}'\nStackId='{stackId}'\n""}}";
                 var result = JsonSerializer.Deserialize<SnsMessage<CloudFormationStackEvent>>(source);
 
                 result!.Message.ClientRequestToken.Should().Be(clientRequestToken);
+                result!.Message.StackId.Should().Be(stackId);
             }
         }
 
