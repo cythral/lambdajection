@@ -4,9 +4,9 @@
     ".NETStandard,Version=v2.1": {
       "Amazon.Lambda.RuntimeSupport": {
         "type": "Direct",
-        "requested": "[1.4.0, )",
-        "resolved": "1.4.0",
-        "contentHash": "xmpJ+iQWEL/vDRoBIxsGoLAX9k7al7uS6Xd3xcj3IWB4mPAUx4/J4RQO5jZ7vKnD8SjnYvRe8i6dyh788r2BVA==",
+        "requested": "[1.5.0, )",
+        "resolved": "1.5.0",
+        "contentHash": "WIS3H+58HtH1UOHkF8VN6q29HWFAVOoUqTA18cxmhtuxIHMoAk5kNxxqyqevsFO8akcKaU3UN09b3oQGjU2stg==",
         "dependencies": {
           "Amazon.Lambda.Core": "2.1.0",
           "NSwag.MSBuild": "12.0.4",
