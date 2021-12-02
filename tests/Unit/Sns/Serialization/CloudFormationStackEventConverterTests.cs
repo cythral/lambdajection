@@ -16,17 +16,6 @@ namespace Lambdajection.Sns
         public class Deserialization
         {
             [Test, Auto]
-            public void SourceTopicShouldDeserialize(
-                string sourceTopic
-            )
-            {
-                var source = $@"""SourceTopic={sourceTopic}""";
-                var result = JsonSerializer.Deserialize<CloudFormationStackEvent>(source);
-
-                result!.SourceTopic.Should().Be(sourceTopic);
-            }
-
-            [Test, Auto]
             public void StackIdShouldDeserialize(
                 string stackId
             )
@@ -178,17 +167,6 @@ namespace Lambdajection.Sns
         [Category("Unit")]
         public class Serialization
         {
-            [Test, Auto]
-            public void SourceTopicShouldSerialize(
-                CloudFormationStackEvent stackEvent
-            )
-            {
-                var result = JsonSerializer.Serialize(stackEvent).Trim('"');
-                var lines = Regex.Unescape(result).Split('\n');
-
-                lines.Should().Contain($"SourceTopic='{stackEvent.SourceTopic}'");
-            }
-
             [Test, Auto]
             public void StackIdShouldSerialize(
                 CloudFormationStackEvent stackEvent
