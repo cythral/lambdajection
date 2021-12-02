@@ -26,9 +26,8 @@ namespace Lambdajection.Tests.Compilation
         }
 
         [Test, Auto]
-        public async Task Run_ShouldReturnListOfAllRelevantIds(
-            string id1,
-            string id2
+        public async Task Run_ShouldReturnTheId(
+            string id
         )
         {
             static SnsRecord<CloudFormationStackEvent> CreateRecord(string id)
@@ -41,15 +40,15 @@ namespace Lambdajection.Tests.Compilation
 
             using var generation = await project.GenerateAssembly();
             var (assembly, _) = generation;
-            var handler = new HandlerWrapper<string[]>(assembly, "Lambdajection.CompilationTests.Sns.Handler");
+            var handler = new HandlerWrapper<string>(assembly, "Lambdajection.CompilationTests.Sns.Handler");
 
-            var recordArray = new[] { CreateRecord(id1), CreateRecord(id2) };
+            var recordArray = new[] { CreateRecord(id) };
             var snsEvent = new SnsEvent<CloudFormationStackEvent>(recordArray);
 
             using var inputStream = await StreamUtils.CreateJsonStream(snsEvent);
-            string[] result = (await handler.Run(inputStream, null!))!;
+            string result = (await handler.Run(inputStream, null!))!;
 
-            result.Should().BeEquivalentTo(new[] { id1, id2 });
+            result.Should().Be(id);
         }
     }
 }

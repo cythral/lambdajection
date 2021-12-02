@@ -66,14 +66,13 @@ namespace Lambdajection.Sns
 
             [Test, Auto]
             public async Task ShouldCallLambdaWithEachMessage(
-                SnsRecord<TestLambdaMessage> record1,
-                SnsRecord<TestLambdaMessage> record2,
+                SnsRecord<TestLambdaMessage> record,
                 ServiceCollection serviceCollection,
                 JsonSerializer serializer,
                 [Substitute] TestSnsLambda lambda
             )
             {
-                var request = new SnsEvent<TestLambdaMessage>(new[] { record1, record2 });
+                var request = new SnsEvent<TestLambdaMessage>(new[] { record });
 
                 serviceCollection.AddSingleton<ISerializer>(serializer);
 
@@ -88,20 +87,18 @@ namespace Lambdajection.Sns
 
                 using var inputStream = await StreamUtils.CreateJsonStream(request);
                 await host.InvokeLambda(inputStream, cancellationToken);
-                await lambda.Received().Handle(Matches(record1.Sns), Is(cancellationToken));
-                await lambda.Received().Handle(Matches(record2.Sns), Is(cancellationToken));
+                await lambda.Received().Handle(Matches(record.Sns), Is(cancellationToken));
             }
 
             [Test, Auto]
-            public async Task ShouldValidateEachMessage(
-                SnsRecord<TestLambdaMessage> record1,
-                SnsRecord<TestLambdaMessage> record2,
+            public async Task ShouldValidateMessage(
+                SnsRecord<TestLambdaMessage> record,
                 ServiceCollection serviceCollection,
                 JsonSerializer serializer,
                 [Substitute] TestSnsLambda lambda
             )
             {
-                var request = new SnsEvent<TestLambdaMessage>(new[] { record1, record2 });
+                var request = new SnsEvent<TestLambdaMessage>(new[] { record });
 
                 serviceCollection.AddSingleton<ISerializer>(serializer);
 
@@ -117,8 +114,7 @@ namespace Lambdajection.Sns
                 using var inputStream = await StreamUtils.CreateJsonStream(request);
                 await host.InvokeLambda(inputStream, cancellationToken);
 
-                lambda.Received().Validate(Matches(record1.Sns));
-                lambda.Received().Validate(Matches(record2.Sns));
+                lambda.Received().Validate(Matches(record.Sns));
             }
         }
     }
