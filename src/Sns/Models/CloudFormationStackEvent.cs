@@ -10,11 +10,6 @@ namespace Lambdajection.Sns
     public class CloudFormationStackEvent
     {
         /// <summary>
-        /// Gets or sets the source topic of the stack event.
-        /// </summary>
-        public string SourceTopic { get; set; } = string.Empty;
-
-        /// <summary>
         /// Gets or sets the id of the stack this event came from.
         /// </summary>
         public string StackId { get; set; } = string.Empty;

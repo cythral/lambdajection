@@ -1,7 +1,6 @@
 using System;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using System.Text.RegularExpressions;
 
 using SystemTextJsonSerializer = System.Text.Json.JsonSerializer;
 
@@ -53,7 +52,15 @@ namespace Lambdajection.Core.Serialization
         public override void Write(Utf8JsonWriter writer, object? value, JsonSerializerOptions options)
         {
             var stringValue = SystemTextJsonSerializer.Serialize(value!, typeToConvert, options);
-            writer.WriteStringValue(Regex.Unescape(stringValue));
+
+            if (stringValue.StartsWith('\"'))
+            {
+                writer.WriteRawValue(stringValue);
+            }
+            else
+            {
+                writer.WriteStringValue(stringValue);
+            }
         }
     }
 }

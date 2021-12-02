@@ -29,12 +29,6 @@ namespace Lambdajection.Sns
 
                 switch (key)
                 {
-                    case nameof(CloudFormationStackEvent.SourceTopic):
-                        {
-                            result.SourceTopic = value;
-                            break;
-                        }
-
                     case nameof(CloudFormationStackEvent.StackId):
                         {
                             result.StackId = value;
@@ -118,7 +112,6 @@ namespace Lambdajection.Sns
         public override void Write(Utf8JsonWriter writer, CloudFormationStackEvent value, JsonSerializerOptions options)
         {
             var lines = string.Empty;
-            lines += $"SourceTopic='{value.SourceTopic}'\n";
             lines += $"StackId='{value.StackId}'\n";
             lines += $"Timestamp='{value.Timestamp}'\n";
             lines += $"EventId='{value.EventId}'\n";
