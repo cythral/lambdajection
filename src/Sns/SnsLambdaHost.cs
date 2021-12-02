@@ -1,7 +1,5 @@
 using System;
 using System.IO;
-using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -12,7 +10,7 @@ namespace Lambdajection.Sns
 {
     /// <inheritdoc />
     public class SnsLambdaHost<TLambda, TLambdaParameter, TLambdaOutput, TLambdaStartup, TLambdaConfigurator, TLambdaConfigFactory>
-        : LambdaHostBase<TLambda, SnsMessage<TLambdaParameter>, TLambdaOutput[], TLambdaStartup, TLambdaConfigurator, TLambdaConfigFactory>
+        : LambdaHostBase<TLambda, SnsMessage<TLambdaParameter>, TLambdaOutput, TLambdaStartup, TLambdaConfigurator, TLambdaConfigFactory>
         where TLambda : class, ISnsEventHandler<TLambdaParameter, TLambdaOutput>
         where TLambdaParameter : class
         where TLambdaOutput : class
@@ -32,13 +30,13 @@ namespace Lambdajection.Sns
         /// Initializes a new instance of the <see cref="SnsLambdaHost{TLambda, TLambdaParameter, TLambdaOutput, TLambdaStartup, TLambdaConfigurator, TLambdaConfigFactory}" /> class.
         /// </summary>
         /// <param name="build">The builder action to run on the lambda.</param>
-        internal SnsLambdaHost(Action<LambdaHostBase<TLambda, SnsMessage<TLambdaParameter>, TLambdaOutput[], TLambdaStartup, TLambdaConfigurator, TLambdaConfigFactory>> build)
+        internal SnsLambdaHost(Action<LambdaHostBase<TLambda, SnsMessage<TLambdaParameter>, TLambdaOutput, TLambdaStartup, TLambdaConfigurator, TLambdaConfigFactory>> build)
             : base(build)
         {
         }
 
         /// <inheritdoc />
-        public override async Task<TLambdaOutput[]> InvokeLambda(
+        public override async Task<TLambdaOutput> InvokeLambda(
             Stream inputStream,
             CancellationToken cancellationToken = default
         )
@@ -47,13 +45,7 @@ namespace Lambdajection.Sns
             var snsEvent = await Serializer.Deserialize<SnsEvent<TLambdaParameter>>(inputStream, cancellationToken)
                 ?? throw new InvalidLambdaParameterException();
 
-            var tasks = from record in snsEvent.Records select HandleMessage(record.Sns, cancellationToken);
-            return await Task.WhenAll(tasks);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private async Task<TLambdaOutput> HandleMessage(SnsMessage<TLambdaParameter> message, CancellationToken cancellationToken = default)
-        {
+            var message = snsEvent.Records[0].Sns;
             Lambda.Validate(message);
             return await Lambda.Handle(message, cancellationToken);
         }
