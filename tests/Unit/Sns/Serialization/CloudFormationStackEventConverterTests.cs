@@ -307,7 +307,6 @@ namespace Lambdajection.Sns
             )
             {
                 var serialized = JsonSerializer.Serialize(message);
-                Console.WriteLine(serialized);
                 var deserialized = JsonSerializer.Deserialize<SnsMessage<CloudFormationStackEvent>>(serialized);
 
                 deserialized!.Message.StackId.Should().Be(message.Message.StackId);
