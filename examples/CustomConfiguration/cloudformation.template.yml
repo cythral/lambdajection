@@ -10,7 +10,7 @@ Resources:
       CodeUri: ../../bin/Examples/CustomConfiguration/Release/netcoreapp3.1/publish/
       MemorySize: 512
       Policies:
-        - AWSLambdaExecute
+        - AWSLambdaBasicExecutionRole
 
 Outputs:
   InputPayload:

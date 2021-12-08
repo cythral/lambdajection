@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TestType>ExamineStack</TestType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Lambdajection" Version="$(LambdajectionVersion)" />
+    <PackageReference Include="Lambdajection.Sns" Version="$(LambdajectionVersion)" />
+    <PackageReference Include="Lambdajection.CustomResource" Version="$(LambdajectionVersion)" />
+  </ItemGroup>
+</Project>

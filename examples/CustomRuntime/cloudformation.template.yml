@@ -28,7 +28,7 @@ Resources:
         - !Sub arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:net5:${Net5LayerVersion}
         - !Ref LambdajectionLayer
       Policies:
-        - AWSLambdaExecute
+        - AWSLambdaBasicExecutionRole
 
 Outputs:
   InputPayload:

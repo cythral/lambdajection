@@ -10,7 +10,7 @@ Resources:
       CodeUri: ../../bin/Examples/AwsClientFactories/Release/netcoreapp3.1/publish/
       MemorySize: 512
       Policies:
-        - AWSLambdaExecute
+        - AWSLambdaBasicExecutionRole
 
   Bucket:
     Type: AWS::S3::Bucket
