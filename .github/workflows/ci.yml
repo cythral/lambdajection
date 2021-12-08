@@ -23,6 +23,10 @@ jobs:
         os: [windows-latest, ubuntu-latest]
 
     runs-on: ${{ matrix.os }}
+    permissions:
+      contents: read
+      id-token: write
+
     steps:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
