@@ -133,12 +133,22 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+
+      - name: Display .NET Info
+        run: dotnet --info
+
       - name: Download NuGets
         uses: actions/download-artifact@v2
         id: download-nugets
         with:
           name: nugets
           path: bin/Packages/Release
+
+      - name: Set version
+        shell: bash
+        run: echo "VERSION=$(cat version.json | jq -r '.version')" >> $GITHUB_ENV
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -159,9 +169,9 @@ jobs:
           DISCORD_EMBEDS: |
             [
               {
-                "title": "[${{ github.repository }}] Build Failed",
+                "title": "[${{ github.repository }}] End-To-End Tests Failed",
                 "url": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}",
-                "description": "An error occurred while building ${{ github.repository }} ${{ env.VERSION }} on ${{ matrix.os }}",
+                "description": "An error occurred while running the end-to-end tests for ${{ github.repository }} ${{ env.VERSION }}",
                 "color": 12720135
               }
             ]
@@ -190,10 +200,6 @@ jobs:
         id: download-layer-template
         with:
           name: layer-template
-
-      - name: Set version
-        shell: bash
-        run: echo "VERSION=$(cat version.json | jq -r '.version')" >> $GITHUB_ENV
 
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v1
