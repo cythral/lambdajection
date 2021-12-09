@@ -23,7 +23,7 @@ Resources:
       Layers:
         # https://github.com/cythral/dotnet-lambda-layer
         - !Sub arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:net5:${Net5LayerVersion}
-        - !GetAtt LambdajectionLayer.LayerArn
+        - !GetAtt LambdajectionLayer.Outputs.LayerArn
       Policies:
         - AWSLambdaBasicExecutionRole
 
