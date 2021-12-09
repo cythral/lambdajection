@@ -16,6 +16,10 @@ env:
   NUGET_FEED_URL: https://api.nuget.org/v3/index.json
   GITHUB_PACKAGES_FEED_URL: https://nuget.pkg.github.com/cythral/index.json
 
+permissions:
+  contents: read
+  id-token: write
+
 jobs:
   build:
     strategy:
@@ -23,9 +27,6 @@ jobs:
         os: [windows-latest, ubuntu-latest]
 
     runs-on: ${{ matrix.os }}
-    permissions:
-      contents: read
-      id-token: write
 
     steps:
       - uses: actions/checkout@v2
