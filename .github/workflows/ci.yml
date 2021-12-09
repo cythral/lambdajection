@@ -32,13 +32,11 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Get Commit Message
-        shell: bash
-        run: | # Account for pull request merge commits
-          sha=${{ github.sha }}
-          after=$(git rev-list origin/master..HEAD --max-parents=1 --max-count=1)
-          [ ! `git rev-list --no-walk --count --merges "$sha"` ] || sha=$after
-          echo "COMMIT_MESSAGE=$(git log --format=%B -n 1 $sha | tr '\n' ' ')" >> $GITHUB_ENV
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: ${{ secrets.AWS_OSS_ROLE }}
+          aws-region: us-east-1
 
       - name: Set version
         shell: bash
@@ -68,11 +66,7 @@ jobs:
         shell: bash
         run: dotnet build --no-restore -m -bl:obj/logs/build-${{ matrix.os }}.binlog -p:OutputLayerTemplateFilePath=$(pwd)/Layer.template.yml
         env:
-          UPLOAD_LAYER_TEMPLATE: ${{ secrets.AWS_ACCESS_KEY_ID != '' && matrix.os == 'ubuntu-latest' }}
-          AWS_REGION: us-east-1
-          AWS_DEFAULT_REGION: us-east-1
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          UPLOAD_LAYER_TEMPLATE: ${{ matrix.os == 'ubuntu-latest' }}
 
       - name: Test
         run: dotnet test --no-build --collect:"XPlat Code coverage"
