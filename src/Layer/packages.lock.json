@@ -4,9 +4,9 @@
     "net6.0": {
       "Cythral.CloudFormation.BuildTasks": {
         "type": "Direct",
-        "requested": "[0.5.2, )",
-        "resolved": "0.5.2",
-        "contentHash": "XgwEwpltoXeoiOQHVbSQCRNU0v80zMV3RMPlyE3ERlCzkVvgZUBCyrs3QpCOarozvwbruGf1Hc6gbVFIVL/hWQ=="
+        "requested": "[0.5.3, )",
+        "resolved": "0.5.3",
+        "contentHash": "s/gJkDXMlHkRugOcGdo62g9Ww+r1ZZ/fTZTmYuPErUAnT6w7aTgGABmckaQfEq1PkgA+n6PyH1Xy9LrlhZ1RYw=="
       },
       "Microsoft.SourceLink.GitHub": {
         "type": "Direct",
