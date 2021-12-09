@@ -50,19 +50,19 @@
         </PropertyGroup>
 
         <RemoveDir Directories="$(DirectoriesToRemove)" />
-        <Exec Command="dotnet store @(StoreArgs, ' ') --framework net5.0" StandardOutputImportance="low" />
-        <Exec Command="dotnet store @(StoreArgs, ' ') --framework net6.0" StandardOutputImportance="low" />
+        <Exec Command="dotnet store @(StoreArgs, ' ')" StandardOutputImportance=" low" />
 
         <ItemGroup>
-            <Content Include="$(OutputPath)layer/x64/net6.0/artifact.xml" />
+            <Content Include=" $(OutputPath)layer x64 net6.0 artifact.xml" />
         </ItemGroup>
     </Target>
 
-    <Target Name="PackLayer" AfterTargets="Pack" Condition="$(UPLOAD_LAYER_TEMPLATE) == 'true'">
-        <PropertyGroup>
-            <BucketExportName>lambdajection-infrastructure:LayerBucket</BucketExportName>
-            <TemplateFilePath Condition="$(TemplateFilePath) == ''">$(OutputPath)Layer.template.yml</TemplateFilePath>
-            <OutputLayerTemplateFilePath Condition="$(OutputLayerTemplateFilePath) == ''">$(OutputPath)Layer.template.yml.packaged</OutputLayerTemplateFilePath>
+    <Target Name=" PackLayer" AfterTargets=" Pack" Condition=" $(UPLOAD_LAYER_TEMPLATE)=
+            <PropertyGroup>
+                <BucketExportName>lambdajection-infrastructure:LayerBucket</BucketExportName>
+                <TemplateFilePath Condition=" $(TemplateFilePath)=
+        </TemplateFilePath>
+        <OutputLayerTemplateFilePath Condition="$(OutputLayerTemplateFilePath) == ''">$(OutputPath)Layer.template.yml.packaged</OutputLayerTemplateFilePath>
         </PropertyGroup>
 
         <!-- Get the Layer Bucket Name -->
