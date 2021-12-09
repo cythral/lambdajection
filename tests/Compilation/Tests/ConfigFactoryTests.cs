@@ -1,3 +1,5 @@
+using System.IO;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 using FluentAssertions;
@@ -31,7 +33,9 @@ namespace Lambdajection.Tests.Compilation
             var handlerType = assembly.GetType("Lambdajection.CompilationTests.ConfigFactory.Handler")!;
             var runMethod = handlerType.GetMethod("Run")!;
 
-            var result = await (Task<string>)runMethod.Invoke(null, new[] { string.Empty, null })!;
+            var inputStream = await StreamUtils.CreateJsonStream(string.Empty);
+            var resultStream = await (Task<Stream>)runMethod.Invoke(null, new[] { inputStream, null })!;
+            var result = await JsonSerializer.DeserializeAsync<string>(resultStream);
 
             result.Should().Be("TestValue");
         }

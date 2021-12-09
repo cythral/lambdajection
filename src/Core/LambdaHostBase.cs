@@ -1,9 +1,12 @@
 using System;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
 using Amazon.Lambda.Core;
+
+using Lambdajection.Core.Serialization;
 
 using Microsoft.Extensions.DependencyInjection;
 
@@ -69,6 +72,12 @@ namespace Lambdajection.Core
         public ILambdaContext Context { get; private set; } = null!;
 
         /// <summary>
+        /// Gets the serializer used to serialize/deserialize objects between formats.
+        /// </summary>
+        /// <value>Serializer object.</value>
+        protected internal ISerializer Serializer { get; internal set; } = null!;
+
+        /// <summary>
         /// Gets the lambda to be invoked.
         /// </summary>
         /// <value>The lambda to be invoked.</value>
@@ -85,12 +94,12 @@ namespace Lambdajection.Core
         /// - Runs initialization services.
         /// - Invokes the lambda.
         /// </summary>
-        /// <param name="parameter">The input parameter to pass to the lambda.</param>
+        /// <param name="inputStream">Stream containing the input data to pass to the lambda.</param>
         /// <param name="context">The context object to pass to the lambda.</param>
         /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <returns>The return value of the lambda.</returns>
-        public async Task<TLambdaOutput> Run(
-            TLambdaParameter parameter,
+        public async Task<Stream> Run(
+            Stream inputStream,
             ILambdaContext context,
             CancellationToken cancellationToken = default
         )
@@ -107,17 +116,23 @@ namespace Lambdajection.Core
             var scopeContext = provider.GetRequiredService<LambdaScope>();
             scopeContext.LambdaContext = context;
 
+            Serializer = provider.GetRequiredService<ISerializer>();
             Lambda = provider.GetRequiredService<TLambda>();
-            return await InvokeLambda(parameter, cancellationToken);
+
+            var result = await InvokeLambda(inputStream, cancellationToken);
+            var resultStream = new MemoryStream();
+            await Serializer.Serialize(resultStream, result, cancellationToken);
+
+            return resultStream;
         }
 
         /// <summary>
         /// Invokes the Lambda.
         /// </summary>
-        /// <param name="parameter">The parameter to pass to the lambda to invoke it with.</param>
+        /// <param name="inputStream">Stream containing the input data to pass to the lambda.</param>
         /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <returns>The return value of the lambda.</returns>
-        public abstract Task<TLambdaOutput> InvokeLambda(TLambdaParameter parameter, CancellationToken cancellationToken = default);
+        public abstract Task<TLambdaOutput> InvokeLambda(Stream inputStream, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Disposes the Lambda Host and its subresources asynchronously.

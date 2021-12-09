@@ -1,4 +1,7 @@
 using System;
+using System.IO;
+using System.Runtime.Serialization;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -7,6 +10,7 @@ using AutoFixture.AutoNSubstitute;
 using FluentAssertions;
 
 using Lambdajection.Core;
+using Lambdajection.Core.Serialization;
 
 using Microsoft.Extensions.DependencyInjection;
 
@@ -18,7 +22,7 @@ using static NSubstitute.Arg;
 
 using TestCustomResourceLambdaHost = Lambdajection.CustomResource.CustomResourceLambdaHost<
     Lambdajection.TestCustomResourceLambda,
-    object,
+    Lambdajection.TestLambdaMessage,
     Lambdajection.TestCustomResourceOutputData,
     Lambdajection.TestStartup,
     Lambdajection.TestConfigurator,
@@ -46,10 +50,12 @@ namespace Lambdajection.CustomResource.Tests
             public async Task ShouldCallCreate_IfRequestTypeIsCreate(
                 ServiceCollection serviceCollection,
                 CustomResourceRequest<object> request,
+                JsonSerializer serializer,
                 [Substitute] TestCustomResourceLambda lambda,
                 [Substitute] IHttpClient httpClient
             )
             {
+                serviceCollection.AddSingleton<ISerializer>(serializer);
                 serviceCollection.AddSingleton(httpClient);
 
                 var serviceProvider = serviceCollection.BuildServiceProvider();
@@ -58,20 +64,24 @@ namespace Lambdajection.CustomResource.Tests
                 {
                     lambdaHost.Lambda = lambda;
                     lambdaHost.Scope = serviceProvider.CreateScope();
+                    lambdaHost.Serializer = serializer;
                 });
 
                 request.RequestType = CustomResourceRequestType.Create;
-                await host.InvokeLambda(request, cancellationToken);
+
+                using var inputStream = await StreamUtils.CreateJsonStream(request);
+                await host.InvokeLambda(inputStream, cancellationToken);
 
                 await lambda.DidNotReceiveWithAnyArgs().Update(default!, default);
                 await lambda.DidNotReceiveWithAnyArgs().Delete(default!, default);
-                await lambda.Received().Create(Is(request), Is(cancellationToken));
+                await lambda.Received().Create(Is<CustomResourceRequest<TestLambdaMessage>>(req => req.RequestId == request.RequestId), Is(cancellationToken));
             }
 
             [Test, Auto]
             public async Task ShouldCallUpdate_IfRequestTypeIsUpdate(
                 ServiceCollection serviceCollection,
                 CustomResourceRequest<object> request,
+                JsonSerializer serializer,
                 [Substitute] TestCustomResourceLambda lambda,
                 [Substitute] IHttpClient httpClient
             )
@@ -84,19 +94,23 @@ namespace Lambdajection.CustomResource.Tests
                 {
                     lambdaHost.Lambda = lambda;
                     lambdaHost.Scope = serviceProvider.CreateScope();
+                    lambdaHost.Serializer = serializer;
                 });
 
                 request.RequestType = CustomResourceRequestType.Update;
-                await host.InvokeLambda(request, cancellationToken);
+
+                using var inputStream = await StreamUtils.CreateJsonStream(request);
+                await host.InvokeLambda(inputStream, cancellationToken);
 
                 await lambda.DidNotReceiveWithAnyArgs().Create(default!, default);
                 await lambda.DidNotReceiveWithAnyArgs().Delete(default!, default);
-                await lambda.Received().Update(Is(request), Is(cancellationToken));
+                await lambda.Received().Update(Is<CustomResourceRequest<TestLambdaMessage>>(req => req.RequestId == request.RequestId), Is(cancellationToken));
             }
 
             [Test, Auto]
             public async Task ShouldCallCreate_IfRequestTypeIsUpdate_ButLambdaRequiresReplacement(
                 ServiceCollection serviceCollection,
+                JsonSerializer serializer,
                 CustomResourceRequest<object> request,
                 [Substitute] TestCustomResourceLambda lambda,
                 [Substitute] IHttpClient httpClient
@@ -110,22 +124,25 @@ namespace Lambdajection.CustomResource.Tests
                 {
                     lambdaHost.Lambda = lambda;
                     lambdaHost.Scope = serviceProvider.CreateScope();
+                    lambdaHost.Serializer = serializer;
                 });
 
                 request.RequestType = CustomResourceRequestType.Update;
-                lambda.RequiresReplacement(Any<CustomResourceRequest<object>>()).Returns(true);
+                lambda.RequiresReplacement(Any<CustomResourceRequest<TestLambdaMessage>>()).Returns(true);
 
-                await host.InvokeLambda(request, cancellationToken);
+                using var inputStream = await StreamUtils.CreateJsonStream(request);
+                await host.InvokeLambda(inputStream, cancellationToken);
 
                 await lambda.DidNotReceiveWithAnyArgs().Delete(default!, default);
                 await lambda.DidNotReceiveWithAnyArgs().Update(default!, default);
-                await lambda.Received().Create(Is(request), Is(cancellationToken));
+                await lambda.Received().Create(Is<CustomResourceRequest<TestLambdaMessage>>(req => req.RequestId == request.RequestId), Is(cancellationToken));
             }
 
             [Test, Auto]
             public async Task ShouldCallDelete_IfRequestTypeIsDelete(
                 ServiceCollection serviceCollection,
                 CustomResourceRequest<object> request,
+                JsonSerializer serializer,
                 [Substitute] TestCustomResourceLambda lambda,
                 [Substitute] IHttpClient httpClient
             )
@@ -138,14 +155,17 @@ namespace Lambdajection.CustomResource.Tests
                 {
                     lambdaHost.Lambda = lambda;
                     lambdaHost.Scope = serviceProvider.CreateScope();
+                    lambdaHost.Serializer = serializer;
                 });
 
                 request.RequestType = CustomResourceRequestType.Delete;
-                await host.InvokeLambda(request, cancellationToken);
+
+                using var inputStream = await StreamUtils.CreateJsonStream(request);
+                await host.InvokeLambda(inputStream, cancellationToken);
 
                 await lambda.DidNotReceiveWithAnyArgs().Create(default!, default);
                 await lambda.DidNotReceiveWithAnyArgs().Update(default!, default);
-                await lambda.Received().Delete(Is(request), Is(cancellationToken));
+                await lambda.Received().Delete(Is<CustomResourceRequest<TestLambdaMessage>>(req => req.RequestId == request.RequestId), Is(cancellationToken));
             }
 
             [Test, Auto]
@@ -153,11 +173,12 @@ namespace Lambdajection.CustomResource.Tests
                 ServiceCollection serviceCollection,
                 TestCustomResourceOutputData data,
                 CustomResourceRequest<object> request,
+                JsonSerializer serializer,
                 [Substitute] TestCustomResourceLambda lambda,
                 [Substitute] IHttpClient httpClient
             )
             {
-                lambda.Create(Any<CustomResourceRequest<object>>(), Any<CancellationToken>()).Returns(data);
+                lambda.Create(Any<CustomResourceRequest<TestLambdaMessage>>(), Any<CancellationToken>()).Returns(data);
                 serviceCollection.AddSingleton(httpClient);
 
                 var serviceProvider = serviceCollection.BuildServiceProvider();
@@ -166,13 +187,16 @@ namespace Lambdajection.CustomResource.Tests
                 {
                     lambdaHost.Lambda = lambda;
                     lambdaHost.Scope = serviceProvider.CreateScope();
+                    lambdaHost.Serializer = serializer;
                 });
 
                 request.RequestType = CustomResourceRequestType.Create;
-                await host.InvokeLambda(request, cancellationToken);
+
+                using var inputStream = await StreamUtils.CreateJsonStream(request);
+                await host.InvokeLambda(inputStream, cancellationToken);
 
                 await httpClient.Received().PutJson(
-                    Is(request.ResponseURL),
+                    Is(request.ResponseURL!),
                     Is<CustomResourceResponse<TestCustomResourceOutputData>>(response =>
                         response.Status == CustomResourceResponseStatus.Success &&
                         response.Data == data
@@ -186,6 +210,7 @@ namespace Lambdajection.CustomResource.Tests
             public async Task ShouldRespondSuccessWithStackId(
                 ServiceCollection serviceCollection,
                 string stackId,
+                JsonSerializer serializer,
                 CustomResourceRequest<object> request,
                 [Substitute] TestCustomResourceLambda lambda,
                 [Substitute] IHttpClient httpClient
@@ -199,14 +224,17 @@ namespace Lambdajection.CustomResource.Tests
                 {
                     lambdaHost.Lambda = lambda;
                     lambdaHost.Scope = serviceProvider.CreateScope();
+                    lambdaHost.Serializer = serializer;
                 });
 
                 request.RequestType = CustomResourceRequestType.Create;
                 request.StackId = stackId;
-                await host.InvokeLambda(request, cancellationToken);
+
+                using var inputStream = await StreamUtils.CreateJsonStream(request);
+                await host.InvokeLambda(inputStream, cancellationToken);
 
                 await httpClient.Received().PutJson(
-                    Is(request.ResponseURL),
+                    Is(request.ResponseURL!),
                     Is<CustomResourceResponse<TestCustomResourceOutputData>>(response =>
                         response.Status == CustomResourceResponseStatus.Success &&
                         response.StackId == stackId
@@ -220,6 +248,7 @@ namespace Lambdajection.CustomResource.Tests
             public async Task ShouldRespondSuccessWithRequestId(
                 ServiceCollection serviceCollection,
                 string requestId,
+                JsonSerializer serializer,
                 CustomResourceRequest<object> request,
                 [Substitute] TestCustomResourceLambda lambda,
                 [Substitute] IHttpClient httpClient
@@ -233,14 +262,17 @@ namespace Lambdajection.CustomResource.Tests
                 {
                     lambdaHost.Lambda = lambda;
                     lambdaHost.Scope = serviceProvider.CreateScope();
+                    lambdaHost.Serializer = serializer;
                 });
 
                 request.RequestType = CustomResourceRequestType.Create;
                 request.RequestId = requestId;
-                await host.InvokeLambda(request, cancellationToken);
+
+                using var inputStream = await StreamUtils.CreateJsonStream(request);
+                await host.InvokeLambda(inputStream, cancellationToken);
 
                 await httpClient.Received().PutJson(
-                    Is(request.ResponseURL),
+                    Is(request.ResponseURL!),
                     Is<CustomResourceResponse<TestCustomResourceOutputData>>(response =>
                         response.Status == CustomResourceResponseStatus.Success &&
                         response.RequestId == requestId
@@ -254,6 +286,7 @@ namespace Lambdajection.CustomResource.Tests
             public async Task ShouldRespondSuccessWithLogicalResourceId(
                 ServiceCollection serviceCollection,
                 string logicalResourceId,
+                JsonSerializer serializer,
                 CustomResourceRequest<object> request,
                 [Substitute] TestCustomResourceLambda lambda,
                 [Substitute] IHttpClient httpClient
@@ -267,14 +300,17 @@ namespace Lambdajection.CustomResource.Tests
                 {
                     lambdaHost.Lambda = lambda;
                     lambdaHost.Scope = serviceProvider.CreateScope();
+                    lambdaHost.Serializer = serializer;
                 });
 
                 request.RequestType = CustomResourceRequestType.Create;
                 request.LogicalResourceId = logicalResourceId;
-                await host.InvokeLambda(request, cancellationToken);
+
+                using var inputStream = await StreamUtils.CreateJsonStream(request);
+                await host.InvokeLambda(inputStream, cancellationToken);
 
                 await httpClient.Received().PutJson(
-                    Is(request.ResponseURL),
+                    Is(request.ResponseURL!),
                     Is<CustomResourceResponse<TestCustomResourceOutputData>>(response =>
                         response.Status == CustomResourceResponseStatus.Success &&
                         response.LogicalResourceId == logicalResourceId
@@ -288,6 +324,7 @@ namespace Lambdajection.CustomResource.Tests
             public async Task ShouldRespondSuccessWithPhysicalResourceId(
                 ServiceCollection serviceCollection,
                 string physicalResourceId,
+                JsonSerializer serializer,
                 TestCustomResourceOutputData data,
                 CustomResourceRequest<object> request,
                 [Substitute] TestCustomResourceLambda lambda,
@@ -295,7 +332,7 @@ namespace Lambdajection.CustomResource.Tests
             )
             {
                 data.Id = physicalResourceId;
-                lambda.Create(Any<CustomResourceRequest<object>>(), Any<CancellationToken>()).Returns(data);
+                lambda.Create(Any<CustomResourceRequest<TestLambdaMessage>>(), Any<CancellationToken>()).Returns(data);
                 serviceCollection.AddSingleton(httpClient);
 
                 var serviceProvider = serviceCollection.BuildServiceProvider();
@@ -304,13 +341,16 @@ namespace Lambdajection.CustomResource.Tests
                 {
                     lambdaHost.Lambda = lambda;
                     lambdaHost.Scope = serviceProvider.CreateScope();
+                    lambdaHost.Serializer = serializer;
                 });
 
                 request.RequestType = CustomResourceRequestType.Create;
-                await host.InvokeLambda(request, cancellationToken);
+
+                using var inputStream = await StreamUtils.CreateJsonStream(request);
+                await host.InvokeLambda(inputStream, cancellationToken);
 
                 await httpClient.Received().PutJson(
-                    Is(request.ResponseURL),
+                    Is(request.ResponseURL!),
                     Is<CustomResourceResponse<TestCustomResourceOutputData>>(response =>
                         response.Status == CustomResourceResponseStatus.Success &&
                         response.PhysicalResourceId == physicalResourceId
@@ -321,17 +361,55 @@ namespace Lambdajection.CustomResource.Tests
             }
 
             [Test, Auto]
-            public async Task ShouldRespondFailureWithReason(
-                string reason,
+            public async Task ShouldNotRespondSuccessIfResponseURLIsNull(
                 ServiceCollection serviceCollection,
-                TestCustomResourceOutputData data,
+                string stackId,
+                JsonSerializer serializer,
                 CustomResourceRequest<object> request,
                 [Substitute] TestCustomResourceLambda lambda,
                 [Substitute] IHttpClient httpClient
             )
             {
                 serviceCollection.AddSingleton(httpClient);
-                lambda.Create(Any<CustomResourceRequest<object>>(), Any<CancellationToken>()).Returns<TestCustomResourceOutputData>(x =>
+                request.ResponseURL = null;
+
+                var serviceProvider = serviceCollection.BuildServiceProvider();
+                var cancellationToken = new CancellationToken(false);
+                var host = new TestCustomResourceLambdaHost(lambdaHost =>
+                {
+                    lambdaHost.Lambda = lambda;
+                    lambdaHost.Scope = serviceProvider.CreateScope();
+                    lambdaHost.Serializer = serializer;
+                });
+
+                request.RequestType = CustomResourceRequestType.Create;
+                request.StackId = stackId;
+
+                using var inputStream = await StreamUtils.CreateJsonStream(request);
+                await host.InvokeLambda(inputStream, cancellationToken);
+
+                await httpClient.DidNotReceiveWithAnyArgs().PutJson(
+                    default!,
+                    default(CustomResourceResponse<TestCustomResourceOutputData>)!,
+                    default!,
+                    default!
+                );
+            }
+
+            [Test, Auto]
+            public async Task ShouldRespondFailureWithReason(
+                string reason,
+                ServiceCollection serviceCollection,
+                JsonSerializer serializer,
+                TestCustomResourceOutputData data,
+                CustomResourceRequest<object> request,
+                [Substitute] TestCustomResourceLambda lambda,
+                [Substitute] IHttpClient httpClient
+            )
+            {
+                serviceCollection.AddSingleton<ISerializer>(serializer);
+                serviceCollection.AddSingleton(httpClient);
+                lambda.Create(Any<CustomResourceRequest<TestLambdaMessage>>(), Any<CancellationToken>()).Returns<TestCustomResourceOutputData>(x =>
                 {
                     throw new Exception(reason);
                 });
@@ -342,13 +420,16 @@ namespace Lambdajection.CustomResource.Tests
                 {
                     lambdaHost.Lambda = lambda;
                     lambdaHost.Scope = serviceProvider.CreateScope();
+                    lambdaHost.Serializer = serializer;
                 });
 
                 request.RequestType = CustomResourceRequestType.Create;
-                await host.InvokeLambda(request, cancellationToken);
+
+                using var inputStream = await StreamUtils.CreateJsonStream(request);
+                await host.InvokeLambda(inputStream, cancellationToken);
 
                 await httpClient.Received().PutJson(
-                    Is(request.ResponseURL),
+                    Is(request.ResponseURL!),
                     Is<CustomResourceResponse<TestCustomResourceOutputData>>(response =>
                         response.Status == CustomResourceResponseStatus.Failed &&
                         response.Reason == reason
@@ -359,9 +440,80 @@ namespace Lambdajection.CustomResource.Tests
             }
 
             [Test, Auto]
+            public async Task ShouldRespondFailureIfRequestDoesntDeserializeProperly(
+                string requestId,
+                Uri responseURL,
+                TestCustomResourceOutputData data,
+                JsonSerializer serializer,
+                ServiceCollection serviceCollection,
+                [Substitute] TestCustomResourceLambda lambda,
+                [Substitute] IHttpClient httpClient
+            )
+            {
+                serviceCollection.AddSingleton(httpClient);
+                lambda.Create(Any<CustomResourceRequest<TestLambdaMessage>>(), Any<CancellationToken>()).Returns(data);
+
+                var serviceProvider = serviceCollection.BuildServiceProvider();
+                var cancellationToken = new CancellationToken(false);
+                var host = new TestCustomResourceLambdaHost(lambdaHost =>
+                {
+                    lambdaHost.Lambda = lambda;
+                    lambdaHost.Scope = serviceProvider.CreateScope();
+                    lambdaHost.Serializer = serializer;
+                });
+
+                var input = $@"{{ ""RequestId"": ""{requestId}"", ""ResponseURL"": ""{responseURL}"", ""RequestType"": ""Create"", ""ResourceProperties"": {{ ""Id"": 1 }} }}";
+
+                using var inputStream = new MemoryStream(Encoding.UTF8.GetBytes(input));
+                await host.InvokeLambda(inputStream, cancellationToken);
+
+                await httpClient.Received().PutJson(
+                    Is(responseURL),
+                    Is<CustomResourceResponse<TestCustomResourceOutputData>>(response =>
+                        response.Status == CustomResourceResponseStatus.Failed &&
+                        response.RequestId == requestId
+                    ),
+                    Is((string)null!),
+                    Is(cancellationToken)
+                );
+            }
+
+            [Test, Auto]
+            public async Task ShouldThrowIfRequestDeserializesToNull(
+                string requestId,
+                Uri responseURL,
+                JsonSerializer serializer,
+                TestCustomResourceOutputData data,
+                ServiceCollection serviceCollection,
+                [Substitute] TestCustomResourceLambda lambda,
+                [Substitute] IHttpClient httpClient
+            )
+            {
+                serviceCollection.AddSingleton(httpClient);
+                lambda.Create(Any<CustomResourceRequest<TestLambdaMessage>>(), Any<CancellationToken>()).Returns(data);
+
+                var serviceProvider = serviceCollection.BuildServiceProvider();
+                var cancellationToken = new CancellationToken(false);
+                var host = new TestCustomResourceLambdaHost(lambdaHost =>
+                {
+                    lambdaHost.Lambda = lambda;
+                    lambdaHost.Scope = serviceProvider.CreateScope();
+                    lambdaHost.Serializer = serializer;
+                });
+
+                var input = $@"null";
+
+                using var inputStream = new MemoryStream(Encoding.UTF8.GetBytes(input));
+                Func<Task> func = () => host.InvokeLambda(inputStream, cancellationToken);
+
+                await func.Should().ThrowAsync<SerializationException>();
+            }
+
+            [Test, Auto]
             public async Task ShouldRespondFailureWithRequestId(
                 string requestId,
                 ServiceCollection serviceCollection,
+                JsonSerializer serializer,
                 TestCustomResourceOutputData data,
                 CustomResourceRequest<object> request,
                 [Substitute] TestCustomResourceLambda lambda,
@@ -369,7 +521,7 @@ namespace Lambdajection.CustomResource.Tests
             )
             {
                 serviceCollection.AddSingleton(httpClient);
-                lambda.Create(Any<CustomResourceRequest<object>>(), Any<CancellationToken>()).Returns<TestCustomResourceOutputData>(x =>
+                lambda.Create(Any<CustomResourceRequest<TestLambdaMessage>>(), Any<CancellationToken>()).Returns<TestCustomResourceOutputData>(x =>
                 {
                     throw new Exception();
                 });
@@ -380,14 +532,17 @@ namespace Lambdajection.CustomResource.Tests
                 {
                     lambdaHost.Lambda = lambda;
                     lambdaHost.Scope = serviceProvider.CreateScope();
+                    lambdaHost.Serializer = serializer;
                 });
 
                 request.RequestType = CustomResourceRequestType.Create;
                 request.RequestId = requestId;
-                await host.InvokeLambda(request, cancellationToken);
+
+                using var inputStream = await StreamUtils.CreateJsonStream(request);
+                await host.InvokeLambda(inputStream, cancellationToken);
 
                 await httpClient.Received().PutJson(
-                    Is(request.ResponseURL),
+                    Is(request.ResponseURL!),
                     Is<CustomResourceResponse<TestCustomResourceOutputData>>(response =>
                         response.Status == CustomResourceResponseStatus.Failed &&
                         response.RequestId == requestId
@@ -401,6 +556,7 @@ namespace Lambdajection.CustomResource.Tests
             public async Task ShouldRespondFailureWithStackId(
                 string stackId,
                 ServiceCollection serviceCollection,
+                JsonSerializer serializer,
                 TestCustomResourceOutputData data,
                 CustomResourceRequest<object> request,
                 [Substitute] TestCustomResourceLambda lambda,
@@ -408,7 +564,7 @@ namespace Lambdajection.CustomResource.Tests
             )
             {
                 serviceCollection.AddSingleton(httpClient);
-                lambda.Create(Any<CustomResourceRequest<object>>(), Any<CancellationToken>()).Returns<TestCustomResourceOutputData>(x =>
+                lambda.Create(Any<CustomResourceRequest<TestLambdaMessage>>(), Any<CancellationToken>()).Returns<TestCustomResourceOutputData>(x =>
                 {
                     throw new Exception();
                 });
@@ -419,14 +575,17 @@ namespace Lambdajection.CustomResource.Tests
                 {
                     lambdaHost.Lambda = lambda;
                     lambdaHost.Scope = serviceProvider.CreateScope();
+                    lambdaHost.Serializer = serializer;
                 });
 
                 request.RequestType = CustomResourceRequestType.Create;
                 request.StackId = stackId;
-                await host.InvokeLambda(request, cancellationToken);
+
+                using var inputStream = await StreamUtils.CreateJsonStream(request);
+                await host.InvokeLambda(inputStream, cancellationToken);
 
                 await httpClient.Received().PutJson(
-                    Is(request.ResponseURL),
+                    Is(request.ResponseURL!),
                     Is<CustomResourceResponse<TestCustomResourceOutputData>>(response =>
                         response.Status == CustomResourceResponseStatus.Failed &&
                         response.StackId == stackId
@@ -441,13 +600,14 @@ namespace Lambdajection.CustomResource.Tests
                 string logicalResourceId,
                 ServiceCollection serviceCollection,
                 TestCustomResourceOutputData data,
+                JsonSerializer serializer,
                 CustomResourceRequest<object> request,
                 [Substitute] TestCustomResourceLambda lambda,
                 [Substitute] IHttpClient httpClient
             )
             {
                 serviceCollection.AddSingleton(httpClient);
-                lambda.Create(Any<CustomResourceRequest<object>>(), Any<CancellationToken>()).Returns<TestCustomResourceOutputData>(x =>
+                lambda.Create(Any<CustomResourceRequest<TestLambdaMessage>>(), Any<CancellationToken>()).Returns<TestCustomResourceOutputData>(x =>
                 {
                     throw new Exception();
                 });
@@ -458,14 +618,17 @@ namespace Lambdajection.CustomResource.Tests
                 {
                     lambdaHost.Lambda = lambda;
                     lambdaHost.Scope = serviceProvider.CreateScope();
+                    lambdaHost.Serializer = serializer;
                 });
 
                 request.RequestType = CustomResourceRequestType.Create;
                 request.LogicalResourceId = logicalResourceId;
-                await host.InvokeLambda(request, cancellationToken);
+
+                using var inputStream = await StreamUtils.CreateJsonStream(request);
+                await host.InvokeLambda(inputStream, cancellationToken);
 
                 await httpClient.Received().PutJson(
-                    Is(request.ResponseURL),
+                    Is(request.ResponseURL!),
                     Is<CustomResourceResponse<TestCustomResourceOutputData>>(response =>
                         response.Status == CustomResourceResponseStatus.Failed &&
                         response.LogicalResourceId == logicalResourceId
@@ -480,13 +643,14 @@ namespace Lambdajection.CustomResource.Tests
                 string physicalResourceId,
                 ServiceCollection serviceCollection,
                 TestCustomResourceOutputData data,
+                JsonSerializer serializer,
                 CustomResourceRequest<object> request,
                 [Substitute] TestCustomResourceLambda lambda,
                 [Substitute] IHttpClient httpClient
             )
             {
                 serviceCollection.AddSingleton(httpClient);
-                lambda.Create(Any<CustomResourceRequest<object>>(), Any<CancellationToken>()).Returns<TestCustomResourceOutputData>(x =>
+                lambda.Create(Any<CustomResourceRequest<TestLambdaMessage>>(), Any<CancellationToken>()).Returns<TestCustomResourceOutputData>(x =>
                 {
                     throw new Exception();
                 });
@@ -497,14 +661,17 @@ namespace Lambdajection.CustomResource.Tests
                 {
                     lambdaHost.Lambda = lambda;
                     lambdaHost.Scope = serviceProvider.CreateScope();
+                    lambdaHost.Serializer = serializer;
                 });
 
                 request.RequestType = CustomResourceRequestType.Create;
                 request.PhysicalResourceId = physicalResourceId;
-                await host.InvokeLambda(request, cancellationToken);
+
+                using var inputStream = await StreamUtils.CreateJsonStream(request);
+                await host.InvokeLambda(inputStream, cancellationToken);
 
                 await httpClient.Received().PutJson(
-                    Is(request.ResponseURL),
+                    Is(request.ResponseURL!),
                     Is<CustomResourceResponse<TestCustomResourceOutputData>>(response =>
                         response.Status == CustomResourceResponseStatus.Failed &&
                         response.PhysicalResourceId == physicalResourceId

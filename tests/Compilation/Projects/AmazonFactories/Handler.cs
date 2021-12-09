@@ -23,9 +23,9 @@ namespace Lambdajection.CompilationTests.AmazonFactories
             this.utility = utility;
         }
 
-        public Task<IAwsFactory<IAmazonS3>> Handle(string request, CancellationToken cancellationToken = default)
+        public Task<string> Handle(string request, CancellationToken cancellationToken = default)
         {
-            return Task.FromResult(utility.Factory);
+            return Task.FromResult("ok");
         }
     }
 }

@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <TargetFramework>net5.0</TargetFramework>
+        <TargetFramework>net6.0</TargetFramework>
         <PackageId>Lambdajection.Layer</PackageId>
         <AssemblyName>$(PackageId)</AssemblyName>
         <NoWarn>NU5128</NoWarn>
@@ -21,7 +21,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Cythral.CloudFormation.BuildTasks" Version="0.5.1" PrivateAssets="all" />
+        <PackageReference Include="Cythral.CloudFormation.BuildTasks" Version="0.5.4" PrivateAssets="all" />
         <ProjectReference Include="../Generator/Generator.csproj" ReferenceOutputAssembly="false" />
         <ProjectReference Include="../Attributes/Attributes.csproj" PrivateAssets="runtime" />
     </ItemGroup>
@@ -34,7 +34,9 @@
         <ItemGroup>
             <StoreArgs Include="--manifest $(MSBuildThisFileDirectory)/Manifest/Manifest.csproj" />
             <StoreArgs Include="--output $(OutputPath)/layer" />
-            <StoreArgs Include="--skip-optimization" Condition="!$([MSBuild]::IsOsPlatform('linux'))" />
+            <StoreArgs Include="--runtime linux-x64" />
+            <!-- Optimized runtime package stores does not work on .NET 6 -->
+            <StoreArgs Include="--skip-optimization" />
             <StoreArgs Include="/p:Configuration=$(Configuration)" />
             <StoreArgs Include="/p:LambdajectionVersion=$(PackageVersion)" />
             <StoreArgs Include="-nodereuse:false" />
@@ -44,6 +46,7 @@
 
         <PropertyGroup>
             <DirectoriesToRemove>$([System.IO.Directory]::GetDirectories('$(MSBuildThisFileDirectory)Manifest/.nuget', 'lambdajection*'))</DirectoriesToRemove>
+            <DirectoriesToRemove>$([System.IO.Directory]::GetDirectories('$(MSBuildThisFileDirectory)Manifest/.nuget', 'microsoft.aspnetcore.app.runtime.linux-x64'))</DirectoriesToRemove>
         </PropertyGroup>
 
         <RemoveDir Directories="$(DirectoriesToRemove)" />
@@ -51,7 +54,7 @@
         <Exec Command="dotnet store @(StoreArgs, ' ') --framework net6.0" StandardOutputImportance="low" />
 
         <ItemGroup>
-            <Content Include="$(OutputPath)layer/x64/net5.0/artifact.xml" />
+            <Content Include="$(OutputPath)layer/x64/net6.0/artifact.xml" />
         </ItemGroup>
     </Target>
 

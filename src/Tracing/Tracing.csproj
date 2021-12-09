@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>netstandard2.1</TargetFramework>
+        <PackageId>Lambdajection.Tracing</PackageId>
+        <AssemblyName>$(PackageId)</AssemblyName>
+        <NoWarn>NU5128</NoWarn>
+        <IncludeBuildOutput>false</IncludeBuildOutput>
+        <PackageDescription>Adds X-Ray Tracing Support to Lambdajection.</PackageDescription>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Content Include="build/**" Pack="true" PackagePath="build/" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="AWSXRayRecorder.Core" Version="2.10.1" />
+        <PackageReference Include="AWSXRayRecorder.Handlers.AwsSdk" Version="2.8.3" />
+    </ItemGroup>
+</Project>

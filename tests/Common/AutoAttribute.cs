@@ -1,5 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.Reflection;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 using AutoFixture;
 using AutoFixture.AutoNSubstitute;
@@ -15,8 +18,11 @@ internal class AutoAttribute : AutoDataAttribute
     public static IFixture Create(Action<Fixture> customize)
     {
         var fixture = new Fixture();
+        fixture.Register(() => new JsonSerializerOptions());
         fixture.Customize(new AutoNSubstituteCustomization());
         fixture.Customizations.Insert(-1, new TargetRelay());
+        fixture.Customizations.Add(new TypeOmitter<IDictionary<string, JsonElement>>());
+        fixture.Customizations.Add(new TypeOmitter<JsonConverter>());
         customize(fixture);
         return fixture;
     }

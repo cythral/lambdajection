@@ -67,6 +67,7 @@ namespace Lambdajection.Generator.TemplateGeneration
                     Code = codeDirectory,
                     Runtime = $"dotnetcore{targetFrameworkVersion}",
                     Timeout = 300,
+                    TracingConfig = lambdaInfo.EnableTracing ? new { Mode = "Active" } : null,
                 },
             });
 
@@ -78,6 +79,11 @@ namespace Lambdajection.Generator.TemplateGeneration
             var role = new Role()
             .AddTrustedServiceEntity("lambda.amazonaws.com")
             .AddManagedPolicy("arn:aws:iam::aws:policy/AWSLambdaExecute");
+
+            if (lambdaInfo.EnableTracing)
+            {
+                role.AddManagedPolicy("arn:aws:iam::aws:policy/AWSXRayDaemonWriteAccess");
+            }
 
             if (lambdaInfo.Permissions.Any())
             {

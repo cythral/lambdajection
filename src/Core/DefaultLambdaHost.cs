@@ -1,5 +1,5 @@
 using System;
-
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -32,12 +32,13 @@ namespace Lambdajection.Core
 
         /// <inheritdoc />
         public override async Task<TLambdaOutput> InvokeLambda(
-            TLambdaParameter parameter,
+            Stream inputStream,
             CancellationToken cancellationToken = default
         )
         {
-            Lambda.Validate(parameter);
-            return await Lambda.Handle(parameter, cancellationToken);
+            var parameter = await Serializer.Deserialize<TLambdaParameter>(inputStream, cancellationToken);
+            Lambda.Validate(parameter!);
+            return await Lambda.Handle(parameter!, cancellationToken);
         }
     }
 }

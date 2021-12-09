@@ -89,7 +89,8 @@ namespace Lambdajection.Tests.Compilation
             request.RequestId = requestId;
             request.LogicalResourceId = logicalResourceId;
 
-            await handler.Run(request, context);
+            using var inputStream = await StreamUtils.CreateJsonStream(request);
+            await handler.Run(inputStream, context);
 
             var httpRequest = server.Requests
             .Should()
@@ -136,7 +137,8 @@ namespace Lambdajection.Tests.Compilation
             request.ResourceProperties.Serial = 1UL;
             request.OldResourceProperties.Serial = 0UL;
 
-            await handler.Run(request, context);
+            using var inputStream = await StreamUtils.CreateJsonStream(request);
+            await handler.Run(inputStream, context);
 
             var httpRequest = server.Requests
             .Should()
@@ -184,7 +186,8 @@ namespace Lambdajection.Tests.Compilation
             request.ResourceProperties.Metadata.CreatedBy = "Joe New";
             request.OldResourceProperties.Metadata.CreatedBy = "Joe Old";
 
-            await handler.Run(request, context);
+            using var inputStream = await StreamUtils.CreateJsonStream(request);
+            await handler.Run(inputStream, context);
 
             var httpRequest = server.Requests
             .Should()
@@ -230,7 +233,8 @@ namespace Lambdajection.Tests.Compilation
             request.LogicalResourceId = logicalResourceId;
             request.PhysicalResourceId = null;
 
-            await handler.Run(request, context);
+            using var inputStream = await StreamUtils.CreateJsonStream(request);
+            await handler.Run(inputStream, context);
 
             var httpRequest = server.Requests
             .Should()
@@ -275,7 +279,8 @@ namespace Lambdajection.Tests.Compilation
             request.PhysicalResourceId = null;
             request.OldResourceProperties.Name = oldName;
 
-            await handler.Run(request, context);
+            var inputStream = await StreamUtils.CreateJsonStream(request);
+            await handler.Run(inputStream, context);
 
             var httpRequest = server.Requests
             .Should()

@@ -21,7 +21,7 @@ Resources:
       Layers:
         - !Sub arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:net5:${Net5LayerVersion}
       Policies:
-        - AWSLambdaExecute
+        - AWSLambdaBasicExecutionRole
         # Replace this with the ARN of a policy containing the kms:Decrypt permission
         - !ImportValue lambdajection-infrastructure:EncryptionKeyDecryptPolicyArn
       Environment:

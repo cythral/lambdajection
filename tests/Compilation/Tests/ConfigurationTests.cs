@@ -1,3 +1,5 @@
+using System.IO;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 using FluentAssertions;
@@ -39,14 +41,12 @@ namespace Lambdajection.Tests.Compilation
             var handlerType = assembly.GetType("Lambdajection.CompilationTests.Configuration.Handler")!;
             var runMethod = handlerType.GetMethod("Run")!;
 
-            var task = (Task)runMethod.Invoke(null, new[] { string.Empty, null })!;
-            await task;
+            using var inputStream = await StreamUtils.CreateJsonStream(string.Empty);
+            var resultStream = await (Task<Stream>)runMethod.Invoke(null, new[] { inputStream, null })!;
+            var result = await JsonSerializer.DeserializeAsync<JsonElement>(resultStream);
+            result.TryGetProperty("ExampleConfigValue", out var value);
 
-            var dynamicTask = (dynamic)task;
-            var result = dynamicTask.Result;
-            object value = result.ExampleConfigValue;
-
-            value.Should().Be(exampleConfigValue);
+            value.ToString().Should().Be(exampleConfigValue);
         }
 
         [Test]
@@ -57,14 +57,12 @@ namespace Lambdajection.Tests.Compilation
             var handlerType = assembly.GetType("Lambdajection.CompilationTests.Configuration.Handler")!;
             var runMethod = handlerType.GetMethod("Run")!;
 
-            var task = (Task)runMethod.Invoke(null, new[] { string.Empty, null })!;
-            await task;
+            using var inputStream = await StreamUtils.CreateJsonStream(string.Empty);
+            var resultStream = await (Task<Stream>)runMethod.Invoke(null, new[] { inputStream, null })!;
+            var result = await JsonSerializer.DeserializeAsync<JsonElement>(resultStream);
+            result.TryGetProperty("ExampleEncryptedValue", out var value);
 
-            var dynamicTask = (dynamic)task;
-            var result = dynamicTask.Result;
-            object value = result.ExampleEncryptedValue;
-
-            value.Should().BeEquivalentTo("[decrypted] " + exampleEncryptedValue);
+            value.ToString().Should().BeEquivalentTo("[decrypted] " + exampleEncryptedValue);
         }
     }
 }

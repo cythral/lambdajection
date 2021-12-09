@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -8,6 +9,8 @@ using AutoFixture.AutoNSubstitute;
 
 using FluentAssertions;
 
+using Lambdajection.Core.Serialization;
+
 using Microsoft.Extensions.DependencyInjection;
 
 using NSubstitute;
@@ -16,34 +19,50 @@ using NUnit.Framework;
 
 using static NSubstitute.Arg;
 
+using JsonSerializer = Lambdajection.Core.Serialization.JsonSerializer;
+using SystemTextJsonSerializer = System.Text.Json.JsonSerializer;
 using TestLambdaHost = Lambdajection.Core.DefaultLambdaHost<
     Lambdajection.TestLambda,
-    object,
-    object,
+    Lambdajection.TestLambdaMessage,
+    Lambdajection.TestLambdaMessage,
     Lambdajection.TestStartup,
     Lambdajection.TestConfigurator,
     Lambdajection.TestConfigFactory
 >;
+
+#pragma warning disable SA1649 // File name should match first type name
+#pragma warning disable SA1402 // File may only contain a single type
 
 namespace Lambdajection.Core.Tests
 {
     [Category("Unit")]
     public class DefaultLambdaHostTests
     {
+        public static async Task<Stream> CreateStreamForRequest(TestLambdaMessage request)
+        {
+            var stream = new MemoryStream();
+            await SystemTextJsonSerializer.SerializeAsync(stream, request);
+            stream.Position = 0;
+            return stream;
+        }
+
         [Test, Auto]
         public async Task RunCreatesLambdaAndCallsHandle(
-            string expectedResponse,
-            object request,
+            TestLambdaMessage expectedResponse,
+            TestLambdaMessage request,
             ServiceCollection collection,
+            JsonSerializer serializer,
             [Substitute] TestLambda lambda,
             [Substitute] LambdaScope scope,
             [Substitute] ILambdaContext context
         )
         {
-            lambda.Handle(Any<object>(), Any<CancellationToken>()).Returns(expectedResponse);
+            lambda.Handle(Any<TestLambdaMessage>(), Any<CancellationToken>()).Returns(expectedResponse);
+            collection.AddSingleton<ISerializer>(serializer);
             collection.AddSingleton(lambda);
             collection.AddSingleton(scope);
 
+            using var inputStream = await CreateStreamForRequest(request);
             var provider = collection.BuildServiceProvider();
             await using var host = new TestLambdaHost(lambdaHost =>
             {
@@ -51,29 +70,34 @@ namespace Lambdajection.Core.Tests
             });
 
             var cancellationToken = new CancellationToken(false);
-            var response = await host.Run(request, context, cancellationToken);
+            var responseStream = await host.Run(inputStream, context, cancellationToken);
+            var response = await SystemTextJsonSerializer.DeserializeAsync<TestLambdaMessage>(responseStream);
 
-            response.Should().Be(expectedResponse);
-            await lambda.Received().Handle(Is(request), Is(cancellationToken));
+            response.Should().NotBeNull();
+            response!.Id.Should().Be(expectedResponse.Id);
+            await lambda.Received().Handle(Is<TestLambdaMessage>(req => req.Id == request.Id), Is(cancellationToken));
         }
 
         [Test, Auto]
         public async Task RunRunsInitializationServices(
-            string expectedResponse,
-            object request,
+            TestLambdaMessage expectedResponse,
+            TestLambdaMessage request,
             ServiceCollection collection,
+            JsonSerializer serializer,
             [Substitute] ILambdaInitializationService initializationService,
             [Substitute] TestLambda lambda,
             [Substitute] LambdaScope scope,
             [Substitute] ILambdaContext context
         )
         {
-            lambda.Handle(Any<object>(), Any<CancellationToken>()).Returns(expectedResponse);
+            lambda.Handle(Any<TestLambdaMessage>(), Any<CancellationToken>()).Returns(expectedResponse);
 
+            collection.AddSingleton<ISerializer>(serializer);
             collection.AddSingleton(initializationService);
             collection.AddSingleton(lambda);
             collection.AddSingleton(scope);
 
+            using var inputStream = await CreateStreamForRequest(request);
             var provider = collection.BuildServiceProvider();
             await using var host = new TestLambdaHost(lambdaHost =>
             {
@@ -82,28 +106,31 @@ namespace Lambdajection.Core.Tests
             });
 
             var cancellationToken = new CancellationToken(false);
-            await host.Run(request, context, cancellationToken);
+            await host.Run(inputStream, context, cancellationToken);
 
             await initializationService.Received().Initialize(Is(cancellationToken));
         }
 
         [Test, Auto]
         public async Task RunSetsLambdaContextOnScope(
-            string expectedResponse,
-            object request,
+            TestLambdaMessage expectedResponse,
+            TestLambdaMessage request,
             ServiceCollection collection,
+            ISerializer serializer,
             [Substitute] ILambdaInitializationService initializationService,
             [Substitute] TestLambda lambda,
             [Substitute] LambdaScope scope,
             [Substitute] ILambdaContext context
         )
         {
-            lambda.Handle(Any<object>()).Returns(expectedResponse);
+            lambda.Handle(Any<TestLambdaMessage>()).Returns(expectedResponse);
 
+            collection.AddSingleton(serializer);
             collection.AddSingleton(initializationService);
             collection.AddSingleton(lambda);
             collection.AddSingleton(scope);
 
+            using var inputStream = await CreateStreamForRequest(request);
             var provider = collection.BuildServiceProvider();
             await using var host = new TestLambdaHost(lambdaHost =>
             {
@@ -111,16 +138,17 @@ namespace Lambdajection.Core.Tests
                 lambdaHost.RunInitializationServices = true;
             });
 
-            await host.Run(request, context);
+            await host.Run(inputStream, context);
 
             scope.LambdaContext.Should().Be(context);
         }
 
         [Test, Auto]
         public async Task RunDisposesInitializationServices(
-            string expectedResponse,
-            object request,
+            TestLambdaMessage expectedResponse,
+            TestLambdaMessage request,
             ServiceCollection collection,
+            ISerializer serializer,
             [Substitute] TestLambda lambda,
             [Substitute] LambdaScope scope,
             [Substitute] ILambdaContext context
@@ -128,11 +156,13 @@ namespace Lambdajection.Core.Tests
         {
             var initializationService = Substitute.For<ILambdaInitializationService, IDisposable>();
 
-            lambda.Handle(Any<object>()).Returns(expectedResponse);
+            lambda.Handle(Any<TestLambdaMessage>()).Returns(expectedResponse);
+            collection.AddSingleton(serializer);
             collection.AddSingleton(initializationService);
             collection.AddSingleton(lambda);
             collection.AddSingleton(scope);
 
+            using var inputStream = await CreateStreamForRequest(request);
             var provider = collection.BuildServiceProvider();
             await using var host = new TestLambdaHost(lambdaHost =>
             {
@@ -140,27 +170,30 @@ namespace Lambdajection.Core.Tests
                 lambdaHost.RunInitializationServices = true;
             });
 
-            await host.Run(request, context);
+            await host.Run(inputStream, context);
 
             initializationService.As<IDisposable>().Received().Dispose();
         }
 
         [Test, Auto]
         public async Task RunDisposesInitializationServicesAsync(
-            string expectedResponse,
-            object request,
+            TestLambdaMessage expectedResponse,
+            TestLambdaMessage request,
             ServiceCollection collection,
+            ISerializer serializer,
             [Substitute] TestLambda lambda,
             [Substitute] LambdaScope scope,
             [Substitute] ILambdaContext context
         )
         {
             var initializationService = Substitute.For<ILambdaInitializationService, IAsyncDisposable>();
-            lambda.Handle(Any<object>()).Returns(expectedResponse);
+            lambda.Handle(Any<TestLambdaMessage>()).Returns(expectedResponse);
+            collection.AddSingleton(serializer);
             collection.AddSingleton(initializationService);
             collection.AddSingleton(lambda);
             collection.AddSingleton(scope);
 
+            using var inputStream = await CreateStreamForRequest(request);
             var provider = collection.BuildServiceProvider();
             await using var host = new TestLambdaHost(lambdaHost =>
             {
@@ -168,27 +201,30 @@ namespace Lambdajection.Core.Tests
                 lambdaHost.RunInitializationServices = true;
             });
 
-            await host.Run(request, context);
+            await host.Run(inputStream, context);
 
             await initializationService.As<IAsyncDisposable>().Received().DisposeAsync();
         }
 
         [Test, Auto]
         public async Task RunDoesNotRunInitializationServicesIfPropertySetToFalse(
-            string expectedResponse,
-            object request,
+            TestLambdaMessage expectedResponse,
+            TestLambdaMessage request,
             ServiceCollection collection,
+            ISerializer serializer,
             [Substitute] ILambdaInitializationService initializationService,
             [Substitute] TestLambda lambda,
             [Substitute] LambdaScope scope,
             [Substitute] ILambdaContext context
         )
         {
-            lambda.Handle(Any<object>(), Any<CancellationToken>()).Returns(expectedResponse);
+            lambda.Handle(Any<TestLambdaMessage>(), Any<CancellationToken>()).Returns(expectedResponse);
+            collection.AddSingleton(serializer);
             collection.AddSingleton(initializationService);
             collection.AddSingleton(lambda);
             collection.AddSingleton(scope);
 
+            using var inputStream = await CreateStreamForRequest(request);
             var provider = collection.BuildServiceProvider();
             await using var host = new TestLambdaHost(lambdaHost =>
             {
@@ -197,7 +233,7 @@ namespace Lambdajection.Core.Tests
             });
 
             var cancellationToken = new CancellationToken(false);
-            await host.Run(request, context, cancellationToken);
+            await host.Run(inputStream, context, cancellationToken);
 
             await initializationService.DidNotReceive().Initialize(Is(cancellationToken));
         }
@@ -205,18 +241,21 @@ namespace Lambdajection.Core.Tests
         [Test, Auto]
         public async Task DisposeAsyncIsCalled(
             string expectedResponse,
-            object request,
+            TestLambdaMessage request,
             ServiceCollection collection,
+            ISerializer serializer,
             [Substitute] ILambdaInitializationService initializationService,
             [Substitute] AsyncDisposableLambda lambda,
             [Substitute] LambdaScope scope,
             [Substitute] ILambdaContext context
         )
         {
+            collection.AddSingleton(serializer);
             collection.AddSingleton(initializationService);
             collection.AddSingleton<TestLambda>(lambda);
             collection.AddSingleton(scope);
 
+            using var inputStream = await CreateStreamForRequest(request);
             var provider = collection.BuildServiceProvider();
             await using (var host = new TestLambdaHost(lambdaHost =>
             {
@@ -224,7 +263,7 @@ namespace Lambdajection.Core.Tests
                 lambdaHost.RunInitializationServices = false;
             }))
             {
-                await host.Run(request, context);
+                await host.Run(inputStream, context);
             }
 
             await lambda.Received().DisposeAsync();
@@ -233,8 +272,9 @@ namespace Lambdajection.Core.Tests
         [Test, Auto]
         public async Task DisposeIsCalled(
             string expectedResponse,
-            object request,
+            TestLambdaMessage request,
             ServiceCollection collection,
+            ISerializer serializer,
             [Substitute] Action<object> suppressor,
             [Substitute] ILambdaInitializationService initializationService,
             [Substitute] DisposableLambda lambda,
@@ -242,10 +282,12 @@ namespace Lambdajection.Core.Tests
             [Substitute] ILambdaContext context
         )
         {
+            collection.AddSingleton(serializer);
             collection.AddSingleton(initializationService);
             collection.AddSingleton<TestLambda>(lambda);
             collection.AddSingleton(scope);
 
+            using var inputStream = await CreateStreamForRequest(request);
             var provider = collection.BuildServiceProvider();
             await using (var host = new TestLambdaHost(lambdaHost =>
             {
@@ -254,7 +296,7 @@ namespace Lambdajection.Core.Tests
                 lambdaHost.SuppressFinalize = suppressor;
             }))
             {
-                await host.Run(request, context);
+                await host.Run(inputStream, context);
             }
 
             lambda.Received().Dispose();
@@ -263,18 +305,21 @@ namespace Lambdajection.Core.Tests
         [Test, Auto]
         public async Task DisposeAsyncIsPreferred(
             string expectedResponse,
-            object request,
+            TestLambdaMessage request,
             ServiceCollection collection,
+            ISerializer serializer,
             [Substitute] ILambdaInitializationService initializationService,
             [Substitute] MultiDisposableLambda lambda,
             [Substitute] LambdaScope scope,
             [Substitute] ILambdaContext context
         )
         {
+            collection.AddSingleton(serializer);
             collection.AddSingleton(initializationService);
             collection.AddSingleton<TestLambda>(lambda);
             collection.AddSingleton(scope);
 
+            using var inputStream = await CreateStreamForRequest(request);
             var provider = collection.BuildServiceProvider();
             await using (var host = new TestLambdaHost(lambdaHost =>
             {
@@ -282,7 +327,7 @@ namespace Lambdajection.Core.Tests
                 lambdaHost.RunInitializationServices = false;
             }))
             {
-                await host.Run(request, context);
+                await host.Run(inputStream, context);
             }
 
             await lambda.Received().DisposeAsync();
@@ -292,8 +337,9 @@ namespace Lambdajection.Core.Tests
         [Test, Auto]
         public async Task FinalizationIsSuppressed(
             string expectedResponse,
-            object request,
+            TestLambdaMessage request,
             ServiceCollection collection,
+            ISerializer serializer,
             [Substitute] Action<object> suppressor,
             [Substitute] ILambdaInitializationService initializationService,
             [Substitute] MultiDisposableLambda lambda,
@@ -301,11 +347,13 @@ namespace Lambdajection.Core.Tests
             [Substitute] ILambdaContext context
         )
         {
+            collection.AddSingleton(serializer);
             collection.AddSingleton(initializationService);
             collection.AddSingleton<TestLambda>(lambda);
             collection.AddSingleton(scope);
 
             TestLambdaHost host;
+            using var inputStream = await CreateStreamForRequest(request);
             var provider = collection.BuildServiceProvider();
             await using (host = new TestLambdaHost(lambdaHost =>
             {
@@ -314,7 +362,7 @@ namespace Lambdajection.Core.Tests
                 lambdaHost.SuppressFinalize = suppressor;
             }))
             {
-                await host.Run(request, context);
+                await host.Run(inputStream, context);
             }
 
             suppressor.Received()(Is(host));

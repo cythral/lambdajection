@@ -1,12 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <TargetFrameworks>net5.0;net6.0</TargetFrameworks>
+        <TargetFramework>net6.0</TargetFramework>
         <RuntimeIdentifier>linux-x64</RuntimeIdentifier>
         <RestoreLockedMode>false</RestoreLockedMode>
         <RestorePackagesPath>$(MSBuildThisFileDirectory).nuget</RestorePackagesPath>
         <RestoreAdditionalProjectSources>$(PackageOutputPath);$(RestoreAdditionalProjectSources)</RestoreAdditionalProjectSources>
         <RestorePackagesWithLockFile>false</RestorePackagesWithLockFile>
-        <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
     </PropertyGroup>
 
     <ItemGroup>
@@ -27,7 +26,7 @@
 
         <Copy
             SourceFiles="@(AWSSDKCoreReference)"
-            DestinationFiles="$(MSBuildThisFileDirectory).nuget/lambdajection.core/$(LambdajectionVersion)/lib/net5.0/AWSSDK.Core.dll"
+            DestinationFiles="$(MSBuildThisFileDirectory).nuget/lambdajection.core/$(LambdajectionVersion)/lib/netstandard2.1/AWSSDK.Core.dll"
         />
     </Target>
 </Project>

@@ -10,6 +10,7 @@
         <CompilerVisibleProperty Include="LambdajectionBuildTimeAssemblies" />
         <CompilerVisibleProperty Include="LambdajectionAdditionalProbingPath" />
         <CompilerVisibleProperty Include="LambdajectionIamPermissionsOutputPath" />
+        <CompilerVisibleProperty Include="EnableLambdajectionTracing" />
         <CompilerVisibleProperty Include="AssemblyName" />
         <CompilerVisibleProperty Include="OutputPath" />
         <CompilerVisibleProperty Include="TargetFrameworkVersion" />

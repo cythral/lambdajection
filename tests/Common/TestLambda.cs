@@ -5,18 +5,18 @@ using Lambdajection.Core;
 
 namespace Lambdajection
 {
-    public class TestLambda : ILambda<object, object>
+    public class TestLambda : ILambda<TestLambdaMessage, TestLambdaMessage>
     {
         public object Request { get; set; } = null!;
 
-        public virtual Task<object> Handle(object request, CancellationToken cancellationToken = default)
+        public virtual Task<TestLambdaMessage> Handle(TestLambdaMessage request, CancellationToken cancellationToken = default)
         {
             Request = request;
 
-            return Task.FromResult<object>(null!);
+            return Task.FromResult<TestLambdaMessage>(null!);
         }
 
-        public void Validate(object request)
+        public virtual void Validate(TestLambdaMessage request)
         {
         }
     }

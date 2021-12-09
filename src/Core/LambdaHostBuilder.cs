@@ -1,10 +1,15 @@
 using System;
+using System.Text.Json;
 
 using Amazon.Lambda.Core;
+
+using Lambdajection.Core.Serialization;
 
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+
+using JsonSerializer = Lambdajection.Core.Serialization.JsonSerializer;
 
 namespace Lambdajection.Core
 {
@@ -78,11 +83,17 @@ namespace Lambdajection.Core
         {
             return new ServiceCollection()
             .AddSingleton<IConfiguration>(configuration)
+            .AddSingleton<ISerializer, JsonSerializer>()
             .AddSingleton<ILambdaStartup, TLambdaStartup>()
             .AddSingleton<ILambdaConfigurator, TLambdaConfigurator>()
             .AddSingleton<IHttpClient, DefaultHttpClient>()
             .AddScoped<TLambda>()
             .AddScoped<LambdaScope>()
+            .AddSingleton(provider =>
+            {
+                var options = provider.GetService<JsonSerializerOptions>() ?? new JsonSerializerOptions();
+                return new JsonSerializerSettings(options);
+            })
             .AddScoped(provider =>
             {
                 var scope = provider.GetRequiredService<LambdaScope>();

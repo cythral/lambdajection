@@ -1,3 +1,6 @@
+using System;
+using System.IO;
+using System.Reflection;
 using System.Threading.Tasks;
 
 using FluentAssertions;
@@ -30,15 +33,17 @@ namespace Lambdajection.Tests.Compilation
             var (assembly, _) = generation;
             var handlerType = assembly.GetType("Lambdajection.CompilationTests.Disposables.DisposableHandler")!;
             var runMethod = handlerType.GetMethod("Run")!;
+            var disposeWasCalledProperty = handlerType.GetProperty("DisposeWasCalled", BindingFlags.Static | BindingFlags.Public);
+            var disposeWasCalledGetter = disposeWasCalledProperty!.GetGetMethod();
 
-            var task = (Task)runMethod.Invoke(null, new[] { string.Empty, null })!;
-            await task;
+            var disposeWasCalledBefore = (bool)disposeWasCalledGetter!.Invoke(null, Array.Empty<object>())!;
+            disposeWasCalledBefore.Should().BeFalse();
 
-            var dynamicTask = (dynamic)task;
-            var result = dynamicTask.Result;
-            object value = result.DisposeWasCalled;
+            using var inputStream = await StreamUtils.CreateJsonStream(string.Empty);
+            await (Task<Stream>)runMethod.Invoke(null, new[] { inputStream, null })!;
 
-            value.Should().Be(true);
+            var disposeWasCalledAfter = (bool)disposeWasCalledGetter!.Invoke(null, Array.Empty<object>())!;
+            disposeWasCalledAfter.Should().BeTrue();
         }
 
         [Test]
@@ -48,15 +53,17 @@ namespace Lambdajection.Tests.Compilation
             var (assembly, _) = generation;
             var handlerType = assembly.GetType("Lambdajection.CompilationTests.Disposables.AsyncDisposableHandler")!;
             var runMethod = handlerType.GetMethod("Run")!;
+            var disposeWasCalledProperty = handlerType.GetProperty("DisposeAsyncWasCalled", BindingFlags.Static | BindingFlags.Public);
+            var disposeWasCalledGetter = disposeWasCalledProperty!.GetGetMethod();
 
-            var task = (Task)runMethod.Invoke(null, new[] { string.Empty, null })!;
-            await task;
+            var disposeWasCalledBefore = (bool)disposeWasCalledGetter!.Invoke(null, Array.Empty<object>())!;
+            disposeWasCalledBefore.Should().BeFalse();
 
-            var dynamicTask = (dynamic)task;
-            var result = dynamicTask.Result;
-            object value = result.DisposeAsyncWasCalled;
+            using var inputStream = await StreamUtils.CreateJsonStream(string.Empty);
+            await (Task<Stream>)runMethod.Invoke(null, new[] { inputStream, null })!;
 
-            value.Should().Be(true);
+            var disposeWasCalledAfter = (bool)disposeWasCalledGetter!.Invoke(null, Array.Empty<object>())!;
+            disposeWasCalledAfter.Should().BeTrue();
         }
     }
 }

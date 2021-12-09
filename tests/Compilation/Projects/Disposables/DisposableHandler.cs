@@ -16,11 +16,11 @@ namespace Lambdajection.CompilationTests.Disposables
     [Lambda(typeof(Startup))]
     public partial class DisposableHandler : IDisposable
     {
-        public bool DisposeWasCalled = false;
+        public static bool DisposeWasCalled { get; set; } = false;
 
-        public Task<DisposableHandler> Handle(string request, CancellationToken cancellationToken = default)
+        public Task<string> Handle(string request, CancellationToken cancellationToken = default)
         {
-            return Task.FromResult(this);
+            return Task.FromResult("ok");
         }
 
         public void Dispose()

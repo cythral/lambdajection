@@ -2,13 +2,11 @@
   <Import Project="..\src\Metapackage\build\Lambdajection.props" />
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
-    <LangVersion>9.0</LangVersion>
+    <TargetFramework>net6.0</TargetFramework>
     <IsPackable>false</IsPackable>
     <AssemblyName>Lambdajection.Tests</AssemblyName>
     <NoWarn>CS1591;CA2007;CA1062</NoWarn> <!-- These often turn off if project settings change -->
     <CoreCompileDependsOn>GenerateTestMetadata;CleanTestResultsDirectory;$(CoreCompileDependsOn)</CoreCompileDependsOn>
-    <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
   </PropertyGroup>
 
   <ItemGroup>
@@ -16,27 +14,24 @@
     <PackageReference Include="AWSSDK.SecurityToken" Version="3.7.1.18" />
     <PackageReference Include="AWSSDK.S3" Version="3.7.1" />
     <PackageReference Include="AutoFixture.NUnit3" Version="4.17.0" />
-    <PackageReference Include="coverlet.collector" Version="3.0.3" PrivateAssets="all" />
+    <PackageReference Include="coverlet.collector" Version="3.1.0" PrivateAssets="all" />
     <PackageReference Include="FluentAssertions" Version="5.10.3" />
     <PackageReference Include="Microsoft.Build.Locator" Version="1.4.1" />
-    <PackageReference Include="Microsoft.CodeAnalysis" Version="3.9.0" />
-    <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.MSBuild" Version="3.9.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.MSBuild" Version="4.0.1" />
     <PackageReference Include="NSubstitute" Version="4.2.2" />
-    <PackageReference Include="NuGet.ProjectModel" Version="6.0.0-preview.1.107" />
+    <PackageReference Include="NuGet.Frameworks" Version="6.0.0" />
+    <PackageReference Include="NuGet.ProjectModel" Version="6.0.0" />
     <PackageReference Include="nunit" Version="3.13.2" />
     <PackageReference Include="NUnit3TestAdapter" Version="4.0.0" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.10.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.0.0" />
     <PackageReference Include="McMaster.NETCore.Plugins" Version="1.4.0" />
-    <PackageReference Include="YamlDotNet" Version="11.1.1" />
-
-    <!-- Added to resolve a version conflict, this isn't used directly -->
-    <PackageReference Include="System.Configuration.ConfigurationManager" Version="5.0.0" />
+    <PackageReference Include="YamlDotNet" Version="11.2.1" />
   </ItemGroup>
 
   <ItemGroup>
     <!-- Don't compile the NoFactoryCompilationTestProject, a test will do that at runtime. -->
     <Compile Remove="Compilation\Projects\**" />
-    <Compile Include="$(IntermediateOutputPath)\TestMetadata.cs" />
+    <Compile Include="$(IntermediateOutputPath)\TestMetadata.cs" Watch="false" />
   </ItemGroup>
 
   <Target Name="GenerateTestMetadata" DependsOnTargets="GetBuildVersion">
@@ -58,17 +53,17 @@
     <WriteLinesToFile Lines="$(FileContents)" File="$(IntermediateOutputPath)\TestMetadata.cs" Overwrite="true" />
   </Target>
 
-  <Target Name="PrepareVSTestProps" BeforeTargets="VSTest">
+  <Target Name="PrepareVSTestEnv" BeforeTargets="VSTest">
     <PropertyGroup>
       <VSTestResultsDirectory>$(IntermediateOutputPath)TestResults/</VSTestResultsDirectory>
     </PropertyGroup>
   </Target>
 
-  <Target Name="CleanTestResultsDirectory" DependsOnTargets="PrepareVSTestProps">
+  <Target Name="CleanTestResultsDirectory" DependsOnTargets="PrepareVSTestEnv">
     <RemoveDir Directories="$(VSTestResultsDirectory)" />
   </Target>
 
-  <Target Name="MoveTestCoverageResultsFile" AfterTargets="VSTest" DependsOnTargets="PrepareVSTestProps">
+  <Target Name="MoveTestCoverageResultsFile" AfterTargets="VSTest" DependsOnTargets="PrepareVSTestEnv">
     <ItemGroup>
       <CoverageFile Include="$(VSTestResultsDirectory)*/coverage.cobertura.xml" />
     </ItemGroup>
@@ -78,11 +73,13 @@
 
   <ItemGroup>
     <ProjectReference Include="..\src\Attributes\Attributes.csproj" />
-    <ProjectReference Include="..\src\Core\Core.csproj" SetTargetFramework="TargetFramework=netstandard2.1" />
+    <ProjectReference Include="..\src\Core\Core.csproj" />
+    <ProjectReference Include="..\src\Sns\Sns.csproj" />
     <ProjectReference Include="..\src\CustomResource\CustomResource.csproj" />
     <ProjectReference Include="..\src\Runtime\Runtime.csproj" />
     <ProjectReference Include="..\src\Encryption\Encryption.csproj" />
     <ProjectReference Include="..\src\Generator\Generator.csproj" />
+    <ProjectReference Include="..\src\Tracing\Tracing.csproj" />
     <ProjectReference Include="..\src\Metapackage\Metapackage.csproj" PrivateAssets="all" ReferenceOutputAssembly="false" />
   </ItemGroup>
 </Project>
