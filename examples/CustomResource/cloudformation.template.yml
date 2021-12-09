@@ -10,7 +10,7 @@ Resources:
       CodeUri: ../../bin/Examples/CustomResource/Release/netcoreapp3.1/publish/
       MemorySize: 512
       Policies:
-        - AWSLambdaExecute
+        - AWSLambdaBasicExecutionRole
       Environment:
         Variables:
           PasswordGen__DefaultLength: "26"

@@ -16,6 +16,10 @@ env:
   NUGET_FEED_URL: https://api.nuget.org/v3/index.json
   GITHUB_PACKAGES_FEED_URL: https://nuget.pkg.github.com/cythral/index.json
 
+permissions:
+  contents: read
+  id-token: write
+
 jobs:
   build:
     strategy:
@@ -23,18 +27,17 @@ jobs:
         os: [windows-latest, ubuntu-latest]
 
     runs-on: ${{ matrix.os }}
+
     steps:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
 
-      - name: Get Commit Message
-        shell: bash
-        run: | # Account for pull request merge commits
-          sha=${{ github.sha }}
-          after=$(git rev-list origin/master..HEAD --max-parents=1 --max-count=1)
-          [ ! `git rev-list --no-walk --count --merges "$sha"` ] || sha=$after
-          echo "COMMIT_MESSAGE=$(git log --format=%B -n 1 $sha | tr '\n' ' ')" >> $GITHUB_ENV
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: ${{ secrets.AWS_OSS_ROLE }}
+          aws-region: us-east-1
 
       - name: Set version
         shell: bash
@@ -64,11 +67,7 @@ jobs:
         shell: bash
         run: dotnet build --no-restore -m -bl:obj/logs/build-${{ matrix.os }}.binlog -p:OutputLayerTemplateFilePath=$(pwd)/Layer.template.yml
         env:
-          UPLOAD_LAYER_TEMPLATE: ${{ secrets.AWS_ACCESS_KEY_ID != '' && matrix.os == 'ubuntu-latest' }}
-          AWS_REGION: us-east-1
-          AWS_DEFAULT_REGION: us-east-1
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          UPLOAD_LAYER_TEMPLATE: ${{ matrix.os == 'ubuntu-latest' }}
 
       - name: Test
         run: dotnet test --no-build --collect:"XPlat Code coverage"
@@ -80,17 +79,6 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
           file: ./obj/Tests/Release/net6.0/coverage.xml
           fail_ci_if_error: true
-
-      - name: Run End to End Tests
-        if: matrix.os == 'ubuntu-latest' && (startsWith(github.ref, 'refs/tags/v') || contains(env.COMMIT_MESSAGE, '[e2e]') || github.event_name == 'schedule')
-        run: dotnet build -t:EndToEndTests -p:PackageBucket=${BUCKET} -p:RoleArn=${ROLE_ARN}
-        env:
-          BUCKET: ${{ secrets.ARTIFACT_BUCKET }}
-          ROLE_ARN: ${{ secrets.CLOUDFORMATION_ROLE_ARN }}
-          AWS_REGION: us-east-1
-          AWS_DEFAULT_REGION: us-east-1
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
       - name: Upload Nugets
         if: matrix.os == 'ubuntu-latest'
@@ -135,8 +123,70 @@ jobs:
               }
             ]
 
-  release:
+  end-to-end-tests:
+    runs-on: ubuntu-latest
     needs: build
+    concurrency: end-to-end
+    if: startsWith(github.ref, 'refs/tags/v') || contains(github.event.pull_request.labels.*.name, 'E2E') || github.event_name == 'schedule'
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+
+      - name: Display .NET Info
+        run: dotnet --info
+
+      - name: Download NuGets
+        uses: actions/download-artifact@v2
+        id: download-nugets
+        with:
+          name: nugets
+          path: bin/Packages/Release
+
+      - name: Download Layer Template
+        uses: actions/download-artifact@v2
+        id: download-layer-template
+        with:
+          name: layer-template
+          path: ./
+
+      - name: Set version
+        shell: bash
+        run: echo "VERSION=$(cat version.json | jq -r '.version')" >> $GITHUB_ENV
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: ${{ secrets.AWS_OSS_ROLE }}
+          aws-region: us-east-1
+
+      - name: Test
+        run: dotnet build -t:EndToEndTests -p:PackageBucket=${BUCKET}
+        env:
+          BUCKET: ${{ secrets.ARTIFACT_BUCKET }}
+
+      - name: Discord Failure Notification
+        uses: Ilshidur/action-discord@master
+        if: failure() && (github.event_name == 'push' || github.event_name == 'schedule')
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+          DISCORD_EMBEDS: |
+            [
+              {
+                "title": "[${{ github.repository }}] End-To-End Tests Failed",
+                "url": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}",
+                "description": "An error occurred while running the end-to-end tests for ${{ github.repository }} ${{ env.VERSION }}",
+                "color": 12720135
+              }
+            ]
+
+  release:
+    needs:
+      - build
+      - end-to-end-tests
     runs-on: ubuntu-latest
     environment:
       name: Production
@@ -157,10 +207,6 @@ jobs:
         id: download-layer-template
         with:
           name: layer-template
-
-      - name: Set version
-        shell: bash
-        run: echo "VERSION=$(cat version.json | jq -r '.version')" >> $GITHUB_ENV
 
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v1

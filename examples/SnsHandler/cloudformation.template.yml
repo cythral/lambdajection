@@ -1,0 +1,38 @@
+Transform: AWS::Serverless-2016-10-31
+Resources:
+  SnsHandler:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: SnsHandler::Lambdajection.Examples.SnsHandler.Handler::Run
+      Runtime: dotnetcore3.1
+      FunctionName: lambdajection-snshandler
+      Timeout: 300
+      CodeUri: ../../bin/Examples/SnsHandler/Release/netcoreapp3.1/publish/
+      MemorySize: 512
+      Policies:
+        - AWSLambdaBasicExecutionRole
+      Events:
+        Sns:
+          Type: SNS
+          Properties:
+            Topic: !Ref Topic
+
+  Topic:
+    Type: AWS::SNS::Topic
+
+  TopicInvocation:
+    Type: Custom::Invocation
+    DeletionPolicy: Retain
+    DependsOn:
+      - SnsHandler
+      - SnsHandlerSns
+      - SnsHandlerSnsPermission
+    Properties:
+      ServiceToken: !Ref Topic
+
+Outputs:
+  InputPayload:
+    Value: "{}"
+
+  ExpectedOutput:
+    Value: !Sub '"${TopicInvocation.Id}"'

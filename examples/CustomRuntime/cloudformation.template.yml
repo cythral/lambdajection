@@ -6,13 +6,10 @@ Parameters:
 
 Resources:
   LambdajectionLayer:
-    Type: AWS::Serverless::LayerVersion
+    Type: AWS::CloudFormation::Stack
     Properties:
-      LayerName: lambdajection
-      Description: Lambda Layer for Lambdajection
-      CompatibleRuntimes:
-        - provided.al2
-      ContentUri: ../../bin/Layer/Release/net6.0/layer
+      # Requires that dotnet build be run with UPLOAD_LAYER_TEMPLATE=true and OutputLayerTemplateFilePath=./Layer.template.yml
+      TemplateURL: ../../Layer.template.yml
 
   CustomRuntime:
     Type: AWS::Serverless::Function
@@ -26,9 +23,9 @@ Resources:
       Layers:
         # https://github.com/cythral/dotnet-lambda-layer
         - !Sub arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:net5:${Net5LayerVersion}
-        - !Ref LambdajectionLayer
+        - !GetAtt LambdajectionLayer.Outputs.LayerArn
       Policies:
-        - AWSLambdaExecute
+        - AWSLambdaBasicExecutionRole
 
 Outputs:
   InputPayload:

@@ -24,7 +24,7 @@
     <CustomLocalFeed Include="$(_PackagesRelease)" Condition="Exists($(_PackagesRelease))" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Cythral.CloudFormation.BuildTasks" Version="0.5.1" PrivateAssets="all" />
+    <PackageReference Include="Cythral.CloudFormation.BuildTasks" Version="0.5.4" PrivateAssets="all" />
   </ItemGroup>
   <Target Name="EndToEndTestCleanup" />
 </Project>
