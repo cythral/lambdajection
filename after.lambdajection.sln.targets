@@ -146,7 +146,7 @@
             <EndToEndTestProp Include="RoleArn=$(RoleArn)" />
         </ItemGroup>
 
-        <MSBuild Projects="@(Examples)" Targets="EndToEndTest" Properties="@(EndToEndTestProp)" />
+        <MSBuild Projects="@(Examples)" Targets="Restore;Build;EndToEndTest" Properties="@(EndToEndTestProp)" />
     </Target>
 
     <Target Name="Format" DependsOnTargets="RestoreTools">
