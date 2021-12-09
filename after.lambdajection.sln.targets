@@ -134,10 +134,6 @@
         DependsOnTargets="RetrievePackageVersionFromTool"
         Condition="$(Configuration) == 'Release'"
     >
-        <CreateItem Include="$(MSBuildThisFileDirectory)examples\*\*.csproj">
-            <Output TaskParameter="Include" ItemName="Examples" />
-        </CreateItem>
-
         <ItemGroup>
             <EndToEndTestProp Include="LambdajectionVersion=$(PackageVersion)" />
             <EndToEndTestProp Include="Configuration=$(Configuration)" />
@@ -146,7 +142,7 @@
             <EndToEndTestProp Include="RoleArn=$(RoleArn)" />
         </ItemGroup>
 
-        <MSBuild Projects="@(Examples)" Targets="Restore;Build;EndToEndTest" Properties="@(EndToEndTestProp)" />
+        <MSBuild Projects="$(MSBuildThisFileDirectory)examples\examples.sln" Targets="Restore;Build;EndToEndTest" Properties="@(EndToEndTestProp)" />
     </Target>
 
     <Target Name="Format" DependsOnTargets="RestoreTools">
