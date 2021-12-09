@@ -21,7 +21,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Cythral.CloudFormation.BuildTasks" Version="0.5.3" PrivateAssets="all" />
+        <PackageReference Include="Cythral.CloudFormation.BuildTasks" Version="0.5.4" PrivateAssets="all" />
         <ProjectReference Include="../Generator/Generator.csproj" ReferenceOutputAssembly="false" />
         <ProjectReference Include="../Attributes/Attributes.csproj" PrivateAssets="runtime" />
     </ItemGroup>
