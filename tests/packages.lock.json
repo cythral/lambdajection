@@ -171,8 +171,8 @@
       },
       "Amazon.Lambda.RuntimeSupport": {
         "type": "Transitive",
-        "resolved": "1.5.0",
-        "contentHash": "WIS3H+58HtH1UOHkF8VN6q29HWFAVOoUqTA18cxmhtuxIHMoAk5kNxxqyqevsFO8akcKaU3UN09b3oQGjU2stg==",
+        "resolved": "1.6.0",
+        "contentHash": "EZGsuTMbkU4p3D3c8YRe6F+uIAgGQQ6n/2fbUGh0/4bmuxsmqahqOd33irFaotIfRQ85e5CKWcKqfJWZvJlClA==",
         "dependencies": {
           "Amazon.Lambda.Core": "2.1.0",
           "NSwag.MSBuild": "12.0.4",
@@ -1880,7 +1880,7 @@
       "Lambdajection.Runtime": {
         "type": "Project",
         "dependencies": {
-          "Amazon.Lambda.RuntimeSupport": "1.5.0"
+          "Amazon.Lambda.RuntimeSupport": "1.6.0"
         }
       },
       "Lambdajection.Sns": {
