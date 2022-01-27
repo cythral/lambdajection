@@ -196,6 +196,16 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: ${{ secrets.AWS_OSS_ROLE }}
+          aws-region: us-east-1
+
+      - name: Set version
+        shell: bash
+        run: echo "VERSION=$(cat version.json | jq -r '.version')" >> $GITHUB_ENV
+
       - name: Download NuGets
         uses: actions/download-artifact@v2
         id: download-nugets
@@ -227,10 +237,6 @@ jobs:
             --template ${{ steps.download-layer-template.outputs.download-path }}/Layer.template.yml \
             --region us-east-1 \
             --semantic-version ${VERSION}
-        env:
-          AWS_DEFAULT_REGION: us-east-1
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
       - uses: ncipollo/release-action@v1
         with:
