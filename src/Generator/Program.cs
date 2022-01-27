@@ -60,7 +60,11 @@ namespace Lambdajection.Generator
                 {
                     try
                     {
-                        return Assembly.LoadFile(matchingFile);
+                        var assembly = Assembly.LoadFile(matchingFile);
+                        if (assembly.GetName().Version >= name.Version)
+                        {
+                            return assembly;
+                        }
                     }
                     catch (Exception)
                     {

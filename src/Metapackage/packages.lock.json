@@ -1542,6 +1542,7 @@
           "Lambdajection.Attributes": "1.0.0",
           "Lambdajection.Framework": "1.0.0",
           "Lambdajection.Framework.BuildTime": "1.0.0",
+          "Microsoft.Bcl.AsyncInterfaces": "6.0.0",
           "Microsoft.CodeAnalysis": "4.0.1",
           "Microsoft.CodeAnalysis.CSharp.Workspaces": "4.0.1",
           "Microsoft.Extensions.Hosting": "6.0.0",
