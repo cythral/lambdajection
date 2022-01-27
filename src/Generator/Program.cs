@@ -61,7 +61,7 @@ namespace Lambdajection.Generator
                     try
                     {
                         var assembly = Assembly.LoadFile(matchingFile);
-                        if (assembly.GetName().Version == name.Version)
+                        if (assembly.GetName().Version >= name.Version)
                         {
                             return assembly;
                         }
