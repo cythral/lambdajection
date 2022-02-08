@@ -20,7 +20,7 @@ namespace Lambdajection.CustomResource
         /// Gets or sets the physical resource ID of the requested custom resource.
         /// </summary>
         /// <value>The physical resource ID of the requested custom resource.</value>
-        public string PhysicalResourceId { get; set; } = string.Empty;
+        public string? PhysicalResourceId { get; set; }
 
         /// <summary>
         /// Gets or sets the ID of the CloudFormation stack the requested custom resource belongs to.

@@ -58,7 +58,7 @@ namespace Lambdajection.CustomResource
         /// for the requested custom resource.
         /// </summary>
         /// <value>The physical resource ID of the requested custom resource.</value>
-        public virtual string PhysicalResourceId { get; set; } = string.Empty;
+        public virtual string? PhysicalResourceId { get; set; }
 
         /// <summary>
         /// Gets or sets the extra properties that appear when deserializing a request to this type.
