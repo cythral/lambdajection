@@ -20,7 +20,7 @@
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.0.1" PrivateAssets="runtime;analyzers;contentfiles;build" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" PrivateAssets="runtime;analyzers;contentfiles;build" />
     <PackageReference Include="System.Runtime.Loader" Version="4.3.0" PrivateAssets="runtime;analyzers;contentfiles;build" />
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.0" PrivateAssets="runtime;analyzers;contentfiles;build" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" PrivateAssets="runtime;analyzers;contentfiles;build" />
     <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="6.0.0" PrivateAssets="runtime;analyzers;contentfiles;build" />
     <PackageReference Include="YamlDotNet" Version="11.2.1" PrivateAssets="runtime;analyzers;contentfiles;build" />
   </ItemGroup>
