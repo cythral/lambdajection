@@ -13,6 +13,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Amazon.Lambda.RuntimeSupport" Version="1.6.0" />
+        <PackageReference Include="Amazon.Lambda.RuntimeSupport" Version="1.7.0" />
     </ItemGroup>
 </Project>
