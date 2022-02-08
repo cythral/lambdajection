@@ -9,6 +9,9 @@
   "markdown.extension.toc.levels": "2..6",
   "editor.semanticHighlighting.enabled": true,
   "csharp.semanticHighlighting.enabled": true,
+  "files.exclude": {
+    "**/.nuget": true,
+  },
   "yaml.customTags": [
     "!And",
     "!And sequence",
