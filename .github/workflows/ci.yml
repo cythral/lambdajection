@@ -29,7 +29,7 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
@@ -129,7 +129,7 @@ jobs:
     concurrency: end-to-end
     if: startsWith(github.ref, 'refs/tags/v') || contains(github.event.pull_request.labels.*.name, 'E2E') || github.event_name == 'schedule'
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
@@ -192,7 +192,7 @@ jobs:
       name: Production
     if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
