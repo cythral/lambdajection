@@ -140,14 +140,14 @@ jobs:
         run: dotnet --info
 
       - name: Download NuGets
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         id: download-nugets
         with:
           name: nugets
           path: bin/Packages/Release
 
       - name: Download Layer Template
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         id: download-layer-template
         with:
           name: layer-template
@@ -207,13 +207,13 @@ jobs:
         run: echo "VERSION=$(cat version.json | jq -r '.version')" >> $GITHUB_ENV
 
       - name: Download NuGets
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         id: download-nugets
         with:
           name: nugets
 
       - name: Download Layer Template
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         id: download-layer-template
         with:
           name: layer-template
