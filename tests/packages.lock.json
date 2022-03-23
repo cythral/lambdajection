@@ -188,15 +188,15 @@
       },
       "AWSSDK.Core": {
         "type": "Transitive",
-        "resolved": "3.7.9",
-        "contentHash": "KD3Uy8s7S+Qmmvu0z8szEddVaNB9G/UinPWkTOwAbjS6oGeoVBwAbvhHCtPymdoXHwhQMvuBBwmjk4vJT+CFpA=="
+        "resolved": "3.7.9.1",
+        "contentHash": "nSQvACQhCQ9Z2o6I9sIYUtgFSboOyXavuEjxO50r2UvGtCLNNYtcGie62FxcP/YubqlfRVid/HY7S/GcVI1SNw=="
       },
       "AWSSDK.KeyManagementService": {
         "type": "Transitive",
-        "resolved": "3.7.2.83",
-        "contentHash": "qJ6yny0YxKUAplRiEZISv3oDyNRy/vyRpsVe/fcJv7HJp8JuasOkU/IiBc/qU7AfhDKG5TPKQeUkxlZ9U6umQw==",
+        "resolved": "3.7.2.84",
+        "contentHash": "ERn1VwYtM8zBfKDxh0Sy/073XUZy4F9SDnfWI66BR/d48+7DTbhTsdSjQ6gIIOT532KZMk9FQy9c+jHVfNT8UA==",
         "dependencies": {
-          "AWSSDK.Core": "[3.7.9, 4.0.0)"
+          "AWSSDK.Core": "[3.7.9.1, 4.0.0)"
         }
       },
       "AWSXRayRecorder.Core": {
@@ -1842,7 +1842,7 @@
       "Lambdajection.Encryption": {
         "type": "Project",
         "dependencies": {
-          "AWSSDK.KeyManagementService": "3.7.2.83",
+          "AWSSDK.KeyManagementService": "3.7.2.84",
           "Lambdajection.Framework": "1.0.0"
         }
       },
