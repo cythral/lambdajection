@@ -1,7 +1,6 @@
 using System;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Runtime.Loader;
 
 using Microsoft.CodeAnalysis;
@@ -26,7 +25,6 @@ public static class CompilationExtensions
         stream.Position = 0;
 
         var context = new AssemblyLoadContext(Path.GetRandomFileName(), true);
-        var tempContext = new AssemblyLoadContext(Path.GetRandomFileName(), true);
 
         foreach (var reference in compilation.References)
         {
@@ -34,13 +32,13 @@ public static class CompilationExtensions
 
             try
             {
-                var assembly = tempContext.LoadFromAssemblyPath(display);
-                var thisAssembly = Assembly.GetExecutingAssembly();
-
-                if (!thisAssembly.GetReferencedAssemblies().Any(a => a.FullName == assembly.FullName))
+                if (!AppDomain.CurrentDomain.GetAssemblies().Any(a => a.Location == display))
                 {
                     context.LoadFromAssemblyPath(display);
                 }
+            }
+            catch (NotSupportedException)
+            {
             }
             catch (FileLoadException)
             {
@@ -49,8 +47,6 @@ public static class CompilationExtensions
             {
             }
         }
-
-        tempContext.Unload();
 
         return new GenerateAssemblyResult
         {
