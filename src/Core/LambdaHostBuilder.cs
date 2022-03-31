@@ -1,8 +1,6 @@
 using System;
 using System.Text.Json;
 
-using Amazon.Lambda.Core;
-
 using Lambdajection.Core.Serialization;
 
 using Microsoft.Extensions.Configuration;
@@ -28,26 +26,29 @@ namespace Lambdajection.Core
         where TLambdaConfigurator : class, ILambdaConfigurator
         where TLambdaConfigFactory : class, ILambdaConfigFactory, new()
     {
-#pragma warning disable SA1401, SA1311, SA1304
-
         /// <summary>
-        /// The service provider containing services to inject into the lambda.
-        /// This gets reused between invocations.
+        /// The category used for messages logged by the lambda host.
         /// </summary>
-        internal static IServiceProvider serviceProvider = BuildServiceProvider();
+        internal const string LogCategory = "Lambdajection";
 
         /// <summary>
-        /// Whether or not to run initialization services for the lambda.  Initialization
+        /// Gets or sets a value indicating whether or not to run initialization services for the lambda.  Initialization
         /// services only run once.
         /// </summary>
-        internal static bool runInitializationServices = true;
+        internal static bool RunInitializationServices { get; set; } = true;
 
         /// <summary>
-        /// The context for the current invocation.
+        /// Gets or sets the service provider containing services to inject into the lambda.
+        /// This gets reused between invocations.
         /// </summary>
-        internal static ILambdaContext? context;
+        internal static IServiceProvider ServiceProvider { get; set; } = BuildServiceProvider();
 
-#pragma warning restore SA1401, SA1311, SA1304
+        /// <summary>
+        /// Gets or sets the service for logging messages and data to the console and other user-configured destinations.
+        /// </summary>
+        internal static ILogger Logger { get; set; } = ServiceProvider
+            .GetRequiredService<ILoggerFactory>()
+            .CreateLogger(LogCategory);
 
         /// <summary>
         /// Builds a new lambda host.
@@ -55,9 +56,10 @@ namespace Lambdajection.Core
         /// <param name="host">The host to build.</param>
         public static void Build(LambdaHostBase<TLambda, TLambdaParameter, TLambdaOutput, TLambdaStartup, TLambdaConfigurator, TLambdaConfigFactory> host)
         {
-            host.ServiceProvider = serviceProvider;
-            host.RunInitializationServices = runInitializationServices;
-            runInitializationServices = false;
+            host.ServiceProvider = ServiceProvider;
+            host.Logger = Logger;
+            host.RunInitializationServices = RunInitializationServices;
+            RunInitializationServices = false;
         }
 
         /// <summary>
@@ -114,6 +116,7 @@ namespace Lambdajection.Core
             serviceCollection.AddLogging(logging =>
             {
                 logging.AddConsole();
+                logging.AddFilter("Lambdajection", LogLevel.Warning);
                 startup.ConfigureLogging(logging);
             });
 

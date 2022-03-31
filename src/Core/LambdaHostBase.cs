@@ -9,8 +9,7 @@ using Amazon.Lambda.Core;
 using Lambdajection.Core.Serialization;
 
 using Microsoft.Extensions.DependencyInjection;
-
-#pragma warning disable IDE0060, CA1801
+using Microsoft.Extensions.Logging;
 
 namespace Lambdajection.Core
 {
@@ -90,6 +89,12 @@ namespace Lambdajection.Core
         protected internal IServiceScope Scope { get; internal set; } = null!;
 
         /// <summary>
+        /// Gets the logger service.
+        /// </summary>
+        /// <value>The lambda host's logger.</value>
+        protected internal ILogger Logger { get; internal set; } = null!;
+
+        /// <summary>
         /// Runs the lambda host:
         /// - Runs initialization services.
         /// - Invokes the lambda.
@@ -104,26 +109,35 @@ namespace Lambdajection.Core
             CancellationToken cancellationToken = default
         )
         {
-            if (RunInitializationServices)
-            {
-                await Initialize(cancellationToken);
-            }
-
             cancellationToken.ThrowIfCancellationRequested();
-            Scope = ServiceProvider.CreateScope();
 
-            var provider = Scope.ServiceProvider;
-            var scopeContext = provider.GetRequiredService<LambdaScope>();
-            scopeContext.LambdaContext = context;
+            try
+            {
+                if (RunInitializationServices)
+                {
+                    await Initialize(cancellationToken);
+                }
 
-            Serializer = provider.GetRequiredService<ISerializer>();
-            Lambda = provider.GetRequiredService<TLambda>();
+                cancellationToken.ThrowIfCancellationRequested();
+                Scope = ServiceProvider.CreateScope();
 
-            var result = await InvokeLambda(inputStream, cancellationToken);
-            var resultStream = new MemoryStream();
-            await Serializer.Serialize(resultStream, result, cancellationToken);
+                var provider = Scope.ServiceProvider;
+                var scopeContext = provider.GetRequiredService<LambdaScope>();
+                scopeContext.LambdaContext = context;
 
-            return resultStream;
+                Serializer = provider.GetRequiredService<ISerializer>();
+                Lambda = provider.GetRequiredService<TLambda>();
+
+                var resultStream = new MemoryStream();
+                var result = await InvokeLambda(inputStream, cancellationToken);
+                await Serializer.Serialize(resultStream, result, cancellationToken);
+                return resultStream;
+            }
+            catch (Exception exception)
+            {
+                Logger.LogCritical(exception, "An unhandled exception occurred.");
+                throw exception;
+            }
         }
 
         /// <summary>

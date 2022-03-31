@@ -12,6 +12,7 @@ using FluentAssertions;
 using Lambdajection.Core.Serialization;
 
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 using NSubstitute;
 
@@ -20,6 +21,7 @@ using NUnit.Framework;
 using static NSubstitute.Arg;
 
 using JsonSerializer = Lambdajection.Core.Serialization.JsonSerializer;
+using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 using SystemTextJsonSerializer = System.Text.Json.JsonSerializer;
 using TestLambdaHost = Lambdajection.Core.DefaultLambdaHost<
     Lambdajection.TestLambda,
@@ -29,7 +31,6 @@ using TestLambdaHost = Lambdajection.Core.DefaultLambdaHost<
     Lambdajection.TestConfigurator,
     Lambdajection.TestConfigFactory
 >;
-
 #pragma warning disable SA1649 // File name should match first type name
 #pragma warning disable SA1402 // File may only contain a single type
 
@@ -366,6 +367,44 @@ namespace Lambdajection.Core.Tests
             }
 
             suppressor.Received()(Is(host));
+        }
+
+        [Test, Auto]
+        public async Task ShouldLogExceptions(
+            string expectedResponse,
+            TestLambdaMessage request,
+            ServiceCollection collection,
+            ISerializer serializer,
+            TestLambda lambda,
+            ILogger logger,
+            Exception exception,
+            [Substitute] Action<object> suppressor,
+            [Substitute] ILambdaInitializationService initializationService,
+            [Substitute] LambdaScope scope,
+            [Substitute] ILambdaContext context
+        )
+        {
+            collection.AddSingleton(serializer);
+            collection.AddSingleton(initializationService);
+            collection.AddSingleton(lambda);
+            collection.AddSingleton(scope);
+
+            lambda.HandleAction = () => throw exception;
+
+            using var inputStream = await CreateStreamForRequest(request);
+            var provider = collection.BuildServiceProvider();
+            await using var host = new TestLambdaHost(lambdaHost =>
+            {
+                lambdaHost.ServiceProvider = provider;
+                lambdaHost.RunInitializationServices = false;
+                lambdaHost.SuppressFinalize = suppressor;
+                lambdaHost.Logger = logger;
+            });
+
+            Func<Task> func = () => host.Run(inputStream, context);
+
+            await func.Should().ThrowAsync<Exception>();
+            logger.ReceivedCalls().Should().Contain(call => (LogLevel)call.GetArguments()[0] == LogLevel.Critical);
         }
     }
 }

@@ -4,6 +4,7 @@
   "editor.formatOnType": true,
   "omnisharp.enableEditorConfigSupport": true,
   "omnisharp.enableRoslynAnalyzers": true,
+  "omnisharp.enableImportCompletion": true,
   "prettier.enable": false,
   "xml.format.preserveAttributeLineBreaks": true,
   "markdown.extension.toc.levels": "2..6",
