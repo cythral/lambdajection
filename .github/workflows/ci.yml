@@ -103,7 +103,7 @@ jobs:
 
       - name: Deploy to Github Packages
         if: matrix.os == 'ubuntu-latest' && github.event_name == 'push'
-        run: dotnet nuget push "bin/Packages/${CONFIGURATION}/*.nupkg" -k ${FEED_TOKEN} -s ${FEED_URL} --skip-duplicate --no-symbols 1
+        run: dotnet nuget push "bin/Packages/${CONFIGURATION}/*.nupkg" -k ${FEED_TOKEN} -s ${FEED_URL} --skip-duplicate --no-symbols
         env:
           FEED_TOKEN: ${{ secrets.GH_TOKEN }}
           FEED_URL: ${{ env.GITHUB_PACKAGES_FEED_URL }}
