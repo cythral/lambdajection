@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -9,10 +10,12 @@ namespace Lambdajection
     {
         public object Request { get; set; } = null!;
 
+        public Action? HandleAction { get; set; } = null;
+
         public virtual Task<TestLambdaMessage> Handle(TestLambdaMessage request, CancellationToken cancellationToken = default)
         {
             Request = request;
-
+            HandleAction?.Invoke();
             return Task.FromResult<TestLambdaMessage>(null!);
         }
 

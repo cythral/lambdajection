@@ -1,4 +1,3 @@
-using System;
 using System.Threading.Tasks;
 
 using AutoFixture.AutoNSubstitute;
@@ -11,11 +10,13 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Console;
+using Microsoft.Extensions.Options;
 
 using NSubstitute;
 
 using NUnit.Framework;
 
+using ILoggerFactory = Microsoft.Extensions.Logging.ILoggerFactory;
 using TestLambdaHost = Lambdajection.Core.DefaultLambdaHost<
     Lambdajection.TestLambda,
     Lambdajection.TestLambdaMessage,
@@ -48,15 +49,29 @@ namespace Lambdajection.Core.Tests
             host.ServiceProvider.Should().NotBeNull();
         }
 
+        [Test]
+        public async Task BuildSetsTheLogger()
+        {
+            await using var host = new TestLambdaHost(lambdaHost => { });
+            host.Logger.Should().BeNull();
+
+            TestLambdaHostBuilder.Build(host);
+            host.Logger.Should().NotBeNull();
+        }
+
         [Test, Auto]
         public async Task BuildSetsTheServiceProviderIfItAlreadyWasBuilt(
-            [Substitute] IServiceProvider serviceProvider
+            ILoggerFactory loggerFactory
         )
         {
+            var serviceProvider = new ServiceCollection()
+            .AddSingleton(loggerFactory)
+            .BuildServiceProvider();
+
             await using var host = new TestLambdaHost(lambdaHost => { });
             host.ServiceProvider.Should().BeNull();
 
-            TestLambdaHostBuilder.serviceProvider = serviceProvider;
+            TestLambdaHostBuilder.ServiceProvider = serviceProvider;
             TestLambdaHostBuilder.Build(host);
 
             host.ServiceProvider.Should().BeSameAs(serviceProvider);
@@ -64,14 +79,18 @@ namespace Lambdajection.Core.Tests
 
         [Test, Auto]
         public async Task BuildSetsRunInitializationServicesToTrueTheFirstTime(
-            [Substitute] IServiceProvider serviceProvider
+            ILoggerFactory loggerFactory
         )
         {
+            var serviceProvider = new ServiceCollection()
+            .AddSingleton(loggerFactory)
+            .BuildServiceProvider();
+
             await using var host = new TestLambdaHost(lambdaHost => { });
             host.ServiceProvider.Should().BeNull();
 
-            TestLambdaHostBuilder.serviceProvider = serviceProvider;
-            TestLambdaHostBuilder.runInitializationServices = true;
+            TestLambdaHostBuilder.ServiceProvider = serviceProvider;
+            TestLambdaHostBuilder.RunInitializationServices = true;
             TestLambdaHostBuilder.Build(host);
 
             host.RunInitializationServices.Should().BeTrue();
@@ -79,14 +98,18 @@ namespace Lambdajection.Core.Tests
 
         [Test, Auto]
         public async Task BuildSetsRunInitializationServicesToFalseTheSecondTime(
-            [Substitute] IServiceProvider serviceProvider
+            ILoggerFactory loggerFactory
         )
         {
+            var serviceProvider = new ServiceCollection()
+            .AddSingleton(loggerFactory)
+            .BuildServiceProvider();
+
             await using var host = new TestLambdaHost(lambdaHost => { });
             host.ServiceProvider.Should().BeNull();
 
-            TestLambdaHostBuilder.serviceProvider = serviceProvider;
-            TestLambdaHostBuilder.runInitializationServices = true;
+            TestLambdaHostBuilder.ServiceProvider = serviceProvider;
+            TestLambdaHostBuilder.RunInitializationServices = true;
             TestLambdaHostBuilder.Build(host);
             TestLambdaHostBuilder.Build(host);
 
@@ -214,6 +237,21 @@ namespace Lambdajection.Core.Tests
             TestLambdaHostBuilder.RunLambdaStartup(provider, serviceCollection);
 
             serviceCollection.Should().Contain(descriptor => descriptor.ServiceType == typeof(ILoggerFactory));
+        }
+
+        [Test, Auto]
+        public void RunLambdaStartupShouldAddDefaultWarningFilter(
+            ServiceCollection serviceCollection,
+            [Substitute] ILambdaStartup startup
+        )
+        {
+            serviceCollection.AddSingleton(startup);
+
+            var provider = serviceCollection.BuildServiceProvider();
+            TestLambdaHostBuilder.RunLambdaStartup(provider, serviceCollection);
+
+            var options = serviceCollection.BuildServiceProvider().GetRequiredService<IOptions<LoggerFilterOptions>>();
+            options.Value.Rules.Should().Contain(rule => rule.CategoryName == TestLambdaHostBuilder.LogCategory && rule.LogLevel == LogLevel.Warning);
         }
 
         [Test, Auto]
