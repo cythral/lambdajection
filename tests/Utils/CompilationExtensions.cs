@@ -12,7 +12,7 @@ public static class CompilationExtensions
     public static GenerateAssemblyResult GenerateAssembly(this Compilation compilation)
     {
         var options = new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary)
-            .WithPlatform(Platform.X64)
+            .WithPlatform(Platform.AnyCpu)
             .WithOptimizationLevel(OptimizationLevel.Release);
 
         var diagnostics = compilation.GetDiagnostics();
