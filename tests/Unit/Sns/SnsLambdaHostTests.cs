@@ -17,6 +17,7 @@ using NUnit.Framework;
 
 using static NSubstitute.Arg;
 
+using ILogger = Microsoft.Extensions.Logging.ILogger;
 using TestSnsLambdaHost = Lambdajection.Sns.SnsLambdaHost<
     Lambdajection.TestSnsLambda,
     Lambdajection.TestLambdaMessage,
@@ -44,6 +45,7 @@ namespace Lambdajection.Sns
             public async Task ShouldThrowIfEventDeserializesToNull(
                 ServiceCollection serviceCollection,
                 JsonSerializer serializer,
+                ILogger logger,
                 [Substitute] TestSnsLambda lambda
             )
             {
@@ -56,6 +58,7 @@ namespace Lambdajection.Sns
                     lambdaHost.Lambda = lambda;
                     lambdaHost.Scope = serviceProvider.CreateScope();
                     lambdaHost.Serializer = serializer;
+                    lambdaHost.Logger = logger;
                 });
 
                 using var inputStream = await StreamUtils.CreateJsonStream<object?>(null);
@@ -69,6 +72,7 @@ namespace Lambdajection.Sns
                 SnsRecord<TestLambdaMessage> record,
                 ServiceCollection serviceCollection,
                 JsonSerializer serializer,
+                ILogger logger,
                 [Substitute] TestSnsLambda lambda
             )
             {
@@ -83,6 +87,7 @@ namespace Lambdajection.Sns
                     lambdaHost.Lambda = lambda;
                     lambdaHost.Scope = serviceProvider.CreateScope();
                     lambdaHost.Serializer = serializer;
+                    lambdaHost.Logger = logger;
                 });
 
                 using var inputStream = await StreamUtils.CreateJsonStream(request);
@@ -95,6 +100,7 @@ namespace Lambdajection.Sns
                 SnsRecord<TestLambdaMessage> record,
                 ServiceCollection serviceCollection,
                 JsonSerializer serializer,
+                ILogger logger,
                 [Substitute] TestSnsLambda lambda
             )
             {
@@ -109,6 +115,7 @@ namespace Lambdajection.Sns
                     lambdaHost.Lambda = lambda;
                     lambdaHost.Scope = serviceProvider.CreateScope();
                     lambdaHost.Serializer = serializer;
+                    lambdaHost.Logger = logger;
                 });
 
                 using var inputStream = await StreamUtils.CreateJsonStream(request);

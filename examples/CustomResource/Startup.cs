@@ -4,6 +4,7 @@ using Lambdajection.Core;
 
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace Lambdajection.Examples.CustomResource
 {
@@ -19,6 +20,11 @@ namespace Lambdajection.Examples.CustomResource
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<RNGCryptoServiceProvider>();
+        }
+
+        public void ConfigureLogging(ILoggingBuilder logging)
+        {
+            logging.AddFilter("Lambdajection", LogLevel.Information);
         }
     }
 }

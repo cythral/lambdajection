@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Lambdajection.Core;
 
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 #pragma warning disable SA1119
 
@@ -49,24 +50,20 @@ namespace Lambdajection.CustomResource
             cancellationToken.ThrowIfCancellationRequested();
 
             CustomResourceResponse<TLambdaOutput> response;
-            var httpClient = Scope.ServiceProvider.GetRequiredService<IHttpClient>();
             var input = await DeserializeInput(inputStream, cancellationToken);
 
             try
             {
                 var request = GetFullRequest(input);
-                Lambda.Validate(request);
+                Validate(request);
 
-                var requestType = Lambda.RequiresReplacement(request)
-                    ? CustomResourceRequestType.Create
-                    : input!.RequestType;
-
+                var requestType = GetRequestType(request);
                 var data = await (requestType switch
                 {
                     CustomResourceRequestType.Create => Lambda.Create(request, cancellationToken),
                     CustomResourceRequestType.Update => Lambda.Update(request, cancellationToken),
                     CustomResourceRequestType.Delete => Lambda.Delete(request, cancellationToken),
-                    _ => throw new Exception($"Unknown RequestType '{input!.RequestType}'"),
+                    _ => throw new Exception($"Unknown RequestType '{request.RequestType}'"),
                 });
 
                 response = new CustomResourceResponse<TLambdaOutput>
@@ -79,8 +76,9 @@ namespace Lambdajection.CustomResource
                     Data = data,
                 };
             }
-            catch (Exception e)
+            catch (Exception exception)
             {
+                Logger.LogCritical(exception, "Received exception from custom resource provider");
                 response = new CustomResourceResponse<TLambdaOutput>
                 {
                     Status = CustomResourceResponseStatus.Failed,
@@ -88,34 +86,47 @@ namespace Lambdajection.CustomResource
                     StackId = input.StackId,
                     LogicalResourceId = input.LogicalResourceId,
                     PhysicalResourceId = input.PhysicalResourceId,
-                    Reason = e.Message,
+                    Reason = exception.Message,
                 };
             }
 
-            if (input.ResponseURL != null)
+            Logger.LogInformation("Custom resource response: {response}", response);
+            await Respond(input, response, cancellationToken);
+            return response;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private CustomResourceRequestType GetRequestType(CustomResourceRequest<TLambdaParameter> request)
+        {
+            if (Lambda.RequiresReplacement(request))
             {
-                await httpClient.PutJson(
-                    requestUri: input.ResponseURL,
-                    payload: response,
-                    contentType: null,
-                    cancellationToken: cancellationToken
-                );
+                Logger.LogInformation("Non-updatable property/properties changed, new resource must be created.");
+                return CustomResourceRequestType.Create;
             }
 
-            return response;
+            return request.RequestType;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private async Task<CustomResourceRequest> DeserializeInput(Stream stream, CancellationToken cancellationToken)
         {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            Logger.LogInformation("Starting deserialization of custom resource request.");
+            Stopwatch.Restart();
+
             var input = await Serializer.Deserialize<CustomResourceRequest>(stream, cancellationToken);
-            return input ?? throw new SerializationException("Request unexpectedly deserialized to null.");
+            var result = input ?? throw new SerializationException("Request unexpectedly deserialized to null.");
+
+            Stopwatch.Stop();
+            Logger.LogInformation("Deserialization of custom resource request finished in {time} ms", Stopwatch.ElapsedMilliseconds);
+            return result;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private CustomResourceRequest<TLambdaParameter> GetFullRequest(CustomResourceRequest request)
         {
-            return new CustomResourceRequest<TLambdaParameter>
+            var result = new CustomResourceRequest<TLambdaParameter>
             {
                 RequestType = request.RequestType,
                 ResponseURL = request.ResponseURL,
@@ -127,6 +138,21 @@ namespace Lambdajection.CustomResource
                 ResourceProperties = GetExtraPropertyAsParameter(request, "ResourceProperties"),
                 OldResourceProperties = GetExtraPropertyAsParameter(request, "OldResourceProperties"),
             };
+
+            Logger.LogInformation("Received custom resource request: {request}", result);
+            return result;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private void Validate(CustomResourceRequest<TLambdaParameter> request)
+        {
+            Logger.LogInformation("Beginning request validation.");
+            Stopwatch.Restart();
+
+            Lambda.Validate(request);
+
+            Stopwatch.Stop();
+            Logger.LogInformation("Finished request validation in {time} ms", Stopwatch.ElapsedMilliseconds);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -140,6 +166,33 @@ namespace Lambdajection.CustomResource
             }
 
             return null;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private async Task Respond(
+            CustomResourceRequest request,
+            CustomResourceResponse<TLambdaOutput> response,
+            CancellationToken cancellationToken
+        )
+        {
+            if (request.ResponseURL == null)
+            {
+                return;
+            }
+
+            Logger.LogInformation("Sending response to {responseURL}", request.ResponseURL);
+            Stopwatch.Restart();
+
+            var httpClient = Scope.ServiceProvider.GetRequiredService<IHttpClient>();
+            await httpClient.PutJson(
+                requestUri: request.ResponseURL,
+                payload: response,
+                contentType: null,
+                cancellationToken: cancellationToken
+            );
+
+            Stopwatch.Stop();
+            Logger.LogInformation("Sent response to {responseURL} in {time} ms", request.ResponseURL, Stopwatch.ElapsedMilliseconds);
         }
     }
 }
