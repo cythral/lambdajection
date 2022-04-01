@@ -1,10 +1,13 @@
 using System;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 
 using Lambdajection.Core;
 using Lambdajection.Core.Exceptions;
+
+using Microsoft.Extensions.Logging;
 
 namespace Lambdajection.Sns
 {
@@ -42,12 +45,41 @@ namespace Lambdajection.Sns
         )
         {
             cancellationToken.ThrowIfCancellationRequested();
+            var snsEvent = await Deserialize(inputStream, cancellationToken);
+            var message = snsEvent.Records[0].Sns;
+            Validate(message);
+
+            var response = await Lambda.Handle(message, cancellationToken);
+            Logger.LogInformation("SNS Response: {response}", response);
+            return response;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private async Task<SnsEvent<TLambdaParameter>> Deserialize(Stream inputStream, CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            Logger.LogInformation("Beginning deserialization of sns request.");
+            Stopwatch.Restart();
+
             var snsEvent = await Serializer.Deserialize<SnsEvent<TLambdaParameter>>(inputStream, cancellationToken)
                 ?? throw new InvalidLambdaParameterException();
 
-            var message = snsEvent.Records[0].Sns;
+            Stopwatch.Stop();
+            Logger.LogInformation("Received sns request: {request}", snsEvent);
+            Logger.LogInformation("Finished deserializing sns request in {time} ms", Stopwatch.ElapsedMilliseconds);
+            return snsEvent;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private void Validate(SnsMessage<TLambdaParameter> message)
+        {
+            Logger.LogInformation("Beginning sns request validation.");
+            Stopwatch.Restart();
+
             Lambda.Validate(message);
-            return await Lambda.Handle(message, cancellationToken);
+
+            Stopwatch.Stop();
+            Logger.LogInformation("Finished request validation in {time} ms", Stopwatch.ElapsedMilliseconds);
         }
     }
 }

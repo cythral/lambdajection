@@ -1,6 +1,8 @@
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -95,6 +97,12 @@ namespace Lambdajection.Core
         protected internal ILogger Logger { get; internal set; } = null!;
 
         /// <summary>
+        /// Gets a stopwatch used for timing operations.
+        /// </summary>
+        /// <returns>Stopwatch used for timing operations.</returns>
+        protected Stopwatch Stopwatch { get; } = new();
+
+        /// <summary>
         /// Runs the lambda host:
         /// - Runs initialization services.
         /// - Invokes the lambda.
@@ -161,8 +169,10 @@ namespace Lambdajection.Core
             Scope = null!;
 
             SuppressFinalize(this);
+            Logger.LogInformation("Disposed Lambda Host.");
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static async Task MaybeDispose(object? obj)
         {
             if (obj is IAsyncDisposable asyncDisposable)
@@ -174,13 +184,18 @@ namespace Lambdajection.Core
             (obj as IDisposable)?.Dispose();
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private async Task Initialize(CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
             var services = ServiceProvider.GetServices<ILambdaInitializationService>();
-
             var initializeTasks = services.Select(service => service.Initialize(cancellationToken));
+
+            Logger.LogInformation("Running initialization services.");
+            Stopwatch.Restart();
             await Task.WhenAll(initializeTasks);
+            Stopwatch.Stop();
+            Logger.LogInformation("Initialization services finished in {time} ms", Stopwatch.ElapsedMilliseconds);
 
             var disposeTasks = services.Select(MaybeDispose);
             await Task.WhenAll(disposeTasks);

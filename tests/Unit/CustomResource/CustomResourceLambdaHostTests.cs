@@ -20,6 +20,7 @@ using NUnit.Framework;
 
 using static NSubstitute.Arg;
 
+using ILogger = Microsoft.Extensions.Logging.ILogger;
 using TestCustomResourceLambdaHost = Lambdajection.CustomResource.CustomResourceLambdaHost<
     Lambdajection.TestCustomResourceLambda,
     Lambdajection.TestLambdaMessage,
@@ -51,6 +52,7 @@ namespace Lambdajection.CustomResource.Tests
                 ServiceCollection serviceCollection,
                 CustomResourceRequest<object> request,
                 JsonSerializer serializer,
+                ILogger logger,
                 [Substitute] TestCustomResourceLambda lambda,
                 [Substitute] IHttpClient httpClient
             )
@@ -65,6 +67,7 @@ namespace Lambdajection.CustomResource.Tests
                     lambdaHost.Lambda = lambda;
                     lambdaHost.Scope = serviceProvider.CreateScope();
                     lambdaHost.Serializer = serializer;
+                    lambdaHost.Logger = logger;
                 });
 
                 request.RequestType = CustomResourceRequestType.Create;
@@ -82,6 +85,7 @@ namespace Lambdajection.CustomResource.Tests
                 ServiceCollection serviceCollection,
                 CustomResourceRequest<object> request,
                 JsonSerializer serializer,
+                ILogger logger,
                 [Substitute] TestCustomResourceLambda lambda,
                 [Substitute] IHttpClient httpClient
             )
@@ -95,6 +99,7 @@ namespace Lambdajection.CustomResource.Tests
                     lambdaHost.Lambda = lambda;
                     lambdaHost.Scope = serviceProvider.CreateScope();
                     lambdaHost.Serializer = serializer;
+                    lambdaHost.Logger = logger;
                 });
 
                 request.RequestType = CustomResourceRequestType.Update;
@@ -112,6 +117,7 @@ namespace Lambdajection.CustomResource.Tests
                 ServiceCollection serviceCollection,
                 JsonSerializer serializer,
                 CustomResourceRequest<object> request,
+                ILogger logger,
                 [Substitute] TestCustomResourceLambda lambda,
                 [Substitute] IHttpClient httpClient
             )
@@ -125,6 +131,7 @@ namespace Lambdajection.CustomResource.Tests
                     lambdaHost.Lambda = lambda;
                     lambdaHost.Scope = serviceProvider.CreateScope();
                     lambdaHost.Serializer = serializer;
+                    lambdaHost.Logger = logger;
                 });
 
                 request.RequestType = CustomResourceRequestType.Update;
@@ -143,6 +150,7 @@ namespace Lambdajection.CustomResource.Tests
                 ServiceCollection serviceCollection,
                 CustomResourceRequest<object> request,
                 JsonSerializer serializer,
+                ILogger logger,
                 [Substitute] TestCustomResourceLambda lambda,
                 [Substitute] IHttpClient httpClient
             )
@@ -156,6 +164,7 @@ namespace Lambdajection.CustomResource.Tests
                     lambdaHost.Lambda = lambda;
                     lambdaHost.Scope = serviceProvider.CreateScope();
                     lambdaHost.Serializer = serializer;
+                    lambdaHost.Logger = logger;
                 });
 
                 request.RequestType = CustomResourceRequestType.Delete;
@@ -174,6 +183,7 @@ namespace Lambdajection.CustomResource.Tests
                 TestCustomResourceOutputData data,
                 CustomResourceRequest<object> request,
                 JsonSerializer serializer,
+                ILogger logger,
                 [Substitute] TestCustomResourceLambda lambda,
                 [Substitute] IHttpClient httpClient
             )
@@ -188,6 +198,7 @@ namespace Lambdajection.CustomResource.Tests
                     lambdaHost.Lambda = lambda;
                     lambdaHost.Scope = serviceProvider.CreateScope();
                     lambdaHost.Serializer = serializer;
+                    lambdaHost.Logger = logger;
                 });
 
                 request.RequestType = CustomResourceRequestType.Create;
@@ -212,6 +223,7 @@ namespace Lambdajection.CustomResource.Tests
                 string stackId,
                 JsonSerializer serializer,
                 CustomResourceRequest<object> request,
+                ILogger logger,
                 [Substitute] TestCustomResourceLambda lambda,
                 [Substitute] IHttpClient httpClient
             )
@@ -225,6 +237,7 @@ namespace Lambdajection.CustomResource.Tests
                     lambdaHost.Lambda = lambda;
                     lambdaHost.Scope = serviceProvider.CreateScope();
                     lambdaHost.Serializer = serializer;
+                    lambdaHost.Logger = logger;
                 });
 
                 request.RequestType = CustomResourceRequestType.Create;
@@ -250,6 +263,7 @@ namespace Lambdajection.CustomResource.Tests
                 string requestId,
                 JsonSerializer serializer,
                 CustomResourceRequest<object> request,
+                ILogger logger,
                 [Substitute] TestCustomResourceLambda lambda,
                 [Substitute] IHttpClient httpClient
             )
@@ -263,6 +277,7 @@ namespace Lambdajection.CustomResource.Tests
                     lambdaHost.Lambda = lambda;
                     lambdaHost.Scope = serviceProvider.CreateScope();
                     lambdaHost.Serializer = serializer;
+                    lambdaHost.Logger = logger;
                 });
 
                 request.RequestType = CustomResourceRequestType.Create;
@@ -288,6 +303,7 @@ namespace Lambdajection.CustomResource.Tests
                 string logicalResourceId,
                 JsonSerializer serializer,
                 CustomResourceRequest<object> request,
+                ILogger logger,
                 [Substitute] TestCustomResourceLambda lambda,
                 [Substitute] IHttpClient httpClient
             )
@@ -301,6 +317,7 @@ namespace Lambdajection.CustomResource.Tests
                     lambdaHost.Lambda = lambda;
                     lambdaHost.Scope = serviceProvider.CreateScope();
                     lambdaHost.Serializer = serializer;
+                    lambdaHost.Logger = logger;
                 });
 
                 request.RequestType = CustomResourceRequestType.Create;
@@ -327,6 +344,7 @@ namespace Lambdajection.CustomResource.Tests
                 JsonSerializer serializer,
                 TestCustomResourceOutputData data,
                 CustomResourceRequest<object> request,
+                ILogger logger,
                 [Substitute] TestCustomResourceLambda lambda,
                 [Substitute] IHttpClient httpClient
             )
@@ -342,6 +360,7 @@ namespace Lambdajection.CustomResource.Tests
                     lambdaHost.Lambda = lambda;
                     lambdaHost.Scope = serviceProvider.CreateScope();
                     lambdaHost.Serializer = serializer;
+                    lambdaHost.Logger = logger;
                 });
 
                 request.RequestType = CustomResourceRequestType.Create;
@@ -366,6 +385,7 @@ namespace Lambdajection.CustomResource.Tests
                 string stackId,
                 JsonSerializer serializer,
                 CustomResourceRequest<object> request,
+                ILogger logger,
                 [Substitute] TestCustomResourceLambda lambda,
                 [Substitute] IHttpClient httpClient
             )
@@ -380,6 +400,7 @@ namespace Lambdajection.CustomResource.Tests
                     lambdaHost.Lambda = lambda;
                     lambdaHost.Scope = serviceProvider.CreateScope();
                     lambdaHost.Serializer = serializer;
+                    lambdaHost.Logger = logger;
                 });
 
                 request.RequestType = CustomResourceRequestType.Create;
@@ -403,6 +424,7 @@ namespace Lambdajection.CustomResource.Tests
                 JsonSerializer serializer,
                 TestCustomResourceOutputData data,
                 CustomResourceRequest<object> request,
+                ILogger logger,
                 [Substitute] TestCustomResourceLambda lambda,
                 [Substitute] IHttpClient httpClient
             )
@@ -421,6 +443,7 @@ namespace Lambdajection.CustomResource.Tests
                     lambdaHost.Lambda = lambda;
                     lambdaHost.Scope = serviceProvider.CreateScope();
                     lambdaHost.Serializer = serializer;
+                    lambdaHost.Logger = logger;
                 });
 
                 request.RequestType = CustomResourceRequestType.Create;
@@ -446,6 +469,7 @@ namespace Lambdajection.CustomResource.Tests
                 TestCustomResourceOutputData data,
                 JsonSerializer serializer,
                 ServiceCollection serviceCollection,
+                ILogger logger,
                 [Substitute] TestCustomResourceLambda lambda,
                 [Substitute] IHttpClient httpClient
             )
@@ -460,6 +484,7 @@ namespace Lambdajection.CustomResource.Tests
                     lambdaHost.Lambda = lambda;
                     lambdaHost.Scope = serviceProvider.CreateScope();
                     lambdaHost.Serializer = serializer;
+                    lambdaHost.Logger = logger;
                 });
 
                 var input = $@"{{ ""RequestId"": ""{requestId}"", ""ResponseURL"": ""{responseURL}"", ""RequestType"": ""Create"", ""ResourceProperties"": {{ ""Id"": 1 }} }}";
@@ -485,6 +510,7 @@ namespace Lambdajection.CustomResource.Tests
                 JsonSerializer serializer,
                 TestCustomResourceOutputData data,
                 ServiceCollection serviceCollection,
+                ILogger logger,
                 [Substitute] TestCustomResourceLambda lambda,
                 [Substitute] IHttpClient httpClient
             )
@@ -499,6 +525,7 @@ namespace Lambdajection.CustomResource.Tests
                     lambdaHost.Lambda = lambda;
                     lambdaHost.Scope = serviceProvider.CreateScope();
                     lambdaHost.Serializer = serializer;
+                    lambdaHost.Logger = logger;
                 });
 
                 var input = $@"null";
@@ -516,6 +543,7 @@ namespace Lambdajection.CustomResource.Tests
                 JsonSerializer serializer,
                 TestCustomResourceOutputData data,
                 CustomResourceRequest<object> request,
+                ILogger logger,
                 [Substitute] TestCustomResourceLambda lambda,
                 [Substitute] IHttpClient httpClient
             )
@@ -533,6 +561,7 @@ namespace Lambdajection.CustomResource.Tests
                     lambdaHost.Lambda = lambda;
                     lambdaHost.Scope = serviceProvider.CreateScope();
                     lambdaHost.Serializer = serializer;
+                    lambdaHost.Logger = logger;
                 });
 
                 request.RequestType = CustomResourceRequestType.Create;
@@ -559,6 +588,7 @@ namespace Lambdajection.CustomResource.Tests
                 JsonSerializer serializer,
                 TestCustomResourceOutputData data,
                 CustomResourceRequest<object> request,
+                ILogger logger,
                 [Substitute] TestCustomResourceLambda lambda,
                 [Substitute] IHttpClient httpClient
             )
@@ -576,6 +606,7 @@ namespace Lambdajection.CustomResource.Tests
                     lambdaHost.Lambda = lambda;
                     lambdaHost.Scope = serviceProvider.CreateScope();
                     lambdaHost.Serializer = serializer;
+                    lambdaHost.Logger = logger;
                 });
 
                 request.RequestType = CustomResourceRequestType.Create;
@@ -602,6 +633,7 @@ namespace Lambdajection.CustomResource.Tests
                 TestCustomResourceOutputData data,
                 JsonSerializer serializer,
                 CustomResourceRequest<object> request,
+                ILogger logger,
                 [Substitute] TestCustomResourceLambda lambda,
                 [Substitute] IHttpClient httpClient
             )
@@ -619,6 +651,7 @@ namespace Lambdajection.CustomResource.Tests
                     lambdaHost.Lambda = lambda;
                     lambdaHost.Scope = serviceProvider.CreateScope();
                     lambdaHost.Serializer = serializer;
+                    lambdaHost.Logger = logger;
                 });
 
                 request.RequestType = CustomResourceRequestType.Create;
@@ -645,6 +678,7 @@ namespace Lambdajection.CustomResource.Tests
                 TestCustomResourceOutputData data,
                 JsonSerializer serializer,
                 CustomResourceRequest<object> request,
+                ILogger logger,
                 [Substitute] TestCustomResourceLambda lambda,
                 [Substitute] IHttpClient httpClient
             )
@@ -662,6 +696,7 @@ namespace Lambdajection.CustomResource.Tests
                     lambdaHost.Lambda = lambda;
                     lambdaHost.Scope = serviceProvider.CreateScope();
                     lambdaHost.Serializer = serializer;
+                    lambdaHost.Logger = logger;
                 });
 
                 request.RequestType = CustomResourceRequestType.Create;

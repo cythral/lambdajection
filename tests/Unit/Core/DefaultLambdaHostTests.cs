@@ -53,6 +53,7 @@ namespace Lambdajection.Core.Tests
             TestLambdaMessage request,
             ServiceCollection collection,
             JsonSerializer serializer,
+            ILogger logger,
             [Substitute] TestLambda lambda,
             [Substitute] LambdaScope scope,
             [Substitute] ILambdaContext context
@@ -68,6 +69,7 @@ namespace Lambdajection.Core.Tests
             await using var host = new TestLambdaHost(lambdaHost =>
             {
                 lambdaHost.ServiceProvider = provider;
+                lambdaHost.Logger = logger;
             });
 
             var cancellationToken = new CancellationToken(false);
@@ -85,6 +87,7 @@ namespace Lambdajection.Core.Tests
             TestLambdaMessage request,
             ServiceCollection collection,
             JsonSerializer serializer,
+            ILogger logger,
             [Substitute] ILambdaInitializationService initializationService,
             [Substitute] TestLambda lambda,
             [Substitute] LambdaScope scope,
@@ -104,6 +107,7 @@ namespace Lambdajection.Core.Tests
             {
                 lambdaHost.ServiceProvider = provider;
                 lambdaHost.RunInitializationServices = true;
+                lambdaHost.Logger = logger;
             });
 
             var cancellationToken = new CancellationToken(false);
@@ -118,6 +122,7 @@ namespace Lambdajection.Core.Tests
             TestLambdaMessage request,
             ServiceCollection collection,
             ISerializer serializer,
+            ILogger logger,
             [Substitute] ILambdaInitializationService initializationService,
             [Substitute] TestLambda lambda,
             [Substitute] LambdaScope scope,
@@ -137,6 +142,7 @@ namespace Lambdajection.Core.Tests
             {
                 lambdaHost.ServiceProvider = provider;
                 lambdaHost.RunInitializationServices = true;
+                lambdaHost.Logger = logger;
             });
 
             await host.Run(inputStream, context);
@@ -150,6 +156,7 @@ namespace Lambdajection.Core.Tests
             TestLambdaMessage request,
             ServiceCollection collection,
             ISerializer serializer,
+            ILogger logger,
             [Substitute] TestLambda lambda,
             [Substitute] LambdaScope scope,
             [Substitute] ILambdaContext context
@@ -169,6 +176,7 @@ namespace Lambdajection.Core.Tests
             {
                 lambdaHost.ServiceProvider = provider;
                 lambdaHost.RunInitializationServices = true;
+                lambdaHost.Logger = logger;
             });
 
             await host.Run(inputStream, context);
@@ -182,6 +190,7 @@ namespace Lambdajection.Core.Tests
             TestLambdaMessage request,
             ServiceCollection collection,
             ISerializer serializer,
+            ILogger logger,
             [Substitute] TestLambda lambda,
             [Substitute] LambdaScope scope,
             [Substitute] ILambdaContext context
@@ -200,6 +209,7 @@ namespace Lambdajection.Core.Tests
             {
                 lambdaHost.ServiceProvider = provider;
                 lambdaHost.RunInitializationServices = true;
+                lambdaHost.Logger = logger;
             });
 
             await host.Run(inputStream, context);
@@ -213,6 +223,7 @@ namespace Lambdajection.Core.Tests
             TestLambdaMessage request,
             ServiceCollection collection,
             ISerializer serializer,
+            ILogger logger,
             [Substitute] ILambdaInitializationService initializationService,
             [Substitute] TestLambda lambda,
             [Substitute] LambdaScope scope,
@@ -231,6 +242,7 @@ namespace Lambdajection.Core.Tests
             {
                 lambdaHost.ServiceProvider = provider;
                 lambdaHost.RunInitializationServices = false;
+                lambdaHost.Logger = logger;
             });
 
             var cancellationToken = new CancellationToken(false);
@@ -245,6 +257,7 @@ namespace Lambdajection.Core.Tests
             TestLambdaMessage request,
             ServiceCollection collection,
             ISerializer serializer,
+            ILogger logger,
             [Substitute] ILambdaInitializationService initializationService,
             [Substitute] AsyncDisposableLambda lambda,
             [Substitute] LambdaScope scope,
@@ -262,6 +275,7 @@ namespace Lambdajection.Core.Tests
             {
                 lambdaHost.ServiceProvider = provider;
                 lambdaHost.RunInitializationServices = false;
+                lambdaHost.Logger = logger;
             }))
             {
                 await host.Run(inputStream, context);
@@ -276,6 +290,7 @@ namespace Lambdajection.Core.Tests
             TestLambdaMessage request,
             ServiceCollection collection,
             ISerializer serializer,
+            ILogger logger,
             [Substitute] Action<object> suppressor,
             [Substitute] ILambdaInitializationService initializationService,
             [Substitute] DisposableLambda lambda,
@@ -295,6 +310,7 @@ namespace Lambdajection.Core.Tests
                 lambdaHost.ServiceProvider = provider;
                 lambdaHost.RunInitializationServices = false;
                 lambdaHost.SuppressFinalize = suppressor;
+                lambdaHost.Logger = logger;
             }))
             {
                 await host.Run(inputStream, context);
@@ -309,6 +325,7 @@ namespace Lambdajection.Core.Tests
             TestLambdaMessage request,
             ServiceCollection collection,
             ISerializer serializer,
+            ILogger logger,
             [Substitute] ILambdaInitializationService initializationService,
             [Substitute] MultiDisposableLambda lambda,
             [Substitute] LambdaScope scope,
@@ -326,6 +343,7 @@ namespace Lambdajection.Core.Tests
             {
                 lambdaHost.ServiceProvider = provider;
                 lambdaHost.RunInitializationServices = false;
+                lambdaHost.Logger = logger;
             }))
             {
                 await host.Run(inputStream, context);
@@ -341,6 +359,7 @@ namespace Lambdajection.Core.Tests
             TestLambdaMessage request,
             ServiceCollection collection,
             ISerializer serializer,
+            ILogger logger,
             [Substitute] Action<object> suppressor,
             [Substitute] ILambdaInitializationService initializationService,
             [Substitute] MultiDisposableLambda lambda,
@@ -361,6 +380,7 @@ namespace Lambdajection.Core.Tests
                 lambdaHost.ServiceProvider = provider;
                 lambdaHost.RunInitializationServices = false;
                 lambdaHost.SuppressFinalize = suppressor;
+                lambdaHost.Logger = logger;
             }))
             {
                 await host.Run(inputStream, context);
