@@ -10,9 +10,9 @@
       },
       "AWSSDK.Core": {
         "type": "Direct",
-        "requested": "[3.7.10.13, )",
-        "resolved": "3.7.10.13",
-        "contentHash": "hTEK40Xc7d4hjUenalhyLd2MGtbV5tH5BfQGZVS38AVIo6uYM7KMGT3Ey/DRETarn5yh3OYC1hoIOeYtTHwIuw==",
+        "requested": "[3.7.10.14, )",
+        "resolved": "3.7.10.14",
+        "contentHash": "rQMKs/M6yea0NAZQJvOgRv7ONLzVpGZ9l2V9Q69OB84Nifm31DG3rOKuhzA8GRq1Z4inNeLuKkvQ5ztY/AmpLQ==",
         "dependencies": {
           "Microsoft.Bcl.AsyncInterfaces": "1.1.0"
         }
