@@ -26,15 +26,21 @@
         <ProjectReference Include="../Attributes/Attributes.csproj" PrivateAssets="runtime" />
     </ItemGroup>
 
-    <Target Name="CreateStore" DependsOnTargets="GetBuildVersion;ResolvePackageAssets">
+    <ItemGroup>
+        <LayerArchitectures Include="arm64" />
+        <LayerArchitectures Include="x64" />
+    </ItemGroup>
+
+    <Target Name="CreateStore" DependsOnTargets="GetBuildVersion;ResolvePackageAssets" Outputs="%(LayerArchitectures.Identity)">
         <PropertyGroup>
+            <CurrentArchitecture>%(LayerArchitectures.Identity)</CurrentArchitecture>
             <ReferencePaths>@(ReferencePath, '%253B')</ReferencePaths>
         </PropertyGroup>
 
         <ItemGroup>
             <StoreArgs Include="--manifest $(MSBuildThisFileDirectory)/Manifest/Manifest.csproj" />
             <StoreArgs Include="--output $(OutputPath)/layer" />
-            <StoreArgs Include="--runtime linux-x64" />
+            <StoreArgs Include="--runtime linux-$(CurrentArchitecture)" />
             <!-- Optimized runtime package stores does not work on .NET 6 -->
             <StoreArgs Include="--skip-optimization" />
             <StoreArgs Include="/p:Configuration=$(Configuration)" />
@@ -53,7 +59,7 @@
         <Exec Command="dotnet store @(StoreArgs, ' ')" StandardOutputImportance="low" />
 
         <ItemGroup>
-            <Content Include="$(OutputPath)layer/x64/net6.0/artifact.xml" />
+            <Content Include="$(OutputPath)layer/$(CurrentArchitecture)/net6.0/artifact.xml" Condition="$(CurrentArchitecture) == 'x64'" />
         </ItemGroup>
     </Target>
 
