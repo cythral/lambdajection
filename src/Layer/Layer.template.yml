@@ -25,6 +25,9 @@ Resources:
       Description: Lambda Layer for Lambajection
       CompatibleRuntimes:
         - provided.al2
+      CompatibleArchitectures:
+        - x86_64
+        - arm64
       ContentUri: ./layer
       LicenseInfo: MIT
 
