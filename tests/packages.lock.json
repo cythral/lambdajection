@@ -188,15 +188,15 @@
       },
       "AWSSDK.Core": {
         "type": "Transitive",
-        "resolved": "3.7.11.2",
-        "contentHash": "p+iZkaC1OCWnbJtfR08KX8Wxzownf2LcOqjEjEdNu0I9cxhu7G14YzB4xSyRuIBBlicxbM39aRX32dwfL+s+dw=="
+        "resolved": "3.7.12.21",
+        "contentHash": "nKa0w3u+VKVJB6joat/mX7KtQFCVHkwpyLaE/og1eATe3mzSdiWC58YUlPTB3MqV/ng0/6uc9ih0H0kCt20a6A=="
       },
       "AWSSDK.KeyManagementService": {
         "type": "Transitive",
-        "resolved": "3.7.3.9",
-        "contentHash": "ZohVlos663ScXwQXuIKizj8oiMO4KAgXKP4qAqb8zgHSi9guAAMx/ADBAwirePI/w16adWRn+cAPlCcKpGcZVA==",
+        "resolved": "3.7.4.10",
+        "contentHash": "moIvWjOQ3u1Wyx+cewS9njQVkPB7JvRtM3aLoX9pQ9Nn8Mme9okb7nhDMhD6QTh9Ohn4YdJZ4CAtXB6w8haiuw==",
         "dependencies": {
-          "AWSSDK.Core": "[3.7.11.2, 4.0.0)"
+          "AWSSDK.Core": "[3.7.12.21, 4.0.0)"
         }
       },
       "Castle.Core": {
@@ -1460,7 +1460,7 @@
       "Lambdajection.Encryption": {
         "type": "Project",
         "dependencies": {
-          "AWSSDK.KeyManagementService": "3.7.3.9",
+          "AWSSDK.KeyManagementService": "3.7.4.10",
           "Lambdajection.Framework": "1.0.0"
         }
       },
