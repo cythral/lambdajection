@@ -16,11 +16,11 @@
       },
       "AWSXRayRecorder.Handlers.AwsSdk": {
         "type": "Direct",
-        "requested": "[2.8.3, )",
-        "resolved": "2.8.3",
-        "contentHash": "E9OuBvqVTd1HDWfXnAve0RjZUzWQxXm9HQGyo3XbnCCd4noTUJaLSJJN4InqJDS3Xf+JfqStkrIelMbRmgMmyQ==",
+        "requested": "[2.9.1, )",
+        "resolved": "2.9.1",
+        "contentHash": "1f5LESOwV5cWZfwr55DamD/zrBq674EZx+dF3Ci6a7GCG4Mj8gC2y50q5GbNZXlzHCsqmrGJ+BOZILAqfe+/1Q==",
         "dependencies": {
-          "AWSXRayRecorder.Core": "2.10.1"
+          "AWSXRayRecorder.Core": "2.11.1"
         }
       },
       "Microsoft.SourceLink.GitHub": {
