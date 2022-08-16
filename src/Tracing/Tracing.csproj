@@ -13,7 +13,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="AWSXRayRecorder.Core" Version="2.10.1" />
+        <PackageReference Include="AWSXRayRecorder.Core" Version="2.11.1" />
         <PackageReference Include="AWSXRayRecorder.Handlers.AwsSdk" Version="2.8.3" />
     </ItemGroup>
 </Project>
