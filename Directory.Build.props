@@ -48,4 +48,14 @@
   <ItemGroup>
     <AdditionalFiles Include="$(MSBuildThisFileDirectory)stylecop.json" Visible="false" />
   </ItemGroup>
+  <ItemGroup>
+    <AdditionalThisAssemblyFields Include="NuGetPackageVersion" String="$(NuGetPackageVersion)" />
+  </ItemGroup>
+  <Target Name="AddNuGetPackageVersionToThisAssembly" DependsOnTargets="GetBuildVersion" BeforeTargets="GenerateAssemblyNBGVVersionInfo" Condition="'$(SkipAddNuGetPackageVersionToThisAssembly)' != 'true'">
+    <ItemGroup>
+      <AssemblyAttribute Include="Lambdajection.Framework.LambdajectionVersion">
+        <_Parameter1>$(NuGetPackageVersion)</_Parameter1>
+      </AssemblyAttribute>
+    </ItemGroup>
+  </Target>
 </Project>

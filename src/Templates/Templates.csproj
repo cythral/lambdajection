@@ -10,6 +10,7 @@
     <IncludeContentInPack>true</IncludeContentInPack>
     <PackageDescription>Includes templates for creating Lambdajection projects and components.</PackageDescription>
     <BeforePack>CopyTemplates;PrepareTemplates</BeforePack>
+    <SkipAddNuGetPackageVersionToThisAssembly>true</SkipAddNuGetPackageVersionToThisAssembly>
   </PropertyGroup>
 
   <ItemGroup>

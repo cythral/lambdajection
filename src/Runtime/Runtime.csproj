@@ -5,6 +5,7 @@
         <PackageId>Lambdajection.Runtime</PackageId>
         <AssemblyName>$(PackageId)</AssemblyName>
         <NoWarn>NU5128</NoWarn>
+        <SkipAddNuGetPackageVersionToThisAssembly>true</SkipAddNuGetPackageVersionToThisAssembly>
         <PackageDescription>Sets Lambdajection projects up to support custom runtimes.</PackageDescription>
     </PropertyGroup>
 

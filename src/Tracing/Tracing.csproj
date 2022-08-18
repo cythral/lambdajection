@@ -5,6 +5,7 @@
         <AssemblyName>$(PackageId)</AssemblyName>
         <NoWarn>NU5128</NoWarn>
         <IncludeBuildOutput>false</IncludeBuildOutput>
+        <SkipAddNuGetPackageVersionToThisAssembly>true</SkipAddNuGetPackageVersionToThisAssembly>
         <PackageDescription>Adds X-Ray Tracing Support to Lambdajection.</PackageDescription>
     </PropertyGroup>
 

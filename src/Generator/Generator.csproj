@@ -11,6 +11,7 @@
     <NoWarn>NU5118;CS8618;NU5128;CS1591;CA1062</NoWarn>
     <BuildOutputTargetFolder>analyzers/dotnet/cs</BuildOutputTargetFolder>
     <DevelopmentDependency>true</DevelopmentDependency>
+    <SkipAddNuGetPackageVersionToThisAssembly>true</SkipAddNuGetPackageVersionToThisAssembly>
     <PackageDescription>Includes the compile-time generator used to generate code needed for Dependency Injection-enabled AWS Lambdas.</PackageDescription>
     <BeforePack>IncludeExtraPackItems</BeforePack>
   </PropertyGroup>
