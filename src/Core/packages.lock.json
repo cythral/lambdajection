@@ -111,9 +111,9 @@
       },
       "Nerdbank.GitVersioning": {
         "type": "Direct",
-        "requested": "[3.5.109, )",
-        "resolved": "3.5.109",
-        "contentHash": "tKA1XJ5U2Ytk+u2/5sGNa04Pw6z9noYmqbpmHpjvbwJTtIalqsQjnwT4RQKSDTTIznHBbKxzv3HVh8QD28Qk+g=="
+        "requested": "[3.5.112, )",
+        "resolved": "3.5.112",
+        "contentHash": "3ZaisyYmczn5EJHvKbrX7ARRSWR0ETZGFAaQrZm5EVrxKCAeDtUi/Khqa6/DJVUmmgUtu8qAkd5GDxZUeFHkWg=="
       },
       "StyleCop.Analyzers": {
         "type": "Direct",
