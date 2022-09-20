@@ -20,9 +20,9 @@
       },
       "Nerdbank.GitVersioning": {
         "type": "Direct",
-        "requested": "[3.5.112, )",
-        "resolved": "3.5.112",
-        "contentHash": "3ZaisyYmczn5EJHvKbrX7ARRSWR0ETZGFAaQrZm5EVrxKCAeDtUi/Khqa6/DJVUmmgUtu8qAkd5GDxZUeFHkWg=="
+        "requested": "[3.5.113, )",
+        "resolved": "3.5.113",
+        "contentHash": "4fBSMkqhi410qlkjPm+Mxfk8iO3C7dmgdVS7ljsfVO21WEzZCHP1VCOqB6rlOPfPidR/oxX+/Do/I7meCAz+Jg=="
       },
       "StyleCop.Analyzers": {
         "type": "Direct",
