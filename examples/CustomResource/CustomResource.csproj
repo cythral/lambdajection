@@ -1,8 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>netcoreapp3.1</TargetFramework>
-        <TestType>ExamineStack</TestType> <!-- This is for our E2E Tests, you do not need to include it. -->
+        <TargetFramework>net6.0</TargetFramework>
+        <TestType>ExamineStack</TestType> <!-- This is for our E2E Tests, you do not need to include
+        it. -->
     </PropertyGroup>
 
     <ItemGroup>

@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>netcoreapp3.1</TargetFramework>
+        <TargetFramework>net6.0</TargetFramework>
         <LangVersion>9.0</LangVersion>
         <Nullable>enable</Nullable>
         <RootNamespace>__Project__</RootNamespace>
@@ -9,7 +9,8 @@
 
     <ItemGroup>
         <PackageReference Include="Lambdajection" Version="$(LambdajectionVersion)" />
-        <!--#if (encryption) -->
+        <!--#if
+        (encryption) -->
         <PackageReference Include="Lambdajection.Encryption" Version="$(LambdajectionVersion)" />
         <!--#endif -->
     </ItemGroup>
