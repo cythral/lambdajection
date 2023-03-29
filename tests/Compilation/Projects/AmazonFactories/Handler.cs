@@ -5,8 +5,6 @@ using Amazon.Lambda.Core;
 
 using Amazon.S3;
 
-using Internal;
-
 using Lambdajection.Attributes;
 using Lambdajection.Core;
 
