@@ -171,8 +171,8 @@
       },
       "Amazon.Lambda.RuntimeSupport": {
         "type": "Transitive",
-        "resolved": "1.8.2",
-        "contentHash": "AOLjSwZHvIbUUkiwSEcwWdOSb1r5xLWZjIc2PcFugEeuBc8RoGf8PcyVIpndPGD9p2EuhEdCQ1Ez6H9P+oh7Xg==",
+        "resolved": "1.8.6",
+        "contentHash": "8EYcoXqadmtzdkTzcTmUWfzWXLHlQ+cmuCDTrdoyWvX5bjT5yFjFolpYCBnMZBerDRWSr8N3TfGrvn5eWwbRlw==",
         "dependencies": {
           "Amazon.Lambda.Core": "2.1.0"
         }
@@ -1492,7 +1492,7 @@
       "Lambdajection.Runtime": {
         "type": "Project",
         "dependencies": {
-          "Amazon.Lambda.RuntimeSupport": "1.8.2"
+          "Amazon.Lambda.RuntimeSupport": "1.8.6"
         }
       },
       "Lambdajection.Sns": {
