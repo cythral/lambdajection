@@ -1,7 +1,7 @@
 {
   "version": 1,
   "dependencies": {
-    "net6.0": {
+    "net7.0": {
       "AutoFixture.AutoNSubstitute": {
         "type": "Direct",
         "requested": "[4.17.0, )",
@@ -1418,50 +1418,50 @@
       "Lambdajection.Attributes": {
         "type": "Project",
         "dependencies": {
-          "Lambdajection.Framework": "1.0.0"
+          "Lambdajection.Framework": "[1.0.0, )"
         }
       },
       "Lambdajection.Core": {
         "type": "Project",
         "dependencies": {
-          "Amazon.Lambda.Core": "2.1.0",
-          "Lambdajection.Attributes": "1.0.0",
-          "Lambdajection.Framework": "1.0.0",
-          "Microsoft.Extensions.Configuration": "6.0.1",
-          "Microsoft.Extensions.Configuration.EnvironmentVariables": "6.0.1",
-          "Microsoft.Extensions.DependencyInjection": "6.0.1",
-          "Microsoft.Extensions.Logging": "6.0.0",
-          "Microsoft.Extensions.Logging.Console": "6.0.0",
-          "Microsoft.Extensions.Options": "6.0.0",
-          "Microsoft.Extensions.Options.ConfigurationExtensions": "6.0.0"
+          "Amazon.Lambda.Core": "[2.1.0, )",
+          "Lambdajection.Attributes": "[1.0.0, )",
+          "Lambdajection.Framework": "[1.0.0, )",
+          "Microsoft.Extensions.Configuration": "[6.0.1, )",
+          "Microsoft.Extensions.Configuration.EnvironmentVariables": "[6.0.1, )",
+          "Microsoft.Extensions.DependencyInjection": "[6.0.1, )",
+          "Microsoft.Extensions.Logging": "[6.0.0, )",
+          "Microsoft.Extensions.Logging.Console": "[6.0.0, )",
+          "Microsoft.Extensions.Options": "[6.0.0, )",
+          "Microsoft.Extensions.Options.ConfigurationExtensions": "[6.0.0, )"
         }
       },
       "Lambdajection.CustomResource": {
         "type": "Project",
         "dependencies": {
-          "Lambdajection.Attributes": "1.0.0",
-          "Lambdajection.Core": "1.0.0",
-          "Lambdajection.CustomResource.BuildTime": "1.0.0",
-          "Lambdajection.Framework": "1.0.0"
+          "Lambdajection.Attributes": "[1.0.0, )",
+          "Lambdajection.Core": "[1.0.0, )",
+          "Lambdajection.CustomResource.BuildTime": "[1.0.0, )",
+          "Lambdajection.Framework": "[1.0.0, )"
         }
       },
       "Lambdajection.CustomResource.BuildTime": {
         "type": "Project",
         "dependencies": {
-          "Lambdajection.Attributes": "1.0.0",
-          "Lambdajection.Core": "1.0.0",
-          "Lambdajection.Framework": "1.0.0",
-          "Lambdajection.Framework.BuildTime": "1.0.0",
-          "Microsoft.CodeAnalysis": "4.1.0",
-          "Microsoft.CodeAnalysis.CSharp.Workspaces": "4.1.0",
-          "System.ComponentModel.Annotations": "5.0.0"
+          "Lambdajection.Attributes": "[1.0.0, )",
+          "Lambdajection.Core": "[1.0.0, )",
+          "Lambdajection.Framework": "[1.0.0, )",
+          "Lambdajection.Framework.BuildTime": "[1.0.0, )",
+          "Microsoft.CodeAnalysis": "[4.1.0, )",
+          "Microsoft.CodeAnalysis.CSharp.Workspaces": "[4.1.0, )",
+          "System.ComponentModel.Annotations": "[5.0.0, )"
         }
       },
       "Lambdajection.Encryption": {
         "type": "Project",
         "dependencies": {
-          "AWSSDK.KeyManagementService": "3.7.101.76",
-          "Lambdajection.Framework": "1.0.0"
+          "AWSSDK.KeyManagementService": "[3.7.101.76, )",
+          "Lambdajection.Framework": "[1.0.0, )"
         }
       },
       "Lambdajection.Framework": {
@@ -1470,36 +1470,36 @@
       "Lambdajection.Framework.BuildTime": {
         "type": "Project",
         "dependencies": {
-          "Lambdajection.Framework": "1.0.0",
-          "Microsoft.CodeAnalysis": "4.1.0"
+          "Lambdajection.Framework": "[1.0.0, )",
+          "Microsoft.CodeAnalysis": "[4.1.0, )"
         }
       },
       "Lambdajection.Generator": {
         "type": "Project",
         "dependencies": {
-          "Lambdajection.Attributes": "1.0.0",
-          "Lambdajection.Framework": "1.0.0",
-          "Lambdajection.Framework.BuildTime": "1.0.0",
-          "Microsoft.Bcl.AsyncInterfaces": "6.0.0",
-          "Microsoft.CodeAnalysis": "4.1.0",
-          "Microsoft.CodeAnalysis.CSharp.Workspaces": "4.1.0",
-          "Microsoft.Extensions.Hosting": "6.0.1",
-          "System.ComponentModel.Annotations": "5.0.0",
-          "System.Runtime.Loader": "4.3.0",
-          "YamlDotNet": "11.2.1"
+          "Lambdajection.Attributes": "[1.0.0, )",
+          "Lambdajection.Framework": "[1.0.0, )",
+          "Lambdajection.Framework.BuildTime": "[1.0.0, )",
+          "Microsoft.Bcl.AsyncInterfaces": "[6.0.0, )",
+          "Microsoft.CodeAnalysis": "[4.1.0, )",
+          "Microsoft.CodeAnalysis.CSharp.Workspaces": "[4.1.0, )",
+          "Microsoft.Extensions.Hosting": "[6.0.1, )",
+          "System.ComponentModel.Annotations": "[5.0.0, )",
+          "System.Runtime.Loader": "[4.3.0, )",
+          "YamlDotNet": "[11.2.1, )"
         }
       },
       "Lambdajection.Runtime": {
         "type": "Project",
         "dependencies": {
-          "Amazon.Lambda.RuntimeSupport": "1.8.6"
+          "Amazon.Lambda.RuntimeSupport": "[1.8.6, )"
         }
       },
       "Lambdajection.Sns": {
         "type": "Project",
         "dependencies": {
-          "Lambdajection.Core": "1.0.0",
-          "Lambdajection.Framework": "1.0.0"
+          "Lambdajection.Core": "[1.0.0, )",
+          "Lambdajection.Framework": "[1.0.0, )"
         }
       }
     }

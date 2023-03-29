@@ -1,5 +1,6 @@
 <Project>
     <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
         <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
         <Configuration>Debug</Configuration>
     </PropertyGroup>
@@ -9,7 +10,8 @@
         <RestorePackagesPath>$(_BasePath).nuget/tests</RestorePackagesPath>
         <OutputPath>$(_BasePath)bin/CompilationTestProjects/$(MSBuildProjectName)/$(Configuration)</OutputPath>
         <BaseIntermediateOutputPath>$(_BasePath)obj/CompilationTestProjects/$(MSBuildProjectName)</BaseIntermediateOutputPath>
-        <CompilerGeneratedFilesOutputPath>$(_BasePath)obj/CompilationTestProjects/$(MSBuildProjectName)/$(Configuration)</CompilerGeneratedFilesOutputPath>
+        <CompilerGeneratedFilesOutputPath>
+            $(_BasePath)obj/CompilationTestProjects/$(MSBuildProjectName)/$(Configuration)</CompilerGeneratedFilesOutputPath>
         <RestoreLocation>$(_BasePath)bin/Packages/$(Configuration)</RestoreLocation>
         <RestoreAdditionalProjectSources Condition="Exists($(RestoreLocation))">
             $(RestoreLocation);

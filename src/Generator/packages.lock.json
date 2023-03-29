@@ -1512,7 +1512,7 @@
       "Lambdajection.Attributes": {
         "type": "Project",
         "dependencies": {
-          "Lambdajection.Framework": "1.0.0"
+          "Lambdajection.Framework": "[1.0.0, )"
         }
       },
       "Lambdajection.Framework": {
@@ -1521,8 +1521,8 @@
       "Lambdajection.Framework.BuildTime": {
         "type": "Project",
         "dependencies": {
-          "Lambdajection.Framework": "1.0.0",
-          "Microsoft.CodeAnalysis": "4.1.0"
+          "Lambdajection.Framework": "[1.0.0, )",
+          "Microsoft.CodeAnalysis": "[4.1.0, )"
         }
       }
     }
