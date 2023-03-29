@@ -1,7 +1,10 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
 using Amazon.Lambda.Core;
+
+using Internal;
 
 using Lambdajection.Attributes;
 using Lambdajection.Core;
@@ -18,6 +21,7 @@ namespace Lambdajection.CompilationTests.LambdaContext
 
         public Handler(ILambdaContext context)
         {
+            Console.WriteLine("Testing LambdaContext");
             this.context = context;
         }
 

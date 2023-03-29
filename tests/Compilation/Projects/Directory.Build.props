@@ -1,6 +1,5 @@
 <Project>
     <PropertyGroup>
-        <TargetFramework>net7.0</TargetFramework>
         <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
         <Configuration>Debug</Configuration>
     </PropertyGroup>

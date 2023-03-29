@@ -29,7 +29,6 @@ public static class CompilationExtensions
         foreach (var reference in compilation.References)
         {
             var display = reference.Display!;
-
             try
             {
                 if (!AppDomain.CurrentDomain.GetAssemblies().Any(a => a.Location == display))

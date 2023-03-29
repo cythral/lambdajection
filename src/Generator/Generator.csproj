@@ -12,24 +12,35 @@
     <BuildOutputTargetFolder>analyzers/dotnet/cs</BuildOutputTargetFolder>
     <DevelopmentDependency>true</DevelopmentDependency>
     <SkipAddNuGetPackageVersionToThisAssembly>true</SkipAddNuGetPackageVersionToThisAssembly>
-    <PackageDescription>Includes the compile-time generator used to generate code needed for Dependency Injection-enabled AWS Lambdas.</PackageDescription>
+    <PackageDescription>Includes the compile-time generator used to generate code needed for
+      Dependency Injection-enabled AWS Lambdas.</PackageDescription>
     <BeforePack>IncludeExtraPackItems</BeforePack>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.CodeAnalysis" Version="4.1.0" PrivateAssets="runtime;analyzers;contentfiles;build" />
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.1.0" PrivateAssets="runtime;analyzers;contentfiles;build" />
-    <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" PrivateAssets="runtime;analyzers;contentfiles;build" />
-    <PackageReference Include="System.Runtime.Loader" Version="4.3.0" PrivateAssets="runtime;analyzers;contentfiles;build" />
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" PrivateAssets="runtime;analyzers;contentfiles;build" />
-    <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="6.0.0" PrivateAssets="runtime;analyzers;contentfiles;build" />
-    <PackageReference Include="YamlDotNet" Version="11.2.1" PrivateAssets="runtime;analyzers;contentfiles;build" />
+    <PackageReference Include="Microsoft.CodeAnalysis" Version="4.5.0"
+      PrivateAssets="runtime;analyzers;contentfiles;build" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.5.0"
+      PrivateAssets="runtime;analyzers;contentfiles;build" />
+    <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0"
+      PrivateAssets="runtime;analyzers;contentfiles;build" />
+    <PackageReference Include="System.Runtime.Loader" Version="4.3.0"
+      PrivateAssets="runtime;analyzers;contentfiles;build" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1"
+      PrivateAssets="runtime;analyzers;contentfiles;build" />
+    <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="6.0.0"
+      PrivateAssets="runtime;analyzers;contentfiles;build" />
+    <PackageReference Include="YamlDotNet" Version="11.2.1"
+      PrivateAssets="runtime;analyzers;contentfiles;build" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="../Attributes/Attributes.csproj" PrivateAssets="runtime;analyzers;contentfiles" />
-    <ProjectReference Include="../Framework/Framework.csproj" PrivateAssets="runtime;analyzers;contentfiles" />
-    <ProjectReference Include="../Framework.BuildTime/Framework.BuildTime.csproj" PrivateAssets="runtime;analyzers;contentfiles" />
+    <ProjectReference Include="../Attributes/Attributes.csproj"
+      PrivateAssets="runtime;analyzers;contentfiles" />
+    <ProjectReference Include="../Framework/Framework.csproj"
+      PrivateAssets="runtime;analyzers;contentfiles" />
+    <ProjectReference Include="../Framework.BuildTime/Framework.BuildTime.csproj"
+      PrivateAssets="runtime;analyzers;contentfiles" />
   </ItemGroup>
 
   <ItemGroup>

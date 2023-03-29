@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <TargetFramework>net6.0</TargetFramework>
+        <TargetFramework>net7.0</TargetFramework>
         <PackageId>Lambdajection.Layer</PackageId>
         <AssemblyName>$(PackageId)</AssemblyName>
         <NoWarn>NU5128</NoWarn>
@@ -15,13 +15,17 @@
     <ItemGroup>
         <None Include="build/**" Pack="true" PackagePath="build/" />
         <None Include="Layer.template.yml" CopyToOutputDirectory="always" />
-        <ContentWithTargetPath Include="../../README.md" CopyToOutputDirectory="always" TargetPath="layer/README.md" />
-        <ContentWithTargetPath Include="../../LICENSE.txt" CopyToOutputDirectory="always" TargetPath="layer/LICENSE.txt" />
-        <ContentWithTargetPath Include="./THIRD-PARTY-NOTICES.txt" CopyToOutputDirectory="always" TargetPath="layer/THIRD-PARTY-NOTICES.txt" />
+        <ContentWithTargetPath Include="../../README.md" CopyToOutputDirectory="always"
+            TargetPath="layer/README.md" />
+        <ContentWithTargetPath Include="../../LICENSE.txt" CopyToOutputDirectory="always"
+            TargetPath="layer/LICENSE.txt" />
+        <ContentWithTargetPath Include="./THIRD-PARTY-NOTICES.txt" CopyToOutputDirectory="always"
+            TargetPath="layer/THIRD-PARTY-NOTICES.txt" />
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Cythral.CloudFormation.BuildTasks" Version="0.5.4" PrivateAssets="all" />
+        <PackageReference Include="Cythral.CloudFormation.BuildTasks" Version="0.5.4"
+            PrivateAssets="all" />
         <ProjectReference Include="../Generator/Generator.csproj" ReferenceOutputAssembly="false" />
         <ProjectReference Include="../Attributes/Attributes.csproj" PrivateAssets="runtime" />
     </ItemGroup>
@@ -31,7 +35,8 @@
         <LayerArchitectures Include="x64" />
     </ItemGroup>
 
-    <Target Name="CreateStore" DependsOnTargets="GetBuildVersion;ResolvePackageAssets" Outputs="%(LayerArchitectures.Identity)">
+    <Target Name="CreateStore" DependsOnTargets="GetBuildVersion;ResolvePackageAssets"
+        Outputs="%(LayerArchitectures.Identity)">
         <PropertyGroup>
             <CurrentArchitecture>%(LayerArchitectures.Identity)</CurrentArchitecture>
             <ReferencePaths>@(ReferencePath, '%253B')</ReferencePaths>
@@ -51,15 +56,18 @@
         <MakeDir Directories="$(MSBuildThisFileDirectory)Manifest/.nuget" />
 
         <PropertyGroup>
-            <DirectoriesToRemove>$([System.IO.Directory]::GetDirectories('$(MSBuildThisFileDirectory)Manifest/.nuget', 'lambdajection*'))</DirectoriesToRemove>
-            <DirectoriesToRemove>$([System.IO.Directory]::GetDirectories('$(MSBuildThisFileDirectory)Manifest/.nuget', 'microsoft.aspnetcore.app.runtime.linux-x64'))</DirectoriesToRemove>
+            <DirectoriesToRemove>$([System.IO.Directory]::GetDirectories('$(MSBuildThisFileDirectory)Manifest/.nuget',
+                'lambdajection*'))</DirectoriesToRemove>
+            <DirectoriesToRemove>$([System.IO.Directory]::GetDirectories('$(MSBuildThisFileDirectory)Manifest/.nuget',
+                'microsoft.aspnetcore.app.runtime.linux-x64'))</DirectoriesToRemove>
         </PropertyGroup>
 
         <RemoveDir Directories="$(DirectoriesToRemove)" />
         <Exec Command="dotnet store @(StoreArgs, ' ')" StandardOutputImportance="low" />
 
         <ItemGroup>
-            <Content Include="$(OutputPath)layer/$(CurrentArchitecture)/net6.0/artifact.xml" Condition="$(CurrentArchitecture) == 'x64'" />
+            <Content Include="$(OutputPath)layer/$(CurrentArchitecture)/net7.0/artifact.xml"
+                Condition="$(CurrentArchitecture) == 'x64'" />
         </ItemGroup>
     </Target>
 
@@ -67,14 +75,18 @@
         <PropertyGroup>
             <BucketExportName>lambdajection-infrastructure:LayerBucket</BucketExportName>
             <TemplateFilePath Condition="$(TemplateFilePath) == ''">$(OutputPath)Layer.template.yml</TemplateFilePath>
-            <OutputLayerTemplateFilePath Condition="$(OutputLayerTemplateFilePath) == ''">$(OutputPath)Layer.template.yml.packaged</OutputLayerTemplateFilePath>
+            <OutputLayerTemplateFilePath Condition="$(OutputLayerTemplateFilePath) == ''">
+                $(OutputPath)Layer.template.yml.packaged</OutputLayerTemplateFilePath>
         </PropertyGroup>
 
         <!-- Get the Layer Bucket Name -->
-        <Exec Command="aws cloudformation list-exports --query Exports[?Name==\`$(BucketExportName)\`].Value --output text" ConsoleToMsBuild="true" StandardOutputImportance="low">
+        <Exec
+            Command="aws cloudformation list-exports --query Exports[?Name==\`$(BucketExportName)\`].Value --output text"
+            ConsoleToMsBuild="true" StandardOutputImportance="low">
             <Output TaskParameter="ConsoleOutput" PropertyName="LayerBucket" />
         </Exec>
 
-        <PackageTemplate TemplateFile="$(TemplateFilePath)" PackageBucket="$(LayerBucket)" OutputTemplateFile="$(OutputLayerTemplateFilePath)" />
+        <PackageTemplate TemplateFile="$(TemplateFilePath)" PackageBucket="$(LayerBucket)"
+            OutputTemplateFile="$(OutputLayerTemplateFilePath)" />
     </Target>
 </Project>

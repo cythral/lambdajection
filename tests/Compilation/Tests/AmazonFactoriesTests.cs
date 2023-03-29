@@ -40,6 +40,7 @@ namespace Lambdajection.Tests.Compilation
         [OneTimeSetUp]
         public async Task Setup()
         {
+            Console.WriteLine("test");
             project = await MSBuildProjectExtensions.LoadProject(ProjectPath);
         }
 

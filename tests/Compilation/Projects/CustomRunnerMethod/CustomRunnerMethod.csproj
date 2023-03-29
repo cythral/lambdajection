@@ -1,5 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
     <RuntimeIdentifiers>linux-x64</RuntimeIdentifiers>
     <SelfContained>false</SelfContained>
     <IsPackable>false</IsPackable>

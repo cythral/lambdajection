@@ -53,7 +53,7 @@ namespace Lambdajection.Generator
             AssemblyLoadContext.Default.Resolving += (_, name) =>
             {
                 var matchingFiles = from file in Directory.GetFiles(additionalProbingPath, $"{name.Name}.dll", SearchOption.AllDirectories)
-                                    where file.Contains("netstandard") || file.Contains("net5.0") || file.Contains("net6.0")
+                                    where file.Contains("netstandard") || file.Contains("net5.0") || file.Contains("net6.0") || file.Contains("net7.0")
                                     select file;
 
                 foreach (var matchingFile in matchingFiles)
