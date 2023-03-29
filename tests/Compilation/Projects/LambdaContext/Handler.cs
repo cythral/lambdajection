@@ -4,8 +4,6 @@ using System.Threading.Tasks;
 
 using Amazon.Lambda.Core;
 
-using Internal;
-
 using Lambdajection.Attributes;
 using Lambdajection.Core;
 
