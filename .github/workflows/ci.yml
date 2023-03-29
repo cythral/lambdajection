@@ -55,8 +55,11 @@ jobs:
           lastTaggedVersionSha=$(git rev-list -n 1 $lastTaggedVersion)
           if [ "$lastTaggedVersion" = "v$VERSION" ] && [ "$lastTaggedVersionSha" != "${{ github.sha }}" ]; then exit 1; fi
 
-      - name: Setup .NET Core
+      - name: Setup .NET
         uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: "6.0.x"
+          global-json-file: "./global.json"
 
       - name: Display .NET Info
         run: dotnet --info
