@@ -1,8 +1,10 @@
 <Project>
     <PropertyGroup>
         <SuppressNETCoreSdkPreviewMessage>true</SuppressNETCoreSdkPreviewMessage>
-        <OutputPath>$(MSBuildThisFileDirectory)..\bin\Examples\$(MSBuildProjectName)\$(Configuration)</OutputPath>
-        <BaseIntermediateOutputPath>$(MSBuildThisFileDirectory)..\obj\Templates\$(MSBuildProjectName)</BaseIntermediateOutputPath>
+        <OutputPath>
+            $(MSBuildThisFileDirectory)..\bin\Examples\$(MSBuildProjectName)\$(Configuration)</OutputPath>
+        <BaseIntermediateOutputPath>
+            $(MSBuildThisFileDirectory)..\obj\Templates\$(MSBuildProjectName)</BaseIntermediateOutputPath>
         <PackageOutputPath>$(MSBuildThisFileDirectory)..\bin\Packages\Templates\$(Configuration)</PackageOutputPath>
         <RestorePackagesPath>$(MSBuildThisFileDirectory)..\.nuget\templates</RestorePackagesPath>
         <_PackagesDebug>$(MSBuildThisFileDirectory)..\bin\Packages\Debug</_PackagesDebug>
@@ -17,7 +19,9 @@
 
     <ItemGroup>
         <AdditionalFiles Include="$(MSBuildThisFileDirectory)..\.editorconfig" />
-        <PackageReference Include="Microsoft.CodeAnalysis" Version="4.1.0" PrivateAssets="all" ExcludeAssets="runtime" />
-        <PackageReference Include="Microsoft.CodeAnalysis.CSharp.CodeStyle" Version="4.1.0" PrivateAssets="all" />
+        <PackageReference Include="Microsoft.CodeAnalysis" Version="4.5.0" PrivateAssets="all"
+            ExcludeAssets="runtime" />
+        <PackageReference Include="Microsoft.CodeAnalysis.CSharp.CodeStyle" Version="4.5.0"
+            PrivateAssets="all" />
     </ItemGroup>
 </Project>
