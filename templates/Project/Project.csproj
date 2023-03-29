@@ -9,8 +9,7 @@
 
     <ItemGroup>
         <PackageReference Include="Lambdajection" Version="$(LambdajectionVersion)" />
-        <!--#if
-        (encryption) -->
+        <!--#if (encryption) -->
         <PackageReference Include="Lambdajection.Encryption" Version="$(LambdajectionVersion)" />
         <!--#endif -->
     </ItemGroup>
