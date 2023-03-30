@@ -7,7 +7,7 @@ Resources:
       Runtime: dotnet6
       FunctionName: lambdajection-snshandler
       Timeout: 300
-      CodeUri: ../../bin/Examples/SnsHandler/Release/dotnet6.0/publish/
+      CodeUri: ../../bin/Examples/SnsHandler/Release/net6.0/publish/
       MemorySize: 512
       Policies:
         - AWSLambdaBasicExecutionRole
