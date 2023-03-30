@@ -25,28 +25,6 @@ public static class CompilationExtensions
         stream.Position = 0;
 
         var context = new AssemblyLoadContext(Path.GetRandomFileName(), true);
-
-        foreach (var reference in compilation.References)
-        {
-            var display = reference.Display!;
-            try
-            {
-                if (!AppDomain.CurrentDomain.GetAssemblies().Any(a => a.Location == display))
-                {
-                    context.LoadFromAssemblyPath(display);
-                }
-            }
-            catch (NotSupportedException)
-            {
-            }
-            catch (FileLoadException)
-            {
-            }
-            catch (BadImageFormatException)
-            {
-            }
-        }
-
         return new GenerateAssemblyResult
         {
             Assembly = context.LoadFromStream(stream),

@@ -20,6 +20,7 @@
     <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.MSBuild" Version="4.5.0" />
     <PackageReference Include="NSubstitute" Version="4.2.2" />
     <PackageReference Include="NuGet.Frameworks" Version="6.5.0" />
+    <PackageReference Include="NuGet.Commands" Version="6.5.0" />
     <PackageReference Include="NuGet.ProjectModel" Version="6.5.0" />
     <PackageReference Include="nunit" Version="3.13.3" />
     <PackageReference Include="NUnit3TestAdapter" Version="4.4.2" />
@@ -38,14 +39,14 @@
     <PropertyGroup>
       <FileContents>
         $([System.IO.File]::ReadAllText('TestMetadata.txt')
-        .Replace('__TestDirectory__','$(MSBuildThisFileDirectory)')
-        .Replace('__PackageVersion__', '$(PackageVersion)')
-        .Replace('__BaseOutputPath__', '$(MSBuildThisFileDirectory)../bin')
-        .Replace('__BaseIntermediateOutputPath__', '$(MSBuildThisFileDirectory)../obj')
-        .Replace('__OutputPath__', '$(OutputPath)')
-        .Replace('__RestorePackagesPath__', '$(RestorePackagesPath)')
-        .Replace('__TargetFramework__', '$(TargetFramework)')
-        .Replace('__Configuration__', '$(Configuration)')
+          .Replace('__TestDirectory__','$(MSBuildThisFileDirectory)')
+          .Replace('__PackageVersion__', '$(PackageVersion)')
+          .Replace('__BaseOutputPath__', '$(MSBuildThisFileDirectory)../bin')
+          .Replace('__BaseIntermediateOutputPath__', '$(MSBuildThisFileDirectory)../obj')
+          .Replace('__OutputPath__', '$(OutputPath)')
+          .Replace('__RestorePackagesPath__', '$(RestorePackagesPath)')
+          .Replace('__TargetFramework__', '$(TargetFramework)')
+          .Replace('__Configuration__', '$(Configuration)')
         )
       </FileContents>
     </PropertyGroup>
@@ -81,9 +82,7 @@
     <ProjectReference Include="..\src\Runtime\Runtime.csproj" />
     <ProjectReference Include="..\src\Encryption\Encryption.csproj" />
     <ProjectReference Include="..\src\Generator\Generator.csproj" />
-    <ProjectReference Include="..\src\Tracing\Tracing.csproj" PrivateAssets="all"
-      ReferenceOutputAssembly="false" />
-    <ProjectReference Include="..\src\Metapackage\Metapackage.csproj" PrivateAssets="all"
-      ReferenceOutputAssembly="false" />
+    <ProjectReference Include="..\src\Tracing\Tracing.csproj" PrivateAssets="all" ReferenceOutputAssembly="false" />
+    <ProjectReference Include="..\src\Metapackage\Metapackage.csproj" PrivateAssets="all" ReferenceOutputAssembly="false" />
   </ItemGroup>
 </Project>

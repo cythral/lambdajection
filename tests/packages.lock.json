@@ -119,6 +119,18 @@
           "System.Threading.Tasks.Extensions": "4.3.0"
         }
       },
+      "NuGet.Commands": {
+        "type": "Direct",
+        "requested": "[6.5.0, )",
+        "resolved": "6.5.0",
+        "contentHash": "5d7esoaCBLbE/bQ+cf5bfUOdQz8Phf9PgozWTfTw4J/BESi16F/YJZo92oTVJnlkCJWK8Ub99pr+1gAbcjJazg==",
+        "dependencies": {
+          "Microsoft.Extensions.FileProviders.Abstractions": "6.0.0",
+          "Microsoft.Extensions.FileSystemGlobbing": "6.0.0",
+          "NuGet.Credentials": "6.5.0",
+          "NuGet.ProjectModel": "6.5.0"
+        }
+      },
       "NuGet.Frameworks": {
         "type": "Direct",
         "requested": "[6.5.0, )",
@@ -663,6 +675,14 @@
         "dependencies": {
           "NuGet.Common": "6.5.0",
           "System.Security.Cryptography.ProtectedData": "4.4.0"
+        }
+      },
+      "NuGet.Credentials": {
+        "type": "Transitive",
+        "resolved": "6.5.0",
+        "contentHash": "CDAYvjQCFmOG6fRCCeUXL7BY8lqtbsxV8Jv8yuyxbTH1ja6/9Qz0WvAB+d1iMKnZ04RNL6RaHeR8r+yfguVDxQ==",
+        "dependencies": {
+          "NuGet.Protocol": "6.5.0"
         }
       },
       "NuGet.DependencyResolver.Core": {
