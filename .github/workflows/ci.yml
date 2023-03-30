@@ -35,7 +35,7 @@ jobs:
           fetch-depth: 0
 
       - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1
+        uses: aws-actions/configure-aws-credentials@v2
         with:
           role-to-assume: ${{ secrets.AWS_OSS_ROLE }}
           aws-region: us-east-1
@@ -159,7 +159,7 @@ jobs:
         run: echo "VERSION=$(cat version.json | jq -r '.version')" >> $GITHUB_ENV
 
       - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1
+        uses: aws-actions/configure-aws-credentials@v2
         with:
           role-to-assume: ${{ secrets.AWS_OSS_ROLE }}
           aws-region: us-east-1
@@ -198,7 +198,7 @@ jobs:
           fetch-depth: 0
 
       - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1
+        uses: aws-actions/configure-aws-credentials@v2
         with:
           role-to-assume: ${{ secrets.AWS_OSS_ROLE }}
           aws-region: us-east-1
