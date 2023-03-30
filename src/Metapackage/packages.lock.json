@@ -665,8 +665,8 @@
       },
       "YamlDotNet": {
         "type": "Transitive",
-        "resolved": "11.2.1",
-        "contentHash": "tBt8K+korVfrjH9wyDEhiLKxbs8qoLCLIFwvYgkSUuMC9//w3z0cFQ8LQAI/5MCKq+BMil0cfRTRvPeE7eXhQw=="
+        "resolved": "13.0.2",
+        "contentHash": "hRPqCt2bxTvHN6iT2JNG2KznDPFgD5B6j0bQ7woSpfGctmjgAYdKQ+LYHUaj/7q8sN1AbIcTNbaO75g8IFmTjw=="
       },
       "Lambdajection.Attributes": {
         "type": "Project",
@@ -711,7 +711,7 @@
           "Microsoft.Extensions.Hosting": "[6.0.1, )",
           "System.ComponentModel.Annotations": "[5.0.0, )",
           "System.Runtime.Loader": "[4.3.0, )",
-          "YamlDotNet": "[11.2.1, )"
+          "YamlDotNet": "[13.0.2, )"
         }
       }
     }
