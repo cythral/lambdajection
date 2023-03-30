@@ -1,9 +1,5 @@
 Transform: AWS::Serverless-2016-10-31
 Parameters:
-  DotnetLayerVersion:
-    Type: String
-    Description: Version number of the .NET 5 Lambda Layer to Use
-
   EncryptedValue:
     Type: String
     Description: A value for the encrypted options lambda to decrypt
@@ -18,8 +14,6 @@ Resources:
       Timeout: 300
       CodeUri: ../../bin/Examples/EncryptedOptions/Release/net6.0/publish/
       MemorySize: 512
-      Layers:
-        - !Sub arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:dotnet:${DotnetLayerVersion}
       Policies:
         - AWSLambdaBasicExecutionRole
         # Replace this with the ARN of a policy containing the kms:Decrypt permission
