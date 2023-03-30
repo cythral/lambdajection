@@ -4,11 +4,12 @@
     ".NETStandard,Version=v2.1": {
       "AWSXRayRecorder.Core": {
         "type": "Direct",
-        "requested": "[2.11.1, )",
-        "resolved": "2.11.1",
-        "contentHash": "eCNoLdvtAuookHh5Plz0y6sgsP0p8PnSKc1xcPnBKaWkepymCs7ZOHtzj31rk9R1Qrkn+lgoK3zNkRuRooKS3g==",
+        "requested": "[2.14.0, )",
+        "resolved": "2.14.0",
+        "contentHash": "Ze+j7Pt+PCCP3zx17ncHGaRoWzIDsDsD2Pjawrxz2eox9ClNEWO36HCsRRXrZ63NVZ/J7AxXuD/x2hXrdgdUIQ==",
         "dependencies": {
           "AWSSDK.Core": "3.3.25.1",
+          "Amazon.Lambda.SQSEvents": "2.1.0",
           "Microsoft.AspNetCore.Http": "2.1.22",
           "Microsoft.Extensions.Configuration": "2.0.0",
           "System.Net.Http": "4.3.4"
@@ -47,6 +48,11 @@
         "dependencies": {
           "StyleCop.Analyzers.Unstable": "1.2.0.333"
         }
+      },
+      "Amazon.Lambda.SQSEvents": {
+        "type": "Transitive",
+        "resolved": "2.1.0",
+        "contentHash": "a1xaCIuXDleJ8iRE3vHWWhtPqUiURmoQUS68INMEQmtfHr4wTz837TQZONo4cyubv5sZj78DDrYessZEzgFRGQ=="
       },
       "AWSSDK.Core": {
         "type": "Transitive",
