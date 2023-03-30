@@ -43,6 +43,8 @@
             <StoreArgs Include="--manifest $(MSBuildThisFileDirectory)/Manifest/Manifest.csproj" />
             <StoreArgs Include="--output $(OutputPath)/layer" />
             <StoreArgs Include="--runtime linux-$(CurrentArchitecture)" />
+            <!-- Optimized runtime package stores does not work on .NET 6 -->
+            <StoreArgs Include="--skip-optimization" />
             <StoreArgs Include="/p:Configuration=$(Configuration)" />
             <StoreArgs Include="/p:LambdajectionVersion=$(PackageVersion)" />
             <StoreArgs Include="-nodereuse:false" />
@@ -72,7 +74,9 @@
         </PropertyGroup>
 
         <!-- Get the Layer Bucket Name -->
-        <Exec Command="aws cloudformation list-exports --query Exports[?Name==\`$(BucketExportName)\`].Value --output text" ConsoleToMsBuild="true" StandardOutputImportance="low">
+        <Exec
+            Command="aws cloudformation list-exports --query Exports[?Name==\`$(BucketExportName)\`].Value --output text"
+            ConsoleToMsBuild="true" StandardOutputImportance="low">
             <Output TaskParameter="ConsoleOutput" PropertyName="LayerBucket" />
         </Exec>
 
