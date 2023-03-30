@@ -5,9 +5,9 @@ Resources:
     Properties:
       Handler: AwsClientFactories::Lambdajection.Examples.AwsClientFactories.Handler::Run
       FunctionName: lambdajection-awsclientfactories
-      Runtime: dotnetcore3.1
+      Runtime: dotnet6
       Timeout: 300
-      CodeUri: ../../bin/Examples/AwsClientFactories/Release/netcoreapp3.1/publish/
+      CodeUri: ../../bin/Examples/AwsClientFactories/Release/net6.0/publish/
       MemorySize: 512
       Policies:
         - AWSLambdaBasicExecutionRole

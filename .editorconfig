@@ -53,6 +53,9 @@ dotnet_diagnostic.SA1133.severity = none
 # Parentheses
 dotnet_diagnostic.SA1009.severity = none
 
+# simplified null check
+dotnet_diagnostic.IDE0270.severity = none
+
 dotnet_analyzer_diagnostic.category-Style.severity = error
 
 dotnet_diagnostic.IDE0058.severity = none

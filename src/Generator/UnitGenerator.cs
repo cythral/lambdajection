@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -81,9 +82,10 @@ namespace Lambdajection.Generator
                                   let lambdaInfo = GenerateLambdaInfo(generationContext).GetAwaiter().GetResult()
                                   select (name, document, lambdaInfo);
 
+                int documentNumber = 0;
                 foreach (var (name, document, lambdaInfo) in generations)
                 {
-                    programContext.GeneratorExecutionContext.AddSource(name, document);
+                    programContext.GeneratorExecutionContext.AddSource($"{name}{documentNumber++}", document);
                     programContext.LambdaInfos.Add(lambdaInfo);
                 }
 
@@ -96,6 +98,9 @@ namespace Lambdajection.Generator
                 );
 
                 templateGenerator.GenerateTemplates();
+            }
+            catch (DirectoryNotFoundException)
+            {
             }
             catch (AggregateException e)
             {

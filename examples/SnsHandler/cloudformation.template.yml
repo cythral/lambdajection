@@ -4,10 +4,10 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Handler: SnsHandler::Lambdajection.Examples.SnsHandler.Handler::Run
-      Runtime: dotnetcore3.1
+      Runtime: dotnet6
       FunctionName: lambdajection-snshandler
       Timeout: 300
-      CodeUri: ../../bin/Examples/SnsHandler/Release/netcoreapp3.1/publish/
+      CodeUri: ../../bin/Examples/SnsHandler/Release/net6.0/publish/
       MemorySize: 512
       Policies:
         - AWSLambdaBasicExecutionRole

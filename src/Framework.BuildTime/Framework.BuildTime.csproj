@@ -7,19 +7,21 @@
         <AssemblyName>$(PackageId)</AssemblyName>
         <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
         <IncludeBuildOutput>false</IncludeBuildOutput>
-        <PackageDescription>Includes build-time only framework assets for generating Lambdas with Lambdajection.</PackageDescription>
+        <PackageDescription>Includes build-time only framework assets for generating Lambdas with
+            Lambdajection.</PackageDescription>
         <BeforePack>IncludeExtraPackItems;$(BeforePack)</BeforePack>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.CodeAnalysis" Version="4.1.0" />
+        <PackageReference Include="Microsoft.CodeAnalysis" Version="4.5.0" />
         <ProjectReference Include="../Framework/Framework.csproj" PrivateAssets="none" />
     </ItemGroup>
 
     <Target Name="IncludeExtraPackItems">
         <ItemGroup>
             <None Include="build/**" Pack="true" PackagePath="build/" />
-            <None Include="$(OutputPath)/Lambdajection.Framework.BuildTime.*" Pack="true" PackagePath="tools/any/" Visible="false" />
+            <None Include="$(OutputPath)/Lambdajection.Framework.BuildTime.*" Pack="true"
+                PackagePath="tools/any/" Visible="false" />
         </ItemGroup>
     </Target>
 

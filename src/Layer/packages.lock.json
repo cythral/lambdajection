@@ -1,7 +1,7 @@
 {
   "version": 1,
   "dependencies": {
-    "net6.0": {
+    "net7.0": {
       "Cythral.CloudFormation.BuildTasks": {
         "type": "Direct",
         "requested": "[0.5.4, )",
@@ -51,7 +51,7 @@
       "Lambdajection.Attributes": {
         "type": "Project",
         "dependencies": {
-          "Lambdajection.Framework": "1.0.0"
+          "Lambdajection.Framework": "[1.0.0, )"
         }
       },
       "Lambdajection.Framework": {

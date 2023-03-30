@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <TargetFramework>net6.0</TargetFramework>
+        <TargetFramework>net7.0</TargetFramework>
         <PackageId>Lambdajection.Layer</PackageId>
         <AssemblyName>$(PackageId)</AssemblyName>
         <NoWarn>NU5128</NoWarn>
@@ -21,7 +21,8 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Cythral.CloudFormation.BuildTasks" Version="0.5.4" PrivateAssets="all" />
+        <PackageReference Include="Cythral.CloudFormation.BuildTasks" Version="0.5.4"
+            PrivateAssets="all" />
         <ProjectReference Include="../Generator/Generator.csproj" ReferenceOutputAssembly="false" />
         <ProjectReference Include="../Attributes/Attributes.csproj" PrivateAssets="runtime" />
     </ItemGroup>
@@ -31,7 +32,8 @@
         <LayerArchitectures Include="x64" />
     </ItemGroup>
 
-    <Target Name="CreateStore" DependsOnTargets="GetBuildVersion;ResolvePackageAssets" Outputs="%(LayerArchitectures.Identity)">
+    <Target Name="CreateStore" DependsOnTargets="GetBuildVersion;ResolvePackageAssets"
+        Outputs="%(LayerArchitectures.Identity)">
         <PropertyGroup>
             <CurrentArchitecture>%(LayerArchitectures.Identity)</CurrentArchitecture>
             <ReferencePaths>@(ReferencePath, '%253B')</ReferencePaths>
@@ -59,7 +61,8 @@
         <Exec Command="dotnet store @(StoreArgs, ' ')" StandardOutputImportance="low" />
 
         <ItemGroup>
-            <Content Include="$(OutputPath)layer/$(CurrentArchitecture)/net6.0/artifact.xml" Condition="$(CurrentArchitecture) == 'x64'" />
+            <Content Include="$(OutputPath)layer/$(CurrentArchitecture)/net7.0/artifact.xml"
+                Condition="$(CurrentArchitecture) == 'x64'" />
         </ItemGroup>
     </Target>
 
@@ -71,10 +74,13 @@
         </PropertyGroup>
 
         <!-- Get the Layer Bucket Name -->
-        <Exec Command="aws cloudformation list-exports --query Exports[?Name==\`$(BucketExportName)\`].Value --output text" ConsoleToMsBuild="true" StandardOutputImportance="low">
+        <Exec
+            Command="aws cloudformation list-exports --query Exports[?Name==\`$(BucketExportName)\`].Value --output text"
+            ConsoleToMsBuild="true" StandardOutputImportance="low">
             <Output TaskParameter="ConsoleOutput" PropertyName="LayerBucket" />
         </Exec>
 
-        <PackageTemplate TemplateFile="$(TemplateFilePath)" PackageBucket="$(LayerBucket)" OutputTemplateFile="$(OutputLayerTemplateFilePath)" />
+        <PackageTemplate TemplateFile="$(TemplateFilePath)" PackageBucket="$(LayerBucket)"
+            OutputTemplateFile="$(OutputLayerTemplateFilePath)" />
     </Target>
 </Project>

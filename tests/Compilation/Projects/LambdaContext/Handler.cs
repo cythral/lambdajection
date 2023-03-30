@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -18,6 +19,7 @@ namespace Lambdajection.CompilationTests.LambdaContext
 
         public Handler(ILambdaContext context)
         {
+            Console.WriteLine("Testing LambdaContext");
             this.context = context;
         }
 

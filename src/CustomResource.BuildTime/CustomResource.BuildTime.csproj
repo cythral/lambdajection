@@ -9,13 +9,14 @@
         <EmbedUntrackedSources>true</EmbedUntrackedSources>
         <IncludeBuildOutput>false</IncludeBuildOutput>
         <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
-        <PackageDescription>Includes the compile-time utilities used for generating Lambdajection-backed Custom Resources.</PackageDescription>
+        <PackageDescription>Includes the compile-time utilities used for generating
+            Lambdajection-backed Custom Resources.</PackageDescription>
         <BeforePack>IncludeExtraPackItems</BeforePack>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.CodeAnalysis" Version="4.1.0" />
-        <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.1.0" />
+        <PackageReference Include="Microsoft.CodeAnalysis" Version="4.5.0" />
+        <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.5.0" />
         <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
     </ItemGroup>
 
@@ -23,7 +24,8 @@
         <ProjectReference Include="../Core/Core.csproj" PrivateAssets="none" />
         <ProjectReference Include="../Attributes/Attributes.csproj" PrivateAssets="runtime" />
         <ProjectReference Include="../Framework/Framework.csproj" PrivateAssets="none" />
-        <ProjectReference Include="../Framework.BuildTime/Framework.BuildTime.csproj" PrivateAssets="runtime" />
+        <ProjectReference Include="../Framework.BuildTime/Framework.BuildTime.csproj"
+            PrivateAssets="runtime" />
     </ItemGroup>
 
     <ItemGroup>
@@ -33,7 +35,8 @@
     <Target Name="IncludeExtraPackItems">
         <ItemGroup>
             <None Include="build/**" Pack="true" PackagePath="build/" />
-            <None Include="$(OutputPath)/Lambdajection.CustomResource.BuildTime.*" Pack="true" PackagePath="tools/any/" Visible="false" />
+            <None Include="$(OutputPath)/Lambdajection.CustomResource.BuildTime.*" Pack="true"
+                PackagePath="tools/any/" Visible="false" />
         </ItemGroup>
     </Target>
 

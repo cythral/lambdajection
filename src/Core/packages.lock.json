@@ -267,7 +267,7 @@
       "Lambdajection.Attributes": {
         "type": "Project",
         "dependencies": {
-          "Lambdajection.Framework": "1.0.0"
+          "Lambdajection.Framework": "[1.0.0, )"
         }
       },
       "Lambdajection.Framework": {

@@ -1,8 +1,8 @@
 Transform: AWS::Serverless-2016-10-31
 Parameters:
-  Net5LayerVersion:
+  DotnetVersion:
     Type: String
-    Description: Version number of the .NET 5 Lambda Layer to Use
+    Description: Version of .NET to use.
 
 Resources:
   LambdajectionLayer:
@@ -18,11 +18,11 @@ Resources:
       Runtime: provided.al2
       FunctionName: lambdajection-customruntime
       Timeout: 300
-      CodeUri: ../../bin/Examples/CustomRuntime/Release/net6.0/linux-x64/publish/
+      CodeUri: ../../bin/Examples/CustomRuntime/Release/net7.0/linux-x64/publish/
       MemorySize: 512
       Layers:
         # https://github.com/cythral/dotnet-lambda-layer
-        - !Sub arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:net5:${Net5LayerVersion}
+        - !Sub "{{resolve:ssm:/dotnet/${DotnetVersion}/layer-arn}}"
         - !GetAtt LambdajectionLayer.Outputs.LayerArn
       Policies:
         - AWSLambdaBasicExecutionRole

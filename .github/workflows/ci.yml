@@ -55,8 +55,11 @@ jobs:
           lastTaggedVersionSha=$(git rev-list -n 1 $lastTaggedVersion)
           if [ "$lastTaggedVersion" = "v$VERSION" ] && [ "$lastTaggedVersionSha" != "${{ github.sha }}" ]; then exit 1; fi
 
-      - name: Setup .NET Core
+      - name: Setup .NET
         uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: "6.0.x"
+          global-json-file: "./global.json"
 
       - name: Display .NET Info
         run: dotnet --info
@@ -78,7 +81,7 @@ jobs:
         if: matrix.os == 'ubuntu-latest'
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          file: ./obj/Tests/Release/net6.0/coverage.xml
+          file: ./obj/Tests/Release/net7.0/coverage.xml
           fail_ci_if_error: true
 
       - name: Upload Nugets

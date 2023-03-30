@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <TargetFramework>net6.0</TargetFramework>
+        <TargetFramework>net7.0</TargetFramework>
         <RuntimeIdentifiers>linux-x64;linux-arm64</RuntimeIdentifiers>
         <RestoreLockedMode>false</RestoreLockedMode>
         <RestorePackagesPath>$(MSBuildThisFileDirectory).nuget</RestorePackagesPath>
@@ -17,11 +17,13 @@
 
     <!-- Because AWSSDK.Core is marked as PrivateAssets="all" in Lambdajection.Core, 
          its dependency graph is generated without it included.
-         Therefore, for ReadyToRun to do its thing, we have to copy the aws sdk core assembly and its dependencies
+         Therefore, for ReadyToRun to do its thing, we have to copy the aws sdk core assembly and its
+    dependencies
          into the directory where the lambdajection.core assembly is located. -->
     <Target Name="PrepareForReadyToRun" AfterTargets="Restore">
         <ItemGroup>
-            <AWSSDKCoreReference Include="$(MSBuildThisFileDirectory)/.nuget/awssdk.core/*/lib/netcoreapp3.1/AWSSDK.Core.dll" />
+            <AWSSDKCoreReference
+                Include="$(MSBuildThisFileDirectory)/.nuget/awssdk.core/*/lib/netcoreapp3.1/AWSSDK.Core.dll" />
         </ItemGroup>
 
         <Copy
