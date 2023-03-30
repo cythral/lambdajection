@@ -32,7 +32,6 @@ namespace Lambdajection.Generator
             {
                 try
                 {
-                    Console.WriteLine(buildTimeAssembly);
                     AssemblyLoadContext.Default.LoadFromAssemblyPath(buildTimeAssembly);
                 }
                 catch (FileLoadException)
