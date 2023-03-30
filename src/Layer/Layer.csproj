@@ -15,12 +15,9 @@
     <ItemGroup>
         <None Include="build/**" Pack="true" PackagePath="build/" />
         <None Include="Layer.template.yml" CopyToOutputDirectory="always" />
-        <ContentWithTargetPath Include="../../README.md" CopyToOutputDirectory="always"
-            TargetPath="layer/README.md" />
-        <ContentWithTargetPath Include="../../LICENSE.txt" CopyToOutputDirectory="always"
-            TargetPath="layer/LICENSE.txt" />
-        <ContentWithTargetPath Include="./THIRD-PARTY-NOTICES.txt" CopyToOutputDirectory="always"
-            TargetPath="layer/THIRD-PARTY-NOTICES.txt" />
+        <ContentWithTargetPath Include="../../README.md" CopyToOutputDirectory="always" TargetPath="layer/README.md" />
+        <ContentWithTargetPath Include="../../LICENSE.txt" CopyToOutputDirectory="always" TargetPath="layer/LICENSE.txt" />
+        <ContentWithTargetPath Include="./THIRD-PARTY-NOTICES.txt" CopyToOutputDirectory="always" TargetPath="layer/THIRD-PARTY-NOTICES.txt" />
     </ItemGroup>
 
     <ItemGroup>
@@ -46,8 +43,6 @@
             <StoreArgs Include="--manifest $(MSBuildThisFileDirectory)/Manifest/Manifest.csproj" />
             <StoreArgs Include="--output $(OutputPath)/layer" />
             <StoreArgs Include="--runtime linux-$(CurrentArchitecture)" />
-            <!-- Optimized runtime package stores does not work on .NET 6 -->
-            <StoreArgs Include="--skip-optimization" />
             <StoreArgs Include="/p:Configuration=$(Configuration)" />
             <StoreArgs Include="/p:LambdajectionVersion=$(PackageVersion)" />
             <StoreArgs Include="-nodereuse:false" />
@@ -56,10 +51,8 @@
         <MakeDir Directories="$(MSBuildThisFileDirectory)Manifest/.nuget" />
 
         <PropertyGroup>
-            <DirectoriesToRemove>$([System.IO.Directory]::GetDirectories('$(MSBuildThisFileDirectory)Manifest/.nuget',
-                'lambdajection*'))</DirectoriesToRemove>
-            <DirectoriesToRemove>$([System.IO.Directory]::GetDirectories('$(MSBuildThisFileDirectory)Manifest/.nuget',
-                'microsoft.aspnetcore.app.runtime.linux-x64'))</DirectoriesToRemove>
+            <DirectoriesToRemove>$([System.IO.Directory]::GetDirectories('$(MSBuildThisFileDirectory)Manifest/.nuget', 'lambdajection*'))</DirectoriesToRemove>
+            <DirectoriesToRemove>$([System.IO.Directory]::GetDirectories('$(MSBuildThisFileDirectory)Manifest/.nuget', 'microsoft.aspnetcore.app.runtime.linux-x64'))</DirectoriesToRemove>
         </PropertyGroup>
 
         <RemoveDir Directories="$(DirectoriesToRemove)" />
@@ -75,14 +68,11 @@
         <PropertyGroup>
             <BucketExportName>lambdajection-infrastructure:LayerBucket</BucketExportName>
             <TemplateFilePath Condition="$(TemplateFilePath) == ''">$(OutputPath)Layer.template.yml</TemplateFilePath>
-            <OutputLayerTemplateFilePath Condition="$(OutputLayerTemplateFilePath) == ''">
-                $(OutputPath)Layer.template.yml.packaged</OutputLayerTemplateFilePath>
+            <OutputLayerTemplateFilePath Condition="$(OutputLayerTemplateFilePath) == ''">$(OutputPath)Layer.template.yml.packaged</OutputLayerTemplateFilePath>
         </PropertyGroup>
 
         <!-- Get the Layer Bucket Name -->
-        <Exec
-            Command="aws cloudformation list-exports --query Exports[?Name==\`$(BucketExportName)\`].Value --output text"
-            ConsoleToMsBuild="true" StandardOutputImportance="low">
+        <Exec Command="aws cloudformation list-exports --query Exports[?Name==\`$(BucketExportName)\`].Value --output text" ConsoleToMsBuild="true" StandardOutputImportance="low">
             <Output TaskParameter="ConsoleOutput" PropertyName="LayerBucket" />
         </Exec>
 

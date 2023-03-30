@@ -1,6 +1,6 @@
 {
     "Parameters": {
-        "Net5LayerVersion": "3"
+        "DotnetVersion": "7.0.202"
     },
     "Tags": {
         "Name": "lambdajection-customruntime",
