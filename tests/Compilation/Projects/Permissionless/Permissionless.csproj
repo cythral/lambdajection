@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="NSubstitute" Version="4.2.2" />
+    <PackageReference Include="NSubstitute" Version="5.1.0" />
     <PackageReference Include="Lambdajection" Version="$(LambdajectionVersion)" />
   </ItemGroup>
 </Project>
