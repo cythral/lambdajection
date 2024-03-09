@@ -14,7 +14,7 @@
         <PackageReference Include="Lambdajection.Layer" Version="$(LambdajectionVersion)" />
 
         <!-- If you don't use Lambdajection.Layer, the ready to run compiler will look for AWSSDK.Core since Lambdajection.Core has references to it -->
-        <PackageReference Include="AWSSDK.Core" Version="3.7.0.31" />
+        <PackageReference Include="AWSSDK.Core" Version="3.7.302.16" />
     </ItemGroup>
 
 </Project>
