@@ -6,8 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AWSSDK.S3" Version="3.7.0" />
-    <PackageReference Include="AWSSDK.SecurityToken" Version="3.7.0" />
+    <PackageReference Include="AWSSDK.S3" Version="3.7.511.8" />
+    <PackageReference Include="AWSSDK.SecurityToken" Version="3.7.504.50" />
     <PackageReference Include="Lambdajection" Version="$(LambdajectionVersion)" />
   </ItemGroup>
 </Project>
