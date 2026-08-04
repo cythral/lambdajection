@@ -4,9 +4,9 @@
     ".NETStandard,Version=v2.1": {
       "Amazon.Lambda.Core": {
         "type": "Direct",
-        "requested": "[2.1.0, )",
-        "resolved": "2.1.0",
-        "contentHash": "ok06UhfBZw6j6+PhiJR9C0EOMuJvnq8rMCHVkaFmPFrlI/q447ukwGZQKaAKqodV+MNTfpb/iPxjgUPVbSlVVw=="
+        "requested": "[2.8.1, )",
+        "resolved": "2.8.1",
+        "contentHash": "wLrBdUXY1jn12o3+sar5c5ApMJPGEMye+1rnyDjwCKA2rcPNMZbNsKLQ76bV+DGnx5CN8bArB26SKB/rEuxIxQ=="
       },
       "AWSSDK.Core": {
         "type": "Direct",

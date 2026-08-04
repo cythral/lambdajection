@@ -4,13 +4,13 @@
     ".NETStandard,Version=v2.1": {
       "Amazon.Lambda.RuntimeSupport": {
         "type": "Direct",
-        "requested": "[1.8.6, )",
-        "resolved": "1.8.6",
-        "contentHash": "8EYcoXqadmtzdkTzcTmUWfzWXLHlQ+cmuCDTrdoyWvX5bjT5yFjFolpYCBnMZBerDRWSr8N3TfGrvn5eWwbRlw==",
+        "requested": "[1.14.3, )",
+        "resolved": "1.14.3",
+        "contentHash": "eZlYmyf+jqlhvgoPZ7CNK1/sHAGVCebxI7fdKhK+REaAvx/UrE0bkV8kMGbmXoOHJL+qm7nyq8m65gHEJACLGg==",
         "dependencies": {
-          "Amazon.Lambda.Core": "2.1.0",
+          "Amazon.Lambda.Core": "2.8.1",
           "System.Runtime.Loader": "4.3.0",
-          "System.Text.Json": "6.0.0"
+          "System.Text.Json": "6.0.10"
         }
       },
       "Microsoft.SourceLink.GitHub": {
@@ -40,8 +40,8 @@
       },
       "Amazon.Lambda.Core": {
         "type": "Transitive",
-        "resolved": "2.1.0",
-        "contentHash": "ok06UhfBZw6j6+PhiJR9C0EOMuJvnq8rMCHVkaFmPFrlI/q447ukwGZQKaAKqodV+MNTfpb/iPxjgUPVbSlVVw=="
+        "resolved": "2.8.1",
+        "contentHash": "wLrBdUXY1jn12o3+sar5c5ApMJPGEMye+1rnyDjwCKA2rcPNMZbNsKLQ76bV+DGnx5CN8bArB26SKB/rEuxIxQ=="
       },
       "Microsoft.Bcl.AsyncInterfaces": {
         "type": "Transitive",
@@ -173,8 +173,8 @@
       },
       "System.Text.Json": {
         "type": "Transitive",
-        "resolved": "6.0.0",
-        "contentHash": "zaJsHfESQvJ11vbXnNlkrR46IaMULk/gHxYsJphzSF+07kTjPHv+Oc14w6QEOfo3Q4hqLJgStUaYB9DBl0TmWg==",
+        "resolved": "6.0.10",
+        "contentHash": "NSB0kDipxn2ychp88NXWfFRFlmi1bst/xynOutbnpEfRCT9JZkZ7KOmF/I/hNKo2dILiMGnqblm+j1sggdLB9g==",
         "dependencies": {
           "Microsoft.Bcl.AsyncInterfaces": "6.0.0",
           "System.Buffers": "4.5.1",

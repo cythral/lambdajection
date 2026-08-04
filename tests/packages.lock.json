@@ -178,15 +178,15 @@
       },
       "Amazon.Lambda.Core": {
         "type": "Transitive",
-        "resolved": "2.1.0",
-        "contentHash": "ok06UhfBZw6j6+PhiJR9C0EOMuJvnq8rMCHVkaFmPFrlI/q447ukwGZQKaAKqodV+MNTfpb/iPxjgUPVbSlVVw=="
+        "resolved": "2.8.1",
+        "contentHash": "wLrBdUXY1jn12o3+sar5c5ApMJPGEMye+1rnyDjwCKA2rcPNMZbNsKLQ76bV+DGnx5CN8bArB26SKB/rEuxIxQ=="
       },
       "Amazon.Lambda.RuntimeSupport": {
         "type": "Transitive",
-        "resolved": "1.8.6",
-        "contentHash": "8EYcoXqadmtzdkTzcTmUWfzWXLHlQ+cmuCDTrdoyWvX5bjT5yFjFolpYCBnMZBerDRWSr8N3TfGrvn5eWwbRlw==",
+        "resolved": "1.14.3",
+        "contentHash": "eZlYmyf+jqlhvgoPZ7CNK1/sHAGVCebxI7fdKhK+REaAvx/UrE0bkV8kMGbmXoOHJL+qm7nyq8m65gHEJACLGg==",
         "dependencies": {
-          "Amazon.Lambda.Core": "2.1.0"
+          "Amazon.Lambda.Core": "2.8.1"
         }
       },
       "AutoFixture": {
@@ -1380,7 +1380,7 @@
       "Lambdajection.Core": {
         "type": "Project",
         "dependencies": {
-          "Amazon.Lambda.Core": "[2.1.0, )",
+          "Amazon.Lambda.Core": "[2.8.1, )",
           "Lambdajection.Attributes": "[1.0.0, )",
           "Lambdajection.Framework": "[1.0.0, )",
           "Microsoft.Extensions.Configuration": "[7.0.0, )",
@@ -1448,7 +1448,7 @@
       "Lambdajection.Runtime": {
         "type": "Project",
         "dependencies": {
-          "Amazon.Lambda.RuntimeSupport": "[1.8.6, )"
+          "Amazon.Lambda.RuntimeSupport": "[1.14.3, )"
         }
       },
       "Lambdajection.Sns": {
